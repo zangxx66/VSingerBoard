@@ -1,9 +1,11 @@
 import time
+import multiprocessing
 from .app import app
 from fastapi import WebSocket, WebSocketDisconnect, WebSocketException
 from src.database import Db as conn
 from src.bili import MyLive
 from src.utils import logger
+from bilibili_api import Credential
 
 
 class WsManager:
@@ -29,18 +31,33 @@ class WsManager:
 
 
 manager = WsManager()
+multiprocessing.set_start_method("spawn")
 
 
-async def on_danmu(event):
+async def on_bili_danmu(event):
     await manager.broadcast(event)
 
 
+async def create_bili_process(room_id: int):
+    bili_credential = await conn.get_bcredential(enable=True)
+    cred = Credential(
+        sessdata=bili_credential.sessdata,
+        bili_jct=bili_credential.bili_jct,
+        buvid3=bili_credential.buvid3,
+        buvid4=bili_credential.buvid4,
+        dedeuserid=bili_credential.dedeuserid,
+        ac_time_value=bili_credential.ac_time_value
+    )
+    instance = MyLive(room_id=room_id, credentials=cred)
+    instance.on("danmu")(on_bili_danmu)
+    task = multiprocessing.Process(target=instance.start, args=(), daemon=True, name=f"bili_{room_id}")
+    task.start()
+    return task
+
+
 @app.websocket("/bili/{room_id}/ws")
-async def ws_endpoint(*, websocket: WebSocket, room_id: int):
-    credential = await conn.get_bcredential(enable=True)
-    instance = MyLive(room_id=room_id, credential=credential)
-    instance.on("danmu")(on_danmu)
-    instance.start()
+async def ws_bili_endpoint(*, websocket: WebSocket, room_id: int):
+    task = await create_bili_process(room_id)
     await manager.connect(websocket)
     try:
         while True:
@@ -50,4 +67,7 @@ async def ws_endpoint(*, websocket: WebSocket, room_id: int):
     except WebSocketException as ex:
         logger.exception(ex)
     except WebSocketDisconnect:
+        task.kill()
+        task.join()
+        task.close()
         manager.disconnect(websocket)

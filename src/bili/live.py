@@ -1,6 +1,6 @@
 import time
 from bilibili_api import live, sync
-from typing import TypedDict
+from typing import TypedDict, Optional
 from src.utils import logger, Decorator
 
 
@@ -8,12 +8,15 @@ class DanmuInfo(TypedDict):
     uid: int
     uname: str
     msg: str
+    medal_level: int
+    medal_name: str
+    guard_level: int
+    price: Optional[int]
     send_time: int
 
 
 class MyLive(Decorator):
     room: live.LiveDanmaku
-    __handlers__ = {}
 
     def __init__(self, room_id: int, credentials=None):
         self.room = live.LiveDanmaku(room_display_id=room_id, credential=credentials)
@@ -50,6 +53,10 @@ class MyLive(Decorator):
         uid = info[2][0]
         uname = info[2][1]
         now = int(time.time())
+        user_info = info[0][15]["user"]
+        medal_level = user_info["medal"]["level"]
+        medal_name = user_info["medal"]["name"]
+        guard_level = user_info["medal"]["guard_level"]
 
         logger.info(f"{uname}: {msg}")
 
@@ -60,6 +67,9 @@ class MyLive(Decorator):
             "uid": uid,
             "uname": uname,
             "msg": msg,
+            "medal_level": medal_level,
+            "medal_name": medal_name,
+            "guard_level": guard_level,
             "send_time": now
         }
 
