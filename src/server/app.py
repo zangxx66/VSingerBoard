@@ -53,6 +53,6 @@ def startup():
     """
     启动FastAPI应用
     """
-    log_config = uvicorn.Config.LOGGING_CONFIG
+    log_config = uvicorn.config.LOGGING_CONFIG
     log_config["formatters"]["default"]["fmt"] = "[%(asctime)s][%(levelname)s][%(funcName)s] - %(message)s"
-    uvicorn.run(app, host="0.0.0.0", port=8000, log_config=log_config, access_log=False)
+    uvicorn.run(app, host="127.0.0.1", port=8000, log_config=log_config, access_log=False)

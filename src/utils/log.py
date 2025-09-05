@@ -3,18 +3,18 @@ import datetime
 import sys
 from .tool import get_path
 
-logger = logging.getLogger("danmaku")
-
-console_handle = logging.StreamHandler()
-
 file_name = f"{datetime.datetime.today().strftime('%Y-%m-%d')}.log"
 dir_path = get_path(file_name, dir_name="logs")
+
+logger = logging.getLogger("danmaku")
 file_handle = logging.FileHandler(filename=dir_path, mode="a", encoding="utf8")
+console_handle = logging.StreamHandler()
 
-console_handle.setLevel(logging.INFO)
-
-file_handle.setLevel(logging.WARNING)
 file_formatter = logging.Formatter(fmt="[%(asctime)s][%(levelname)s][%(funcName)s][%(lineno)d] - %(message)s", datefmt="%Y-%m-%d  %H:%M:%S")
+
+logger.setLevel(logging.INFO)
+console_handle.setLevel(logging.INFO)
+file_handle.setLevel(logging.WARNING)
 
 file_handle.setFormatter(file_formatter)
 console_handle.setFormatter(file_formatter)

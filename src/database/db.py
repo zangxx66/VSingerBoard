@@ -20,7 +20,7 @@ class Db:
             "connections": {"default": f"sqlite://{get_path("vsingerboard.sqlite3", dir_name="data")}"},
             "apps": {
                 "1.0": {
-                    "models": ["database.model"],
+                    "models": ["src.database.model"],
                     "default_connection": "default"
                 }
             }
