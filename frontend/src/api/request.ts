@@ -1,28 +1,12 @@
 import { client } from "./client"
 
 class Request {
-    async getSubscribeList(params: {}){
-        return await client.get("/api/get_subscribe", params)
-    }
-
-    async addSubscribe(params: {}){
-        return await client.post("/api/add_subscribe", params)
-    }
-
-    async updateSubscribe(params: {}){
-        return await client.post("/api/update_subscribe", params)
-    }
-
     async getBiliConfig(params: {}){
         return await client.get("/api/get_bili_config", params)
     }
 
-    async addBiliConfig(params: {}){
-        return await client.post("/api/add_bili_config", params)
-    }
-
-    async updateBiliConfig(params: {}){
-        return await client.post("/api/update_bili_config", params)
+    async addOrUpdateBiliConfig(params: {}){
+        return await client.post("/api/add_or_update_bili_config", params)
     }
 
     async getBiliCredntialList(params: {}){
@@ -31,6 +15,10 @@ class Request {
 
     async refreshBiliCredential(params: {}){
         return await client.get("/api/refresh_bili_credential", params)
+    }
+
+    async deleteBiliCredential(params: {}){
+        return await client.post("/api/delete_bili_credential", params)
     }
 
     async getBiliCredentialCode(params: {}){

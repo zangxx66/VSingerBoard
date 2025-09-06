@@ -1,7 +1,7 @@
 from tortoise import Tortoise
 from tortoise.connection import connections
 from tortoise.backends.base.client import BaseDBAsyncClient
-from .model import BiliConfig, BiliCredential, Subscribe
+from .model import BiliConfig, BiliCredential
 from src.utils import get_path
 
 
@@ -38,41 +38,6 @@ class Db:
         :return: None
         """
         await connections.close_all()
-
-    @classmethod
-    async def add_sub(cls, **kwargs):
-        """
-        Add a subscription.
-
-        :param kwargs: Keyword arguments passed to Subscribe.add()
-        :return: True if the subscription is added successfully, False otherwise
-        """
-        if not await Subscribe.add(**kwargs):
-            return False
-        return True
-
-    @classmethod
-    async def update_sub(cls, pk, **kwargs):
-        """
-        Update a subscription.
-
-        :param pk: Primary key of the subscription to be updated
-        :param kwargs: Keyword arguments passed to Subscribe.update()
-        :return: The result of the update operation
-        """
-        res = await Subscribe.get(id=pk).update(**kwargs)
-        return res
-
-    @classmethod
-    async def get_sub(cls, **kwargs):
-        """
-        Get subscriptions.
-
-        :param kwargs: Keyword arguments passed to Subscribe.get()
-        :return: The result of the get operation
-        """
-        res = await Subscribe.get(**kwargs)
-        return res
 
     @classmethod
     async def add_bcredential(cls, **kwargs):

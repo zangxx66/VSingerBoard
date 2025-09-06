@@ -21,3 +21,20 @@ export type SubscribeModel = {
     source: string
     create_time: number
 }
+
+export type BiliConfigModel = {
+    id: number
+    room_id: number
+    modal_level: number
+    user_level: number
+    sing_prefix: string
+    sing_cd: number
+}
+
+export type BiliCredentialModel = {
+    id: number
+    uname: string
+    avatar: string
+    uid: number
+    enable: boolean
+}

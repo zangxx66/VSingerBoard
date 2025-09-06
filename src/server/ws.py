@@ -32,6 +32,7 @@ class WsManager:
 
 manager = WsManager()
 multiprocessing.set_start_method("spawn")
+task: multiprocessing.Process = None
 
 
 async def on_bili_danmu(event):
@@ -39,6 +40,7 @@ async def on_bili_danmu(event):
 
 
 async def create_bili_process(room_id: int):
+    global task
     bili_credential = await conn.get_bcredential(enable=True)
     cred = Credential(
         sessdata=bili_credential.sessdata,
@@ -50,14 +52,16 @@ async def create_bili_process(room_id: int):
     )
     instance = MyLive(room_id=room_id, credentials=cred)
     instance.on("danmu")(on_bili_danmu)
-    task = multiprocessing.Process(target=instance.start, args=(), daemon=True, name=f"bili_{room_id}")
+    task = multiprocessing.Process(target=instance.start, args=(), daemon=True)
     task.start()
     return task
 
 
 @app.websocket("/bili/{room_id}/ws")
 async def ws_bili_endpoint(*, websocket: WebSocket, room_id: int):
-    task = await create_bili_process(room_id)
+    global task
+    if task is None or not task.is_alive():
+        task = await create_bili_process(room_id)
     await manager.connect(websocket)
     try:
         while True:
@@ -69,5 +73,4 @@ async def ws_bili_endpoint(*, websocket: WebSocket, room_id: int):
     except WebSocketDisconnect:
         task.kill()
         task.join()
-        task.close()
         manager.disconnect(websocket)

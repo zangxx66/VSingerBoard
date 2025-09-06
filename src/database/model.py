@@ -59,15 +59,9 @@ class BiliCredential(BaseModel):
     enable = fields.BooleanField()
 
 
-class Subscribe(BaseModel):
-    id = fields.BigIntField(primary_key=True, generated=True)
-    room_id = fields.BigIntField()
-    source = fields.CharField(max_length=100)
-    create_time = fields.BigIntField(max_length=100)
-
-
 class BiliConfig(BaseModel):
     id = fields.BigIntField(primary_key=True, generated=True)
+    room_id = fields.BigIntField()
     modal_level = fields.IntField()
     user_level = fields.IntField()
     sing_prefix = fields.CharField(max_length=100)

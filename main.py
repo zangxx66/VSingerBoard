@@ -3,6 +3,7 @@ import os
 import asyncio
 import threading
 import time
+import signal
 from src.server import app
 from src.database import Db as conn
 from src.utils import logger
@@ -11,6 +12,9 @@ from webview.window import Window
 DEBUG = True
 PORT = 5173 if DEBUG else 8000
 window: Window = None
+server_thread: threading.Thread = None
+dev_thread: threading.Thread = None
+stop_event = threading.Event()
 
 
 class JsAPI:
@@ -20,6 +24,11 @@ class JsAPI:
         height = screens.height
         initHeight = int(height * 4 / 5)
         return initHeight
+
+
+def signal_handler(sig, frame):
+    print("Received signal:", sig)
+    stop_event.set()
 
 
 def pro_server():
@@ -32,19 +41,32 @@ def dev_server():
 
 
 def on_start(window: Window):
-    # window.load_url(f"http://127.0.0.1:{PORT}/")
-    window.evaluate_js("alert('启动成功...正在加载')")
-    logger.info("window start")
-    time.sleep(5)
-    window.load_url(f"http://127.0.0.1:{PORT}/")
+    webview.logger.info("window start")
+    webview.logger.debug(f"token:{webview.token}")
+
+
+def on_closing():
+    global stop_event, server_thread, dev_thread
+    webview.logger.info("click close")
+
+    stop_event.set()
+    if server_thread is not None and server_thread.is_alive:
+        webview.logger.info("Waiting for server thread to finish...")
+        server_thread.join(5)
+    if dev_thread is not None and dev_thread.is_alive:
+        webview.logger.info("Waiting for dev thread to finish...")
+        dev_thread.join(5)
+
+    os._exit(0)
 
 
 def main():
-    global window
+    global window, stop_event, server_thread, dev_thread
     logger.info("------startup------")
 
-    server_thread: threading.Thread = None
-    dev_thread: threading.Thread = None
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
+    signal.signal(signal.SIGQUIT, signal_handler)
 
     try:
         # Initialize services
@@ -74,6 +96,8 @@ def main():
         if DEBUG:
             dev_thread = threading.Thread(target=dev_server, daemon=True, name="devServer")
             dev_thread.start()
+            # Vite服务器启动较慢，手动给个时间等待
+            time.sleep(3)
         server_thread = threading.Thread(target=pro_server, daemon=True, name="proServer")
         server_thread.start()
 
@@ -88,11 +112,13 @@ def main():
 
         webview.settings["OPEN_DEVTOOLS_IN_DEBUG"] = False
         os.environ["PYWEBVIE_WLOG"] = "debug"
+        os.environ["WEBKIT_DISABLE_COMPOSITING_MODE"] = "1"
 
-        window = webview.create_window("点歌板", html="<html></html>", js_api=JsAPI(), localization=localization, width=initWidth, height=initHeight, resizable=False)
+        window = webview.create_window("点歌板", url=f"http://127.0.0.1:{PORT}/", js_api=JsAPI(), localization=localization, width=initWidth, height=initHeight, resizable=False)
+        window.events.closing += on_closing
         webview.start(on_start, window, debug=DEBUG, gui="gtk", icon="wwwroot/assets/images/logo.png")
 
-        # webview.start(on_server, window, debug=DEBUG)
+        stop_event.wait()
     except Exception as ex:
         logger.exception(ex)
     finally:
