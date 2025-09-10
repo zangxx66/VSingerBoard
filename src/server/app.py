@@ -1,3 +1,4 @@
+import uvicorn
 from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.middleware.gzip import GZipMiddleware
@@ -8,7 +9,6 @@ from fastapi.responses import JSONResponse, HTMLResponse
 from fastapi.templating import Jinja2Templates
 from .router import router
 from src.utils import logger
-import uvicorn
 
 
 dist_path = Path(__file__).parent.parent.parent / "wwwroot"
@@ -28,13 +28,12 @@ app = FastAPI(
 @app.exception_handler(RequestValidationError)
 async def exception_handle(request: Request, exc: RequestValidationError):
     logger.error(f"fastapi请求异常：{exc.errors()}")
-    return JSONResponse(status_code=200, content={"code": -1, "msg": "请求异常", "data": None})
+    return JSONResponse(status_code=200, content={"code": -1, "msg": f"{exc.errors()}", "data": None})
 
 
 @app.exception_handler(404)
 async def redirect_all_requests(request: Request, exc: HTTPException):
     return HTMLResponse(open(Path(dist_path) / "index.html").read())
-
 
 app.add_middleware(GZipMiddleware, minimum_size=1024)
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])

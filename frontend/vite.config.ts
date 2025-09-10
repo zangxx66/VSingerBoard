@@ -52,7 +52,7 @@ export default defineConfig({
   },
   build: {
     outDir: '../wwwroot',
-    minify: 'terser',
+    minify: 'esbuild',
     reportCompressedSize: false,
     rollupOptions: {
       output: {

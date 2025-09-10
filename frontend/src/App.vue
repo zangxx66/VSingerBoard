@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import { ref, computed } from "vue"
+import { ref, onMounted, defineAsyncComponent, computed } from "vue"
 import { RouterView } from "vue-router"
-import router from "@/router"
 import zhCn from "element-plus/es/locale/lang/zh-cn"
+import { Setting, StarFilled } from "@element-plus/icons-vue"
+import { ContextMenu } from '@imengyu/vue3-context-menu'
 import { ElMessage } from "element-plus"
-import { HomeFilled, List, StarFilled, Share } from "@element-plus/icons-vue"
-
-const active = ref(1)
 
 const cardConfig = {
   shadow: "always"
@@ -19,38 +17,46 @@ const dialogConfig = {
   transition: "el-fade-in"
 }
 
-const goto = (name: string) => {
-  router.push({ name: name })
+const show = ref(false)
+const options = ref({
+  zIndex: 100,
+  minWidth: 230,
+  x: 500,
+  y: 200,
+  theme: "mac"
+})
+function onContextMenu(e: MouseEvent) {
+  e.preventDefault()
+  show.value = true
+  options.value.x = e.x
+  options.value.y = e.y
 }
 
-const asideStyle = computed(() => {
-  return {
-    // height: window.outerHeight + 'px'
-    height: window.innerHeight + "px"
-  }
+const refresh = () => console.log("refresh")
+const isSelection = computed(() => {
+  const selectText = window.getSelection()?.toString()
+  if(selectText)return true
+  return false
 })
+async function copyToClipboard() {
+  const selectText = window.getSelection()?.toString()
+  if (selectText) {
+    await navigator.clipboard.writeText(selectText)
+    ElMessage.success("复制成功")
+  }
+}
+
+onMounted(() => {
+  const dom = document.querySelector(".layout-container-demo .el-main") as HTMLElement
+  dom.style.width = window.innerWidth + "px"
+})
+
+const isShow = ref(false)
+const settingComponent = defineAsyncComponent(() => import("@/components/home/setting.vue"))
 </script>
 
 <template>
-<el-container class="layout-container-demo">
-  <el-aside :style="asideStyle" class="glassmorphism">
-    <el-scrollbar>
-      <el-menu>
-        <el-menu-item index="1" @click="goto('home')">
-          <el-icon>
-            <HomeFilled />
-          </el-icon>
-          <span>主页</span>
-        </el-menu-item>
-        <el-menu-item index="2">
-          <el-icon><List /></el-icon>
-          <span>点歌列表</span>
-        </el-menu-item>
-      </el-menu>
-    </el-scrollbar>
-  </el-aside>
-
-  <el-container class="main-container">
+  <el-container class="layout-container-demo" @contextmenu="onContextMenu($event)">
     <el-header class="glassmorphism">
       <el-menu mode="horizontal" :ellipsis="false" class="toolbar">
         <el-menu-item index="0">
@@ -61,10 +67,11 @@ const asideStyle = computed(() => {
             <StarFilled />
           </el-icon>
         </el-menu-item>
-        <el-menu-item index="2">
+        <el-menu-item index="2" @click="isShow = true">
           <el-icon>
-            <Share />
+            <Setting />
           </el-icon>
+          <span>设置</span>
         </el-menu-item>
       </el-menu>
     </el-header>
@@ -75,8 +82,24 @@ const asideStyle = computed(() => {
         <el-backtop :right="100" :bottom="100" />
       </el-config-provider>
     </el-main>
+    <el-drawer v-model="isShow" direction="rtl" resizable destroy-on-close>
+      <template #header>
+        <el-text>
+          <el-icon>
+            <Setting />
+          </el-icon>
+          设置
+        </el-text>
+      </template>
+      <template #default>
+        <setting-component></setting-component>
+      </template>
+    </el-drawer>
+    <context-menu v-model:show="show" :options="options">
+      <context-menu-item label="重新加载" @click="refresh"  />
+      <context-menu-item v-if="isSelection" label="复制" @click="copyToClipboard" />
+    </context-menu>
   </el-container>
-</el-container>
 </template>
 
 <style scoped>
@@ -87,17 +110,6 @@ const asideStyle = computed(() => {
 .layout-container-demo {
   width: 100%;
   height: 100%;
-}
-
-.layout-container-demo .el-aside {
-  color: var(--el-text-color-primary);
-  box-shadow: 2px 0 2px rgba(0, 0, 0, 0.2);
-  width: 200px;
-  position: fixed;
-  left: 0;
-  top: 60px;
-  right: 0;
-  z-index: 100;
 }
 
 .layout-container-demo .el-header {
@@ -116,10 +128,9 @@ const asideStyle = computed(() => {
   border-right: none;
 }
 
-.main-container .el-main {
-  width: calc(100vw - 200px);
-  left: 200px;
-  top: 60px;
+.layout-container-demo .el-main {
+  height: calc(100vh - 60px);
+  left: 0;
   position: absolute;
 }
 

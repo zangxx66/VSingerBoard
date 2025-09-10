@@ -4,9 +4,10 @@ import asyncio
 import threading
 import time
 import signal
-from src.server import app
+from src.server import startup
 from src.database import Db as conn
 from src.utils import logger
+from src.bili import Api, init_live
 from webview.window import Window
 
 DEBUG = True
@@ -14,16 +15,8 @@ PORT = 5173 if DEBUG else 8000
 window: Window = None
 server_thread: threading.Thread = None
 dev_thread: threading.Thread = None
+ws_thread: threading.Thread = None
 stop_event = threading.Event()
-
-
-class JsAPI:
-    def getWindowHeight(self):
-        screens = webview.screens
-        screens = screens[0]
-        height = screens.height
-        initHeight = int(height * 4 / 5)
-        return initHeight
 
 
 def signal_handler(sig, frame):
@@ -32,7 +25,13 @@ def signal_handler(sig, frame):
 
 
 def pro_server():
-    app.startup()
+    print("------startup------")
+    startup()
+
+
+def ws_server():
+    print("------websocket------")
+    asyncio.run(init_live())
 
 
 def dev_server():
@@ -46,7 +45,7 @@ def on_start(window: Window):
 
 
 def on_closing():
-    global stop_event, server_thread, dev_thread
+    global stop_event, server_thread, dev_thread, ws_thread
     webview.logger.info("click close")
 
     stop_event.set()
@@ -56,6 +55,9 @@ def on_closing():
     if dev_thread is not None and dev_thread.is_alive:
         webview.logger.info("Waiting for dev thread to finish...")
         dev_thread.join(5)
+    if ws_thread is not None and ws_thread.is_alive:
+        webview.logger.info("Waiting for ws thread to finish...")
+        ws_thread.join(5)
 
     os._exit(0)
 
@@ -101,6 +103,9 @@ def main():
         server_thread = threading.Thread(target=pro_server, daemon=True, name="proServer")
         server_thread.start()
 
+        ws_thread = threading.Thread(target=ws_server, daemon=True, name="wsServer")
+        ws_thread.start()
+
         # 系统分辨率
         screens = webview.screens
         screens = screens[0]
@@ -114,7 +119,7 @@ def main():
         os.environ["PYWEBVIE_WLOG"] = "debug"
         os.environ["WEBKIT_DISABLE_COMPOSITING_MODE"] = "1"
 
-        window = webview.create_window("点歌板", url=f"http://127.0.0.1:{PORT}/", js_api=JsAPI(), localization=localization, width=initWidth, height=initHeight, resizable=False)
+        window = webview.create_window("点歌板", url=f"http://127.0.0.1:{PORT}/", js_api=Api(), localization=localization, width=initWidth, height=initHeight, resizable=False)
         window.events.closing += on_closing
         webview.start(on_start, window, debug=DEBUG, gui="gtk", icon="wwwroot/assets/images/logo.png")
 

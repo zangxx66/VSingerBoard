@@ -16,9 +16,11 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@imengyu/vue3-context-menu": "^1.5.2",
     "axios": "^1.11.0",
     "element-plus": "^2.11.1",
     "nprogress": "^0.2.0",
+    "socket.io-client": "^4.8.1",
     "vue": "^3.5.18",
     "vue-router": "^4.5.1"
   },

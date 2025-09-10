@@ -6,13 +6,22 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "aiohttp>=3.12.15",
+    "betterproto>=1.2.5",
     "bilibili-api-python>=17.3.0",
     "curl-cffi>=0.13.0",
     "fastapi>=0.116.1",
     "jinja2>=3.1.6",
+    "mini-racer>=0.12.4",
+    "pydantic>=2.11.7",
     "pyobjc>=11.1",
     "pywebview>=6.0",
+    "requests>=2.32.5",
     "tortoise-orm>=0.25.1",
     "uvicorn>=0.35.0",
+    "websocket-client>=1.8.0",
     "websockets>=15.0.1",
 ]
+
+[[tool.uv.index]]
+url="https://pypi.tuna.tsinghua.edu.cn/simple"
+default=true

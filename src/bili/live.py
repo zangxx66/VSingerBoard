@@ -1,7 +1,7 @@
 import time
 from bilibili_api import live, sync
 from typing import TypedDict, Optional
-from src.utils import logger, Decorator
+from src.utils import Decorator
 
 
 class DanmuInfo(TypedDict):
@@ -17,9 +17,11 @@ class DanmuInfo(TypedDict):
 
 class MyLive(Decorator):
     room: live.LiveDanmaku
+    song_prefix: str
 
-    def __init__(self, room_id: int, credentials=None):
+    def __init__(self, room_id: int, credentials=None, song_prefix: str = "点歌"):
         self.room = live.LiveDanmaku(room_display_id=room_id, credential=credentials)
+        self.song_prefix = song_prefix
 
     def start(self):
         """
@@ -36,6 +38,7 @@ class MyLive(Decorator):
         }
         """
         self.room.on("DANMU_MSG")(self.on_danmu_msg)
+        self.room.on("SUPER_CHAT_MESSAGE")(self.on_super_chat)
 
         sync(self.room.connect())
 
@@ -49,24 +52,28 @@ class MyLive(Decorator):
 
     async def on_danmu_msg(self, event):
         info = event["data"]["info"]
-        msg = info[1]
+        msg = str(info[1])
         uid = info[2][0]
         uname = info[2][1]
         now = int(time.time())
         user_info = info[0][15]["user"]
-        medal_level = user_info["medal"]["level"]
-        medal_name = user_info["medal"]["name"]
-        guard_level = user_info["medal"]["guard_level"]
+        medal_level = 0
+        medal_name = ""
+        guard_level = 0
+        if user_info["medal"] is not None:
+            medal_level = user_info["medal"]["level"]
+            medal_name = user_info["medal"]["name"]
+            guard_level = user_info["medal"]["guard_level"]
 
-        logger.info(f"{uname}: {msg}")
-
-        if not msg.startswith("点歌"):
+        if not msg.startswith(self.song_prefix):
             return
 
+        song_name = msg.replace(self.song_prefix, "").strip()
+        print(song_name)
         danmu_info: DanmuInfo = {
             "uid": uid,
             "uname": uname,
-            "msg": msg,
+            "msg": song_name,
             "medal_level": medal_level,
             "medal_name": medal_name,
             "guard_level": guard_level,
@@ -74,3 +81,34 @@ class MyLive(Decorator):
         }
 
         self.dispatch("danmu", danmu_info)
+
+    async def on_super_chat(self, event):
+        sc_data = event["data"]["data"]
+        uname = sc_data["user_info"]["uname"]
+        uid = sc_data["uid"]
+        message = str(sc_data["message"])
+        price = sc_data["price"]
+        medal_level = 0
+        medal_name = ""
+        guard_level = 0
+        if sc_data["medal_info"] is not None:
+            guard_level = sc_data["medal_info"]["guard_level"]
+            medal_level = sc_data["medal_info"]["medal_level"]
+            medal_name = sc_data["medal_info"]["medal_name"]
+    
+        if not message.startswith(self.song_prefix):
+            return
+        song_name = message.replace(self.song_prefix, "").strip()
+
+        sc_info: DanmuInfo = {
+            "uid": uid,
+            "uname": uname,
+            "msg": song_name,
+            "medal_level": medal_level,
+            "medal_name": medal_name,
+            "guard_level": guard_level,
+            "price": price,
+            "send_time": int(time.time())
+        }
+
+        self.dispatch("sc", sc_info)

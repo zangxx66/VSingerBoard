@@ -2,12 +2,13 @@ import webview
 import base64
 from pydantic import BaseModel
 from typing import Dict, Any, Optional
-from fastapi import APIRouter, Query, Body, Header, Depends
+from fastapi import APIRouter, Query, Body, Header, Depends, BackgroundTasks
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import HTTPException
 from bilibili_api import Credential, user
 from bilibili_api.login_v2 import QrCodeLogin, QrCodeLoginChannel
 from src.database import Db as conn
+from src.bili import restart_live
 
 
 def verify_token(x_token: str = Header()):
@@ -57,6 +58,8 @@ async def add_or_update_bili_config(data: bconfigItem = Body(..., embed=True)):
     else:
         result = await conn.add_bconfig(**new_dic)
         msg = "添加成功" if result else "添加失败"
+    if result:
+        BackgroundTasks.add_task(func=restart_live)
     code = 0 if result else -1
     return ResponseItem(code=code, msg=msg, data=None)
 
