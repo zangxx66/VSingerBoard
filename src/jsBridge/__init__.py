@@ -157,16 +157,12 @@ class Douyin:
 
 
 async def restart_bili():
-    global bili_thread
-    if bili_thread is not None and bili_thread.is_alive():
-        bili_thread.join(5)
+    stop_bili()
     start_bili()
 
 
 async def restart_dy():
-    global dy_thread
-    if dy_thread is not None and dy_thread.is_alive():
-        dy_thread.join(5)
+    stop_dy()
     start_dy()
 
 
