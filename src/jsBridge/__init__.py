@@ -1,3 +1,4 @@
+import asyncio
 import threading
 import webview
 import pyperclip
@@ -5,7 +6,7 @@ import time
 from src.bili import MyLive
 from src.database import Db
 from src.douyin import DouyinLiveWebFetcher
-from bilibili_api import Credential, sync
+from bilibili_api import Credential
 
 
 BdanmuList: list = []
@@ -42,30 +43,50 @@ class Api:
 
 
 class Bili:
+    conn: Db
+
     def __init__(self):
         self.conn = Db()
 
     def start(self):
-        config = sync(self.conn.get_bconfig())
-        if not config:
+        """
+        Wrapper to run the async start method in a new event loop.
+        This method is the target for the background thread.
+        """
+        try:
+            asyncio.run(self._start_async())
+        except Exception as e:
+            webview.logger.error(f"Bilibili thread failed: {e}")
+
+    async def _start_async(self):
+        """
+        Asynchronously fetches configuration and starts the Bilibili live client.
+        """
+        config = await self.conn.get_bconfig()
+        if not config or config.room_id == 0:
+            webview.logger.info("Bilibili room_id not configured, skipping.")
             return
-        if config.room_id == 0:
-            return
-        bili_credential = sync(self.conn.get_bcredential(enable=True))
+
+        bili_credential = await self.conn.get_bcredential(enable=True)
         credential: Credential = None
-        if bili_credential is not None:
+        if bili_credential:
             credential = Credential(
                 sessdata=bili_credential.sessdata,
-                bili_jct=bili_credential.bili_jct,
+                jct=bili_credential.bili_jct,
                 buvid3=bili_credential.buvid3,
                 buvid4=bili_credential.buvid4,
                 dedeuserid=bili_credential.dedeuserid,
                 ac_time_value=bili_credential.ac_time_value
             )
+
         live = MyLive(room_id=config.room_id, credentials=credential, song_prefix=config.sing_prefix)
         live.on("danmu")(self.add_bdanmu)
         live.on("sc")(self.add_bdanmu)
-        live.start()
+
+        if hasattr(live, "connect") and asyncio.iscoroutinefunction(live.connect):
+            await live.connect()
+        else:
+            webview.logger.error("MyLive object does not have a suitable async 'connect' method.")
 
     def add_bdanmu(self, danmu):
         global BdanmuList
@@ -80,22 +101,48 @@ class Bili:
 
 
 class Douyin:
+    conn: Db
+
     def __init__(self):
         self.conn = Db()
         self.sing_prefix = ""
 
     def start(self):
-        config = sync(self.conn.get_dy_config())
-        if not config:
+        """
+        Wrapper to run the async start method in a new event loop.
+        This method is the target for the background thread.
+        """
+        try:
+            asyncio.run(self._start_async())
+        except Exception as e:
+            webview.logger.error(f"Douyin thread failed: {e}")
+
+    async def _start_async(self):
+        """
+        Asynchronously fetches configuration and starts the Douyin live client.
+        """
+        config = await self.conn.get_dy_config()
+        if not config or not config.room_id:
+            webview.logger.info("Douyin room_id not configured, skipping.")
             return
-        if config.room_id == 0:
-            return
+
         self.sing_prefix = config.sing_prefix
+
+        # Assuming DouyinLiveWebFetcher follows a similar pattern with an async start/connect
         Dlive = DouyinLiveWebFetcher(live_id=config.room_id)
         Dlive.on("danmu")(self.add_dydanmu)
-        Dlive.start()
 
-    def add_danmu(self, danmu):
+        # Similar to Bili, we need to call an async method to start the client
+        if hasattr(Dlive, "connect") and asyncio.iscoroutinefunction(Dlive.connect):
+            await Dlive.connect()
+        elif hasattr(Dlive, "start") and asyncio.iscoroutinefunction(Dlive.start):
+            await Dlive.start()
+        else:
+            # If the start method is synchronous and blocking, it must be called directly.
+            # This assumes it manages its own loop correctly without conflicting.
+            Dlive.start()
+
+    def add_dydanmu(self, danmu):
         global DdanmuList
         if danmu.content.startswith(self.sing_prefix):
             song_name = danmu.content.replace(self.sing_prefix, "").strip()
@@ -106,7 +153,7 @@ class Douyin:
                 "send_time": int(time.time()),
                 "source": "douyin"
             }
-        DdanmuList.append(result)
+            DdanmuList.append(result)
 
 
 async def restart_bili():
@@ -133,7 +180,7 @@ def start_bili():
 def start_dy():
     global dy_thread
     dy = Douyin()
-    dy_thread = threading.Thread(target=dy.start(), daemon=True, name="dy_thread")
+    dy_thread = threading.Thread(target=dy.start, daemon=True, name="dy_thread")
     dy_thread.start()
 
 

@@ -3,7 +3,7 @@ from tortoise import Tortoise
 from tortoise.connection import connections
 # from tortoise.backends.base.client import BaseDBAsyncClient
 from .model import BiliConfig, BiliCredential, DyConfig
-from src.utils import get_path
+from src.utils import get_path, logger
 
 
 class Db:
@@ -11,13 +11,16 @@ class Db:
 
     def __init__(self):
         try:
-            loop = asyncio.get_event_loop()
-            if loop is None or not loop.is_running():
-                loop = asyncio.new_event_loop()
-                asyncio.set_event_loop(loop)
-            loop.run_until_complete(self.init())
+            # Get the current running event loop.
+            loop = asyncio.get_running_loop()
+            # If a loop is running, create a task to run the init coroutine concurrently.
+            loop.create_task(self.init())
+        except RuntimeError:
+            # If no event loop is running, a RuntimeError is raised.
+            # In this case, run the init coroutine in a new event loop.
+            asyncio.run(self.init())
         except Exception as e:
-            print(e)
+            logger.error(f"An unexpected error occurred during database initialization: {e}")
 
     # @classmethod
     async def init(cls):

@@ -11,7 +11,7 @@ from src.jsBridge import Api, start_bili, start_dy, stop_bili, stop_dy
 from webview.window import Window
 from pathlib import Path
 
-DEBUG = False
+DEBUG = True
 PORT = 5173 if DEBUG else 8000
 window: Window = None
 server_thread: threading.Thread = None

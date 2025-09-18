@@ -56,7 +56,7 @@ const minus = () => {
   active.value = "0"
 }
 
-const quit = () => {
+const quit = async () => {
   const loading = ElLoading.service({
     lock: true,
     text: "正在退出...",
@@ -64,7 +64,7 @@ const quit = () => {
   })
 
   // @ts-ignore
-  const result = window.pywebview.api.on_closing()
+  const result = await window.pywebview.api.on_closing()
   if(!result){
     loading.close()
   }
