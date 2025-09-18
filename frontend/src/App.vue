@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { ref, onMounted, defineAsyncComponent, computed } from "vue"
+import { ref, onMounted } from "vue"
 import { RouterView } from "vue-router"
+import router from "@/router"
 import zhCn from "element-plus/es/locale/lang/zh-cn"
-import { Setting, StarFilled } from "@element-plus/icons-vue"
-import { ContextMenu } from '@imengyu/vue3-context-menu'
-import { ElMessage } from "element-plus"
+import { Minus, Close } from "@element-plus/icons-vue"
+import ContextMenu from '@imengyu/vue3-context-menu'
+import { ElLoading, ElMessage } from "element-plus"
 
+const active = ref("0")
 const cardConfig = {
   shadow: "always"
 }
@@ -17,32 +19,54 @@ const dialogConfig = {
   transition: "el-fade-in"
 }
 
-const show = ref(false)
-const options = ref({
-  zIndex: 100,
-  minWidth: 230,
-  x: 500,
-  y: 200,
-  theme: "mac"
-})
-function onContextMenu(e: MouseEvent) {
+const onContextMenu = async(e: MouseEvent) => {
   e.preventDefault()
-  show.value = true
-  options.value.x = e.x
-  options.value.y = e.y
+  const selectTxt = window.getSelection()?.toString()
+  ContextMenu.showContextMenu({
+    x: e.x,
+    y: e.y,
+    theme: "mac",
+    zIndex: 100,
+    minWidth: 230,
+    items: [
+      {
+        label: "重新加载",
+        onClick: () => {
+          router.go(0)
+        }
+      },
+      {
+        label: "拷贝",
+        disabled: !selectTxt,
+        onClick: () => {
+          if (selectTxt) {
+            // @ts-ignore
+            window.pywebview.api.copy_to_clipboard(selectTxt)
+            ElMessage.success("拷贝成功")
+          }
+        }
+      },
+    ]
+  })
 }
 
-const refresh = () => console.log("refresh")
-const isSelection = computed(() => {
-  const selectText = window.getSelection()?.toString()
-  if(selectText)return true
-  return false
-})
-async function copyToClipboard() {
-  const selectText = window.getSelection()?.toString()
-  if (selectText) {
-    await navigator.clipboard.writeText(selectText)
-    ElMessage.success("复制成功")
+const minus = () => {
+  // @ts-ignore
+  window.pywebview.api.minus_window()
+  active.value = "0"
+}
+
+const quit = () => {
+  const loading = ElLoading.service({
+    lock: true,
+    text: "正在退出...",
+    background: "rgba(0, 0, 0, 0.7)"
+  })
+
+  // @ts-ignore
+  const result = window.pywebview.api.on_closing()
+  if(!result){
+    loading.close()
   }
 }
 
@@ -50,55 +74,34 @@ onMounted(() => {
   const dom = document.querySelector(".layout-container-demo .el-main") as HTMLElement
   dom.style.width = window.innerWidth + "px"
 })
-
-const isShow = ref(false)
-const settingComponent = defineAsyncComponent(() => import("@/components/home/setting.vue"))
 </script>
 
 <template>
-  <el-container class="layout-container-demo" @contextmenu="onContextMenu($event)">
-    <el-header class="glassmorphism">
-      <el-menu mode="horizontal" :ellipsis="false" class="toolbar">
+  <el-container class="layout-container-demo">
+    <el-header class="glassmorphism pywebview-drag-region">
+      <el-menu :default-active="active" mode="horizontal" :ellipsis="false" class="toolbar">
         <el-menu-item index="0">
           <img src="/assets/images/logo.png" alt="logo" style="width:100px;" />
         </el-menu-item>
-        <el-menu-item index="1">
+        <el-menu-item index="1" @click="minus">
           <el-icon>
-            <StarFilled />
+            <Minus />
           </el-icon>
         </el-menu-item>
-        <el-menu-item index="2" @click="isShow = true">
+        <el-menu-item index="2" @click="quit">
           <el-icon>
-            <Setting />
+            <Close />
           </el-icon>
-          <span>设置</span>
         </el-menu-item>
       </el-menu>
     </el-header>
 
-    <el-main>
+    <el-main @contextmenu="onContextMenu">
       <el-config-provider :locale="zhCn" :card="cardConfig" :dialog="dialogConfig">
         <RouterView></RouterView>
         <el-backtop :right="100" :bottom="100" />
       </el-config-provider>
     </el-main>
-    <el-drawer v-model="isShow" direction="rtl" resizable destroy-on-close>
-      <template #header>
-        <el-text>
-          <el-icon>
-            <Setting />
-          </el-icon>
-          设置
-        </el-text>
-      </template>
-      <template #default>
-        <setting-component></setting-component>
-      </template>
-    </el-drawer>
-    <context-menu v-model:show="show" :options="options">
-      <context-menu-item label="重新加载" @click="refresh"  />
-      <context-menu-item v-if="isSelection" label="复制" @click="copyToClipboard" />
-    </context-menu>
   </el-container>
 </template>
 
@@ -129,9 +132,10 @@ const settingComponent = defineAsyncComponent(() => import("@/components/home/se
 }
 
 .layout-container-demo .el-main {
-  height: calc(100vh - 60px);
+  height: calc(100vh - 30px);
   left: 0;
   position: absolute;
+  overflow: hidden;
 }
 
 .layout-container-demo .toolbar {
@@ -140,7 +144,7 @@ const settingComponent = defineAsyncComponent(() => import("@/components/home/se
   justify-content: center;
   height: 60px;
   width: 100%;
-  right: 20px;
+  right: 0;
   background-color: transparent;
   text-align: right;
   font-size: 24px;

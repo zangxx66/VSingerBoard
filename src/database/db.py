@@ -1,14 +1,25 @@
+import asyncio
 from tortoise import Tortoise
 from tortoise.connection import connections
-from tortoise.backends.base.client import BaseDBAsyncClient
-from .model import BiliConfig, BiliCredential
+# from tortoise.backends.base.client import BaseDBAsyncClient
+from .model import BiliConfig, BiliCredential, DyConfig
 from src.utils import get_path
 
 
 class Db:
-    conn: BaseDBAsyncClient
+    # conn: BaseDBAsyncClient
 
-    @classmethod
+    def __init__(self):
+        try:
+            loop = asyncio.get_event_loop()
+            if loop is None or not loop.is_running():
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+            loop.run_until_complete(self.init())
+        except Exception as e:
+            print(e)
+
+    # @classmethod
     async def init(cls):
         """
         Initialize database connection.
@@ -28,9 +39,9 @@ class Db:
 
         await Tortoise.init(config=config)
         await Tortoise.generate_schemas()
-        cls.conn = Tortoise.get_connection("default")
+        # cls.conn = Tortoise.get_connection("default")
 
-    @classmethod
+    # @classmethod
     async def disconnect(cls):
         """
         Close all database connections.
@@ -39,7 +50,7 @@ class Db:
         """
         await connections.close_all()
 
-    @classmethod
+    # @classmethod
     async def add_bcredential(cls, **kwargs):
         """
         Add a BiliCredential.
@@ -51,7 +62,7 @@ class Db:
             return False
         return True
 
-    @classmethod
+    # @classmethod
     async def update_bcredential(cls, pk, **kwargs):
         """
         Update a BiliCredential.
@@ -63,7 +74,7 @@ class Db:
         res = await BiliCredential.get(id=pk).update(**kwargs)
         return res
 
-    @classmethod
+    # @classmethod
     async def delete_bcredential(cls, pk):
         """
         Delete a BiliCredential by its primary key.
@@ -74,7 +85,7 @@ class Db:
         res = await BiliCredential.delete(id=pk)
         return res
 
-    @classmethod
+    # @classmethod
     async def get_bcredential_list(cls, **kwargs):
         """
         Get a list of BiliCredentials.
@@ -85,7 +96,7 @@ class Db:
         res = await BiliCredential.get(**kwargs)
         return res
 
-    @classmethod
+    # @classmethod
     async def get_bcredential(cls, **kwargs):
         """
         Get a BiliCredential by its primary key.
@@ -96,7 +107,7 @@ class Db:
         res = await BiliCredential.get(**kwargs).first()
         return res
 
-    @classmethod
+    # @classmethod
     async def add_bconfig(cls, **kwargs):
         """
         Add a BiliConfig.
@@ -108,7 +119,7 @@ class Db:
             return False
         return True
 
-    @classmethod
+    # @classmethod
     async def update_bconfig(cls, pk, **kwargs):
         """
         Update a BiliConfig by its primary key.
@@ -120,7 +131,7 @@ class Db:
         res = await BiliConfig.get(id=pk).update(**kwargs)
         return res
 
-    @classmethod
+    # @classmethod
     async def get_bconfig(cls, **kwargs):
         """
         Get a BiliConfig by its keyword arguments.
@@ -130,3 +141,38 @@ class Db:
         """
         res = await BiliConfig.get(**kwargs).first()
         return res
+
+    # @classmethod
+    async def get_dy_config(cls, **kwargs):
+        """
+        Get a DyConfig by its keyword arguments.
+
+        :param kwargs: Keyword arguments passed to DyConfig.get()
+        :return: The result of the get operation
+        """
+        res = await DyConfig.get(**kwargs).first()
+        return res
+
+    # @classmethod
+    async def update_dy_config(cls, pk, **kwargs):
+        """
+        Update a DyConfig by its primary key.
+
+        :param pk: Primary key of the config to be updated
+        :param kwargs: Keyword arguments passed to DyConfig.update()
+        :return: The result of the update operation
+        """
+        res = await DyConfig.get(id=pk).update(**kwargs)
+        return res
+
+    # @classmethod
+    async def add_dy_config(cls, **kwargs):
+        """
+        Add a DyConfig.
+
+        :param kwargs: Keyword arguments passed to DyConfig.add()
+        :return: True if the config is added successfully, False otherwise
+        """
+        if not await DyConfig.add(**kwargs):
+            return False
+        return True

@@ -11,7 +11,6 @@ const btnLoading = ref(false)
 const timer = ref(0)
 const qrCode = ref('')
 const qrCodeText = ref('')
-const numberReg = /^\d+$/g
 const credentialList = ref(Array<BiliCredentialModel>())
 const baseFormValue = reactive<BiliConfigModel>({
     id: 0,
@@ -110,9 +109,9 @@ const initConfig = () => {
             if (resp.code != 0) {
                 ElMessage.warning(resp.msg)
             } else {
-                const data = resp.data
+                const data = resp.data.data
                 if (data) {
-                    const model = data.data as BiliConfigModel
+                    const model = data as BiliConfigModel
                     baseFormValue.id = model.id
                     baseFormValue.room_id = model.room_id
                     baseFormValue.modal_level = model.modal_level
@@ -272,7 +271,7 @@ onMounted(() => {
             <el-form-item label="房间号" prop="room_id">
                 <el-input v-model="baseFormValue.room_id" placeholder="B站直播间号" type="text" min="1" />
             </el-form-item>
-            <el-form-item label="粉丝牌等级" prop="modal_level">
+            <!-- <el-form-item label="粉丝牌等级" prop="modal_level">
                 <el-input v-model="baseFormValue.modal_level" placeholder="粉丝牌等级" type="text" min="0" />
             </el-form-item>
             <el-form-item label="用户等级" prop="user_level">
@@ -281,13 +280,13 @@ onMounted(() => {
                         <el-radio :value="item.value">{{ item.key }}</el-radio>
                     </template>
                 </el-radio-group>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="点歌指令" prop="sing_prefix">
                 <el-input v-model="baseFormValue.sing_prefix" placeholder="点歌指令" type="text" />
             </el-form-item>
-            <el-form-item label="点歌cd" prop="sing_cd">
+            <!-- <el-form-item label="点歌cd" prop="sing_cd">
                 <el-input v-model="baseFormValue.sing_cd" placeholder="点歌cd，单位：秒" type="text" min="0" />
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item>
                 <el-button type="primary" @click="addOrUpdateConfig()">保存</el-button>
             </el-form-item>

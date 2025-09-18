@@ -8,11 +8,8 @@ export type DanmakuModel = {
     uid: number
     uname: string
     msg: string
-    medal_level: number
-    medal_name: string
-    guard_level: number
     send_time: number
-    price?: number
+    source: string
 }
 
 export type SubscribeModel = {
@@ -37,4 +34,19 @@ export type BiliCredentialModel = {
     avatar: string
     uid: number
     enable: boolean
+}
+
+export type DyConfigModel = {
+    id: number
+    room_id: number
+    sing_prefix: string
+    sing_cd: number
+}
+
+export type DyDanmuModel = {
+    user_id: number
+    user_name: string
+    content: string
+    level: number
+    fans_club_data: any
 }

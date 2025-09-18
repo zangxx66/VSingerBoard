@@ -68,5 +68,12 @@ class BiliConfig(BaseModel):
     sing_cd = fields.IntField()
 
 
+class DyConfig(BaseModel):
+    id = fields.BigIntField(primary_key=True, generated=True)
+    room_id = fields.BigIntField()
+    sing_prefix = fields.CharField(max_length=100)
+    sing_cd = fields.IntField()
+
+
 def ignore_none(kwargs):
     return {k: v for k, v in kwargs.items() if v is not None}

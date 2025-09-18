@@ -22,6 +22,7 @@ const initConfig = () => {
         if (resp.code != 0) {
             ElMessage.warning(resp.msg)
         } else {
+            if (!resp.data.data) return
             const cfg = resp.data.data as BiliConfigModel
             config.id = cfg.id
             config.room_id = cfg.room_id
@@ -35,18 +36,16 @@ const initConfig = () => {
 }
 
 const wsConnect = () => {
-    setInterval(async () => {
+    timer.value = setInterval(async () => {
         // @ts-ignore
         const list = await window.pywebview.api.get_danmu() as Array<DanmakuModel>
         if (list) {
-            list.forEach((value, index, array) => {
-                if (config.user_level == 0 && value.medal_level >= config.modal_level) {
-                    danmakuList.value.push(value)
-                }
-                if (config.user_level != 0 && value.guard_level <= config.user_level) {
-                    danmakuList.value.push(value)
-                }
-            })
+            danmakuList.value.push(...list)
+        }
+        // @ts-ignore
+        const dylist = await window.pywebview.api.get_dy_danmu() as Array<DanmakuModel>
+        if (dylist) {
+            danmakuList.value.push(...dylist)
         }
 
     }, 1000)
@@ -54,13 +53,32 @@ const wsConnect = () => {
 
 const load = () => console.log("load")
 
-const copyToClipboard = async (txt: string) => {
-    await navigator.clipboard.writeText(txt)
-    ElMessage.success("复制成功")
+const copyToClipboard = (txt: string) => {
+    // @ts-ignore
+    window.pywebview.api.copy_to_clipboard(txt)
+    ElMessage.success("拷贝成功")
+}
+
+const close = (danmaku: DanmakuModel) => {
+    const newList = danmakuList.value.filter(item => item.uid != danmaku.uid && item.source != danmaku.source)
+    danmakuList.value = newList
 }
 
 onMounted(() => {
     initConfig()
+    // danmakuList.value.push(...[{
+    //     uid: 0,
+    //     uname: "999",
+    //     msg: "string",
+    //     send_time: 1,
+    //     source: "bilibili"
+    // }, {
+    //     uid: 0,
+    //     uname: "ciruno",
+    //     msg: "yayaya",
+    //     send_time: 2,
+    //     source: "douyin"
+    // }])
 })
 
 onBeforeUnmount(() => {
@@ -79,12 +97,17 @@ onBeforeUnmount(() => {
                 </template>
                 <div class="infinite-list" v-infinite-scroll="load">
                     <template v-for="item in danmakuList">
-                        <div class="infinite-list-item" @click="copyToClipboard(item.msg)">
-                            <el-text tag="span" class="chat-tag">
-                                <el-tag type="primary" v-if="item.medal_level > 0">{{ item.medal_name }} Lv{{ item.medal_level }}</el-tag>
+                        <div class="infinite-list-item">
+                            <template v-if="item.source == 'bilibili'">
+                                <img src="/assets/images/bilibili.png" class="source-img" alt="bilibili" width="24" />
+                            </template>
+                            <template v-else-if="item.source == 'douyin'">
+                                <img src="/assets/images/douyin.png" class="source-img" alt="douyin" width="24" />
+                            </template>
+                            <el-text tag="span" class="chat-tag" @click="copyToClipboard(item.msg)">
                                 {{ item.uname }}：{{ item.msg }}
                             </el-text>
-                            <el-text tag="span" class="chat-close">
+                            <el-text tag="span" class="chat-close" @click="close(item)">
                                 <el-icon>
                                     <CloseBold />
                                 </el-icon>
@@ -113,23 +136,34 @@ onBeforeUnmount(() => {
     overflow: auto;
 }
 
-.infinite-list .infinite-list-item {
+.infinite-list-item {
+    width: 95%;
     display: flex;
-    align-items: center;
-    justify-content: left;
-    height: 50px;
-    background: var(--el-color-primary-light-9);
     margin: 10px;
+    height: 50px;
+    text-align: left;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--el-color-primary-light-9);
     color: var(--el-color-primary);
+}
+
+.chat-tag {
+    display: inline-block;
+    width: 90%;
     cursor: pointer;
-
+    margin-left: 1%;
 }
 
-.infinite-list .infinite-list-item+.list-item {
-    margin-top: 10px;
+.chat-close {
+    width: 1%;
+    margin-right: 1%;
+    cursor: pointer;
 }
 
-.song-name {
-    margin-left: 10px;
+.source-img {
+    margin: 1px;
+    height: 24px;
 }
+
 </style>

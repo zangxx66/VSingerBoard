@@ -181,6 +181,7 @@ class DouyinLiveWebFetcher(Decorator):
             user_id = user.get('id_str')
             nickname = user.get('nickname')
             print(f"【{nickname}】[{user_id}]直播间：{['正在直播', '已结束'][bool(room_status)]}.")
+            self.dispatch("status", {"status": room_status, "user_id": user_id, "nickname": nickname})
 
     def _connectWebSocket(self):
         """

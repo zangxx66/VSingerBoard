@@ -7,8 +7,8 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import HTTPException
 from bilibili_api import Credential, user
 from bilibili_api.login_v2 import QrCodeLogin, QrCodeLoginChannel
-from src.database import Db as conn
-from src.bili import restart_live
+from src.database import Db
+from src.jsBridge import restart_bili, restart_dy
 
 
 def verify_token(x_token: str = Header()):
@@ -18,6 +18,7 @@ def verify_token(x_token: str = Header()):
 
 router = APIRouter(tags=["api"], dependencies=[Depends(verify_token)])
 qr_code_login: QrCodeLogin
+conn = Db()
 
 
 class ResponseItem(BaseModel):
@@ -41,6 +42,13 @@ class bconfigItem(BaseModel):
     sing_cd: int
 
 
+class dyconfigItem(BaseModel):
+    id: int
+    room_id: int
+    song_prefix: str
+    song_cd: int
+
+
 @router.get("/get_bili_config", response_model=ResponseItem)
 async def get_bili_config():
     config = await conn.get_bconfig()
@@ -48,7 +56,7 @@ async def get_bili_config():
 
 
 @router.post("/add_or_update_bili_config", response_model=ResponseItem)
-async def add_or_update_bili_config(data: bconfigItem = Body(..., embed=True)):
+async def add_or_update_bili_config(background_tasks: BackgroundTasks, data: bconfigItem = Body(..., embed=True)):
     data_dic = data.__dict__
     new_dic = {k: v for k, v in data_dic.items() if v is not None and k != "id"}
     msg = ""
@@ -59,7 +67,7 @@ async def add_or_update_bili_config(data: bconfigItem = Body(..., embed=True)):
         result = await conn.add_bconfig(**new_dic)
         msg = "添加成功" if result else "添加失败"
     if result:
-        BackgroundTasks.add_task(func=restart_live)
+        background_tasks.add_task(func=restart_bili)
     code = 0 if result else -1
     return ResponseItem(code=code, msg=msg, data=None)
 
@@ -150,3 +158,26 @@ async def check_qr_code():
         return ResponseItem(code=0, msg="success", data=None)
     qr_state = await qr_code_login.check_state()
     return ResponseItem(code=0, msg="qr_state", data={"data": qr_state.value})
+
+
+@router.get("/get_dy_config")
+async def get_dy_config():
+    result = await conn.get_dy_config()
+    return ResponseItem(code=0, msg=None, data={"data": jsonable_encoder(result)})
+
+
+@router.get("/add_or_update_dy_config", response_model=ResponseItem)
+async def add_or_update_dy_config(background_tasks: BackgroundTasks, data: dyconfigItem = Body(..., embed=True)):
+    data_dic = data.__dict__
+    new_dic = {k: v for k, v in data_dic.items() if v is not None and k != "id"}
+    msg = ""
+    if data.id > 0:
+        result = await conn.update_dyconfig(pk=data.id, **new_dic)
+        msg = "更新成功" if result else "更新失败"
+    else:
+        result = await conn.add_dyconfig(**new_dic)
+        msg = "添加成功" if result else "添加失败"
+    if result:
+        background_tasks.add_task(func=restart_dy)
+    code = 0 if result else -1
+    return ResponseItem(code=code, msg=msg, data=None)

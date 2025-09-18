@@ -64,6 +64,24 @@ class Request {
     async checkQrCode(params: {}): Promise<AxiosResponse<any>>{
         return await client.get("/api/check_qr_code", params)
     }
+
+    /**
+     * Get a Douyin configuration.
+     * @param {Object} params Parameters object passed to the server.
+     * @returns {Promise<AxiosResponse<any>>} The response of the get operation.
+     */
+    async getDyConfig(params: {}): Promise<AxiosResponse<any>>{
+        return await client.get("/api/get_dy_config", params)
+    }
+
+    /**
+     * Add or update a Douyin configuration.
+     * @param {Object} params Parameters object passed to the server.
+     * @returns {Promise<AxiosResponse<any>>} The response of the add or update operation.
+     */
+    async addOrUpdateDyConfig(params: {}): Promise<AxiosResponse<any>>{
+        return await client.post("/api/add_or_update_dy_config", params)
+    }
 }
 
 export const request = new Request()

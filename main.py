@@ -1,21 +1,21 @@
 import webview
 import os
-import asyncio
+# import asyncio
 import threading
 import time
 import signal
 from src.server import startup
-from src.database import Db as conn
-from src.utils import logger
-from src.bili import Api, init_live
+# from src.database import Db as conn
+from src.utils import logger, get_version
+from src.jsBridge import Api, start_bili, start_dy, stop_bili, stop_dy
 from webview.window import Window
+from pathlib import Path
 
-DEBUG = True
+DEBUG = False
 PORT = 5173 if DEBUG else 8000
 window: Window = None
 server_thread: threading.Thread = None
 dev_thread: threading.Thread = None
-ws_thread: threading.Thread = None
 stop_event = threading.Event()
 
 
@@ -31,7 +31,8 @@ def pro_server():
 
 def ws_server():
     print("------websocket------")
-    asyncio.run(init_live())
+    start_dy()
+    start_bili()
 
 
 def dev_server():
@@ -45,8 +46,13 @@ def on_start(window: Window):
 
 
 def on_closing():
-    global stop_event, server_thread, dev_thread, ws_thread
+    global stop_event, server_thread, dev_thread
     webview.logger.info("click close")
+
+    window = webview.active_window()
+    result = window.create_confirmation_dialog("提示", "是否退出？")
+    if not result:
+        return False
 
     stop_event.set()
     if server_thread is not None and server_thread.is_alive:
@@ -55,9 +61,9 @@ def on_closing():
     if dev_thread is not None and dev_thread.is_alive:
         webview.logger.info("Waiting for dev thread to finish...")
         dev_thread.join(5)
-    if ws_thread is not None and ws_thread.is_alive:
-        webview.logger.info("Waiting for ws thread to finish...")
-        ws_thread.join(5)
+    stop_bili()
+    stop_dy()
+    # asyncio.run(conn.disconnect())
 
     os._exit(0)
 
@@ -72,22 +78,27 @@ def main():
 
     try:
         # Initialize services
-        asyncio.run(conn.init())
+        # asyncio.run(conn.init())
 
         localization = {
-            'global.quitConfirmation': u'你想退出吗？',
+            'global.quitConfirmation': u'是否退出？',
             'global.ok': u'确定',
             'global.quit': u'退出',
             'global.cancel': u'取消',
             'global.saveFile': u'保存文件',
             'cocoa.menu.about': u'关于',
             'cocoa.menu.services': u'服务',
-            'cocoa.menu.view': u'显示',
+            'cocoa.menu.view': u'视图',
+            'cocoa.menu.edit': u'编辑',
             'cocoa.menu.hide': u'隐藏',
             'cocoa.menu.hideOthers': u'隐藏其他',
-            'cocoa.menu.showAll': u'显示所有',
+            'cocoa.menu.showAll': u'全部显示',
             'cocoa.menu.quit': u'退出',
             'cocoa.menu.fullscreen': u'进入全屏',
+            'cocoa.menu.cut': u'剪切',
+            'cocoa.menu.copy': u'拷贝',
+            'cocoa.menu.paste': u'粘贴',
+            'cocoa.menu.selectAll': u'全部选择',
             'windows.fileFilter.allFiles': u'所有文件',
             'windows.fileFilter.otherFiles': u'其他文件类型',
             'linux.openFile': u'打开文件',
@@ -103,25 +114,34 @@ def main():
         server_thread = threading.Thread(target=pro_server, daemon=True, name="proServer")
         server_thread.start()
 
-        ws_thread = threading.Thread(target=ws_server, daemon=True, name="wsServer")
-        ws_thread.start()
+        ws_server()
 
         # 系统分辨率
         screens = webview.screens
+        print(str(screens))
         screens = screens[0]
         width = screens.width
         height = screens.height
         # 程序窗口大小
-        initWidth = int(width * 2 / 2)
-        initHeight = int(height * 4 / 4)
+        initWidth = int(width / 1.2)
+        initHeight = int(height / 1.2)
 
         webview.settings["OPEN_DEVTOOLS_IN_DEBUG"] = False
         os.environ["PYWEBVIE_WLOG"] = "debug"
         os.environ["WEBKIT_DISABLE_COMPOSITING_MODE"] = "1"
 
-        window = webview.create_window("点歌板", url=f"http://127.0.0.1:{PORT}/", js_api=Api(), localization=localization, width=initWidth, height=initHeight, resizable=False)
-        window.events.closing += on_closing
-        webview.start(on_start, window, debug=DEBUG, gui="gtk", icon="wwwroot/assets/images/logo.png")
+        window = webview.create_window("点歌板",
+                                       url=f"http://127.0.0.1:{PORT}/",
+                                       js_api=Api(),
+                                       localization=localization,
+                                       width=initWidth,
+                                       height=initHeight,
+                                       resizable=False,
+                                       frameless=True,
+                                       easy_drag=False)
+        # window.events.closing += on_closing
+        window.expose(on_closing)
+        webview.start(on_start, window, debug=DEBUG, gui="gtk", icon="logo.icns")
 
         stop_event.wait()
     except Exception as ex:
@@ -135,9 +155,23 @@ def main():
         if dev_thread is not None and dev_thread.is_alive:
             logger.info("Waiting for dev thread to finish...")
             dev_thread.join(5)
+        stop_bili()
+        stop_dy()
 
         logger.info("Shutdown complete.")  # Wait
+        os._exit(0)
 
 
 if __name__ == "__main__":
     main()
+    # def tree(src):
+    #     return [
+    #         (root, map(lambda f: Path.cwd().joinpath(root, f), files))
+    #         for (root, dirs, files) in os.walk(os.path.normpath(src))
+    #     ]
+
+    # DATA_FILES = tree("wwwroot")
+    # for i in DATA_FILES:
+    #     j = [k.name for k in i[1]]
+    #     print(i[0], j)
+    # os._exit(0)

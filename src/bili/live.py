@@ -95,7 +95,7 @@ class MyLive(Decorator):
             guard_level = sc_data["medal_info"]["guard_level"]
             medal_level = sc_data["medal_info"]["medal_level"]
             medal_name = sc_data["medal_info"]["medal_name"]
-    
+
         if not message.startswith(self.song_prefix):
             return
         song_name = message.replace(self.song_prefix, "").strip()

@@ -4,6 +4,7 @@
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
+  overflow: hidden;
   font-weight: normal;
   font-family: Inter, 'Helvetica Neue', Helvetica, 'PingFang SC',
   'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
@@ -24,6 +25,17 @@
   transform-origin: 200px bottom;
   backdrop-filter: blur(10px);
   color: #000;
+}
+
+.mx-context-menu-item {
+  background-color: transparent;
+}
+
+.mx-context-menu-item-display {
+  display: block;
+}
+.mx-context-menu-item-hide {
+  display: none;
 }
 
 a,

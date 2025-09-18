@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref, defineAsyncComponent } from "vue"
+import { defineAsyncComponent } from "vue"
 
-const BiliChat = defineAsyncComponent(() => import("@/components/room/biliChat.vue"))
+const BiliChat = defineAsyncComponent(() => import("@/components/room/chat.vue"))
+const Settings = defineAsyncComponent(() => import("@/components/home/setting.vue"))
 </script>
 <template>
     <el-container class="room-container">
@@ -11,15 +12,9 @@ const BiliChat = defineAsyncComponent(() => import("@/components/room/biliChat.v
                     <bili-chat></bili-chat>
                 </el-splitter-panel>
                 <el-splitter-panel min="30%">
-
+                    <settings></settings>
                 </el-splitter-panel>
             </el-splitter>
         </el-main>
     </el-container>
 </template>
-<style scoped>
-.room-watermark {
-    height: calc(100vh - 80px);
-    overflow: hidden;
-}
-</style>

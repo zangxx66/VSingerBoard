@@ -1,4 +1,5 @@
 import uvicorn
+import os
 from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.middleware.gzip import GZipMiddleware
@@ -11,9 +12,10 @@ from .router import router
 from src.utils import logger
 
 
-dist_path = Path(__file__).parent.parent.parent / "wwwroot"
+dist_path = Path.cwd().joinpath("wwwroot")
 if not dist_path.is_dir():
-    dist_path.mkdir()
+    app_path = dist_path.parent.parent / "Resources"
+    dist_path = os.path.join(app_path, "wwwroot")
 
 app = FastAPI(
     title="vsingerboard",

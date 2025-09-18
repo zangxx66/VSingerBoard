@@ -1,11 +1,17 @@
-from pathlib import Path
+import os
 import time
+import tomllib
+from pathlib import Path
 
 
 def get_path(*other, dir_name: str):
     """获取数据文件路径"""
-    dir_path = Path.cwd().joinpath(dir_name)
-    return str(dir_path.joinpath(*other))
+    os.makedirs(os.path.expanduser("~/.vsingerboard"), exist_ok=True)
+    # dir_path = Path.cwd().joinpath(dir_name)
+    dir_path = os.path.expanduser(f"~/.vsingerboard/{dir_name}")
+    os.makedirs(dir_path, exist_ok=True)
+    cfg_path = os.path.join(dir_path, *other)
+    return cfg_path
 
 
 def get_timespan(time_str):
@@ -37,3 +43,24 @@ def get_now():
     now = int(time.time())
     now_str = timespan_to_localtime(now)
     return now_str
+
+
+def get_pyproject_info():
+    file_path = Path.cwd().joinpath("pyproject.toml")
+    try:
+        with open(file_path, "rb") as f:
+            data = tomllib.load(f)
+        return data
+    except FileNotFoundError:
+        print(f"错误：文件 '{file_path}' 未找到。")
+        return None
+    except Exception as e:
+        print(f"解析文件时发生错误: {e}")
+        return None
+
+
+def get_version():
+    toml = get_pyproject_info()
+    if "project" in toml and "version" in toml["project"]:
+        return toml["project"]["version"]
+    return "0.0.1"

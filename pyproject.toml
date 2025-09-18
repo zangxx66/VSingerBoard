@@ -1,6 +1,6 @@
 [project]
 name = "vsingerboard"
-version = "0.1.0"
+version = "1.0.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -12,12 +12,21 @@ dependencies = [
     "fastapi>=0.116.1",
     "jinja2>=3.1.6",
     "mini-racer>=0.12.4",
+    "py2app>=0.28.8",
     "pydantic>=2.11.7",
     "pyobjc>=11.1",
+    "pyobjc-framework-calendarstore==11.1",
+    "pyobjc-framework-collaboration==11.1",
+    "pyobjc-framework-dictionaryservices==11.1",
+    "pyobjc-framework-inputmethodkit==11.1",
+    "pyobjc-framework-instantmessage==11.1",
+    "pyobjc-framework-scriptingbridge==11.1",
+    "pyperclip>=1.9.0",
     "pywebview>=6.0",
     "requests>=2.32.5",
+    "setuptools==70.3.0",
     "tortoise-orm>=0.25.1",
-    "uvicorn>=0.35.0",
+    "uvicorn[standard]>=0.35.0",
     "websocket-client>=1.8.0",
     "websockets>=15.0.1",
 ]
