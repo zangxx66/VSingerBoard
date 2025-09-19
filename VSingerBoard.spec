@@ -14,7 +14,7 @@ from src.utils import get_version
 # Add the entire wwwroot directory as a single data entry.
 # This is a robust way to include all static assets.
 datas = [('wwwroot', 'wwwroot')]
-hidden_packages =  ["webview", "uvloop", "uvicorn", "tortoise", "pydantic", "objc", "anyio"]
+hidden_packages =  ["webview", "uvloop", "uvicorn", "tortoise", "pydantic", "anyio"]
 
 # --- Define the Info.plist dictionary (from py2app options) ---
 info_plist = {
