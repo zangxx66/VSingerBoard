@@ -57,6 +57,7 @@ jobs:
         run: Compress-Archive -Path dist/VSingerBoard/* -DestinationPath ${{ matrix.asset_name }}
 
       - name: Upload Release Asset
+        if: github.event_name == 'release'
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
