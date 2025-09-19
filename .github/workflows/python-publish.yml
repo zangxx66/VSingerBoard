@@ -1,4 +1,4 @@
-# This workflow builds the application for multiple platforms and uploads them as release assets.
+# This workflow builds the application for multiple platforms using PyInstaller and uploads them as release assets.
 
 name: Build and Release Application
 
@@ -40,8 +40,11 @@ jobs:
         run: pip install uv
 
       - name: Install project dependencies with uv
-        # Reads dependencies from pyproject.toml
+        # uv sync installs dependencies from uv.lock, based on pyproject.toml
         run: uv sync
+
+      - name: Install PyInstaller
+        run: uv pip install pyinstaller
 
       - name: Install Linux system dependencies (for pywebview)
         if: runner.os == 'Linux'
@@ -49,22 +52,22 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev
 
-      - name: Build the application
-        run: uv run setup.py py2app
+      - name: Build the application with PyInstaller
+        run: pyinstaller VSingerBoard.spec
 
       - name: Package the application for macOS
         if: runner.os == 'macOS'
         # Use ditto for macOS to correctly handle .app bundles
-        run: ditto -c -k --sequesterRsrc --keepParent dist/main.app ${{ matrix.asset_name }}
+        run: ditto -c -k --sequesterRsrc --keepParent dist/VSingerBoard.app ${{ matrix.asset_name }}
 
       - name: Package the application for Linux
         if: runner.os == 'Linux'
-        run: tar -czvf ${{ matrix.asset_name }} -C dist/ .
+        run: tar -czvf ${{ matrix.asset_name }} -C dist/VSingerBoard .
 
       - name: Package the application for Windows
         if: runner.os == 'Windows'
         shell: pwsh
-        run: Compress-Archive -Path dist/* -DestinationPath ${{ matrix.asset_name }}
+        run: Compress-Archive -Path dist/VSingerBoard/* -DestinationPath ${{ matrix.asset_name }}
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1

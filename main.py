@@ -6,10 +6,9 @@ import time
 import signal
 from src.server import startup
 # from src.database import Db as conn
-from src.utils import logger, get_version
+from src.utils import logger
 from src.jsBridge import Api, start_bili, start_dy, stop_bili, stop_dy
 from webview.window import Window
-from pathlib import Path
 
 DEBUG = True
 PORT = 5173 if DEBUG else 8000
@@ -164,14 +163,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    # def tree(src):
-    #     return [
-    #         (root, map(lambda f: Path.cwd().joinpath(root, f), files))
-    #         for (root, dirs, files) in os.walk(os.path.normpath(src))
-    #     ]
-
-    # DATA_FILES = tree("wwwroot")
-    # for i in DATA_FILES:
-    #     j = [k.name for k in i[1]]
-    #     print(i[0], j)
-    # os._exit(0)
