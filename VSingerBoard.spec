@@ -39,9 +39,7 @@ info_plist = {
     "CFBundleDisplayName": "点歌姬",
     "CFBundleVersion": ver,
     "CFBundleIdentifier": "com.ricardo.vsingerboard",
-    "DTSDKBuild": "24G90",
-    "DTSDKName": "macOS 15.0",
-    "LSMinimumSystemVersion": "15.0",
+    "LSMinimumSystemVersion": "13.0",
     "NSHumanReadableCopyright": "Copyright © 2025 Ricardo All rights reserved.",
     "NSAppTransportSecurity": {
         "NSAllowsArbitraryLoads": True,

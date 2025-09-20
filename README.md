@@ -39,7 +39,7 @@
 - **前端**: Vue 3, Vite, Element Plus, TypeScript
 - **桌面端框架**: Pywebview
 - **构建与打包**: PyInstaller, GitHub Actions
-- **直播平台接口**: `bilibili-api-python`, `websocket-client`, `py_mini_racer`, Protobuf
+- **直播平台接口**: `bilibili-api-python`, `websocket-client`, `py_mini_racer`, `Protobuf`
 
 ## 🤝 如何贡献
 
