@@ -36,7 +36,7 @@ hidden_packages += tortoise_hiddenimports
 # --- Define the Info.plist dictionary (from py2app options) ---
 info_plist = {
     "CFBundleName": "VSingerBoard",
-    "CFBundleDisplayName": "点歌板",
+    "CFBundleDisplayName": "点歌姬",
     "CFBundleVersion": ver,
     "CFBundleIdentifier": "com.ricardo.vsingerboard",
     "DTSDKBuild": "24G90",
@@ -89,10 +89,19 @@ exe = EXE(
     [],
     exclude_binaries=True,
     name='VSingerBoard',
-    version=ver,
+    version={
+                "CompanyName": "想象力有限公司",
+                "FileDescription": "多平台点歌板",
+                "FileVersion": ver,
+                "InternalName": "VSingerBoard",
+                "LegalCopyright": "Copyright © 2025 Ricardo All rights reserved.",
+                "OriginalFilename": "VSingerBoard.exe",
+                "ProductName": "点歌姬",
+                "ProductVersion": ver
+            },
     debug=False,
     bootloader_ignore_signals=False,
-    strip=False,
+    strip=True,
     upx=True,
     console=False,  # This is a GUI app, so no console window.
     disable_windowed_traceback=False,
@@ -108,7 +117,7 @@ coll = COLLECT(
     a.binaries,
     a.zipfiles,
     a.datas,
-    strip=False,
+    strip=True,
     upx=True,
     upx_exclude=[],
     name='VSingerBoard',
