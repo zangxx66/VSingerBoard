@@ -2,6 +2,7 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 import sys
+from PyInstaller.utils.hooks import collect_all
 
 # Use SPECPATH, the PyInstaller global variable for the spec file's directory,
 # to ensure imports from local scripts work correctly.
@@ -10,11 +11,26 @@ sys.path.insert(0, SPECPATH)
 # Import necessary variables from other project files
 from src.utils import get_version
 
+# --- Collect all submodules and data from specific packages ---
+# This is the most robust way to ensure a package is fully included.
+bilibili_api_datas, bilibili_api_binaries, bilibili_api_hiddenimports = collect_all('bilibili_api')
+tortoise_datas, tortoise_binaries, tortoise_hiddenimports = collect_all('tortoise')
+
 # --- Define data files ---
 # Add the entire wwwroot directory as a single data entry.
-# This is a robust way to include all static assets.
 datas = [('wwwroot', 'wwwroot')]
-hidden_packages =  ["webview", "uvloop", "uvicorn", "tortoise", "pydantic", "objc", "anyio"]
+datas += bilibili_api_datas
+datas += tortoise_datas
+
+# --- Define hidden imports ---
+# This list contains modules that PyInstaller's static analysis might miss.
+hidden_packages = [
+    "webview", "uvloop", "uvicorn", "pydantic", "objc", "anyio",
+    "aiohttp", "betterproto", "curl_cffi", "fastapi", "jinja2",
+    "py_mini_racer", "pyperclip", "requests", "pkg_resources", "websocket"
+]
+hidden_packages += bilibili_api_hiddenimports
+hidden_packages += tortoise_hiddenimports
 
 # --- Define the Info.plist dictionary (from py2app options) ---
 info_plist = {
@@ -51,12 +67,10 @@ info_plist = {
 }
 
 # --- PyInstaller Analysis ---
-# This block tells PyInstaller what to analyze: your main script, data files,
-# hidden imports, etc.
 a = Analysis(
     ['main.py'],
     pathex=[SPECPATH],
-    binaries=[],
+    binaries=bilibili_api_binaries + tortoise_binaries,
     datas=datas,
     hiddenimports=hidden_packages,
     hookspath=[],
@@ -99,7 +113,6 @@ coll = COLLECT(
 )
 
 # --- macOS .app Bundle ---
-# This block defines the final macOS application bundle.
 app = BUNDLE(
     coll,
     name='VSingerBoard.app',
