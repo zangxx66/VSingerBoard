@@ -88,6 +88,7 @@ exe = EXE(
     [],
     exclude_binaries=True,
     name='VSingerBoard',
+    version=get_version(),
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
