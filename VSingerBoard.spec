@@ -10,6 +10,7 @@ sys.path.insert(0, SPECPATH)
 
 # Import necessary variables from other project files
 from src.utils import get_version
+ver = get_version()
 
 # --- Collect all submodules and data from specific packages ---
 # This is the most robust way to ensure a package is fully included.
@@ -36,7 +37,7 @@ hidden_packages += tortoise_hiddenimports
 info_plist = {
     "CFBundleName": "VSingerBoard",
     "CFBundleDisplayName": "点歌板",
-    "CFBundleVersion": get_version(),
+    "CFBundleVersion": ver,
     "CFBundleIdentifier": "com.ricardo.vsingerboard",
     "DTSDKBuild": "24G90",
     "DTSDKName": "macOS 15.0",
@@ -88,7 +89,7 @@ exe = EXE(
     [],
     exclude_binaries=True,
     name='VSingerBoard',
-    version=get_version(),
+    version=ver,
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
