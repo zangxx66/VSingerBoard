@@ -89,7 +89,7 @@ exe = EXE(
     [],
     exclude_binaries=True,
     name='VSingerBoard',
-    version={
+    version_info={
                 "CompanyName": "想象力有限公司",
                 "FileDescription": "多平台点歌板",
                 "FileVersion": ver,
