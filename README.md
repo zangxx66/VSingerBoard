@@ -1,6 +1,6 @@
 # VSingerBoard - 您的专属虚拟主播点歌台
 
-![Build Status](https://github.com/zangxx66/VSingerBoard/actions/workflows/python-publish.yml/badge.svg) ![Python Version](https://img.shields.io/badge/python-3.12-blue.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Build Status](https://github.com/zangxx66/VSingerBoard/actions/workflows/python-publish.yml/badge.svg) ![Python Version](https://img.shields.io/badge/python-3.12-blue.svg) ![License](https://img.shields.io/badge/license-GPL-green.svg)
 
 ---
 
@@ -53,4 +53,4 @@
 
 ## 📄 许可证
 
-本项目基于 MIT 许可证发布。详情请见 `LICENSE` 文件。
+本项目基于 GPL-3.0 许可证发布。详情请见 `LICENSE` 文件。

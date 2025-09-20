@@ -1,5 +1,6 @@
 import uvicorn
 import os
+import sys
 from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.middleware.gzip import GZipMiddleware
@@ -14,12 +15,14 @@ from src.utils import logger
 
 dist_path = Path.cwd().joinpath("wwwroot")
 if not dist_path.exists():
-    if os.platform == "darwin":
+    if sys.platform == "win32":
+        app_path = Path.cwd().parent / "_internal"
+        dist_path = os.path.join(app_path, "wwwroot")
+    elif sys.platform == "darwin":
         app_path = Path.cwd().parent.parent / "Resources"
         dist_path = os.path.join(app_path, "wwwroot")
     else:
-        app_path = Path.cwd().parent / "_internal"
-        dist_path = os.path.join(app_path, "wwwroot")
+        pass
 
 app = FastAPI(
     title="vsingerboard",
