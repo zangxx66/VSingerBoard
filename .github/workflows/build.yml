@@ -3,7 +3,7 @@ name: Build Application
 on:
   push:
     branches:
-      - main
+      - master
   workflow_dispatch:
 
 jobs:
