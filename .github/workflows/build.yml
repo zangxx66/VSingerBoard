@@ -40,7 +40,7 @@ jobs:
         run: pip install uv
 
       - name: Install project dependencies with uv
-        run: uv pip install .
+        run: uv sync
 
       - name: Install Linux system dependencies
         if: runner.os == 'Linux'
