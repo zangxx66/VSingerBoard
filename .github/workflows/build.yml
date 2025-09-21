@@ -1,0 +1,74 @@
+name: Build Application
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build for ${{ matrix.os }} (${{ matrix.arch }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # macOS Builds
+          - os: macos-15
+            arch: arm64
+          - os: macos-13
+            arch: x64
+          # Linux Build
+          - os: ubuntu-latest
+            arch: x64
+          # Windows Build
+          - os: windows-latest
+            arch: x64
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          architecture: ${{ matrix.arch }}
+
+      - name: Install uv package manager
+        run: pip install uv
+
+      - name: Install project dependencies with uv
+        run: uv pip install .
+
+      - name: Install Linux system dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-gi python3-gi-cairo gir1.2-gtk-3.0 gir1.2-webkit2-4.1
+
+      - name: Build the application with PyInstaller
+        run: uv run pyinstaller VSingerBoard.spec
+
+      - name: Package Artifact
+        shell: bash
+        run: |
+          SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
+          if [ "$RUNNER_OS" == "macOS" ]; then
+            ASSET_NAME="VSingerBoard-macOS-${{ matrix.arch }}-${SHORT_SHA}.zip"
+            ditto -c -k --sequesterRsrc --keepParent dist/VSingerBoard.app "$ASSET_NAME"
+          elif [ "$RUNNER_OS" == "Linux" ]; then
+            ASSET_NAME="VSingerBoard-Linux-${{ matrix.arch }}-${SHORT_SHA}.tar.gz"
+            tar -czvf "$ASSET_NAME" -C dist/VSingerBoard .
+          elif [ "$RUNNER_OS" == "Windows" ]; then
+            ASSET_NAME="VSingerBoard-Windows-${{ matrix.arch }}-${SHORT_SHA}.zip"
+            7z a -tzip "$ASSET_NAME" ./dist/VSingerBoard/*
+          fi
+          echo "ASSET_NAME=$ASSET_NAME" >> $GITHUB_ENV
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: VSingerBoard-${{ matrix.os }}-${{ matrix.arch }}
+          path: ${{ env.ASSET_NAME }}

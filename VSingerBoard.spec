@@ -26,7 +26,7 @@ datas += tortoise_datas
 # --- Define hidden imports ---
 # This list contains modules that PyInstaller's static analysis might miss.
 hidden_packages = [
-    "webview", "uvloop", "uvicorn", "pydantic", "objc", "anyio",
+    "webview", "uvloop", "uvicorn", "pydantic", "objc", "anyio", "appdirs",
     "aiohttp", "betterproto", "curl_cffi", "fastapi", "jinja2",
     "py_mini_racer", "pyperclip", "requests", "pkg_resources", "websocket"
 ]
@@ -37,6 +37,7 @@ hidden_packages += tortoise_hiddenimports
 info_plist = {
     "CFBundleName": "VSingerBoard",
     "CFBundleDisplayName": "点歌姬",
+    "CFBundleShortVersionString": ver,
     "CFBundleVersion": ver,
     "CFBundleIdentifier": "com.ricardo.vsingerboard",
     "LSMinimumSystemVersion": "13.0",

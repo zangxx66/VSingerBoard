@@ -1,6 +1,5 @@
 import uvicorn
 import os
-import sys
 from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.middleware.gzip import GZipMiddleware
@@ -10,19 +9,12 @@ from fastapi.exceptions import RequestValidationError, HTTPException
 from fastapi.responses import JSONResponse, HTMLResponse
 from fastapi.templating import Jinja2Templates
 from .router import router
-from src.utils import logger
+from src.utils import logger, resource_path
 
 
-dist_path = Path.cwd().joinpath("wwwroot")
-if not dist_path.exists():
-    if sys.platform == "win32":
-        app_path = Path.cwd().parent / "_internal"
-        dist_path = os.path.join(app_path, "wwwroot")
-    elif sys.platform == "darwin":
-        app_path = Path.cwd().parent.parent / "Resources"
-        dist_path = os.path.join(app_path, "wwwroot")
-    else:
-        pass
+dist_path = resource_path("wwwroot")
+if not os.path.exists(dist_path):
+    raise FileNotFoundError(f"文件夹 '{dist_path}' 不存在。")
 
 app = FastAPI(
     title="vsingerboard",
