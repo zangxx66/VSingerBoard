@@ -75,5 +75,12 @@ class DyConfig(BaseModel):
     sing_cd = fields.IntField()
 
 
+class GloalConfig(BaseModel):
+    id = fields.BigIntField(primary_key=True, generated=True)
+    dark_mode = fields.BooleanField()
+    check_update = fields.BooleanField()
+    startup = fields.BooleanField()
+
+
 def ignore_none(kwargs):
     return {k: v for k, v in kwargs.items() if v is not None}

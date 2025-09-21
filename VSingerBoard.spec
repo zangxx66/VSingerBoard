@@ -9,8 +9,14 @@ from PyInstaller.utils.hooks import collect_all
 sys.path.insert(0, SPECPATH)
 
 # Import necessary variables from other project files
-from src.utils import get_version
+from src.utils.tool import get_version
+
 ver = get_version()
+
+# Update the _version.py file to ensure it's in sync
+with open('src/utils/_version.py', 'w') as f:
+    f.write(f'__version__ = "{ver}"\n')
+
 
 # --- Collect all submodules and data from specific packages ---
 # This is the most robust way to ensure a package is fully included.

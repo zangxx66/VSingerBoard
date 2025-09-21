@@ -8,7 +8,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.exceptions import RequestValidationError, HTTPException
 from fastapi.responses import JSONResponse, HTMLResponse
 from fastapi.templating import Jinja2Templates
-from .router import router
+from .router import router, public_router
 from src.utils import logger, resource_path
 
 
@@ -24,6 +24,8 @@ app = FastAPI(
     redoc_url=None,
     openapi_url=None
 )
+
+app.include_router(public_router, prefix="/public")
 
 
 @app.exception_handler(RequestValidationError)

@@ -1,18 +1,14 @@
 import webview
 import os
-# import asyncio
 import threading
 import time
 import signal
+import sys
 from src.server import startup
-# from src.database import Db as conn
 from src.utils import logger
 from src.jsBridge import Api, start_bili, start_dy, stop_bili, stop_dy
 from webview.window import Window
 
-DEBUG = False
-PORT = 5173 if DEBUG else 8000
-window: Window = None
 server_thread: threading.Thread = None
 dev_thread: threading.Thread = None
 stop_event = threading.Event()
@@ -48,11 +44,6 @@ def on_closing():
     global stop_event, server_thread, dev_thread
     webview.logger.info("click close")
 
-    window = webview.active_window()
-    result = window.create_confirmation_dialog("提示", "是否退出？")
-    if not result:
-        return False
-
     stop_event.set()
     if server_thread is not None and server_thread.is_alive:
         webview.logger.info("Waiting for server thread to finish...")
@@ -68,12 +59,22 @@ def on_closing():
 
 
 def main():
-    global window, stop_event, server_thread, dev_thread
+    global stop_event, server_thread, dev_thread
     logger.info("------startup------")
 
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
     signal.signal(signal.SIGQUIT, signal_handler)
+
+    # 是否在PyInstaller环境
+    try:
+        _ = sys._MEIPASS
+        DEBUG = False
+    except Exception:
+        # 不在PyInstaller环境
+        DEBUG = True
+
+    PORT = 5173 if DEBUG else 8000
 
     try:
         # Initialize services
@@ -105,19 +106,8 @@ def main():
             'linux.openFolder': u'打开文件夹',
         }
 
-        if DEBUG:
-            dev_thread = threading.Thread(target=dev_server, daemon=True, name="devServer")
-            dev_thread.start()
-            # Vite服务器启动较慢，手动给个时间等待
-            time.sleep(3)
-        server_thread = threading.Thread(target=pro_server, daemon=True, name="proServer")
-        server_thread.start()
-
-        ws_server()
-
         # 系统分辨率
         screens = webview.screens
-        print(str(screens))
         screens = screens[0]
         width = screens.width
         height = screens.height
@@ -127,17 +117,27 @@ def main():
 
         webview.settings["OPEN_DEVTOOLS_IN_DEBUG"] = False
         os.environ["PYWEBVIE_WLOG"] = "debug"
-        os.environ["WEBKIT_DISABLE_COMPOSITING_MODE"] = "1"
 
-        window = webview.create_window("点歌板",
+        api = Api()
+        window = webview.create_window("点歌姬",
                                        url=f"http://127.0.0.1:{PORT}/",
-                                       js_api=Api(),
+                                       js_api=api,
                                        localization=localization,
                                        width=initWidth,
                                        height=initHeight,
                                        resizable=False,
                                        frameless=True,
-                                       easy_drag=False)
+                                       easy_drag=True)
+
+        if DEBUG:
+            dev_thread = threading.Thread(target=dev_server, daemon=True, name="devServer")
+            dev_thread.start()
+            # Vite服务器启动较慢，手动给个时间等待
+            time.sleep(3)
+        server_thread = threading.Thread(target=pro_server, daemon=True, name="proServer")
+        server_thread.start()
+
+        ws_server()
         # window.events.closing += on_closing
         window.expose(on_closing)
         webview.start(on_start, window, debug=DEBUG, gui="gtk", icon="logo.icns")

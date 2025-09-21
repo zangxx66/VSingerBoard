@@ -50,3 +50,11 @@ export type DyDanmuModel = {
     level: number
     fans_club_data: any
 }
+
+
+export type GlobalConfigModel = {
+    id: number
+    dark_mode: boolean
+    check_update: boolean
+    startup: boolean
+}

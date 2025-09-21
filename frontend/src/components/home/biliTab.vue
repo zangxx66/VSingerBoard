@@ -121,7 +121,10 @@ const initConfig = () => {
                 }
             }
         })
-        .catch((error) => ElMessage.error(error))
+        .catch((error) => {
+            ElMessage.error(error)
+            console.error("getBiliConfig", error)
+        })
 }
 
 const initCredential = () => {

@@ -4,6 +4,8 @@ import { ref, defineAsyncComponent } from "vue"
 const activeName = ref("1")
 const biliTab = defineAsyncComponent(() => import("./biliTab.vue"))
 const dyTab = defineAsyncComponent(() => import("./dyTab.vue"))
+const appSetting = defineAsyncComponent(() => import("./appSettingTab.vue"))
+
 </script>
 <template>
   <el-container class="home-container">
@@ -14,6 +16,9 @@ const dyTab = defineAsyncComponent(() => import("./dyTab.vue"))
         </el-tab-pane>
         <el-tab-pane label="抖音设置" name="2" lazy>
           <dy-tab></dy-tab>
+        </el-tab-pane>
+        <el-tab-pane label="设置" name="3" lazy>
+          <app-setting></app-setting>
         </el-tab-pane>
       </el-tabs>
     </el-main>

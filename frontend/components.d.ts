@@ -8,6 +8,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AppSettingTab: typeof import('./src/components/home/appSettingTab.vue')['default']
     BiliTab: typeof import('./src/components/home/biliTab.vue')['default']
     Chat: typeof import('./src/components/room/chat.vue')['default']
     DyTab: typeof import('./src/components/home/dyTab.vue')['default']
@@ -30,6 +31,7 @@ declare module 'vue' {
     ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
     ElSplitter: typeof import('element-plus/es')['ElSplitter']
     ElSplitterPanel: typeof import('element-plus/es')['ElSplitterPanel']
+    ElSwitch: typeof import('element-plus/es')['ElSwitch']
     ElTableV2: typeof import('element-plus/es')['ElTableV2']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']

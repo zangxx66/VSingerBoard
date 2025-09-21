@@ -1,13 +1,11 @@
 import asyncio
 from tortoise import Tortoise
 from tortoise.connection import connections
-# from tortoise.backends.base.client import BaseDBAsyncClient
-from .model import BiliConfig, BiliCredential, DyConfig
+from .model import BiliConfig, BiliCredential, DyConfig, GloalConfig
 from src.utils import get_path, logger
 
 
 class Db:
-    # conn: BaseDBAsyncClient
 
     def __init__(self):
         try:
@@ -179,3 +177,35 @@ class Db:
         if not await DyConfig.add(**kwargs):
             return False
         return True
+
+    async def add_gloal_config(cls, **kwargs):
+        """
+        Add a GlobalConfig.
+
+        :param kwargs: Keyword arguments passed to GlobalConfig.add()
+        :return: True if the config is added successfully, False otherwise
+        """
+        if not await GloalConfig.add(**kwargs):
+            return False
+        return True
+
+    async def update_gloal_config(cls, pk, **kwargs):
+        """
+        Update a GlobalConfig by its primary key.
+
+        :param pk: Primary key of the config to be updated
+        :param kwargs: Keyword arguments passed to GlobalConfig.update()
+        :return: The result of the update operation
+        """
+        res = await GloalConfig.get(id=pk).update(**kwargs)
+        return res
+
+    async def get_gloal_config(cls, **kwargs):
+        """
+        Get a GlobalConfig by its keyword arguments.
+
+        :param kwargs: Keyword arguments passed to GlobalConfig.get()
+        :return: The result of the get operation
+        """
+        res = await GloalConfig.get(**kwargs).first()
+        return res

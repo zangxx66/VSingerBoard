@@ -82,6 +82,31 @@ class Request {
     async addOrUpdateDyConfig(params: {}): Promise<AxiosResponse<any>>{
         return await client.post("/api/add_or_update_dy_config", params)
     }
+
+    /**
+     * Get a GlobalConfig by its keyword arguments.
+     * @param {Object} params Parameters object passed to the server.
+     * @returns {Promise<AxiosResponse<any>>} The response of the get operation.
+     */
+    async getGlobalConfig(params: {}): Promise<AxiosResponse<any>>{
+        return await client.get("/api/get_global_config", params)
+    }
+
+    /**
+     * Add or update a GlobalConfig.
+     * @param {Object} params Parameters object passed to the server.
+     * @returns {Promise<AxiosResponse<any>>} The response of the add or update operation.
+     */
+    async addOrUpdateGlobalConfig(params: {}): Promise<AxiosResponse<any>>{
+        return await client.post("/api/add_or_update_global_config", params)
+    }
+
+    /**
+     * Reload the application by calling the backend reload endpoint.
+     */
+    async reload(): Promise<AxiosResponse<any>>{
+        return await client.get("/public/reload", {})
+    }
 }
 
 export const request = new Request()

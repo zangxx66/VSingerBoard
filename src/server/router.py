@@ -2,7 +2,7 @@ import webview
 import base64
 from pydantic import BaseModel
 from typing import Dict, Any, Optional
-from fastapi import APIRouter, Query, Body, Header, Depends, BackgroundTasks
+from fastapi import APIRouter, Query, Body, Header, Depends, BackgroundTasks, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import HTTPException
 from bilibili_api import Credential, user
@@ -16,9 +16,17 @@ def verify_token(x_token: str = Header()):
         raise HTTPException("Authentication error")
 
 
+public_router = APIRouter(tags=["public"])
 router = APIRouter(tags=["api"], dependencies=[Depends(verify_token)])
-qr_code_login: QrCodeLogin
 conn = Db()
+qr_code_login: QrCodeLogin
+
+
+@public_router.get("/reload")
+def reload(request: Request):
+    window = webview.active_window()
+    if window:
+        window.load_url(window.get_current_url())
 
 
 class ResponseItem(BaseModel):
@@ -47,6 +55,13 @@ class dyconfigItem(BaseModel):
     room_id: int
     song_prefix: str
     song_cd: int
+
+
+class globalfigItem(BaseModel):
+    id: int
+    dark_mode: bool
+    check_update: bool
+    startup: bool
 
 
 @router.get("/get_bili_config", response_model=ResponseItem)
@@ -179,5 +194,26 @@ async def add_or_update_dy_config(background_tasks: BackgroundTasks, data: dycon
         msg = "添加成功" if result else "添加失败"
     if result:
         background_tasks.add_task(func=restart_dy)
+    code = 0 if result else -1
+    return ResponseItem(code=code, msg=msg, data=None)
+
+
+@router.get("/get_global_config")
+async def get_global_config():
+    result = await conn.get_gloal_config()
+    return ResponseItem(code=0, msg=None, data={"data": jsonable_encoder(result)})
+
+
+@router.post("/add_or_update_global_config")
+async def add_or_update_global_config(background_tasks: BackgroundTasks, data: globalfigItem = Body(..., embed=True)):
+    data_dic = data.__dict__
+    new_dic = {k: v for k, v in data_dic.items() if v is not None and k != "id"}
+    msg = ""
+    if data.id > 0:
+        result = await conn.update_gloal_config(pk=data.id, **new_dic)
+        msg = "更新成功" if result else "更新失败"
+    else:
+        result = await conn.add_gloal_config(**new_dic)
+        msg = "添加成功" if result else "添加失败"
     code = 0 if result else -1
     return ResponseItem(code=code, msg=msg, data=None)
