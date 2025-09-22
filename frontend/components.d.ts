@@ -10,7 +10,6 @@ declare module 'vue' {
   export interface GlobalComponents {
     AppSettingTab: typeof import('./src/components/settings/appSettingTab.vue')['default']
     BiliTab: typeof import('./src/components/settings/biliTab.vue')['default']
-    Chat: typeof import('./src/components/room/chat.vue')['default']
     DyTab: typeof import('./src/components/settings/dyTab.vue')['default']
     ElAlert: typeof import('element-plus/es')['ElAlert']
     ElAside: typeof import('element-plus/es')['ElAside']
@@ -30,8 +29,6 @@ declare module 'vue' {
     ElMain: typeof import('element-plus/es')['ElMain']
     ElMenu: typeof import('element-plus/es')['ElMenu']
     ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
-    ElSplitter: typeof import('element-plus/es')['ElSplitter']
-    ElSplitterPanel: typeof import('element-plus/es')['ElSplitterPanel']
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
     ElTableV2: typeof import('element-plus/es')['ElTableV2']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
@@ -39,7 +36,6 @@ declare module 'vue' {
     ElText: typeof import('element-plus/es')['ElText']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Setting: typeof import('./src/components/home/setting.vue')['default']
   }
   export interface GlobalDirectives {
     vInfiniteScroll: typeof import('element-plus/es')['ElInfiniteScroll']

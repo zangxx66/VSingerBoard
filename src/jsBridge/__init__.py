@@ -137,6 +137,8 @@ class Api:
                     "code": 0,
                     "version": latest_version,
                     "url": latest_release["html_url"],
+                    "body": latest_release["body"],
+                    "published_at": latest_release["published_at"],
                     "msg": f"发现新版本: {latest_version} (当前版本: {CURRENT_VERSION})"
                 }
             else:
@@ -144,6 +146,8 @@ class Api:
                     "code": 0,
                     "version": CURRENT_VERSION,
                     "url": "",
+                    "body": latest_release["body"],
+                    "published_at": latest_release["published_at"],
                     "msg": "当前已是最新版本。"
                 }
         except requests.exceptions.RequestException as e:
@@ -152,6 +156,8 @@ class Api:
                 "code": -1,
                 "version": CURRENT_VERSION,
                 "url": "",
+                "body": "",
+                "published_at": "",
                 "msg": "检查更新失败"
             }
         except Exception as e:
@@ -160,6 +166,8 @@ class Api:
                 "code": -1,
                 "version": CURRENT_VERSION,
                 "url": "",
+                "body": "",
+                "published_at": "",
                 "msg": "发生未知错误"
             }
 

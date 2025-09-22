@@ -1,7 +1,11 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime'
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
 
 dayjs.extend(relativeTime)
+dayjs.extend(utc)
+dayjs.extend(timezone)
 dayjs.locale('zh-cn')
 
 /**
@@ -33,8 +37,18 @@ const getTimespan = (date: string) => {
     return dayjs(date).unix()
 }
 
+/**
+ * 将 UTC 时间字符串转换为本地时间字符串
+ * @param {string} date - UTC 时间字符串,格式为 "YYYY-MM-DD HH:mm:ss"
+ * @returns {string} 本地时间字符串,格式为 "YYYY-MM-DD HH:mm:ss"
+ */
+const utcToLocal = (date: string) => {
+    return dayjs.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
+}
+
 export {
     timespanToString,
     getRelativeTime,
-    getTimespan
+    getTimespan,
+    utcToLocal
 }

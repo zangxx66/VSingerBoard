@@ -188,11 +188,11 @@ onMounted(() => {
           </el-icon>
           <template #title>设置</template>
         </el-menu-item>
-        <el-menu-item index="2">
+        <el-menu-item index="2" @click="goto('changelog')">
           <el-icon>
             <List />
           </el-icon>
-          <template #title>更新内容</template>
+          <template #title>更新日志</template>
         </el-menu-item>
         <el-menu-item index="3" @click="goto('about')">
           <el-icon>
