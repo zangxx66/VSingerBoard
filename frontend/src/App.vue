@@ -28,6 +28,10 @@ const messageConfig = {
   plain: true
 }
 
+/**
+ * Jump to the specified page
+ * @param {string} name The name of the page to jump to
+ */
 const goto = (name: string) => {
   router.push({ name: name })
 }
@@ -223,9 +227,11 @@ onMounted(() => {
 
     <el-main @contextmenu="onContextMenu" :style="mainStyle">
       <el-config-provider :locale="zhCn" :card="cardConfig" :dialog="dialogConfig" :message="messageConfig">
-        <KeepAlive include="Home">
-          <RouterView></RouterView>
-        </KeepAlive>
+        <router-view v-slot="{ Component }">
+          <keep-alive :include="['Home']">
+            <component :is="Component" />
+          </keep-alive>
+        </router-view>
         <el-backtop :right="100" :bottom="100" />
       </el-config-provider>
     </el-main>

@@ -173,11 +173,6 @@ class Api:
 
 
 class Bili:
-    conn: Db
-
-    def __init__(self):
-        self.conn = Db()
-
     def start(self):
         """
         Wrapper to run the async start method in a new event loop.
@@ -192,12 +187,13 @@ class Bili:
         """
         Asynchronously fetches configuration and starts the Bilibili live client.
         """
-        config = await self.conn.get_bconfig()
+        conn = Db()
+        config = await conn.get_bconfig()
         if not config or config.room_id == 0:
             webview.logger.info("Bilibili room_id not configured, skipping.")
             return
 
-        bili_credential = await self.conn.get_bcredential(enable=True)
+        bili_credential = await conn.get_bcredential(enable=True)
         credential: Credential = None
         if bili_credential:
             credential = Credential(
@@ -213,8 +209,8 @@ class Bili:
         live.on("danmu")(self.add_bdanmu)
         live.on("sc")(self.add_bdanmu)
 
-        if hasattr(live, "connect") and asyncio.iscoroutinefunction(live.connect):
-            await live.connect()
+        if hasattr(live, "start"):
+            live.start()
         else:
             webview.logger.error("MyLive object does not have a suitable async 'connect' method.")
 
@@ -231,10 +227,8 @@ class Bili:
 
 
 class Douyin:
-    conn: Db
 
     def __init__(self):
-        self.conn = Db()
         self.sing_prefix = ""
 
     def start(self):
@@ -251,7 +245,8 @@ class Douyin:
         """
         Asynchronously fetches configuration and starts the Douyin live client.
         """
-        config = await self.conn.get_dy_config()
+        conn = Db()
+        config = await conn.get_dy_config()
         if not config or not config.room_id:
             webview.logger.info("Douyin room_id not configured, skipping.")
             return
