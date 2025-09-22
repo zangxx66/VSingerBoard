@@ -14,8 +14,6 @@ from src.utils import __version__ as CURRENT_VERSION
 
 BdanmuList: list = []
 DdanmuList: list = []
-bili_thread: threading.Thread = None
-dy_thread: threading.Thread = None
 
 
 class Api:
@@ -23,297 +21,204 @@ class Api:
         self.window = None
 
     def get_danmu(self):
-        """
-        Get the list of danmu messages received from Bili.
-
-        The list will be cleared after calling this method.
-
-        Returns:
-            list: A copy of the list of danmu messages
-        """
         if len(BdanmuList) > 0:
             result = BdanmuList.copy()
             BdanmuList.clear()
             return result
 
     def get_dy_danmu(self):
-        """
-        Get the list of danmu messages received from Douyin.
-
-        The list will be cleared after calling this method.
-
-        Returns:
-            list: A copy of the list of danmu messages
-        """
         if len(DdanmuList) > 0:
             result = DdanmuList.copy()
             DdanmuList.clear()
             return result
 
     def minus_window(self):
-        """
-        Minimize the current window.
-
-        If there is no active window, this method does nothing.
-        """
         window = webview.active_window()
         if not window:
             return
         window.minimize()
 
     def copy_to_clipboard(self, text):
-        """
-        Copy the given text to the clipboard.
-
-        Args:
-            text (str): The text to copy to the clipboard
-        """
         pyperclip.copy(text)
 
     def check_clipboard(self):
-        """
-        Get the content of the clipboard.
-
-        Returns:
-            str: The content of the clipboard
-        """
-        clipboard_content = pyperclip.paste()
-        return clipboard_content
+        return pyperclip.paste()
 
     def get_version(self):
-        """
-        Get the current version of the project.
-
-        Returns:
-            str: The current version of the project
-        """
         return CURRENT_VERSION
 
     def check_for_updates(self):
-        """
-        Check for updates of VSingerBoard.
-
-        This method sends a GET request to the GitHub API to fetch the latest release information.
-
-        If the latest version is newer than the current version, it returns a dictionary containing the version number, URL to the latest release, and a message indicating the update.
-
-        If the latest version is the same as the current version, it returns a dictionary containing the current version number, an empty URL, and a message indicating that the current version is the latest.
-
-        If the request fails, it returns a dictionary containing the current version number, an empty URL, and a message indicating the failure.
-
-        If an unexpected error occurs, it returns a dictionary containing the current version number, an empty URL, and a message indicating the error.
-
-        Returns:
-            dict: A dictionary containing information about the update
-        """
         REPO_URL = "https://api.github.com/repos/zangxx66/VSingerBoard/releases/latest"
 
         def compare_versions(v1, v2):
             v1_parts = [int(x) for x in v1.split('.')]
             v2_parts = [int(x) for x in v2.split('.')]
-
-            # 填充较短的版本号以进行比较
             max_len = max(len(v1_parts), len(v2_parts))
             v1_parts.extend([0] * (max_len - len(v1_parts)))
             v2_parts.extend([0] * (max_len - len(v2_parts)))
-
-            if v1_parts > v2_parts:
-                return 1
-            elif v1_parts < v2_parts:
-                return -1
-            else:
-                return 0
+            if v1_parts > v2_parts: return 1
+            if v1_parts < v2_parts: return -1
+            return 0
 
         try:
             response = requests.get(REPO_URL)
-            response.raise_for_status()  # 如果请求失败，则引发 HTTPError
-
+            response.raise_for_status()
             latest_release = response.json()
             latest_version = latest_release["tag_name"]
-
-            # 比较版本号
             if compare_versions(latest_version, CURRENT_VERSION) > 0:
-                return {
-                    "code": 0,
-                    "version": latest_version,
-                    "url": latest_release["html_url"],
-                    "body": latest_release["body"],
-                    "published_at": latest_release["published_at"],
-                    "msg": f"发现新版本: {latest_version} (当前版本: {CURRENT_VERSION})"
-                }
+                return {"code": 0, "version": latest_version, "url": latest_release["html_url"], "body": latest_release["body"], "published_at": latest_release["published_at"], "msg": f"发现新版本: {latest_version} (当前版本: {CURRENT_VERSION})"}
             else:
-                return {
-                    "code": 0,
-                    "version": CURRENT_VERSION,
-                    "url": "",
-                    "body": latest_release["body"],
-                    "published_at": latest_release["published_at"],
-                    "msg": "当前已是最新版本。"
-                }
-        except requests.exceptions.RequestException as e:
-            logger.exception(f"检查更新失败: {e}")
-            return {
-                "code": -1,
-                "version": CURRENT_VERSION,
-                "url": "",
-                "body": "",
-                "published_at": "",
-                "msg": "检查更新失败"
-            }
+                return {"code": 0, "version": CURRENT_VERSION, "url": "", "body": latest_release["body"], "published_at": latest_release["published_at"], "msg": "当前已是最新版本。"}
         except Exception as e:
-            logger.exception(f"检查更新发生未知错误: {e}")
-            return {
-                "code": -1,
-                "version": CURRENT_VERSION,
-                "url": "",
-                "body": "",
-                "published_at": "",
-                "msg": "发生未知错误"
-            }
+            logger.exception(f"检查更新失败: {e}")
+            return {"code": -1, "version": CURRENT_VERSION, "url": "", "body": "", "published_at": "", "msg": "检查更新失败"}
+
+
+class AsyncWorker:
+    def __init__(self):
+        self._loop = asyncio.new_event_loop()
+        self._thread = threading.Thread(target=self._run_loop, daemon=True, name="async_worker")
+        self._db_init_task = None
+        self._thread.start()
+
+    def _run_loop(self):
+        asyncio.set_event_loop(self._loop)
+        self._loop.run_forever()
+
+    def submit(self, coro):
+        return asyncio.run_coroutine_threadsafe(coro, self._loop)
+
+    def run_blocking(self, func, *args):
+        return self._loop.run_in_executor(None, func, *args)
+
+    async def init_db(self):
+        if self._db_init_task and not self._db_init_task.done():
+            await self._db_init_task
+            return
+        if Db._initialized:
+            return
+        
+        self._db_init_task = self._loop.create_task(Db.init())
+        await self._db_init_task
+
+    async def disconnect_db(self):
+        await Db.disconnect()
+
+async_worker = AsyncWorker()
 
 
 class Bili:
+    def __init__(self):
+        self.live = None
+        self._run_future = None
+
     def start(self):
-        """
-        Wrapper to run the async start method in a new event loop.
-        This method is the target for the background thread.
-        """
-        try:
-            asyncio.run(self._start_async())
-        except Exception as e:
-            webview.logger.error(f"Bilibili thread failed: {e}")
-
-    async def _start_async(self):
-        """
-        Asynchronously fetches configuration and starts the Bilibili live client.
-        """
-        conn = Db()
-        config = await conn.get_bconfig()
-        if not config or config.room_id == 0:
-            webview.logger.info("Bilibili room_id not configured, skipping.")
+        if self._run_future and not self._run_future.done():
             return
+        self._run_future = async_worker.submit(self._start_and_run_client())
 
-        bili_credential = await conn.get_bcredential(enable=True)
-        credential: Credential = None
-        if bili_credential:
-            credential = Credential(
-                sessdata=bili_credential.sessdata,
-                jct=bili_credential.bili_jct,
-                buvid3=bili_credential.buvid3,
-                buvid4=bili_credential.buvid4,
-                dedeuserid=bili_credential.dedeuserid,
-                ac_time_value=bili_credential.ac_time_value
-            )
+    async def _start_and_run_client(self):
+        try:
+            await async_worker.init_db()
+            config = await Db.get_bconfig()
+            if not config or config.room_id == 0:
+                webview.logger.info("Bilibili room_id not configured, skipping.")
+                return
 
-        live = MyLive(room_id=config.room_id, credentials=credential, song_prefix=config.sing_prefix)
-        live.on("danmu")(self.add_bdanmu)
-        live.on("sc")(self.add_bdanmu)
+            bili_credential = await Db.get_bcredential(enable=True)
+            credential = Credential(**bili_credential.__dict__) if bili_credential else None
 
-        if hasattr(live, "start"):
-            live.start()
-        else:
-            webview.logger.error("MyLive object does not have a suitable async 'connect' method.")
+            self.live = MyLive(room_id=config.room_id, credentials=credential, song_prefix=config.sing_prefix)
+            self.live.on("danmu")(self.add_bdanmu)
+            self.live.on("sc")(self.add_bdanmu)
+            
+            webview.logger.info("Bilibili live client starting.")
+            await async_worker.run_blocking(self.live.start)
+        except Exception as e:
+            webview.logger.error(f"Bilibili task failed: {e}")
+        finally:
+            webview.logger.info("Bilibili live client stopped.")
+
+    def stop(self):
+        if self.live:
+            threading.Thread(target=self.live.stop).start()
+        if self._run_future:
+            self._run_future.cancel()
 
     def add_bdanmu(self, danmu):
-        global BdanmuList
-        result = {
-            "uid": danmu["uid"],
-            "uname": danmu["uname"],
-            "msg": danmu["msg"],
-            "send_time": danmu["send_time"],
-            "source": "bilibili"
-        }
-        BdanmuList.append(result)
+        BdanmuList.append({"uid": danmu["uid"], "uname": danmu["uname"], "msg": danmu["msg"], "send_time": danmu["send_time"], "source": "bilibili"})
 
 
 class Douyin:
-
     def __init__(self):
+        self.live = None
+        self._run_future = None
         self.sing_prefix = ""
 
     def start(self):
-        """
-        Wrapper to run the async start method in a new event loop.
-        This method is the target for the background thread.
-        """
-        try:
-            asyncio.run(self._start_async())
-        except Exception as e:
-            webview.logger.error(f"Douyin thread failed: {e}")
-
-    async def _start_async(self):
-        """
-        Asynchronously fetches configuration and starts the Douyin live client.
-        """
-        conn = Db()
-        config = await conn.get_dy_config()
-        if not config or not config.room_id:
-            webview.logger.info("Douyin room_id not configured, skipping.")
+        if self._run_future and not self._run_future.done():
             return
+        self._run_future = async_worker.submit(self._start_and_run_client())
 
-        self.sing_prefix = config.sing_prefix
+    async def _start_and_run_client(self):
+        try:
+            await async_worker.init_db()
+            config = await Db.get_dy_config()
+            if not config or not config.room_id:
+                webview.logger.info("Douyin room_id not configured, skipping.")
+                return
 
-        # Assuming DouyinLiveWebFetcher follows a similar pattern with an async start/connect
-        Dlive = DouyinLiveWebFetcher(live_id=config.room_id)
-        Dlive.on("danmu")(self.add_dydanmu)
+            self.sing_prefix = config.sing_prefix
+            self.live = DouyinLiveWebFetcher(live_id=config.room_id)
+            self.live.on("danmu")(self.add_dydanmu)
+            
+            webview.logger.info("Douyin live client starting.")
+            await async_worker.run_blocking(self.live.start)
+        except Exception as e:
+            webview.logger.error(f"Douyin task failed: {e}")
+        finally:
+            webview.logger.info("Douyin live client stopped.")
 
-        # Similar to Bili, we need to call an async method to start the client
-        if hasattr(Dlive, "connect") and asyncio.iscoroutinefunction(Dlive.connect):
-            await Dlive.connect()
-        elif hasattr(Dlive, "start") and asyncio.iscoroutinefunction(Dlive.start):
-            await Dlive.start()
-        else:
-            # If the start method is synchronous and blocking, it must be called directly.
-            # This assumes it manages its own loop correctly without conflicting.
-            Dlive.start()
+    def stop(self):
+        if self.live:
+            self.live.stop()
+        if self._run_future:
+            self._run_future.cancel()
 
     def add_dydanmu(self, danmu):
-        global DdanmuList
-        if danmu.content.startswith(self.sing_prefix):
-            song_name = danmu.content.replace(self.sing_prefix, "").strip()
-            result = {
-                "uid": danmu.user_id,
-                "uname": danmu.user_name,
-                "msg": song_name,
-                "send_time": int(time.time()),
-                "source": "douyin"
-            }
-            DdanmuList.append(result)
+        content = danmu.get("content", "")
+        if content.startswith(self.sing_prefix):
+            song_name = content.replace(self.sing_prefix, "").strip()
+            DdanmuList.append({"uid": danmu.get("user_id"), "uname": danmu.get("user_name"), "msg": song_name, "send_time": int(time.time()), "source": "douyin"})
+
+
+bili_manager = Bili()
+dy_manager = Douyin()
 
 
 async def restart_bili():
-    stop_bili()
-    start_bili()
+    bili_manager.stop()
+    await asyncio.sleep(1)
+    bili_manager.start()
 
 
 async def restart_dy():
-    stop_dy()
-    start_dy()
+    dy_manager.stop()
+    await asyncio.sleep(1)
+    dy_manager.start()
 
 
 def start_bili():
-    global bili_thread
-    bili = Bili()
-    bili_thread = threading.Thread(target=bili.start, daemon=True, name="bili_thread")
-    bili_thread.start()
+    bili_manager.start()
 
 
 def start_dy():
-    global dy_thread
-    dy = Douyin()
-    dy_thread = threading.Thread(target=dy.start, daemon=True, name="dy_thread")
-    dy_thread.start()
+    dy_manager.start()
 
 
 def stop_bili():
-    global bili_thread
-    if bili_thread is not None and bili_thread.is_alive():
-        bili_thread.join(5)
-        webview.logger.info("Waiting for bili thread to finish...")
+    bili_manager.stop()
 
 
 def stop_dy():
-    global dy_thread
-    if dy_thread is not None and dy_thread.is_alive():
-        dy_thread.join(5)
-        webview.logger.info("Waiting for dy thread to finish...")
+    dy_manager.stop()

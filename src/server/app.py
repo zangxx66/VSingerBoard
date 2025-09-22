@@ -1,6 +1,7 @@
 import uvicorn
 import os
 from pathlib import Path
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.middleware.cors import CORSMiddleware
@@ -9,6 +10,7 @@ from fastapi.exceptions import RequestValidationError, HTTPException
 from fastapi.responses import JSONResponse, HTMLResponse
 from fastapi.templating import Jinja2Templates
 from .router import router, public_router
+from src.jsBridge import async_worker
 from src.utils import logger, resource_path
 
 
@@ -16,13 +18,26 @@ dist_path = resource_path("wwwroot")
 if not os.path.exists(dist_path):
     raise FileNotFoundError(f"文件夹 '{dist_path}' 不存在。")
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # on startup: call init_db on the worker and wait for it to complete.
+    future = async_worker.submit(async_worker.init_db())
+    future.result() # Block until DB is initialized
+    logger.info("Database initialization requested by server.")
+    yield
+    # on shutdown: call disconnect_db on the worker and wait.
+    future = async_worker.submit(async_worker.disconnect_db())
+    future.result() # Block until DB is disconnected
+    logger.info("Database disconnection requested by server.")
+
 app = FastAPI(
     title="vsingerboard",
     description="Multi-platform Singerboard",
     version="1.0.0",
     docs_url=None,
     redoc_url=None,
-    openapi_url=None
+    openapi_url=None,
+    lifespan=lifespan
 )
 
 app.include_router(public_router, prefix="/public")
