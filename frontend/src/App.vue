@@ -23,6 +23,11 @@ const dialogConfig = {
   transition: "el-fade-in"
 }
 
+const messageConfig = {
+  offset: 70,
+  plain: true
+}
+
 const goto = (name: string) => {
   router.push({ name: name })
 }
@@ -126,15 +131,19 @@ const initGlobalConfig = () => {
   })
   .then(response => {
     if(!response)return
-    if(response.code == 0){
-      if(response.url != ""){
-        ElNotification({
+    if(response.code == 0 && response.url != ""){
+      ElNotification({
           title: "提示",
           message: response.msg,
           type: "primary",
-          position: "bottom-right"
+          position: "bottom-right",
+          onClick: () => {
+            const a = document.createElement("a")
+            a.href = response.url
+            a.target = "_blank"
+            a.click()
+          }
         })
-      }
     }else{
       ElMessage.warning(response.msg)
     }
@@ -151,6 +160,12 @@ const mainStyle = computed(() => {
   }
 })
 
+const asideStyle = computed(() => {
+  return {
+    width: isCollapse.value ? '64px' : '200px'
+  }
+})
+
 onMounted(() => {
   initGlobalConfig()
 })
@@ -159,7 +174,7 @@ onMounted(() => {
 
 <template>
   <el-container class="layout-container-demo">
-    <el-aside>
+    <el-aside :style="asideStyle">
       <el-menu :collapse="isCollapse" class="layout-aside-menu">
         <el-menu-item index="0" @click="goto('home')">
           <el-icon>
@@ -207,7 +222,7 @@ onMounted(() => {
     </el-header>
 
     <el-main @contextmenu="onContextMenu" :style="mainStyle">
-      <el-config-provider :locale="zhCn" :card="cardConfig" :dialog="dialogConfig">
+      <el-config-provider :locale="zhCn" :card="cardConfig" :dialog="dialogConfig" :message="messageConfig">
         <KeepAlive include="Home">
           <RouterView></RouterView>
         </KeepAlive>

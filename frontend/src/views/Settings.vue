@@ -11,7 +11,7 @@ const appSetting = defineAsyncComponent(() => import("@/components/settings/appS
   <el-container class="home-container">
     <el-main class="home-main">
       <el-tabs v-model="activeName" type="border-card" class="demo-tabs">
-        <el-tab-pane label="bilibili设置" name="1">
+        <el-tab-pane label="哔哩哔哩设置" name="1">
           <bili-tab></bili-tab>
         </el-tab-pane>
         <el-tab-pane label="抖音设置" name="2" lazy>

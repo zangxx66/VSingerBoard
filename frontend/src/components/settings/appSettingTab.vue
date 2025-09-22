@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from "vue"
 import { ElMessage, type FormInstance } from "element-plus"
+import { Close, Check } from "@element-plus/icons-vue"
 import { request } from "@/api"
 import type { ResponseModel, GlobalConfigModel } from "@/types"
 import { toggleDark } from "@/utils"
@@ -73,23 +74,23 @@ onMounted(() => {
         <el-form :model="baseFormValue" ref="refForm" label-width="auto">
             <el-form-item label="黑暗模式" prop="dark_mode">
                 <el-switch 
-                :model-value="baseFormValue.dark_mode"
+                v-model="baseFormValue.dark_mode"
                 inline-prompt
                 style="--el-switch-off-color: #ff4949"
-                active-text="开"
-                inactiveText="关"
+                :active-icon="Check"
+                :inactive-icon="Close"
                 ></el-switch>
             </el-form-item>
             <el-form-item label="自动检查更新" prop="check_update">
                 <el-switch 
-                :model-value="baseFormValue.check_update"
+                v-model="baseFormValue.check_update"
                 inline-prompt
                 style="--el-switch-off-color: #ff4949"
-                active-text="开"
-                inactiveText="关"
+                :active-icon="Check"
+                :inactive-icon="Close"
                 ></el-switch>
             </el-form-item>
-            <el-form-item label="开机启动" prop="startup">
+            <!-- <el-form-item label="开机启动" prop="startup">
                 <el-switch 
                 :model-value="baseFormValue.startup"
                 inline-prompt
@@ -97,7 +98,7 @@ onMounted(() => {
                 active-text="开"
                 inactiveText="关"
                 ></el-switch>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item>
                 <el-button type="primary" @click="addOrUpdateConfig()" v-loading="btnLoading">保存</el-button>
             </el-form-item>

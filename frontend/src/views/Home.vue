@@ -65,6 +65,9 @@ const close = (danmaku: DanmakuModel) => {
 }
 
 onMounted(() => {
+    const dom = document.querySelector(".chat-main") as HTMLElement
+    dom.style.height = (window.innerHeight - 100) + "px"
+
     initConfig()
     // danmakuList.value.push(...[{
     //     uid: 0,
@@ -120,10 +123,6 @@ onBeforeUnmount(() => {
     </el-container>
 </template>
 <style scoped>
-.chat-main {
-    height: calc(100vh - 60px);
-}
-
 .chat-card {
     height: 100%;
 }

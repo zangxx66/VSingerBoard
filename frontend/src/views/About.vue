@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
+import { ElNotification } from "element-plus"
 
 const version = ref("")
 
@@ -29,6 +30,32 @@ const openIssues = () => {
     a.click()
 }
 
+const checkUpdate = async() => {
+    // @ts-ignore
+    const response = await window.pywebview.api.check_for_updates()
+    if(response.code == 0 && response.url != ""){
+        ElNotification({
+          title: "提示",
+          message: response.msg,
+          type: "primary",
+          position: "bottom-right",
+          onClick: () => {
+            const a = document.createElement("a")
+            a.href = response.url
+            a.target = "_blank"
+            a.click()
+          }
+        })
+    }else if(response.code != 0){
+        ElNotification({
+          title: "提示",
+          message: response.msg,
+          type: "warning",
+          position: "bottom-right"
+        })
+    }
+}
+
 onMounted(() => {
     getVersion()
 })
@@ -44,7 +71,10 @@ onMounted(() => {
         <div class="about-container">
             <img src="/assets/images/logo.png" alt="logo" class="about-logo" width="70" />
             <div class="about-title">点歌姬</div>
-            <div class="about-version">v{{ version }}</div>
+            <div class="about-version">
+                v{{ version }}
+                <el-button type="primary" @click="checkUpdate" plain>检查更新</el-button>
+            </div>
             <div class="about-author-container">
                 <el-button color="#909399" @click="openGithub" plain>GitHub仓库</el-button>
                 <el-button color="#F56C6C" @click="openHomepage" plain>作者主页</el-button>
