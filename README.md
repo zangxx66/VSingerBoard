@@ -1,6 +1,15 @@
+<div align="center">
+  <img src="doc/634-.jpg" width="180" height="180" alt="NoneBotPluginLogo">
+  <br>
+</div>
+
+<div align="center">
+
 # VSingerBoard - 您的专属虚拟主播点歌台
 
 ![Build Status](https://github.com/zangxx66/VSingerBoard/actions/workflows/python-publish.yml/badge.svg) ![Python Version](https://img.shields.io/badge/python-3.12-blue.svg) ![License](https://img.shields.io/badge/license-GPL-green.svg)
+
+</div>  
 
 ---
 
@@ -43,13 +52,26 @@
 
 ## 🤝 如何贡献
 
-我们欢迎任何形式的贡献！无论是提交 Bug、建议新功能，还是直接贡献代码，都将是对这个项目的巨大支持。
+我们欢迎任何形式的贡献！无论是提交 Bug、建议新功能，还是直接贡献代码，都将是对这个项目的巨大支持。  
+
+推荐使用的IDE是[VS Code](https://code.visualstudio.com/)，后端需要[Python](https://www.python.org/)3.12及以上版本，前端依赖[Node.js](https://nodejs.org/)开发环境
 
 1.  Fork 本仓库。
 2.  创建您的新分支 (`git checkout -b feature/AmazingFeature`)。
-3.  提交您的更改 (`git commit -m 'Add some AmazingFeature'`)。
-4.  将您的分支推送到远程 (`git push origin feature/AmazingFeature`)。
-5.  开启一个 Pull Request。
+3.  安装后端依赖  
+    `pip install uv && uv sync`  
+    **⚠️NOTE:**  
+    如果您是Linux系统，请额外安装以下依赖  
+    `sudo apt-get install -y python3-gi python3-gi-cairo gir1.2-gtk-3.0 gir1.2-webkit2-4.1` 
+4.  安装前端依赖  
+    `cd frontend && npm install`  
+5.  测试  
+    `uv run main.py`  
+6.  Build  
+    `npm run -C frontend/ build`  
+7.  提交您的更改 (`git commit -m 'Add some AmazingFeature'`)。
+8.  将您的分支推送到远程 (`git push origin feature/AmazingFeature`)。
+9.  开启一个 Pull Request。
 
 ## 📄 许可证
 

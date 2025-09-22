@@ -24,6 +24,7 @@ dependencies = [
     "uvicorn[standard]>=0.35.0",
     "websocket-client>=1.8.0",
     "websockets>=15.0.1",
+    "pyexecjs>=1.5.1",
 ]
 
 [[tool.uv.index]]

@@ -53,8 +53,8 @@ class bconfigItem(BaseModel):
 class dyconfigItem(BaseModel):
     id: int
     room_id: int
-    song_prefix: str
-    song_cd: int
+    sing_prefix: str
+    sing_cd: int
 
 
 class globalfigItem(BaseModel):
@@ -181,16 +181,16 @@ async def get_dy_config():
     return ResponseItem(code=0, msg=None, data={"data": jsonable_encoder(result)})
 
 
-@router.get("/add_or_update_dy_config", response_model=ResponseItem)
+@router.post("/add_or_update_dy_config", response_model=ResponseItem)
 async def add_or_update_dy_config(background_tasks: BackgroundTasks, data: dyconfigItem = Body(..., embed=True)):
     data_dic = data.__dict__
     new_dic = {k: v for k, v in data_dic.items() if v is not None and k != "id"}
     msg = ""
     if data.id > 0:
-        result = await conn.update_dyconfig(pk=data.id, **new_dic)
+        result = await conn.update_dy_config(pk=data.id, **new_dic)
         msg = "更新成功" if result else "更新失败"
     else:
-        result = await conn.add_dyconfig(**new_dic)
+        result = await conn.add_dy_config(**new_dic)
         msg = "添加成功" if result else "添加失败"
     if result:
         background_tasks.add_task(func=restart_dy)

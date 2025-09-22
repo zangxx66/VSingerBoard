@@ -25,7 +25,7 @@ tortoise_datas, tortoise_binaries, tortoise_hiddenimports = collect_all('tortois
 
 # --- Define data files ---
 # Add the entire wwwroot directory as a single data entry.
-datas = [('wwwroot', 'wwwroot')]
+datas = [('wwwroot', 'wwwroot'), ('douyinjs', 'douyinjs')]
 datas += bilibili_api_datas
 datas += tortoise_datas
 

@@ -16,15 +16,40 @@ import subprocess
 import threading
 import time
 import urllib.parse
+import execjs
+import os
 from contextlib import contextmanager
 from unittest.mock import patch
 
 import requests
 import websocket
 from py_mini_racer import MiniRacer
+from .ac_signature import get__ac_signature
 
 from src.protobuf.douyin import PushFrame, Response, ChatMessage, GiftMessage, LikeMessage, MemberMessage, SocialMessage, RoomUserSeqMessage, FansclubMessage, EmojiChatMessage, RoomMessage, RoomStatsMessage, RoomRankMessage, ControlMessage, RoomStreamAdaptationMessage
-from src.utils import Decorator
+from src.utils import Decorator, resource_path
+
+from urllib3.util.url import parse_url
+
+
+def get_real_path(filename):
+    res_path = resource_path("douyinjs")
+    js_path = os.path.join(res_path, filename)
+    return js_path
+
+
+def execute_js(js_file: str):
+    """
+    执行 JavaScript 文件
+    :param js_file: JavaScript 文件路径
+    :return: 执行结果
+    """
+    js_path = get_real_path(js_file)
+    with open(js_path, 'r', encoding='utf-8') as file:
+        js_code = file.read()
+
+    ctx = execjs.compile(js_code)
+    return ctx
 
 
 @contextmanager
@@ -55,7 +80,8 @@ def generateSignature(wss, script_file='sign.js'):
     md5.update(param.encode())
     md5_param = md5.hexdigest()
 
-    with codecs.open(script_file, 'r', encoding='utf8') as f:
+    script_path = get_real_path(script_file)
+    with codecs.open(script_path, 'r', encoding='utf8') as f:
         script = f.read()
 
     ctx = MiniRacer()
@@ -74,14 +100,14 @@ def generateSignature(wss, script_file='sign.js'):
     # return ret.get('X-Bogus')
 
 
-def generateMsToken(length=107):
+def generateMsToken(length=182):
     """
-    产生请求头部cookie中的msToken字段，其实为随机的107位字符
+    产生请求头部cookie中的msToken字段，其实为随机的182位字符
     :param length:字符位数
     :return:msToken
     """
     random_str = ''
-    base_str = string.ascii_letters + string.digits + '=_'
+    base_str = string.ascii_letters + string.digits + '-_'
     _len = len(base_str) - 1
     for _ in range(length):
         random_str += base_str[random.randint(0, _len)]
@@ -90,18 +116,23 @@ def generateMsToken(length=107):
 
 class DouyinLiveWebFetcher(Decorator):
 
-    def __init__(self, live_id):
+    def __init__(self, live_id: int, abogus_file='a_bogus.js'):
         """
         直播间弹幕抓取对象
         :param live_id: 直播间的直播id，打开直播间web首页的链接如：https://live.douyin.com/261378947940，
                         其中的261378947940即是live_id
         """
+        self.abogus_file = abogus_file
         self.__ttwid = None
         self.__room_id = None
-        self.live_id = live_id
+        self.session = requests.Session()
+        self.live_id = str(live_id)
+        self.host = "https://www.douyin.com/"
         self.live_url = "https://live.douyin.com/"
-        self.user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) " \
-                          "Chrome/120.0.0.0 Safari/537.36"
+        self.user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0"
+        self.headers = {
+            'User-Agent': self.user_agent
+        }
 
     def start(self):
         self._connectWebSocket()
@@ -121,7 +152,7 @@ class DouyinLiveWebFetcher(Decorator):
             "User-Agent": self.user_agent,
         }
         try:
-            response = requests.get(self.live_url, headers=headers)
+            response = self.session.get(self.live_url, headers=headers)
             response.raise_for_status()
         except Exception as err:
             print("【X】Request the live url error: ", err)
@@ -143,7 +174,7 @@ class DouyinLiveWebFetcher(Decorator):
             "cookie": f"ttwid={self.ttwid}&msToken={generateMsToken()}; __ac_nonce=0123407cc00a9e438deb4",
         }
         try:
-            response = requests.get(url, headers=headers)
+            response = self.session.get(url, headers=headers)
             response.raise_for_status()
         except Exception as err:
             print("【X】Request the live room url error: ", err)
@@ -156,24 +187,56 @@ class DouyinLiveWebFetcher(Decorator):
 
             return self.__room_id
 
+    def get_ac_nonce(self):
+        """
+        获取 __ac_nonce
+        """
+        resp_cookies = self.session.get(self.host, headers=self.headers).cookies
+        return resp_cookies.get("__ac_nonce")
+
+    def get_ac_signature(self, __ac_nonce: str = None) -> str:
+        """
+        获取 __ac_signature
+        """
+        __ac_signature = get__ac_signature(self.host[8:], __ac_nonce, self.user_agent)
+        self.session.cookies.set("__ac_signature", __ac_signature)
+        return __ac_signature
+
+    def get_a_bogus(self, url_params: dict):
+        """
+        获取 a_bogus
+        """
+        url = urllib.parse.urlencode(url_params)
+        ctx = execute_js(self.abogus_file)
+        _a_bogus = ctx.call("get_ab", url, self.user_agent)
+        return _a_bogus
+
     def get_room_status(self):
         """
         获取直播间开播状态:
         room_status: 2 直播已结束
         room_status: 0 直播进行中
         """
+        msToken = generateMsToken()
+        nonce = self.get_ac_nonce()
+        signature = self.get_ac_signature(nonce)
         url = ('https://live.douyin.com/webcast/room/web/enter/?aid=6383'
-               '&app_name=douyin_web&live_id=1&device_platform=web&language=zh-CN&enter_from=web_live'
-               '&cookie_enabled=true&screen_width=1536&screen_height=864&browser_language=zh-CN&browser_platform=Win32'
-               '&browser_name=Edge&browser_version=133.0.0.0'
+               '&app_name=douyin_web&live_id=1&device_platform=web&language=zh-CN&enter_from=page_refresh'
+               '&cookie_enabled=true&screen_width=5120&screen_height=1440&browser_language=zh-CN&browser_platform=Win32'
+               '&browser_name=Edge&browser_version=140.0.0.0'
                f'&web_rid={self.live_id}'
                f'&room_id_str={self.room_id}'
-               '&enter_source=&is_need_double_stream=false&insert_task_id=&live_reason='
-               '&msToken=&a_bogus=')
-        resp = requests.get(url, headers={
-            'User-Agent': self.user_agent,
-            'Cookie': f'ttwid={self.ttwid};'
+               '&enter_source=&is_need_double_stream=false&insert_task_id=&live_reason=&msToken=' + msToken)
+        query = parse_url(url).query
+        params = {i[0]: i[1] for i in [j.split('=') for j in query.split('&')]}
+        a_bogus = self.get_a_bogus(params)  # 计算a_bogus,成功率不是100%，出现失败时重试即可
+        url += f"&a_bogus={a_bogus}"
+        headers = self.headers.copy()
+        headers.update({
+            'Referer': f'https://live.douyin.com/{self.live_id}',
+            'Cookie': f'ttwid={self.ttwid};__ac_nonce={nonce}; __ac_signature={signature}',
         })
+        resp = self.session.get(url, headers=headers)
         data = resp.json().get('data')
         if data:
             room_status = data.get('room_status')
@@ -230,7 +293,7 @@ class DouyinLiveWebFetcher(Decorator):
             try:
                 heartbeat = PushFrame(payload_type='hb').SerializeToString()
                 self.ws.send(heartbeat, websocket.ABNF.OPCODE_PING)
-                print("【√】发送心跳包")
+                # print("【√】发送心跳包")
             except Exception as e:
                 print("【X】心跳包检测错误: ", e)
                 break
@@ -308,7 +371,7 @@ class DouyinLiveWebFetcher(Decorator):
         user_id = message.user.id
         gift_name = message.gift.name
         gift_cnt = message.combo_count
-        print(f"【礼物msg】{user_name} 送出了 {gift_name}x{gift_cnt}")
+        # print(f"【礼物msg】{user_name} 送出了 {gift_name}x{gift_cnt}")
         self.dispatch("gift", {"user_name": user_name, "user_id": user_id, "gift_name": gift_name, "gift_cnt": gift_cnt})
 
     def _parseLikeMsg(self, payload):
@@ -316,7 +379,7 @@ class DouyinLiveWebFetcher(Decorator):
         message = LikeMessage().parse(payload)
         user_name = message.user.nick_name
         count = message.count
-        print(f"【点赞msg】{user_name} 点了{count}个赞")
+        # print(f"【点赞msg】{user_name} 点了{count}个赞")
         self.dispatch("like", {"user_name": user_name, "user_id": message.user.id, "count": count})
 
     def _parseMemberMsg(self, payload):
@@ -325,7 +388,7 @@ class DouyinLiveWebFetcher(Decorator):
         user_name = message.user.nick_name
         user_id = message.user.id
         gender = ["女", "男"][message.user.gender]
-        print(f"【进场msg】[{user_id}][{gender}]{user_name} 进入了直播间")
+        # print(f"【进场msg】[{user_id}][{gender}]{user_name} 进入了直播间")
         self.dispatch("enter", {"user_name": user_name, "user_id": user_id})
 
     def _parseSocialMsg(self, payload):
@@ -333,7 +396,7 @@ class DouyinLiveWebFetcher(Decorator):
         message = SocialMessage().parse(payload)
         user_name = message.user.nick_name
         user_id = message.user.id
-        print(f"【关注msg】[{user_id}]{user_name} 关注了主播")
+        # print(f"【关注msg】[{user_id}]{user_name} 关注了主播")
         self.dispatch("follow", {"user_name": user_name, "user_id": message.user.id})
 
     def _parseRoomUserSeqMsg(self, payload):
@@ -341,14 +404,14 @@ class DouyinLiveWebFetcher(Decorator):
         message = RoomUserSeqMessage().parse(payload)
         current = message.total
         total = message.total_pv_for_anchor
-        print(f"【统计msg】当前观看人数: {current}, 累计观看人数: {total}")
+        # print(f"【统计msg】当前观看人数: {current}, 累计观看人数: {total}")
         self.dispatch("stats", {"current": current, "total": total})
 
     def _parseFansclubMsg(self, payload):
         '''粉丝团消息'''
         message = FansclubMessage().parse(payload)
         content = message.content
-        print(f"【粉丝团msg】 {content}")
+        # print(f"【粉丝团msg】 {content}")
 
     def _parseEmojiChatMsg(self, payload):
         '''聊天表情包消息'''
@@ -357,7 +420,7 @@ class DouyinLiveWebFetcher(Decorator):
         user = message.user
         common = message.common
         default_content = message.default_content
-        print(f"【聊天表情包id】 {emoji_id},user：{user},common:{common},default_content:{default_content}")
+        # print(f"【聊天表情包id】 {emoji_id},user：{user},common:{common},default_content:{default_content}")
 
     def _parseRoomMsg(self, payload):
         message = RoomMessage().parse(payload)
@@ -368,12 +431,12 @@ class DouyinLiveWebFetcher(Decorator):
     def _parseRoomStatsMsg(self, payload):
         message = RoomStatsMessage().parse(payload)
         display_long = message.display_long
-        print(f"【直播间统计msg】{display_long}")
+        # print(f"【直播间统计msg】{display_long}")
 
     def _parseRankMsg(self, payload):
         message = RoomRankMessage().parse(payload)
         ranks_list = message.ranks_list
-        print(f"【直播间排行榜msg】{ranks_list}")
+        # print(f"【直播间排行榜msg】{ranks_list}")
 
     def _parseControlMsg(self, payload):
         '''直播间状态消息'''
