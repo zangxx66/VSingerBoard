@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
+import { ref, onMounted, computed } from "vue"
 import { RouterView } from "vue-router"
 import router from "@/router"
 import zhCn from "element-plus/es/locale/lang/zh-cn"
-import { Minus, Close } from "@element-plus/icons-vue"
+import { Minus, Close, HomeFilled, Tools, List, InfoFilled } from "@element-plus/icons-vue"
 import ContextMenu from '@imengyu/vue3-context-menu'
 import { ElLoading, ElMessage, ElMessageBox, ElNotification } from "element-plus"
 import { request } from "@/api"
@@ -11,6 +11,7 @@ import type { ResponseModel, GlobalConfigModel } from "@/types"
 import { toggleDark } from "@/utils"
 
 const active = ref("0")
+const isCollapse = ref(false)
 const cardConfig = {
   shadow: "always"
 }
@@ -20,6 +21,10 @@ const dialogConfig = {
   draggable: true,
   overflow: false,
   transition: "el-fade-in"
+}
+
+const goto = (name: string) => {
+  router.push({ name: name })
 }
 
 /**
@@ -109,7 +114,7 @@ const initGlobalConfig = () => {
       ElMessage.warning(resp.msg)
     }else{
       const data = resp.data.data
-      if(data != null){
+      if(data){
         const model = data as GlobalConfigModel
         toggleDark(model.dark_mode)
         if(model.check_update){
@@ -140,18 +145,52 @@ const initGlobalConfig = () => {
   })
 }
 
+const mainStyle = computed(() => {
+  return {
+    left: isCollapse.value ? '64px' : '200px'
+  }
+})
+
 onMounted(() => {
-  const dom = document.querySelector(".layout-container-demo .el-main") as HTMLElement
-  dom.style.width = window.innerWidth + "px"
   initGlobalConfig()
 })
+
 </script>
 
 <template>
   <el-container class="layout-container-demo">
+    <el-aside>
+      <el-menu :collapse="isCollapse" class="layout-aside-menu">
+        <el-menu-item index="0" @click="goto('home')">
+          <el-icon>
+            <HomeFilled />
+          </el-icon>
+          <template #title>点歌板</template>
+        </el-menu-item>
+        <el-menu-item index="1" @click="goto('settings')">
+          <el-icon>
+            <Tools />
+          </el-icon>
+          <template #title>设置</template>
+        </el-menu-item>
+        <el-menu-item index="2">
+          <el-icon>
+            <List />
+          </el-icon>
+          <template #title>更新内容</template>
+        </el-menu-item>
+        <el-menu-item index="3" @click="goto('about')">
+          <el-icon>
+            <InfoFilled />
+          </el-icon>
+          <template #title>关于</template>
+        </el-menu-item>
+      </el-menu>
+    </el-aside>
+
     <el-header class="glassmorphism pywebview-drag-region">
       <el-menu :default-active="active" mode="horizontal" :ellipsis="false" class="toolbar">
-        <el-menu-item index="0">
+        <el-menu-item index="0" @click="isCollapse = !isCollapse">
           <img src="/assets/images/logo.png" alt="logo" style="width:100px;" />
         </el-menu-item>
         <el-menu-item index="1" @click="minus">
@@ -167,9 +206,11 @@ onMounted(() => {
       </el-menu>
     </el-header>
 
-    <el-main @contextmenu="onContextMenu">
+    <el-main @contextmenu="onContextMenu" :style="mainStyle">
       <el-config-provider :locale="zhCn" :card="cardConfig" :dialog="dialogConfig">
-        <RouterView></RouterView>
+        <KeepAlive include="Home">
+          <RouterView></RouterView>
+        </KeepAlive>
         <el-backtop :right="100" :bottom="100" />
       </el-config-provider>
     </el-main>
@@ -184,6 +225,25 @@ onMounted(() => {
 .layout-container-demo {
   width: 100%;
   height: 100%;
+}
+
+/* Position the aside itself, not the menu */
+.layout-container-demo .el-aside {
+  position: fixed;
+  left: 0;
+  top: 60px;
+  bottom: 0;
+  z-index: 90;
+  transition: width 0.3s ease-in-out;
+}
+
+/* The menu should fill the aside */
+.layout-aside-menu {
+  height: 100%;
+}
+
+.layout-aside-menu:not(.el-menu--collapse) {
+  width: 200px;
 }
 
 .layout-container-demo .el-header {
@@ -203,10 +263,12 @@ onMounted(() => {
 }
 
 .layout-container-demo .el-main {
-  height: calc(100vh - 30px);
-  left: 0;
   position: absolute;
-  overflow: hidden;
+  top: 60px;
+  right: 0;
+  bottom: 0;
+  overflow: auto;
+  transition: left 0.3s ease-in-out;
 }
 
 .layout-container-demo .toolbar {

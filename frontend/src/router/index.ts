@@ -10,6 +10,16 @@ const router = createRouter({
       name: "home",
       component: () => import("../views/Home.vue")
     },
+    {
+      path: "/settings",
+      name: "settings",
+      component: () => import("../views/Settings.vue")
+    },
+    {
+      path: "/about",
+      name: "about",
+      component: () => import("../views/About.vue")
+    },
   ],
 })
 
@@ -20,7 +30,7 @@ router.beforeEach(async (toString, from) => {
 
 router.afterEach((to, from, failure) => {
   stop()
-  if(isNavigationFailure(failure)){
+  if(isNavigationFailure(failure) && to.name != from.name){
     ElMessage.warning(`failled navigation:${failure}`)
   }
 })

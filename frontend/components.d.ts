@@ -8,11 +8,12 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AppSettingTab: typeof import('./src/components/home/appSettingTab.vue')['default']
-    BiliTab: typeof import('./src/components/home/biliTab.vue')['default']
+    AppSettingTab: typeof import('./src/components/settings/appSettingTab.vue')['default']
+    BiliTab: typeof import('./src/components/settings/biliTab.vue')['default']
     Chat: typeof import('./src/components/room/chat.vue')['default']
-    DyTab: typeof import('./src/components/home/dyTab.vue')['default']
+    DyTab: typeof import('./src/components/settings/dyTab.vue')['default']
     ElAlert: typeof import('element-plus/es')['ElAlert']
+    ElAside: typeof import('element-plus/es')['ElAside']
     ElAutoResizer: typeof import('element-plus/es')['ElAutoResizer']
     ElBacktop: typeof import('element-plus/es')['ElBacktop']
     ElButton: typeof import('element-plus/es')['ElButton']

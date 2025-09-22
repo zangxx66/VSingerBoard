@@ -2,9 +2,9 @@
 import { ref, defineAsyncComponent } from "vue"
 
 const activeName = ref("1")
-const biliTab = defineAsyncComponent(() => import("./biliTab.vue"))
-const dyTab = defineAsyncComponent(() => import("./dyTab.vue"))
-const appSetting = defineAsyncComponent(() => import("./appSettingTab.vue"))
+const biliTab = defineAsyncComponent(() => import("@/components/settings/biliTab.vue"))
+const dyTab = defineAsyncComponent(() => import("@/components/settings/dyTab.vue"))
+const appSetting = defineAsyncComponent(() => import("@/components/settings/appSettingTab.vue"))
 
 </script>
 <template>
