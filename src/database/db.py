@@ -1,4 +1,3 @@
-import asyncio
 from tortoise import Tortoise
 from tortoise.connection import connections
 from .model import BiliConfig, BiliCredential, DyConfig, GloalConfig
@@ -16,7 +15,7 @@ class Db:
         """
         if cls._initialized:
             return
-        
+
         config = {
             "connections": {"default": f"sqlite://{get_path('vsingerboard.sqlite3', dir_name='data')}"},
             "apps": {

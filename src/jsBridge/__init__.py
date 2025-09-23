@@ -8,8 +8,7 @@ from src.bili import MyLive
 from src.database import Db
 from src.douyin import DouyinLiveWebFetcher
 from bilibili_api import Credential
-from src.utils import logger
-from src.utils import __version__ as CURRENT_VERSION
+from src.utils import logger, __version__ as CURRENT_VERSION
 
 
 BdanmuList: list = []
@@ -97,12 +96,13 @@ class AsyncWorker:
             return
         if Db._initialized:
             return
-        
+
         self._db_init_task = self._loop.create_task(Db.init())
         await self._db_init_task
 
     async def disconnect_db(self):
         await Db.disconnect()
+
 
 async_worker = AsyncWorker()
 
@@ -131,7 +131,7 @@ class Bili:
             self.live = MyLive(room_id=config.room_id, credentials=credential, song_prefix=config.sing_prefix)
             self.live.on("danmu")(self.add_bdanmu)
             self.live.on("sc")(self.add_bdanmu)
-            
+
             webview.logger.info("Bilibili live client starting.")
             await async_worker.run_blocking(self.live.start)
         except Exception as e:
@@ -171,7 +171,7 @@ class Douyin:
             self.sing_prefix = config.sing_prefix
             self.live = DouyinLiveWebFetcher(live_id=config.room_id)
             self.live.on("danmu")(self.add_dydanmu)
-            
+
             webview.logger.info("Douyin live client starting.")
             await async_worker.run_blocking(self.live.start)
         except Exception as e:

@@ -7,7 +7,6 @@ import { Minus, Close, HomeFilled, Tools, List, InfoFilled } from "@element-plus
 import ContextMenu from '@imengyu/vue3-context-menu'
 import { ElLoading, ElMessage, ElMessageBox, ElNotification } from "element-plus"
 import { request } from "@/api"
-import type { ResponseModel, GlobalConfigModel } from "@/types"
 import { toggleDark } from "@/utils"
 
 const active = ref("0")

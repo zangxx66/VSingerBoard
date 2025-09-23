@@ -1,10 +1,10 @@
-export type ResponseModel = {
+type ResponseModel = {
     code: number
     msg: string
     data: any
 }
 
-export type DanmakuModel = {
+type DanmakuModel = {
     uid: number
     uname: string
     msg: string
@@ -12,14 +12,14 @@ export type DanmakuModel = {
     source: string
 }
 
-export type SubscribeModel = {
+type SubscribeModel = {
     id: number
     room_id: number
     source: string
     create_time: number
 }
 
-export type BiliConfigModel = {
+type BiliConfigModel = {
     id: number
     room_id: number
     modal_level: number
@@ -28,7 +28,7 @@ export type BiliConfigModel = {
     sing_cd: number
 }
 
-export type BiliCredentialModel = {
+type BiliCredentialModel = {
     id: number
     uname: string
     avatar: string
@@ -36,14 +36,14 @@ export type BiliCredentialModel = {
     enable: boolean
 }
 
-export type DyConfigModel = {
+type DyConfigModel = {
     id: number
     room_id: number
     sing_prefix: string
     sing_cd: number
 }
 
-export type DyDanmuModel = {
+type DyDanmuModel = {
     user_id: number
     user_name: string
     content: string
@@ -51,8 +51,7 @@ export type DyDanmuModel = {
     fans_club_data: any
 }
 
-
-export type GlobalConfigModel = {
+type GlobalConfigModel = {
     id: number
     dark_mode: boolean
     check_update: boolean

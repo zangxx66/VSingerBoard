@@ -3,7 +3,6 @@ import { ref, reactive, onMounted } from "vue"
 import { ElMessage, type FormInstance } from "element-plus"
 import { Close, Check } from "@element-plus/icons-vue"
 import { request } from "@/api"
-import type { ResponseModel, GlobalConfigModel } from "@/types"
 import { toggleDark } from "@/utils"
 
 const refForm = ref<FormInstance>()

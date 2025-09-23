@@ -2,7 +2,6 @@
 import { ref, reactive, onMounted } from "vue"
 import { ElMessage, type FormInstance } from "element-plus"
 import { request } from "@/api"
-import type { DyConfigModel, ResponseModel } from "@/types"
 
 const refForm = ref<FormInstance>()
 const btnLoading = ref(false)

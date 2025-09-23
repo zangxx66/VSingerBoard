@@ -133,12 +133,29 @@ class DouyinLiveWebFetcher(Decorator):
         self.headers = {
             'User-Agent': self.user_agent
         }
+        self._running = False
+        self.ws = None
 
     def start(self):
-        self._connectWebSocket()
+        self._running = True
+        while self._running:
+            try:
+                self._connectWebSocket()
+                if self._running:
+                    print("【i】WebSocket 连接意外断开，5秒后将重新连接...")
+                    time.sleep(5)
+            except KeyboardInterrupt:
+                print("【i】接收到中断信号，正在停止...")
+                self.stop()
+                break
+            except Exception as e:
+                print(f"【X】连接时发生错误: {e}，5秒后将重新连接...")
+                time.sleep(5)
 
     def stop(self):
-        self.ws.close()
+        self._running = False
+        if self.ws:
+            self.ws.close()
 
     @property
     def ttwid(self):
@@ -279,11 +296,7 @@ class DouyinLiveWebFetcher(Decorator):
                                          on_message=self._wsOnMessage,
                                          on_error=self._wsOnError,
                                          on_close=self._wsOnClose)
-        try:
-            self.ws.run_forever()
-        except Exception:
-            self.stop()
-            raise
+        self.ws.run_forever()
 
     def _sendHeartbeat(self):
         """
@@ -444,7 +457,7 @@ class DouyinLiveWebFetcher(Decorator):
 
         if message.status == 3:
             print("直播间已结束")
-            self.stop()
+            # self.stop()
 
     def _parseRoomStreamAdaptationMsg(self, payload):
         message = RoomStreamAdaptationMessage().parse(payload)

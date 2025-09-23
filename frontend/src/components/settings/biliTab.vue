@@ -3,7 +3,6 @@ import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox, ElText, ElButton, ElSwitch, type Column, type FormInstance } from 'element-plus'
 import { Delete, Refresh } from '@element-plus/icons-vue'
 import { request } from '@/api'
-import type { ResponseModel, BiliConfigModel, BiliCredentialModel } from '@/types'
 
 const refForm = ref<FormInstance>()
 const isShow = ref(false)
@@ -120,6 +119,15 @@ const initConfig = () => {
                     baseFormValue.sing_cd = model.sing_cd
                 }
             }
+            return request.getBiliCredntialList({})
+        })
+        .then(response => {
+            const resp = response.data as ResponseModel
+            if (resp.code != 0) {
+                ElMessage.warning(resp.msg)
+            } else {
+                credentialList.value = resp.data.rows
+            }
         })
         .catch((error) => {
             ElMessage.error(error)
@@ -151,7 +159,7 @@ const addOrUpdateConfig = () => {
             }
         })
         .catch((error) => ElMessage.error(error))
-    
+
 }
 
 const changeStatus = (val: string | number | boolean, id: number) => {
@@ -260,7 +268,6 @@ const closeDialog = () => {
 
 onMounted(() => {
     initConfig()
-    initCredential()
 })
 </script>
 <template>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, onBeforeUnmount } from "vue"
-import type { DanmakuModel, ResponseModel, BiliConfigModel } from "@/types"
 import { ElMessage } from "element-plus"
 import { request } from "@/api"
 import { CloseBold } from "@element-plus/icons-vue"

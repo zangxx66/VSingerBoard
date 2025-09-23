@@ -18,16 +18,17 @@ dist_path = resource_path("wwwroot")
 if not os.path.exists(dist_path):
     raise FileNotFoundError(f"文件夹 '{dist_path}' 不存在。")
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # on startup: call init_db on the worker and wait for it to complete.
     future = async_worker.submit(async_worker.init_db())
-    future.result() # Block until DB is initialized
+    future.result()  # Block until DB is initialized
     logger.info("Database initialization requested by server.")
     yield
     # on shutdown: call disconnect_db on the worker and wait.
     future = async_worker.submit(async_worker.disconnect_db())
-    future.result() # Block until DB is disconnected
+    future.result()  # Block until DB is disconnected
     logger.info("Database disconnection requested by server.")
 
 app = FastAPI(

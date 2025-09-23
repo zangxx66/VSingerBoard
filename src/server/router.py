@@ -9,6 +9,10 @@ from bilibili_api import Credential, user
 from bilibili_api.login_v2 import QrCodeLogin, QrCodeLoginChannel
 from src.database import Db
 from src.jsBridge import restart_bili, restart_dy
+import asyncio
+
+# Lock to serialize access to the bilibili-api library to prevent concurrency issues.
+bilibili_api_lock = asyncio.Lock()
 
 
 def verify_token(x_token: str = Header()):
@@ -88,27 +92,28 @@ async def add_or_update_bili_config(background_tasks: BackgroundTasks, data: bco
 
 @router.get("/get_bili_credential_list", response_model=ResponseItem)
 async def get_bili_credential_list():
-    query_list = await Db.get_bcredential_list()
-    result = []
-    for item in query_list:
-        cred = Credential(
-            sessdata=item.sessdata,
-            bili_jct=item.bili_jct,
-            buvid3=item.buvid3,
-            buvid4=item.buvid4,
-            dedeuserid=item.dedeuserid,
-            ac_time_value=item.ac_time_value
-        )
-        up = user.User(uid=item.uid, credential=cred)
-        up_info = await up.get_user_info()
-        result.append({
-            "id": item.id,
-            "uname": up_info["name"],
-            "avatar": up_info["face"],
-            "uid": item.uid,
-            "enable": item.enable
-        })
-    return ResponseItem(code=0, msg=None, data={"rows": jsonable_encoder(result)})
+    async with bilibili_api_lock:
+        query_list = await Db.get_bcredential_list()
+        result = []
+        for item in query_list:
+            cred = Credential(
+                sessdata=item.sessdata,
+                bili_jct=item.bili_jct,
+                buvid3=item.buvid3,
+                buvid4=item.buvid4,
+                dedeuserid=item.dedeuserid,
+                ac_time_value=item.ac_time_value
+            )
+            up = user.User(uid=item.uid, credential=cred)
+            up_info = await up.get_user_info()
+            result.append({
+                "id": item.id,
+                "uname": up_info["name"],
+                "avatar": up_info["face"],
+                "uid": item.uid,
+                "enable": item.enable
+            })
+        return ResponseItem(code=0, msg=None, data={"rows": jsonable_encoder(result)})
 
 
 @router.get("/refresh_bili_credential", response_model=ResponseItem)
