@@ -10,6 +10,7 @@ type DanmakuModel = {
     msg: string
     send_time: number
     source: string
+    html?: string
 }
 
 type SubscribeModel = {

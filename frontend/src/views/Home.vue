@@ -3,6 +3,7 @@ import { ref, reactive, onMounted, onBeforeUnmount } from "vue"
 import { ElMessage } from "element-plus"
 import { request } from "@/api"
 import { CloseBold } from "@element-plus/icons-vue"
+import { emoticons } from "@/utils"
 
 const danmakuList = ref(Array<DanmakuModel>())
 const config = reactive<BiliConfigModel>({
@@ -14,6 +15,8 @@ const config = reactive<BiliConfigModel>({
     sing_cd: 0
 })
 const timer = ref(0)
+// emoji表情
+const emojiexp = /\[[\u4E00-\u9FA5A-Za-z0-9_]+\]/g
 
 const initConfig = () => {
     request.getBiliConfig({}).then(response => {
@@ -39,6 +42,24 @@ const wsConnect = () => {
         // @ts-ignore
         const list = await window.pywebview.api.get_danmu() as Array<DanmakuModel>
         if (list) {
+            list.forEach(item => {
+                let result = item.msg
+                // 替换 emoji
+                const matchList = item.msg.match(emojiexp)
+                if(matchList){
+                    for (const value of matchList) {
+                        const emoji = emoticons.find((item) => value === item.emoji)
+                        if (emoji) {
+                            // 使用全局替换，防止同一个 emoji 多次出现只替换一次
+                            result = result.replaceAll(
+                                value,
+                                `<img src="${emoji.url}" referrerpolicy="no-referrer" width="20" />`,
+                            )
+                        }
+                    }
+                    item.html = `${item.uname}： ${result}`
+                }
+            })
             danmakuList.value.push(...list)
         }
         // @ts-ignore
@@ -68,19 +89,6 @@ onMounted(() => {
     dom.style.height = (window.innerHeight - 100) + "px"
 
     initConfig()
-    // danmakuList.value.push(...[{
-    //     uid: 0,
-    //     uname: "999",
-    //     msg: "string",
-    //     send_time: 1,
-    //     source: "bilibili"
-    // }, {
-    //     uid: 0,
-    //     uname: "ciruno",
-    //     msg: "yayaya",
-    //     send_time: 2,
-    //     source: "douyin"
-    // }])
 })
 
 onBeforeUnmount(() => {
@@ -107,7 +115,12 @@ onBeforeUnmount(() => {
                                 <img src="/assets/images/douyin.png" class="source-img" alt="douyin" width="24" />
                             </template>
                             <el-text tag="span" class="chat-tag" @click="copyToClipboard(item.msg)">
-                                {{ item.uname }}：{{ item.msg }}
+                                <template v-if="item.html != undefined">
+                                    <el-text v-html="item.html"></el-text>
+                                </template>
+                                <template v-else>
+                                    {{ item.uname }}： {{ item.msg }}
+                                </template>
                             </el-text>
                             <el-text tag="span" class="chat-close" @click="close(item)">
                                 <el-icon>
