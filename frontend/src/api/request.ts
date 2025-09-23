@@ -100,13 +100,6 @@ class Request {
     async addOrUpdateGlobalConfig(params: {}): Promise<AxiosResponse<any>>{
         return await client.post("/api/add_or_update_global_config", params)
     }
-
-    /**
-     * Reload the application by calling the backend reload endpoint.
-     */
-    async reload(): Promise<AxiosResponse<any>>{
-        return await client.get("/public/reload", {})
-    }
 }
 
 export const request = new Request()

@@ -1,15 +1,15 @@
 import webview
 import base64
+import asyncio
 from pydantic import BaseModel
 from typing import Dict, Any, Optional
-from fastapi import APIRouter, Query, Body, Header, Depends, BackgroundTasks, Request
+from fastapi import APIRouter, Query, Body, Header, Depends, BackgroundTasks
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import HTTPException
 from bilibili_api import Credential, user
 from bilibili_api.login_v2 import QrCodeLogin, QrCodeLoginChannel
 from src.database import Db
 from src.jsBridge import restart_bili, restart_dy
-import asyncio
 
 # Lock to serialize access to the bilibili-api library to prevent concurrency issues.
 bilibili_api_lock = asyncio.Lock()
@@ -20,16 +20,8 @@ def verify_token(x_token: str = Header()):
         raise HTTPException("Authentication error")
 
 
-public_router = APIRouter(tags=["public"])
 router = APIRouter(tags=["api"], dependencies=[Depends(verify_token)])
 qr_code_login: QrCodeLogin
-
-
-@public_router.get("/reload")
-def reload(request: Request):
-    window = webview.active_window()
-    if window:
-        window.load_url(window.get_current_url())
 
 
 class ResponseItem(BaseModel):
@@ -204,8 +196,9 @@ async def add_or_update_dy_config(background_tasks: BackgroundTasks, data: dycon
 
 @router.get("/get_global_config")
 async def get_global_config():
-    result = await Db.get_gloal_config()
-    return ResponseItem(code=0, msg=None, data={"data": jsonable_encoder(result)})
+    async with bilibili_api_lock:
+        result = await Db.get_gloal_config()
+        return ResponseItem(code=0, msg=None, data={"data": jsonable_encoder(result)})
 
 
 @router.post("/add_or_update_global_config")

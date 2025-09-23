@@ -52,7 +52,8 @@ const onContextMenu = async (e: MouseEvent) => {
       {
         label: "重新加载",
         onClick: () => {
-          request.reload()
+          // @ts-ignore
+          window.pywebview.api.reload()
         }
       },
       {
@@ -115,7 +116,7 @@ const quit = () => {
  * 如果获取失败，将显示错误信息
  * @returns {Promise<void>} 无返回值 Promise
  */
-const initGlobalConfig = () => {
+const initGlobalConfig = async() => {
   request.getGlobalConfig({}).then(response => {
     const resp = response.data as ResponseModel
     if(resp.code != 0){
@@ -155,6 +156,48 @@ const initGlobalConfig = () => {
     ElMessage.error(error)
     console.error("获取全局配置失败", error)
   })
+
+
+}
+
+const getWsStatus = async() => {
+  // @ts-ignore
+  const bili_ws: number = await window.pywebview.api.get_bili_ws_status()
+  let bili_msg = ""
+  if (bili_ws == -1){
+    bili_msg = "哔哩哔哩未配置"
+  }
+  else if (bili_ws >= 0 && bili_ws <= 2){
+    bili_msg = "哔哩哔哩已连接"
+  }
+  else{
+    bili_msg = "哔哩哔哩连接发生错误"
+  }
+  ElNotification({
+    title: "提示",
+    message: bili_msg,
+    type: bili_ws >= 0 && bili_ws <= 2 ? "success" : "warning",
+    position: "bottom-right"
+  })
+
+  // @ts-ignore
+  const dy_ws: number = await window.pywebview.api.get_dy_ws_status()
+  let dy_msg = ""
+  if(dy_ws == -1){
+    dy_msg = "抖音未配置"
+  }
+  else if (dy_ws == 1){
+    dy_msg = "抖音已连接"
+  }
+  else {
+    dy_msg = "抖音连接发生错误"
+  }
+  ElNotification({
+    title: "提示",
+    message: dy_msg,
+    type: dy_ws > 0 ? "success" : "warning",
+    position: "bottom-right"
+  })
 }
 
 const mainStyle = computed(() => {
@@ -170,7 +213,10 @@ const asideStyle = computed(() => {
 })
 
 onMounted(() => {
-  initGlobalConfig()
+  setTimeout(() => {
+    initGlobalConfig()
+  }, 3000)
+  getWsStatus()
 })
 
 </script>

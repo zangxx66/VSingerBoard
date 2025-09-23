@@ -38,8 +38,6 @@ def dev_server():
 def on_start(window: Window):
     webview.logger.info("window start")
     webview.logger.debug(f"token:{webview.token}")
-    time.sleep(3)
-    window.load_url(window.get_current_url())
 
 
 def on_closing():

@@ -15,64 +15,6 @@ BdanmuList: list = []
 DdanmuList: list = []
 
 
-class Api:
-    def __init__(self):
-        self.window = None
-
-    def get_danmu(self):
-        if len(BdanmuList) > 0:
-            result = BdanmuList.copy()
-            BdanmuList.clear()
-            return result
-
-    def get_dy_danmu(self):
-        if len(DdanmuList) > 0:
-            result = DdanmuList.copy()
-            DdanmuList.clear()
-            return result
-
-    def minus_window(self):
-        window = webview.active_window()
-        if not window:
-            return
-        window.minimize()
-
-    def copy_to_clipboard(self, text):
-        pyperclip.copy(text)
-
-    def check_clipboard(self):
-        return pyperclip.paste()
-
-    def get_version(self):
-        return CURRENT_VERSION
-
-    def check_for_updates(self):
-        REPO_URL = "https://api.github.com/repos/zangxx66/VSingerBoard/releases/latest"
-
-        def compare_versions(v1, v2):
-            v1_parts = [int(x) for x in v1.split('.')]
-            v2_parts = [int(x) for x in v2.split('.')]
-            max_len = max(len(v1_parts), len(v2_parts))
-            v1_parts.extend([0] * (max_len - len(v1_parts)))
-            v2_parts.extend([0] * (max_len - len(v2_parts)))
-            if v1_parts > v2_parts: return 1
-            if v1_parts < v2_parts: return -1
-            return 0
-
-        try:
-            response = requests.get(REPO_URL)
-            response.raise_for_status()
-            latest_release = response.json()
-            latest_version = latest_release["tag_name"]
-            if compare_versions(latest_version, CURRENT_VERSION) > 0:
-                return {"code": 0, "version": latest_version, "url": latest_release["html_url"], "body": latest_release["body"], "published_at": latest_release["published_at"], "msg": f"发现新版本: {latest_version} (当前版本: {CURRENT_VERSION})"}
-            else:
-                return {"code": 0, "version": CURRENT_VERSION, "url": "", "body": latest_release["body"], "published_at": latest_release["published_at"], "msg": "当前已是最新版本。"}
-        except Exception as e:
-            logger.exception(f"检查更新失败: {e}")
-            return {"code": -1, "version": CURRENT_VERSION, "url": "", "body": "", "published_at": "", "msg": "检查更新失败"}
-
-
 class AsyncWorker:
     def __init__(self):
         self._loop = asyncio.new_event_loop()
@@ -145,6 +87,12 @@ class Bili:
         if self._run_future:
             self._run_future.cancel()
 
+    def get_status(self):
+        if self.live:
+            return self.live.room.get_status()
+        else:
+            return -1
+
     def add_bdanmu(self, danmu):
         BdanmuList.append({"uid": danmu["uid"], "uname": danmu["uname"], "msg": danmu["msg"], "send_time": danmu["send_time"], "source": "bilibili"})
 
@@ -185,6 +133,12 @@ class Douyin:
         if self._run_future:
             self._run_future.cancel()
 
+    def get_status(self):
+        if self.live:
+            return 1 if self.live._running else 0
+        else:
+            return -1
+
     def add_dydanmu(self, danmu):
         content = danmu.get("content", "")
         if content.startswith(self.sing_prefix):
@@ -194,6 +148,144 @@ class Douyin:
 
 bili_manager = Bili()
 dy_manager = Douyin()
+
+
+class Api:
+    def __init__(self):
+        self.window = None
+
+    def get_danmu(self):
+        """
+        Get the list of danmaku from Bilibili.
+
+        Returns:
+            list: A list of danmaku from Bilibili.
+        """
+        if len(BdanmuList) > 0:
+            result = BdanmuList.copy()
+            BdanmuList.clear()
+            return result
+
+    def get_dy_danmu(self):
+        """
+        Get the list of danmaku from Douyin.
+
+        Returns:
+            list: A list of danmaku from Douyin.
+        """
+        if len(DdanmuList) > 0:
+            result = DdanmuList.copy()
+            DdanmuList.clear()
+            return result
+
+    def minus_window(self):
+        """
+        Minimize the current window.
+        """
+        window = webview.active_window()
+        if not window:
+            return
+        window.minimize()
+
+    def copy_to_clipboard(self, text):
+        """
+        Copy a given text to the clipboard.
+
+        Args:
+            text (str): The text to copy to the clipboard.
+        """
+        pyperclip.copy(text)
+
+    def check_clipboard(self):
+        """
+        Check the current clipboard contents.
+
+        Returns:
+            str: The current contents of the clipboard.
+        """
+        return pyperclip.paste()
+
+    def get_bili_ws_status(self):
+        """
+        Get the status of the Bilibili WebSocket connection.
+
+        Returns:
+            int: The status of the Bilibili WebSocket connection. -1 means the connection is not configured, 0 means the connection is not running, and 1 means the connection is running.
+        """
+        return bili_manager.get_status()
+
+    def get_dy_ws_status(self):
+        """
+        Get the status of the Douyin WebSocket connection.
+
+        Returns:
+            int: The status of the Douyin WebSocket connection. -1 means the connection is not configured, 0 means the connection is not running, and 1 means the connection is running.
+        """
+        return dy_manager.get_status()
+
+    def reload(self):
+        """
+        Reload the current page.
+
+        This function will reload the current page by loading the current URL again.
+
+        Returns:
+            None
+        """
+        window = webview.active_window()
+        if window:
+            window.load_url(window.get_current_url())
+
+    def get_version(self):
+        """
+        Get the current version of the VSingerBoard application.
+
+        Returns:
+            str: The current version of the VSingerBoard application.
+        """
+        return CURRENT_VERSION
+
+    def check_for_updates(self):
+        """
+        Check if there is a new version of the VSingerBoard application.
+
+        This function will send a GET request to the GitHub Releases API to get the latest version of the VSingerBoard application.
+
+        It will then compare the latest version with the current version and return a dictionary with the following keys:
+            - code: The result of the check. 0 means there is a new version, -1 means there is no new version, and -2 means the check failed.
+            - version: The latest version of the VSingerBoard application.
+            - url: The URL of the latest release.
+            - body: The body of the latest release.
+            - published_at: The time the latest release was published.
+            - msg: A human-readable message describing the result of the check.
+
+        Returns:
+            dict: A dictionary with the result of the check.
+        """
+        REPO_URL = "https://api.github.com/repos/zangxx66/VSingerBoard/releases/latest"
+
+        def compare_versions(v1, v2):
+            v1_parts = [int(x) for x in v1.split('.')]
+            v2_parts = [int(x) for x in v2.split('.')]
+            max_len = max(len(v1_parts), len(v2_parts))
+            v1_parts.extend([0] * (max_len - len(v1_parts)))
+            v2_parts.extend([0] * (max_len - len(v2_parts)))
+            if v1_parts > v2_parts: return 1
+            if v1_parts < v2_parts: return -1
+            return 0
+
+        try:
+            response = requests.get(REPO_URL)
+            response.raise_for_status()
+            latest_release = response.json()
+            latest_version = latest_release["tag_name"]
+            if compare_versions(latest_version, CURRENT_VERSION) > 0:
+                return {"code": 0, "version": latest_version, "url": latest_release["html_url"], "body": latest_release["body"], "published_at": latest_release["published_at"], "msg": f"发现新版本: {latest_version} (当前版本: {CURRENT_VERSION})"}
+            else:
+                return {"code": 0, "version": CURRENT_VERSION, "url": "", "body": latest_release["body"], "published_at": latest_release["published_at"], "msg": "当前已是最新版本。"}
+        except Exception as e:
+            logger.exception(f"检查更新失败: {e}")
+            return {"code": -1, "version": CURRENT_VERSION, "url": "", "body": "", "published_at": "", "msg": "检查更新失败"}
 
 
 async def restart_bili():

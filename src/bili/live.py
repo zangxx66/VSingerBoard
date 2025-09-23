@@ -20,7 +20,7 @@ class MyLive(Decorator):
     song_prefix: str
 
     def __init__(self, room_id: int, credentials=None, song_prefix: str = "点歌"):
-        self.room = live.LiveDanmaku(room_display_id=room_id, credential=credentials)
+        self.room = live.LiveDanmaku(room_display_id=room_id, credential=credentials, max_retry=99)
         self.song_prefix = song_prefix
 
     def start(self):
