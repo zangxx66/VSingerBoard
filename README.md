@@ -30,9 +30,11 @@
 
 ## 📸 应用截图
 
-*(在这里插入应用的精美截图，例如主界面、B站标签页、抖音标签页、设置页面等)*
-
-![image](https://raw.githubusercontent.com/zangxx66/VSingerBoard/master/data/screenshot.png)
+![image](doc/1.png)  
+![image](doc/2.png)  
+![image](doc/3.png)  
+![image](doc/4.png)  
+![image](doc/5.png)  
 
 ## 🚀 如何使用
 
@@ -72,6 +74,14 @@
 7.  提交您的更改 (`git commit -m 'Add some AmazingFeature'`)。
 8.  将您的分支推送到远程 (`git push origin feature/AmazingFeature`)。
 9.  开启一个 Pull Request。
+
+## ❤️ 感谢  
+
+特别感谢以下开发者的帮助  
+
+[bilibili-api](https://github.com/Nemo2011/bilibili-api)  
+[DouyinLiveWebFetcher](https://github.com/saermart/DouyinLiveWebFetcher)  
+[PyWebview](https://github.com/r0x0r/pywebview)
 
 ## 📄 许可证
 
