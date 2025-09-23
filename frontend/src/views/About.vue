@@ -5,7 +5,6 @@ import { ElNotification } from "element-plus"
 const version = ref("")
 
 const getVersion = async() =>{
-    // @ts-ignore
     version.value = await window.pywebview.api.get_version()
 } 
 
@@ -31,7 +30,6 @@ const openIssues = () => {
 }
 
 const checkUpdate = async() => {
-    // @ts-ignore
     const response = await window.pywebview.api.check_for_updates()
     if(response.code == 0 && response.url != ""){
         ElNotification({

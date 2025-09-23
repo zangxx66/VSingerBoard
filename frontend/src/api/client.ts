@@ -7,12 +7,10 @@ const instance = axios.create({
 
 class httpClient {
     async get(url: string, params: {}){
-        // @ts-ignore
         return await instance.get(url, { params: params, headers: { "x-token": window.pywebview.token } })
     }
 
     async post(url: string, params: {}){
-        // @ts-ignore
         return await instance.post(url, params, { headers: { "x-token": window.pywebview.token } })
     }
 }

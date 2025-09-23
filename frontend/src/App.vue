@@ -52,7 +52,6 @@ const onContextMenu = async (e: MouseEvent) => {
       {
         label: "重新加载",
         onClick: () => {
-          // @ts-ignore
           window.pywebview.api.reload()
         }
       },
@@ -61,7 +60,6 @@ const onContextMenu = async (e: MouseEvent) => {
         disabled: !selectTxt,
         onClick: () => {
           if (selectTxt) {
-            // @ts-ignore
             window.pywebview.api.copy_to_clipboard(selectTxt)
             ElMessage.success("拷贝成功")
           }
@@ -76,7 +74,6 @@ const onContextMenu = async (e: MouseEvent) => {
  * @returns {void} 无返回值
  */
 const minus = () => {
-  // @ts-ignore
   window.pywebview.api.minus_window()
   active.value = "0"
 }
@@ -101,7 +98,6 @@ const quit = () => {
         text: "正在退出...",
         background: "rgba(0, 0, 0, 0.7)"
       })
-      // @ts-ignore
       window.pywebview.api.on_closing()
     })
     .catch((error) => {
@@ -127,7 +123,6 @@ const initGlobalConfig = async() => {
         const model = data as GlobalConfigModel
         toggleDark(model.dark_mode)
         if(model.check_update){
-          // @ts-ignore
           return window.pywebview.api.check_for_updates()
         }
       }
@@ -161,7 +156,7 @@ const initGlobalConfig = async() => {
 }
 
 const getWsStatus = async() => {
-  // @ts-ignore
+
   const bili_ws: number = await window.pywebview.api.get_bili_ws_status()
   let bili_msg = ""
   if (bili_ws == -1){
@@ -180,7 +175,6 @@ const getWsStatus = async() => {
     position: "bottom-right"
   })
 
-  // @ts-ignore
   const dy_ws: number = await window.pywebview.api.get_dy_ws_status()
   let dy_msg = ""
   if(dy_ws == -1){
@@ -215,8 +209,8 @@ const asideStyle = computed(() => {
 onMounted(() => {
   setTimeout(() => {
     initGlobalConfig()
+    getWsStatus()
   }, 3000)
-  getWsStatus()
 })
 
 </script>

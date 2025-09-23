@@ -39,7 +39,6 @@ const initConfig = () => {
 
 const wsConnect = () => {
     timer.value = setInterval(async () => {
-        // @ts-ignore
         const list = await window.pywebview.api.get_danmu() as Array<DanmakuModel>
         if (list) {
             list.forEach(item => {
@@ -62,7 +61,6 @@ const wsConnect = () => {
             })
             danmakuList.value.push(...list)
         }
-        // @ts-ignore
         const dylist = await window.pywebview.api.get_dy_danmu() as Array<DanmakuModel>
         if (dylist) {
             danmakuList.value.push(...dylist)
@@ -74,7 +72,6 @@ const wsConnect = () => {
 const load = () => console.log("load")
 
 const copyToClipboard = (txt: string) => {
-    // @ts-ignore
     window.pywebview.api.copy_to_clipboard(txt)
     ElMessage.success("拷贝成功")
 }

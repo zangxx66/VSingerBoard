@@ -21,7 +21,6 @@ const changelogHtml = computed(() => {
 
 onMounted(async() => {
     loading.value = true
-    // @ts-ignore
     const response = await window.pywebview.api.check_for_updates()
     if(response.code == 0){
         version.value = response.version
