@@ -61,6 +61,7 @@ jobs:
           node-version: 20
 
       - name: Build frontend assets
+        shell: bash
         run: |
           rm -rf wwwroot
           npm ci -C frontend
