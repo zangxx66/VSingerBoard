@@ -3,7 +3,7 @@ import { ref, reactive, onMounted, onBeforeUnmount } from "vue"
 import { ElMessage } from "element-plus"
 import { request } from "@/api"
 import { CloseBold } from "@element-plus/icons-vue"
-import { emoticons } from "@/utils"
+import { emoticons, emojiList } from "@/utils"
 
 const danmakuList = ref(Array<DanmakuModel>())
 const config = reactive<BiliConfigModel>({
@@ -39,9 +39,10 @@ const initConfig = () => {
 
 const wsConnect = () => {
     timer.value = setInterval(async () => {
-        const list = await window.pywebview.api.get_danmu() as Array<DanmakuModel>
+        const list = await window.pywebview.api.get_danmu()
         if (list) {
             list.forEach(item => {
+                window.pywebview.api.send_notification("收到新的点歌", item.msg)
                 let result = item.msg
                 // 替换 emoji
                 const matchList = item.msg.match(emojiexp)
@@ -58,14 +59,29 @@ const wsConnect = () => {
                     }
                     item.html = `${item.uname}： ${result}`
                 }
-                window.pywebview.api.send_notification("收到新的点歌", item.msg)
             })
             danmakuList.value.push(...list)
         }
-        const dylist = await window.pywebview.api.get_dy_danmu() as Array<DanmakuModel>
+        const dylist = await window.pywebview.api.get_dy_danmu()
         if (dylist) {
             dylist.forEach(item => {
                 window.pywebview.api.send_notification("收到新的点歌", item.msg)
+                let result = item.msg
+                // 替换 emoji
+                const matchList = item.msg.match(emojiexp)
+                if(matchList){
+                    for (const value of matchList) {
+                        const emoji = emojiList.find((item) => value === item.display_name)
+                        if (emoji) {
+                            // 使用全局替换，防止同一个 emoji 多次出现只替换一次
+                            result = result.replaceAll(
+                                value,
+                                `<img src="${emoji.emoji_url.url_list[0]}" referrerpolicy="no-referrer" width="20" />`,
+                            )
+                        }
+                    }
+                    item.html = `${item.uname}： ${result}`
+                }
             })
             danmakuList.value.push(...dylist)
         }
@@ -117,7 +133,7 @@ onBeforeUnmount(() => {
                             </template>
                             <el-text tag="span" class="chat-tag" @click="copyToClipboard(item.msg)">
                                 <template v-if="item.html != undefined">
-                                    <el-text v-html="item.html"></el-text>
+                                    <el-text v-html="item.html" style="display: flex;"></el-text>
                                 </template>
                                 <template v-else>
                                     {{ item.uname }}： {{ item.msg }}
