@@ -155,6 +155,13 @@ const initGlobalConfig = async() => {
 
 }
 
+/**
+ * 获取 WebSocket 连接状态
+ * 
+ * 该函数将获取哔哩哔哩和抖音的 WebSocket 连接状态，并将其以 Notification 的形式显示
+ * 
+ * @returns {Promise<void>} 无返回值 Promise
+ */
 const getWsStatus = async() => {
 
   const bili_ws: number = await window.pywebview.api.get_bili_ws_status()

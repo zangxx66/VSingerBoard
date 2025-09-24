@@ -58,11 +58,15 @@ const wsConnect = () => {
                     }
                     item.html = `${item.uname}： ${result}`
                 }
+                window.pywebview.api.send_notification("收到新的点歌", item.msg)
             })
             danmakuList.value.push(...list)
         }
         const dylist = await window.pywebview.api.get_dy_danmu() as Array<DanmakuModel>
         if (dylist) {
+            dylist.forEach(item => {
+                window.pywebview.api.send_notification("收到新的点歌", item.msg)
+            })
             danmakuList.value.push(...dylist)
         }
 

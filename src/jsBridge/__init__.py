@@ -8,7 +8,8 @@ from src.bili import MyLive
 from src.database import Db
 from src.douyin import DouyinLiveWebFetcher
 from bilibili_api import Credential
-from src.utils import logger, __version__ as CURRENT_VERSION
+from src.utils import logger, resource_path, __version__ as CURRENT_VERSION
+from notifypy import Notify
 
 
 BdanmuList: list = []
@@ -235,6 +236,13 @@ class Api:
         window = webview.active_window()
         if window:
             window.load_url(window.get_current_url())
+
+    def send_notification(self, title, message):
+        notification = Notify()
+        notification.title = title
+        notification.message = message
+        notification.icon = resource_path("logo.png")
+        notification.send(block=False)
 
     def get_version(self):
         """

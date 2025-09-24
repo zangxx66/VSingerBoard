@@ -17,7 +17,7 @@ const appSetting = defineAsyncComponent(() => import("@/components/settings/appS
         <el-tab-pane label="抖音设置" name="2" lazy>
           <dy-tab></dy-tab>
         </el-tab-pane>
-        <el-tab-pane label="设置" name="3" lazy>
+        <el-tab-pane label="应用设置" name="3" lazy>
           <app-setting></app-setting>
         </el-tab-pane>
       </el-tabs>

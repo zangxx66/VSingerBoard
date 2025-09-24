@@ -99,7 +99,7 @@ class MyLive(Decorator):
         if not message.startswith(self.song_prefix):
             return
         song_name = message.replace(self.song_prefix, "").strip()
-
+        print(song_name)
         sc_info: DanmuInfo = {
             "uid": uid,
             "uname": uname,

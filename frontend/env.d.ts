@@ -12,6 +12,7 @@ declare interface Window {
             get_version: () => Promise<string>
             get_danmu: () => Promise<Array<DanmakuModel>>
             get_dy_danmu: () => Promise<Array<DanmakuModel>>
+            send_notification: (title, message) => void
         }
         token: string
     }
