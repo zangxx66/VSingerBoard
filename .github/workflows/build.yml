@@ -82,5 +82,5 @@ jobs:
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: VSingerBoard-${{ matrix.os }}-${{ matrix.arch }}-${{ SHORT_SHA }}
+          name: VSingerBoard-${{ matrix.os }}-${{ matrix.arch }}-${{ env.SHORT_SHA }}
           path: ${{ env.ASSET_NAME }}
