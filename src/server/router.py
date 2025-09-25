@@ -10,6 +10,7 @@ from bilibili_api import Credential, user
 from bilibili_api.login_v2 import QrCodeLogin, QrCodeLoginChannel
 from src.database import Db
 from src.jsBridge import restart_bili, restart_dy
+from src.utils import setup_autostart
 
 # Lock to serialize access to the bilibili-api library to prevent concurrency issues.
 bilibili_api_lock = asyncio.Lock()
@@ -206,6 +207,9 @@ async def add_or_update_global_config(background_tasks: BackgroundTasks, data: g
     data_dic = data.__dict__
     new_dic = {k: v for k, v in data_dic.items() if v is not None and k != "id"}
     msg = ""
+    startup_result = setup_autostart(data.startup)
+    if not startup_result:
+        return ResponseItem(code=-1, msg="开机启动设置失败", data=None)
     if data.id > 0:
         result = await Db.update_gloal_config(pk=data.id, **new_dic)
         msg = "更新成功" if result else "更新失败"

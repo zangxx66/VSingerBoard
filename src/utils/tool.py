@@ -2,8 +2,10 @@ import os
 import sys
 import time
 import tomllib
-from pathlib import Path
 import appdirs
+import pyautostart
+from pathlib import Path
+from .log import logger
 
 
 def get_path(*other, dir_name: str):
@@ -100,3 +102,34 @@ def resource_path(relative_path):
         base_path = os.path.abspath(".")
 
     return os.path.join(base_path, relative_path)
+
+
+def get_autostart_command():
+    if getattr(sys, "frozen", False):
+        return f'"{sys.executable}"'
+    else:
+        return f'"{sys.executable}" "{os.path.abspath(sys.argv[0])}"'
+
+
+def setup_autostart(enable: bool):
+    """
+    设置应用程序的自启动功能
+
+    Args:
+        enable (bool): 是否启用自启动
+
+    Returns:
+        bool: 是否成功设置自启动
+    """
+    APP_NAME = "com.ricardo.vsingerboard"
+    APP_DESCRIPTION = "一个跨平台的点歌姬"
+    command = get_autostart_command()
+    try:
+        if enable:
+            pyautostart.enable(APP_NAME, command, APP_DESCRIPTION)
+        else:
+            pyautostart.disable(APP_NAME)
+        return True
+    except Exception as e:
+        logger.error(f"设置自启动失败：{e}")
+        return False

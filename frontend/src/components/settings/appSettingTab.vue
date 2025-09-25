@@ -97,7 +97,7 @@ onMounted(() => {
                 :inactive-icon="Close"
                 ></el-switch>
             </el-form-item>
-            <!-- <el-form-item label="开机启动" prop="startup">
+            <el-form-item label="开机启动" prop="startup">
                 <el-switch 
                 :model-value="baseFormValue.startup"
                 inline-prompt
@@ -105,7 +105,7 @@ onMounted(() => {
                 active-text="开"
                 inactiveText="关"
                 ></el-switch>
-            </el-form-item> -->
+            </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="addOrUpdateConfig()" v-loading="btnLoading">保存</el-button>
             </el-form-item>
