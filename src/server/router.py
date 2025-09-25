@@ -209,7 +209,7 @@ async def add_or_update_global_config(background_tasks: BackgroundTasks, data: g
     msg = ""
     startup_result = setup_autostart(data.startup)
     if not startup_result:
-        return ResponseItem(code=-1, msg="开机启动设置失败", data=None)
+        return ResponseItem(code=-1, msg="开机启动更新失败", data=None)
     if data.id > 0:
         result = await Db.update_gloal_config(pk=data.id, **new_dic)
         msg = "更新成功" if result else "更新失败"

@@ -4,8 +4,10 @@ import time
 import tomllib
 import appdirs
 import pyautostart
+import logging
 from pathlib import Path
-from .log import logger
+
+logger = logging.getLogger("danmaku")
 
 
 def get_path(*other, dir_name: str):

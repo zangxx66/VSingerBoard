@@ -27,7 +27,7 @@ from py_mini_racer import MiniRacer
 from .ac_signature import get__ac_signature
 
 from src.protobuf.douyin import PushFrame, Response, ChatMessage, GiftMessage, LikeMessage, MemberMessage, SocialMessage, RoomUserSeqMessage, FansclubMessage, EmojiChatMessage, RoomMessage, RoomStatsMessage, RoomRankMessage, ControlMessage, RoomStreamAdaptationMessage
-from src.utils import Decorator, resource_path
+from src.utils import Decorator, resource_path, logger
 
 from urllib3.util.url import parse_url
 
@@ -91,7 +91,7 @@ def generateSignature(wss, script_file='sign.js'):
         signature = ctx.call("get_sign", md5_param)
         return signature
     except Exception as e:
-        print(e)
+        logger.error(e)
 
     # 以下代码对应js脚本为sign_v0.js
     # context = execjs.compile(script)
@@ -142,14 +142,14 @@ class DouyinLiveWebFetcher(Decorator):
             try:
                 self._connectWebSocket()
                 if self._running:
-                    print("【i】WebSocket 连接意外断开，5秒后将重新连接...")
+                    logger.info("【i】WebSocket 连接意外断开，5秒后将重新连接...")
                     time.sleep(5)
             except KeyboardInterrupt:
-                print("【i】接收到中断信号，正在停止...")
+                logger.info("【i】接收到中断信号，正在停止...")
                 self.stop()
                 break
             except Exception as e:
-                print(f"【X】连接时发生错误: {e}，5秒后将重新连接...")
+                logger.info(f"【X】连接时发生错误: {e}，5秒后将重新连接...")
                 time.sleep(5)
 
     def stop(self):
@@ -172,7 +172,7 @@ class DouyinLiveWebFetcher(Decorator):
             response = self.session.get(self.live_url, headers=headers)
             response.raise_for_status()
         except Exception as err:
-            print("【X】Request the live url error: ", err)
+            logger.error("【X】Request the live url error: ", err)
         else:
             self.__ttwid = response.cookies.get('ttwid')
             return self.__ttwid
@@ -194,11 +194,11 @@ class DouyinLiveWebFetcher(Decorator):
             response = self.session.get(url, headers=headers)
             response.raise_for_status()
         except Exception as err:
-            print("【X】Request the live room url error: ", err)
+            logger.error("【X】Request the live room url error: ", err)
         else:
             match = re.search(r'roomId\\":\\"(\d+)\\"', response.text)
             if match is None or len(match.groups()) < 1:
-                print("【X】No match found for roomId")
+                logger.warning("【X】No match found for roomId")
 
             self.__room_id = match.group(1)
 
@@ -260,7 +260,7 @@ class DouyinLiveWebFetcher(Decorator):
             user = data.get('user')
             user_id = user.get('id_str')
             nickname = user.get('nickname')
-            print(f"【{nickname}】[{user_id}]直播间：{['正在直播', '已结束'][bool(room_status)]}.")
+            logger.info(f"【{nickname}】[{user_id}]直播间：{['正在直播', '已结束'][bool(room_status)]}.")
             self.dispatch("status", {"status": room_status, "user_id": user_id, "nickname": nickname})
 
     def _connectWebSocket(self):
@@ -308,7 +308,7 @@ class DouyinLiveWebFetcher(Decorator):
                 self.ws.send(heartbeat, websocket.ABNF.OPCODE_PING)
                 # print("【√】发送心跳包")
             except Exception as e:
-                print("【X】心跳包检测错误: ", e)
+                logger.error("【X】心跳包检测错误: ", e)
                 break
             else:
                 time.sleep(5)
@@ -317,7 +317,7 @@ class DouyinLiveWebFetcher(Decorator):
         """
         连接建立成功
         """
-        print("【√】WebSocket连接成功.")
+        logger.info("【√】WebSocket连接成功.")
         threading.Thread(target=self._sendHeartbeat).start()
 
     def _wsOnMessage(self, ws, message):
@@ -362,11 +362,11 @@ class DouyinLiveWebFetcher(Decorator):
                 pass
 
     def _wsOnError(self, ws, error):
-        print("WebSocket error: ", error)
+        logger.error("WebSocket error: ", error)
 
     def _wsOnClose(self, ws, *args):
         self.get_room_status()
-        print("WebSocket connection closed.")
+        logger.info("WebSocket connection closed.")
 
     def _parseChatMsg(self, payload):
         """聊天消息"""
@@ -374,7 +374,7 @@ class DouyinLiveWebFetcher(Decorator):
         user_name = message.user.nick_name
         user_id = message.user.id
         content = message.content
-        print(f"【聊天msg】[{user_id}]{user_name}: {content}")
+        logger.info(f"【聊天msg】[{user_id}]{user_name}: {content}")
         self.dispatch("danmu", {"user_name": user_name, "user_id": user_id, "content": content, "level": message.user.level, "fans_club_data": message.user.fans_club.data})
 
     def _parseGiftMsg(self, payload):
@@ -439,7 +439,7 @@ class DouyinLiveWebFetcher(Decorator):
         message = RoomMessage().parse(payload)
         common = message.common
         room_id = common.room_id
-        print(f"【直播间msg】直播间id:{room_id}")
+        logger.info(f"【直播间msg】直播间id:{room_id}")
 
     def _parseRoomStatsMsg(self, payload):
         message = RoomStatsMessage().parse(payload)
@@ -456,10 +456,10 @@ class DouyinLiveWebFetcher(Decorator):
         message = ControlMessage().parse(payload)
 
         if message.status == 3:
-            print("直播间已结束")
+            logger.info("直播间已结束")
             # self.stop()
 
     def _parseRoomStreamAdaptationMsg(self, payload):
         message = RoomStreamAdaptationMessage().parse(payload)
         adaptationType = message.adaptation_type
-        print(f'直播间adaptation: {adaptationType}')
+        logger.info(f'直播间adaptation: {adaptationType}')

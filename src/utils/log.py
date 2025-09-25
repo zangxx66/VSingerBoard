@@ -10,7 +10,7 @@ logger = logging.getLogger("danmaku")
 file_handle = logging.FileHandler(filename=dir_path, mode="a", encoding="utf8")
 console_handle = logging.StreamHandler()
 
-file_formatter = logging.Formatter(fmt="[%(asctime)s][%(levelname)s][%(funcName)s][%(lineno)d] - %(message)s", datefmt="%Y-%m-%d  %H:%M:%S")
+file_formatter = logging.Formatter(fmt="[%(asctime)s][%(levelname)s][%(module)s][%(funcName)s][%(lineno)d] - %(message)s", datefmt="%Y-%m-%d  %H:%M:%S")
 
 logger.setLevel(logging.INFO)
 console_handle.setLevel(logging.INFO)
@@ -29,9 +29,6 @@ def exception_handle(exc_type, exc_obj, exc_traceback):
 
 sys.excepthook = exception_handle
 
-if not logger.hasHandlers:
+if not logger.hasHandlers():
     logger.addHandler(file_handle)
     logger.addHandler(console_handle)
-
-file_handle.close()
-console_handle.close()

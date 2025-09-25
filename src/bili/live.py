@@ -1,7 +1,7 @@
 import time
 from bilibili_api import live, sync
 from typing import TypedDict, Optional
-from src.utils import Decorator
+from src.utils import Decorator, logger
 
 
 class DanmuInfo(TypedDict):
@@ -69,7 +69,7 @@ class MyLive(Decorator):
             return
 
         song_name = msg.replace(self.song_prefix, "").strip()
-        print(song_name)
+        logger.info(song_name)
         danmu_info: DanmuInfo = {
             "uid": uid,
             "uname": uname,
@@ -99,7 +99,7 @@ class MyLive(Decorator):
         if not message.startswith(self.song_prefix):
             return
         song_name = message.replace(self.song_prefix, "").strip()
-        print(song_name)
+        logger.info(song_name)
         sc_info: DanmuInfo = {
             "uid": uid,
             "uname": uname,

@@ -15,17 +15,16 @@ stop_event = threading.Event()
 
 
 def signal_handler(sig, frame):
-    print("Received signal:", sig)
+    logger.info("Received signal:", sig)
     stop_event.set()
 
 
 def pro_server():
-    print("------startup------")
     startup()
 
 
 def ws_server():
-    print("------websocket------")
+    logger.info("------start websocket------")
     start_dy()
     start_bili()
 
