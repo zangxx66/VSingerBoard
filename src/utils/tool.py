@@ -63,10 +63,10 @@ def get_pyproject_info():
             data = tomllib.load(f)
         return data
     except FileNotFoundError:
-        print(f"错误：文件 '{file_path}' 未找到。")
+        logger.error(f"错误：文件 '{file_path}' 未找到。")
         return None
     except Exception as e:
-        print(f"解析文件时发生错误: {e}")
+        logger.error(f"解析文件时发生错误: {e}")
         return None
 
 
