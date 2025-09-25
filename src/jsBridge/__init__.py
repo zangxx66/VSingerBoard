@@ -243,7 +243,7 @@ class Api:
         notification.send(block=False)
 
     def is_bundle(self):
-        is_bundle = hasattr(sys, "_MEIPASS")
+        is_bundle = getattr(sys, "frozen", False)
         return is_bundle
 
     def get_version(self):

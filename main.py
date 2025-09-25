@@ -67,7 +67,7 @@ def main():
     signal.signal(signal.SIGQUIT, signal_handler)
 
     # 是否在PyInstaller环境
-    DEBUG = not hasattr(sys, "_MEIPASS")
+    DEBUG = not getattr(sys, "frozen", False)
 
     PORT = 5173 if DEBUG else 8000
 
