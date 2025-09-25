@@ -7,10 +7,12 @@ import { Minus, Close, HomeFilled, Tools, List, InfoFilled } from "@element-plus
 import ContextMenu from '@imengyu/vue3-context-menu'
 import { ElLoading, ElMessage, ElMessageBox, ElNotification } from "element-plus"
 import { request } from "@/api"
-import { toggleDark } from "@/utils"
+import { toggleDark, checkUpdate } from "@/utils"
+import { useIntervalStore } from "@/stores"
 
 const active = ref("0")
 const isCollapse = ref(false)
+const intervalStore = useIntervalStore()
 const cardConfig = {
   shadow: "always"
 }
@@ -42,30 +44,36 @@ const goto = (name: string) => {
 const onContextMenu = async (e: MouseEvent) => {
   e.preventDefault()
   const selectTxt = window.getSelection()?.toString()
+  const isBundle = await window.pywebview.api.is_bundle()
+
+  const items = [{
+    label: "拷贝",
+    disabled: !selectTxt,
+    onClick: () => {
+      if (selectTxt) {
+        window.pywebview.api.copy_to_clipboard(selectTxt)
+        ElMessage.success("拷贝成功")
+      }
+    }
+  }]
+
+  if(!isBundle){
+    items.push({
+      label: "重新加载",
+      disabled: false,
+      onClick: () => {
+        window.pywebview.api.reload()
+      }
+    })
+  }
+
   ContextMenu.showContextMenu({
     x: e.x,
     y: e.y,
     theme: "mac",
     zIndex: 100,
     minWidth: 230,
-    items: [
-      {
-        label: "重新加载",
-        onClick: () => {
-          window.pywebview.api.reload()
-        }
-      },
-      {
-        label: "拷贝",
-        disabled: !selectTxt,
-        onClick: () => {
-          if (selectTxt) {
-            window.pywebview.api.copy_to_clipboard(selectTxt)
-            ElMessage.success("拷贝成功")
-          }
-        }
-      },
-    ]
+    items: items
   })
 }
 
@@ -98,6 +106,7 @@ const quit = () => {
         text: "正在退出...",
         background: "rgba(0, 0, 0, 0.7)"
       })
+      intervalStore.stopAndClear()
       window.pywebview.api.on_closing()
     })
     .catch((error) => {
@@ -112,47 +121,28 @@ const quit = () => {
  * 如果获取失败，将显示错误信息
  * @returns {Promise<void>} 无返回值 Promise
  */
-const initGlobalConfig = async() => {
+const initGlobalConfig = async () => {
   request.getGlobalConfig({}).then(response => {
     const resp = response.data as ResponseModel
-    if(resp.code != 0){
+    if (resp.code != 0) {
       ElMessage.warning(resp.msg)
-    }else{
+    } else {
       const data = resp.data.data
-      if(data){
+      if (data) {
         const model = data as GlobalConfigModel
         toggleDark(model.dark_mode)
-        if(model.check_update){
-          return window.pywebview.api.check_for_updates()
+        if (model.check_update) {
+          checkUpdate()
+          intervalStore.addCallback("check_update", checkUpdate)
+          intervalStore.start(1000 * 60 * 60 * 6)
         }
       }
     }
   })
-  .then(response => {
-    if(!response)return
-    if(response.code == 0 && response.url != ""){
-      ElNotification({
-          title: "提示",
-          message: response.msg,
-          type: "primary",
-          position: "bottom-right",
-          onClick: () => {
-            const a = document.createElement("a")
-            a.href = response.url
-            a.target = "_blank"
-            a.click()
-          }
-        })
-    }else{
-      ElMessage.warning(response.msg)
-    }
-  })
-  .catch(error => {
-    ElMessage.error(error)
-    console.error("获取全局配置失败", error)
-  })
-
-
+    .catch(error => {
+      ElMessage.error(error)
+      console.error("获取全局配置失败", error)
+    })
 }
 
 /**
@@ -162,17 +152,17 @@ const initGlobalConfig = async() => {
  * 
  * @returns {Promise<void>} 无返回值 Promise
  */
-const getWsStatus = async() => {
+const getWsStatus = async () => {
 
   const bili_ws: number = await window.pywebview.api.get_bili_ws_status()
   let bili_msg = ""
-  if (bili_ws == -1){
+  if (bili_ws == -1) {
     bili_msg = "哔哩哔哩未配置"
   }
-  else if (bili_ws >= 0 && bili_ws <= 2){
+  else if (bili_ws >= 0 && bili_ws <= 2) {
     bili_msg = "哔哩哔哩已连接"
   }
-  else{
+  else {
     bili_msg = "哔哩哔哩连接发生错误"
   }
   ElNotification({
@@ -184,10 +174,10 @@ const getWsStatus = async() => {
 
   const dy_ws: number = await window.pywebview.api.get_dy_ws_status()
   let dy_msg = ""
-  if(dy_ws == -1){
+  if (dy_ws == -1) {
     dy_msg = "抖音未配置"
   }
-  else if (dy_ws == 1){
+  else if (dy_ws == 1) {
     dy_msg = "抖音已连接"
   }
   else {
@@ -217,7 +207,7 @@ onMounted(() => {
   setTimeout(() => {
     initGlobalConfig()
     getWsStatus()
-  }, 3000)
+  }, 1000)
 })
 
 </script>

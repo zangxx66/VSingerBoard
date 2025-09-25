@@ -67,12 +67,7 @@ def main():
     signal.signal(signal.SIGQUIT, signal_handler)
 
     # 是否在PyInstaller环境
-    try:
-        _ = sys._MEIPASS
-        DEBUG = False
-    except Exception:
-        # 不在PyInstaller环境
-        DEBUG = True
+    DEBUG = not hasattr(sys, "_MEIPASS")
 
     PORT = 5173 if DEBUG else 8000
 

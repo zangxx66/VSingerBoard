@@ -3,10 +3,12 @@ import { ref, reactive, onMounted } from "vue"
 import { ElMessage, type FormInstance } from "element-plus"
 import { Close, Check } from "@element-plus/icons-vue"
 import { request } from "@/api"
-import { toggleDark } from "@/utils"
+import { toggleDark, checkUpdate } from "@/utils"
+import { useIntervalStore } from "@/stores"
 
 const refForm = ref<FormInstance>()
 const btnLoading = ref(false)
+const intervalStore = useIntervalStore()
 const baseFormValue = reactive<GlobalConfigModel>({
     id: 0,
     dark_mode: false,
@@ -49,6 +51,12 @@ const addOrUpdateConfig = () => {
         }else{
             ElMessage.success(resp.msg || "保存成功")
             toggleDark(baseFormValue.dark_mode)
+            if(baseFormValue.check_update){
+                intervalStore.addCallback("check_update", checkUpdate)
+                intervalStore.start(1000 * 60 * 60 * 6)
+            }else{
+                intervalStore.removeCallback("check_update")
+            }
             initConfig()
         }
         btnLoading.value = false

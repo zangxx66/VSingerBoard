@@ -4,6 +4,7 @@ import webview
 import pyperclip
 import time
 import requests
+import sys
 from src.bili import MyLive
 from src.database import Db
 from src.douyin import DouyinLiveWebFetcher
@@ -152,9 +153,6 @@ dy_manager = Douyin()
 
 
 class Api:
-    def __init__(self):
-        self.window = None
-
     def get_danmu(self):
         """
         Get the list of danmaku from Bilibili.
@@ -243,6 +241,10 @@ class Api:
         notification.message = message
         notification.icon = resource_path("logo.png")
         notification.send(block=False)
+
+    def is_bundle(self):
+        is_bundle = hasattr(sys, "_MEIPASS")
+        return is_bundle
 
     def get_version(self):
         """
