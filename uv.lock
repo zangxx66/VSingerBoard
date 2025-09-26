@@ -887,15 +887,6 @@ source = { registry = "https://pypi.tuna.tsinghua.edu.cn/simple" }
 sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/f2/cf/77d3e19b7fabd03895caca7857ef51e4c409e0ca6b37ee6e9f7daa50b642/proxy_tools-0.1.0.tar.gz", hash = "sha256:ccb3751f529c047e2d8a58440d86b205303cf0fe8146f784d1cbcd94f0a28010", size = 2978, upload-time = "2014-05-05T21:02:24.606Z" }
 
 [[package]]
-name = "pyautostart"
-version = "0.1.2"
-source = { registry = "https://pypi.tuna.tsinghua.edu.cn/simple" }
-sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/4f/fe/8703f79531dee1f3b3695db815b28f22bdcb26a6aaec375437cee4bc9f83/pyautostart-0.1.2.tar.gz", hash = "sha256:9054d6d8aadef670dc64c5ed5531538fbb1d186ab847f2bde09d90aa1682d4d8", size = 16985, upload-time = "2020-12-25T12:12:21.183Z" }
-wheels = [
-    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/be/bd/8004332a879950b16ebdebe3a03b4ff943668c46167204a95b1270ec70cc/pyautostart-0.1.2-py3-none-any.whl", hash = "sha256:924d78f87b8c87ec8ba7a1f43a30f4eecbd74887872776ec72d77d7388c2493d", size = 16081, upload-time = "2020-12-25T12:12:19.884Z" },
-]
-
-[[package]]
 name = "pycparser"
 version = "2.22"
 source = { registry = "https://pypi.tuna.tsinghua.edu.cn/simple" }
@@ -4028,7 +4019,6 @@ dependencies = [
     { name = "jinja2" },
     { name = "mini-racer" },
     { name = "notify-py" },
-    { name = "pyautostart" },
     { name = "pydantic" },
     { name = "pyexecjs" },
     { name = "pyinstaller" },
@@ -4054,7 +4044,6 @@ requires-dist = [
     { name = "jinja2", specifier = ">=3.1.6" },
     { name = "mini-racer", specifier = ">=0.12.4" },
     { name = "notify-py", specifier = ">=0.3.43" },
-    { name = "pyautostart", specifier = ">=0.1.2" },
     { name = "pydantic", specifier = ">=2.11.7" },
     { name = "pyexecjs", specifier = ">=1.5.1" },
     { name = "pyinstaller", specifier = ">=6.16.0" },

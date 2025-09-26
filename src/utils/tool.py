@@ -3,8 +3,8 @@ import sys
 import time
 import tomllib
 import appdirs
-import pyautostart
 import logging
+import getpass
 from pathlib import Path
 
 logger = logging.getLogger("danmaku")
@@ -108,9 +108,9 @@ def resource_path(relative_path):
 
 def get_autostart_command():
     if getattr(sys, "frozen", False):
-        return f'"{sys.executable}"'
+        return [f'"{sys.executable}"']
     else:
-        return f'"{sys.executable}" "{os.path.abspath(sys.argv[0])}"'
+        return [f'"{sys.executable}"', f'"{os.path.abspath(sys.argv[0])}"']
 
 
 def setup_autostart(enable: bool):
@@ -123,15 +123,74 @@ def setup_autostart(enable: bool):
     Returns:
         bool: 是否成功设置自启动
     """
-    APP_NAME = "com.ricardo.vsingerboard"
-    APP_DESCRIPTION = "一个跨平台的点歌姬"
+    APP_NAME = "VSingerBoard"
     command = get_autostart_command()
     try:
-        if enable:
-            pyautostart.enable(APP_NAME, command, APP_DESCRIPTION)
+        if sys.platform == "win32":
+            import winreg
+            key = winreg.HKEY_CURRENT_USER
+            key_path = r"Software\Microsoft\Windows\CurrentVersion\Run"
+            with winreg.OpenKey(key, key_path, 0, winreg.KEY_SET_VALUE) as run_key:
+                if enable:
+                    cmd = " ".join(command)
+                    winreg.SetValueEx(run_key, APP_NAME, 0, winreg.REG_SZ, cmd)
+                    logger.info(f"Windows autostart enabled: {command}")
+                else:
+                    winreg.DeleteValue(run_key, APP_NAME)
+                    logger.info("Windows autostart disabled.")
+                return True
+        elif sys.platform.startswith("linux"):
+            user = getpass.getuser()
+            autostart_dir = f"/home/{user}/.config/autostart/"
+            desktop_entry_path = os.path.join(autostart_dir, f"{APP_NAME.lower()}.desktop")
+            if enable:
+                cmd = " ".join(command)
+                desktop_entry_content = f'''
+                [Desktop Entry]
+                Type=Application
+                Name={APP_NAME}
+                Exec={cmd}
+                Terminal=false
+                Comment=Start {APP_NAME} at login
+                '''
+                os.makedirs(autostart_dir, exist_ok=True)
+                with open(desktop_entry_path, 'w') as f:
+                    f.write(desktop_entry_content)
+                logger.info(f"Linux autostart enabled: {cmd}")
+            else:
+                if os.path.exists(desktop_entry_path):
+                    os.remove(desktop_entry_path)
+                logger.info("Linux autostart disabled.")
+            return True
+        elif sys.platform == "darwin":
+            user = getpass.getuser()
+            plist_path = f"/Users/{user}/Library/LaunchAgents/com.{APP_NAME.lower()}.plist"
+            if enable:
+                program_args_xml = "".join([f"<string>{arg.strip('\"')}</string>" for arg in command])
+                plist_content = f'''
+                <?xml version="1.0" encoding="UTF-8"?>
+                <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+                <plist version="1.0">
+                <dict>
+                    <key>Label</key>
+                    <string>com.{APP_NAME.lower()}</string>
+                    <key>ProgramArguments</key>
+                    <array>{program_args_xml}</array>
+                    <key>RunAtLoad</key>
+                    <true/>
+                </dict>
+                </plist>
+                '''
+                with open(plist_path, 'w') as f:
+                    f.write(plist_content)
+                logger.info(f"macOS autostart enabled: {' '.join(command)}")
+            else:
+                if os.path.exists(plist_path):
+                    os.remove(plist_path)
+                logger.info("macOS autostart disabled.")
+            return True
         else:
-            pyautostart.disable(APP_NAME)
-        return True
+            raise Exception(f"Autostart not supported on platform: {sys.platform}")
     except Exception as e:
         logger.error(f"设置自启动失败：{e}")
         return False

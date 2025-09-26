@@ -26,7 +26,6 @@ dependencies = [
     "websockets>=15.0.1",
     "pyexecjs>=1.5.1",
     "notify-py>=0.3.43",
-    "pyautostart>=0.1.2",
 ]
 
 [[tool.uv.index]]
