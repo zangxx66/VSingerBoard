@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from "vue"
-import { ElMessage, type FormInstance } from "element-plus"
+import { ElMessage, ElNotification, type FormInstance } from "element-plus"
 import { request } from "@/api"
 
 const refForm = ref<FormInstance>()
@@ -37,11 +37,32 @@ const addOrUpdateConfig = () => {
         }else{
             ElMessage.success(resp.msg)
             initConfig()
+            checkWsStatus()
         }
         btnLoading.value = false
     }).catch(error => {
         ElMessage.error(error)
         btnLoading.value = false
+    })
+}
+
+const checkWsStatus = async() => {
+    const dy_ws: number = await window.pywebview.api.get_dy_ws_status()
+    let dy_msg = ""
+    if (dy_ws == -1) {
+        dy_msg = "抖音未配置"
+    }
+    else if (dy_ws == 1) {
+        dy_msg = "抖音已重新连接"
+    }
+    else {
+        dy_msg = "抖音连接发生错误"
+    }
+    ElNotification({
+        title: "提示",
+        message: dy_msg,
+        type: dy_ws > 0 ? "success" : "warning",
+        position: "bottom-right"
     })
 }
 
