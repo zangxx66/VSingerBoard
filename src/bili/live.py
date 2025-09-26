@@ -48,6 +48,8 @@ class MyLive(Decorator):
 
         This method will disconnect from the live room, and stop listening to danmaku
         """
+        self.remove_all_listener()
+        self.room.remove_all_event_listener()
         sync(self.room.disconnect())
 
     async def on_danmu_msg(self, event):

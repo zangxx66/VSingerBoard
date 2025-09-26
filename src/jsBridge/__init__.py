@@ -86,7 +86,9 @@ class Bili:
 
     def stop(self):
         if self.live:
-            threading.Thread(target=self.live.stop).start()
+            self.live.remove_listener("danmu", self.add_bdanmu)
+            self.live.remove_listener("sc", self.add_bdanmu)
+            self.live.stop()
         if self._run_future:
             self._run_future.cancel()
 
@@ -132,6 +134,7 @@ class Douyin:
 
     def stop(self):
         if self.live:
+            self.live.remove_listener("danmu", self.add_dydanmu)
             self.live.stop()
         if self._run_future:
             self._run_future.cancel()
@@ -276,8 +279,10 @@ class Api:
             max_len = max(len(v1_parts), len(v2_parts))
             v1_parts.extend([0] * (max_len - len(v1_parts)))
             v2_parts.extend([0] * (max_len - len(v2_parts)))
-            if v1_parts > v2_parts: return 1
-            if v1_parts < v2_parts: return -1
+            if v1_parts > v2_parts:
+                return 1
+            if v1_parts < v2_parts:
+                return -1
             return 0
 
         try:

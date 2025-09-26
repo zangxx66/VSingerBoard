@@ -53,7 +53,7 @@ const onContextMenu = async (e: MouseEvent) => {
 
   let hasClipboardText = false
   const clipboardItems = await window.pywebview.api.check_clipboard()
-  if(clipboardItems.length > 0){
+  if(clipboardItems && clipboardItems.length > 0){
     hasClipboardText = true
   }
 

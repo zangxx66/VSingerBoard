@@ -153,6 +153,7 @@ class DouyinLiveWebFetcher(Decorator):
                 time.sleep(5)
 
     def stop(self):
+        self.remove_all_listener()
         self._running = False
         if self.ws:
             self.ws.close()

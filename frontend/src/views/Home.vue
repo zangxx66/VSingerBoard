@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, onBeforeUnmount } from "vue"
-import { ElMessage } from "element-plus"
+import { ElMessage, ElMessageBox } from "element-plus"
 import { request } from "@/api"
-import { CloseBold, Download } from "@element-plus/icons-vue"
+import { CloseBold, Download, Delete } from "@element-plus/icons-vue"
 import { emoticons, emojiList, exportExcel, timespanToString, getNowTimespan } from "@/utils"
 import { useClipboard } from "@vueuse/core"
 import type { Column } from "exceljs"
@@ -101,9 +101,32 @@ const copyToClipboard = (txt: string) => {
     ElMessage.success("拷贝成功")
 }
 
-const close = (danmaku: DanmakuModel) => {
-    const newList = danmakuList.value.filter(item => item.uid != danmaku.uid && item.source != danmaku.source)
-    danmakuList.value = newList
+const remove = (danmaku: DanmakuModel) => {
+    // const newList = danmakuList.value.filter(item => item.uid != danmaku.uid && item.send_time != danmaku.send_time)
+    // danmakuList.value = newList
+    const index = danmakuList.value.indexOf(danmaku)
+    if(index > -1){
+        danmakuList.value.splice(index, 1)
+    }
+}
+
+const clear = () => {
+    ElMessageBox.confirm(
+        "是否清空点歌列表",
+        "提示",
+        {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning",
+        }
+    )
+    .then(() => {
+        danmakuList.value = []
+    })
+    .catch((error) => {
+        if ('string' == typeof error && 'cancel' == error) return
+        ElMessage.error(error)
+    })
 }
 
 const exportFile = () => {
@@ -127,8 +150,13 @@ const exportFile = () => {
 }
 
 onMounted(() => {
+    const height = window.innerHeight - 100
     const dom = document.querySelector(".chat-main") as HTMLElement
-    dom.style.height = (window.innerHeight - 100) + "px"
+    dom.style.height = `${height}px`
+
+    const infiniteListDom = document.querySelector(".infinite-list") as HTMLElement
+    const listHeight = height * 0.7
+    infiniteListDom.style.height = `${listHeight}px`
 
     initConfig()
 })
@@ -164,7 +192,7 @@ onBeforeUnmount(() => {
                                     {{ item.uname }}： {{ item.msg }}
                                 </template>
                             </el-text>
-                            <el-text tag="span" class="chat-close" @click="close(item)">
+                            <el-text tag="span" class="chat-close" @click="remove(item)">
                                 <el-icon>
                                     <CloseBold />
                                 </el-icon>
@@ -174,6 +202,12 @@ onBeforeUnmount(() => {
                 </div>
                 <template #footer>
                     <div class="card-footer">
+                        <el-button type="danger" :disabled="danmakuList.length == 0" @click="clear">
+                            清空点歌列表
+                            <el-icon class="el-icon--right">
+                                <Delete />
+                            </el-icon>
+                        </el-button>
                         <el-button type="success" :disabled="danmakuList.length == 0" @click="exportFile">
                             导出点歌列表
                             <el-icon class="el-icon--right">
@@ -192,7 +226,6 @@ onBeforeUnmount(() => {
 }
 
 .infinite-list {
-    height: 70%;
     padding: 0;
     margin: 0;
     list-style: none;
