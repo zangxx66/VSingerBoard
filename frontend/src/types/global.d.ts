@@ -58,3 +58,12 @@ type GlobalConfigModel = {
     check_update: boolean
     startup: boolean
 }
+
+type UpdateModel = {
+    code: number
+    msg: string
+    version: string
+    url: string
+    body: string
+    published_at: string
+}

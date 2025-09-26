@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
-import { ElNotification } from "element-plus"
+import { checkUpdate } from "@/utils"
 
 const version = ref("")
 
@@ -27,31 +27,6 @@ const openIssues = () => {
     a.href = "https://github.com/zangxx66/VSingerBoard/issues"
     a.target = "_blank"
     a.click()
-}
-
-const checkUpdate = async() => {
-    const response = await window.pywebview.api.check_for_updates()
-    if(response.code == 0 && response.url != ""){
-        ElNotification({
-          title: "提示",
-          message: response.msg,
-          type: "primary",
-          position: "bottom-right",
-          onClick: () => {
-            const a = document.createElement("a")
-            a.href = response.url
-            a.target = "_blank"
-            a.click()
-          }
-        })
-    }else if(response.code != 0){
-        ElNotification({
-          title: "提示",
-          message: response.msg,
-          type: "warning",
-          position: "bottom-right"
-        })
-    }
 }
 
 onMounted(() => {

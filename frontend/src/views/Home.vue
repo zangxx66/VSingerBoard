@@ -102,8 +102,6 @@ const copyToClipboard = (txt: string) => {
 }
 
 const remove = (danmaku: DanmakuModel) => {
-    // const newList = danmakuList.value.filter(item => item.uid != danmaku.uid && item.send_time != danmaku.send_time)
-    // danmakuList.value = newList
     const index = danmakuList.value.indexOf(danmaku)
     if(index > -1){
         danmakuList.value.splice(index, 1)
