@@ -2,8 +2,9 @@
 import { ref, reactive, onMounted, onBeforeUnmount } from "vue"
 import { ElMessage } from "element-plus"
 import { request } from "@/api"
-import { CloseBold } from "@element-plus/icons-vue"
+import { CloseBold, Download } from "@element-plus/icons-vue"
 import { emoticons, emojiList } from "@/utils"
+import { useClipboard } from "@vueuse/core"
 
 const danmakuList = ref(Array<DanmakuModel>())
 const config = reactive<BiliConfigModel>({
@@ -92,7 +93,10 @@ const wsConnect = () => {
 const load = () => console.log("load")
 
 const copyToClipboard = (txt: string) => {
-    window.pywebview.api.copy_to_clipboard(txt)
+    const { copy } = useClipboard({
+        source: txt
+    })
+    copy(txt)
     ElMessage.success("拷贝成功")
 }
 
@@ -147,6 +151,16 @@ onBeforeUnmount(() => {
                         </div>
                     </template>
                 </div>
+                <template #footer>
+                    <div class="card-footer">
+                        <el-button type="success">
+                            导出点歌列表
+                            <el-icon class="el-icon--right">
+                                <Download />
+                            </el-icon>
+                        </el-button>
+                    </div>
+                </template>
             </el-card>
         </el-main>
     </el-container>

@@ -17,26 +17,61 @@
   backdrop-filter: blur(10px);
 }
 
+.mx-menu-bar.mac,
+.mx-context-menu.mac {
+  --menu-font-family: Inter, 'Helvetica Neue', Helvetica, 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+  --menu-background-color: rgba(255, 255, 255, 0.6);
+  --menu-color: #000;
+  --mx-menu-disabled-text: #6a6a6a;
+
+  &.dark {
+    --menu-background-color: rgba(0, 0, 0, 0.6);
+    --menu-color: #fff;
+    --mx-menu-disabled-text: #a5a5a5;
+  }
+  &.disabled {
+    color: var(--mx-menu-disabled-text);
+
+    cursor: not-allowed;
+
+    &:hover, &:active {
+      background-color: transparent;
+    }
+
+    .mx-right-arrow, .mx-checked-mark {
+      fill: var(--mx-menu-disabled-text);
+    }
+    .mx-shortcut {
+      background-color: var(--mx-menu-shortcut-backgroud-disabled);
+      color: var(--mx-menu-shortcut-text-second);
+    }
+  }
+}
+
 .mx-context-menu {
-  font-family:Inter, 'Helvetica Neue', Helvetica, 'PingFang SC',
-  'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
-  background-color: rgba(255, 255, 255, 0.6);
+  font-family: var(--menu-font-family);
+  background-color: var(--menu-background-color);
   transition: opacity 0.3s, transform 0.3s, z-index 0.2s;
   transform-origin: 200px bottom;
   backdrop-filter: blur(10px);
-  color: #000;
+  color: var(--menu-color);
 }
 
 .mx-context-menu-item {
   background-color: transparent;
 }
 
+/* Hide or show menu items */
 .mx-context-menu-item-display {
   display: block;
 }
+
 .mx-context-menu-item-hide {
   display: none;
 }
+
+
 
 a,
 .green {

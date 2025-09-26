@@ -3,7 +3,6 @@ declare interface Window {
     pywebview: {
         api: {
             reload: () => void
-            copy_to_clipboard: (text: string) => void
             minus_window: () => void
             on_closing: () => void
             check_for_updates: () => Promise<any>
@@ -14,6 +13,7 @@ declare interface Window {
             get_dy_danmu: () => Promise<Array<DanmakuModel>>
             send_notification: (title: string, message: string) => void
             is_bundle: () => Promise<boolean>
+            check_clipboard: () => Promise<string>
         }
         token: string
     }

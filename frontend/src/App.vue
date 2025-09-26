@@ -7,12 +7,15 @@ import { Minus, Close, HomeFilled, Tools, List, InfoFilled } from "@element-plus
 import ContextMenu from '@imengyu/vue3-context-menu'
 import { ElLoading, ElMessage, ElMessageBox, ElNotification } from "element-plus"
 import { request } from "@/api"
-import { toggleDark, checkUpdate } from "@/utils"
-import { useIntervalStore } from "@/stores"
+import { toggleDark, checkUpdate, pasteToElement } from "@/utils"
+import { useIntervalStore, useContextMenuStore } from "@/stores"
+import { useClipboard } from "@vueuse/core"
 
 const active = ref("0")
 const isCollapse = ref(false)
 const intervalStore = useIntervalStore()
+const contextmenuStore = useContextMenuStore()
+const { copy } = useClipboard()
 const cardConfig = {
   shadow: "always"
 }
@@ -44,20 +47,35 @@ const goto = (name: string) => {
 const onContextMenu = async (e: MouseEvent) => {
   e.preventDefault()
   const selectTxt = window.getSelection()?.toString()
+  const activeElement = document.activeElement as HTMLElement
+  const isFocusInput = activeElement instanceof HTMLInputElement || activeElement instanceof HTMLTextAreaElement
   const isBundle = await window.pywebview.api.is_bundle()
+
+  let hasClipboardText = false
+  const clipboardItems = await window.pywebview.api.check_clipboard()
+  if(clipboardItems.length > 0){
+    hasClipboardText = true
+  }
 
   const items = [{
     label: "拷贝",
     disabled: !selectTxt,
     onClick: () => {
       if (selectTxt) {
-        window.pywebview.api.copy_to_clipboard(selectTxt)
+        copy(selectTxt)
         ElMessage.success("拷贝成功")
       }
     }
+  }, 
+  {
+    label: "粘贴",
+    disabled: !isFocusInput || !hasClipboardText,
+    onClick: () => { 
+      pasteToElement(activeElement)
+    }
   }]
 
-  if(!isBundle){
+  if (!isBundle) {
     items.push({
       label: "重新加载",
       disabled: false,
@@ -70,7 +88,7 @@ const onContextMenu = async (e: MouseEvent) => {
   ContextMenu.showContextMenu({
     x: e.x,
     y: e.y,
-    theme: "mac",
+    theme: contextmenuStore.getTheme(),
     zIndex: 100,
     minWidth: 230,
     items: items
@@ -131,6 +149,8 @@ const initGlobalConfig = async () => {
       if (data) {
         const model = data as GlobalConfigModel
         toggleDark(model.dark_mode)
+        const themeValue = model.dark_mode ? "mac dark" : "mac"
+        contextmenuStore.setTheme(themeValue)
         if (model.check_update) {
           checkUpdate()
           intervalStore.addCallback("check_update", checkUpdate)

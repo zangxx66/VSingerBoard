@@ -121,7 +121,7 @@ def main():
                                        height=initHeight,
                                        resizable=False,
                                        frameless=True,
-                                       easy_drag=True)
+                                       easy_drag=True,)
 
         if DEBUG:
             dev_thread = threading.Thread(target=dev_server, daemon=True, name="devServer")

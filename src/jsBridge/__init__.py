@@ -15,6 +15,7 @@ from notifypy import Notify
 
 BdanmuList: list = []
 DdanmuList: list = []
+thread_lock = threading.Lock()
 
 
 class AsyncWorker:
@@ -160,10 +161,12 @@ class Api:
         Returns:
             list: A list of danmaku from Bilibili.
         """
-        if len(BdanmuList) > 0:
-            result = BdanmuList.copy()
-            BdanmuList.clear()
-            return result
+        with thread_lock:
+            if len(BdanmuList) > 0:
+                result = BdanmuList.copy()
+                BdanmuList.clear()
+                return result
+            return None
 
     def get_dy_danmu(self):
         """
@@ -172,10 +175,12 @@ class Api:
         Returns:
             list: A list of danmaku from Douyin.
         """
-        if len(DdanmuList) > 0:
-            result = DdanmuList.copy()
-            DdanmuList.clear()
-            return result
+        with thread_lock:
+            if len(DdanmuList) > 0:
+                result = DdanmuList.copy()
+                DdanmuList.clear()
+                return result
+            return None
 
     def minus_window(self):
         """
@@ -185,15 +190,6 @@ class Api:
         if not window:
             return
         window.minimize()
-
-    def copy_to_clipboard(self, text):
-        """
-        Copy a given text to the clipboard.
-
-        Args:
-            text (str): The text to copy to the clipboard.
-        """
-        pyperclip.copy(text)
 
     def check_clipboard(self):
         """
