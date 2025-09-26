@@ -110,6 +110,7 @@ def main():
         initHeight = int(height / 1.2)
 
         webview.settings["OPEN_DEVTOOLS_IN_DEBUG"] = False
+        webview.settings['ALLOW_DOWNLOADS'] = True
         os.environ["PYWEBVIE_WLOG"] = "debug"
 
         api = Api()

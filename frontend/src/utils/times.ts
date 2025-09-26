@@ -46,9 +46,28 @@ const utcToLocal = (date: string) => {
     return dayjs.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
 }
 
+
+/**
+ * 获取当前时间的时间戳
+ * @returns {number} 当前时间的时间戳
+ */
+const getNowTimespan = () => {
+    return dayjs().unix()
+}
+
+/**
+ * 获取当前日期的字符串表示
+ * @returns {string} 当前日期的字符串表示，格式为 "YYYY-MM-DD"
+ */
+const getNowDateString = () => {
+    return dayjs().format('YYYY-MM-DD')
+}
+
 export {
     timespanToString,
     getRelativeTime,
     getTimespan,
-    utcToLocal
+    utcToLocal,
+    getNowTimespan,
+    getNowDateString
 }

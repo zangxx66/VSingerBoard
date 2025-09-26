@@ -3,8 +3,9 @@ import { ref, reactive, onMounted, onBeforeUnmount } from "vue"
 import { ElMessage } from "element-plus"
 import { request } from "@/api"
 import { CloseBold, Download } from "@element-plus/icons-vue"
-import { emoticons, emojiList } from "@/utils"
+import { emoticons, emojiList, exportExcel, timespanToString, getNowTimespan } from "@/utils"
 import { useClipboard } from "@vueuse/core"
+import type { Column } from "exceljs"
 
 const danmakuList = ref(Array<DanmakuModel>())
 const config = reactive<BiliConfigModel>({
@@ -105,6 +106,26 @@ const close = (danmaku: DanmakuModel) => {
     danmakuList.value = newList
 }
 
+const exportFile = () => {
+    const columns: Partial<Column>[] = [
+        { header: "日期", key: "date", width: 50 },
+        { header: "昵称", key: "uname", width: 50 },
+        { header: "歌名", key: "song", width: 50 },
+        { header: "平台", key: "source", width: 50}
+    ]
+
+    const data = danmakuList.value.map(item => ({
+        date: timespanToString(item.send_time),
+        uname: item.uname,
+        song: item.msg,
+        source: item.source == "bilibili" ? "B站" : "抖音",
+    }))
+
+    const filename = `点歌列表_${getNowTimespan()}`
+
+    exportExcel(columns, data, filename)
+}
+
 onMounted(() => {
     const dom = document.querySelector(".chat-main") as HTMLElement
     dom.style.height = (window.innerHeight - 100) + "px"
@@ -153,7 +174,7 @@ onBeforeUnmount(() => {
                 </div>
                 <template #footer>
                     <div class="card-footer">
-                        <el-button type="success">
+                        <el-button type="success" :disabled="danmakuList.length == 0" @click="exportFile">
                             导出点歌列表
                             <el-icon class="el-icon--right">
                                 <Download />
