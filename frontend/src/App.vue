@@ -3,18 +3,19 @@ import { ref, onMounted, computed } from "vue"
 import { RouterView } from "vue-router"
 import router from "@/router"
 import zhCn from "element-plus/es/locale/lang/zh-cn"
-import { Minus, Close, HomeFilled, Tools, List, InfoFilled } from "@element-plus/icons-vue"
+import { Minus, Close, HomeFilled, Tools, List, InfoFilled, Sunny, Moon } from "@element-plus/icons-vue"
 import ContextMenu from '@imengyu/vue3-context-menu'
 import { ElLoading, ElMessage, ElMessageBox, ElNotification } from "element-plus"
 import { request } from "@/api"
 import { toggleDark, checkUpdate, pasteToElement } from "@/utils"
-import { useIntervalStore, useContextMenuStore } from "@/stores"
+import { useIntervalStore, useContextMenuStore, useThemeStore } from "@/stores"
 import { useClipboard } from "@vueuse/core"
 
 const active = ref("0")
 const isCollapse = ref(false)
 const intervalStore = useIntervalStore()
 const contextmenuStore = useContextMenuStore()
+const themeStore = useThemeStore()
 const { copy } = useClipboard()
 const cardConfig = {
   shadow: "always"
@@ -149,6 +150,7 @@ const initGlobalConfig = async () => {
       if (data) {
         const model = data as GlobalConfigModel
         toggleDark(model.dark_mode)
+        themeStore.setDarkTheme(model.id, model.dark_mode)
         const themeValue = model.dark_mode ? "mac dark" : "mac"
         contextmenuStore.setTheme(themeValue)
         if (model.check_update) {
@@ -223,6 +225,10 @@ const asideStyle = computed(() => {
   }
 })
 
+const isDarktheme = computed(() => {
+  return themeStore.getDarkTheme()
+})
+
 onMounted(() => {
   setTimeout(() => {
     initGlobalConfig()
@@ -259,6 +265,10 @@ onMounted(() => {
             <InfoFilled />
           </el-icon>
           <template #title>关于</template>
+        </el-menu-item>
+        <el-menu-item index="4">
+          <el-switch v-model="isDarktheme" :active-action-icon="Moon" :inactive-action-icon="Sunny"
+            @change="themeStore.updateConfig(!isDarktheme)" />
         </el-menu-item>
       </el-menu>
     </el-aside>

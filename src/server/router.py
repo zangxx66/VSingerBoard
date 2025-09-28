@@ -55,9 +55,9 @@ class dyconfigItem(BaseModel):
 
 class globalfigItem(BaseModel):
     id: int
-    dark_mode: bool
-    check_update: bool
-    startup: bool
+    dark_mode: Optional[bool] = None
+    check_update: Optional[bool] = None
+    startup: Optional[bool] = None
 
 
 @router.get("/get_bili_config", response_model=ResponseItem)
@@ -207,9 +207,10 @@ async def add_or_update_global_config(background_tasks: BackgroundTasks, data: g
     data_dic = data.__dict__
     new_dic = {k: v for k, v in data_dic.items() if v is not None and k != "id"}
     msg = ""
-    startup_result = setup_autostart(data.startup)
-    if not startup_result:
-        return ResponseItem(code=-1, msg="开机启动更新失败", data=None)
+    if data.startup is not None:
+        startup_result = setup_autostart(data.startup)
+        if not startup_result:
+            return ResponseItem(code=-1, msg="开机启动更新失败", data=None)
     if data.id > 0:
         result = await Db.update_gloal_config(pk=data.id, **new_dic)
         msg = "更新成功" if result else "更新失败"
