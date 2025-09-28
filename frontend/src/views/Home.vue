@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, onBeforeUnmount } from "vue"
+import { ref, reactive, onMounted, defineAsyncComponent } from "vue"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { request } from "@/api"
 import { CloseBold, Download, Delete, CircleCloseFilled, CircleCheckFilled, WarnTriangleFilled } from "@element-plus/icons-vue"
@@ -8,6 +8,7 @@ import { useClipboard } from "@vueuse/core"
 import type { Column } from "exceljs"
 import { useIntervalStore } from "@/stores"
 
+const PlatformStatus = defineAsyncComponent(() => import("@/components/home/platformStatus.vue"))
 const danmakuList = ref(Array<DanmakuModel>())
 const config = reactive<LiveModel>({
     douyin_romm_id: 0,
@@ -87,31 +88,30 @@ const exportFile = () => {
     exportExcel(columns, data, filename)
 }
 
-const getBilibiliWs = async() => {
-    const ws: number = await window.pywebview.api.get_bili_ws_status()
-    bili_ws.value = ws
+const getWsStatus = async() => {
+    bili_ws.value = await window.pywebview.api.get_bili_ws_status()
+    douyin_ws.value = await window.pywebview.api.get_dy_ws_status()
 }
 
-const getDouyinWs = async() => {
-    const ws: number = await window.pywebview.api.get_dy_ws_status()
-    douyin_ws.value = ws
-}
-
-const getBilibiliDanmaku = async () => {
-    const list = await window.pywebview.api.get_danmu()
-    list && list.forEach(item => {
+const processDanmaku = (list: DanmakuModel[], platform: "bilibili" | "douyin") => {
+    list.forEach(item => {
         window.pywebview.api.send_notification("收到新的点歌", item.msg)
         let result = item.msg
-        // 替换 emoji
         const matchList = item.msg.match(emojiexp)
-        if (matchList) {
-            for (const value of matchList) {
-                const emoji = emoticons.find((item) => value === item.emoji)
-                if (emoji) {
-                    // 使用全局替换，防止同一个 emoji 多次出现只替换一次
+        if(matchList){
+            for(const value of matchList){
+                let emojiUrl: string | undefined
+                if(platform == "bilibili"){
+                    const emoji = emoticons.find((e) => value === e.emoji)
+                    if(emoji) emojiUrl = emoji.url
+                }else{
+                    const emoji = emojiList.find((item) => value === item.display_name)
+                    if(emoji) emojiUrl = emoji.emoji_url.url_list[0]
+                }
+                if(emojiUrl){
                     result = result.replaceAll(
                         value,
-                        `<img src="${emoji.url}" referrerpolicy="no-referrer" width="20" />`,
+                        `<img src="${emojiUrl}" referrerpolicy="no-referrer" width="20" />`
                     )
                 }
             }
@@ -121,28 +121,12 @@ const getBilibiliDanmaku = async () => {
     danmakuList.value.push(...list)
 }
 
-const getDouyinDanmaku = async () => {
-    const dylist = await window.pywebview.api.get_dy_danmu()
-    dylist && dylist.forEach(item => {
-        window.pywebview.api.send_notification("收到新的点歌", item.msg)
-        let result = item.msg
-        // 替换 emoji
-        const matchList = item.msg.match(emojiexp)
-        if (matchList) {
-            for (const value of matchList) {
-                const emoji = emojiList.find((item) => value === item.display_name)
-                if (emoji) {
-                    // 使用全局替换，防止同一个 emoji 多次出现只替换一次
-                    result = result.replaceAll(
-                        value,
-                        `<img src="${emoji.emoji_url.url_list[0]}" referrerpolicy="no-referrer" width="20" />`,
-                    )
-                }
-            }
-            item.html = `${item.uname}： ${result}`
-        }
-    })
-    danmakuList.value.push(...dylist)
+const getDanmaku = async() => {
+    const bilibiliDanmaku = await window.pywebview.api.get_danmu()
+    bilibiliDanmaku && processDanmaku(bilibiliDanmaku, "bilibili")
+
+    const douyinDanmaku = await window.pywebview.api.get_dy_danmu()
+    douyinDanmaku && processDanmaku(douyinDanmaku, "douyin")
 }
 
 onMounted(() => {
@@ -157,12 +141,9 @@ onMounted(() => {
 
     initConfig()
 
-    intervalStore.addInterval("check_bilibili_ws", getBilibiliWs, 1000)
-    intervalStore.addInterval("check_douyin_ws", getDouyinWs, 1000)
-    intervalStore.addInterval("get_bilibili_danmaku", getBilibiliDanmaku, 1000)
-    intervalStore.addInterval("get_douyin_danmaku", getDouyinDanmaku, 1000)
+    intervalStore.addInterval("check_ws", getWsStatus, 1000)
+    intervalStore.addInterval("get_danmaku", getDanmaku, 1000)
 })
-
 </script>
 <template>
     <el-container class="chat-container">
@@ -171,44 +152,9 @@ onMounted(() => {
                 <template #header>
                     <div class="card-header">
                         <span>点歌列表</span>&nbsp;(&nbsp;
-                        <img src="/assets/images/douyin.png" class="source-img" alt="douyin" width="24" />：{{
-                        config.douyin_romm_id }}
-                        &nbsp;
-                        <template v-if="douyin_ws == -1">
-                            <el-icon color="#E6A23C" class="source-img">
-                                <WarnTriangleFilled />
-                            </el-icon>
-                        </template>
-                        <template v-else-if="douyin_ws == 1">
-                            <el-icon color="#67C23A" class="source-img">
-                                <CircleCheckFilled />
-                            </el-icon>
-                        </template>
-                        <template v-else>
-                            <el-icon color="#F56C6C" class="source-img">
-                                <CircleCloseFilled />
-                            </el-icon>
-                        </template>
-                        &nbsp;
-                        |&nbsp;
-                        <img src="/assets/images/bilibili.png" class="source-img" alt="bilibili" width="24" />：{{
-                            config.bilibili_room_id }}
-                        &nbsp;
-                        <template v-if="bili_ws == -1">
-                            <el-icon color="#E6A23C" class="source-img">
-                                <WarnTriangleFilled />
-                            </el-icon>
-                        </template>
-                        <template v-else-if="bili_ws >= 0 && bili_ws <= 2">
-                            <el-icon color="#67C23A" class="source-img">
-                                <CircleCheckFilled />
-                            </el-icon>
-                        </template>
-                        <template v-else>
-                            <el-icon color="#F56C6C" class="source-img">
-                                <CircleCloseFilled />
-                            </el-icon>
-                        </template>
+                        <PlatformStatus platform="douyin" :roomId="config.douyin_romm_id" :wsStatus="douyin_ws" />
+                        &nbsp;|&nbsp;
+                        <PlatformStatus platform="bilibili" :roomId="config.bilibili_room_id" :wsStatus="bili_ws" />
                         )
                     </div>
                 </template>
