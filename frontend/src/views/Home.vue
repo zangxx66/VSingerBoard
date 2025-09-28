@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, defineAsyncComponent } from "vue"
+import { ref, reactive, onMounted, defineAsyncComponent, onActivated } from "vue"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { request } from "@/api"
-import { CloseBold, Download, Delete, CircleCloseFilled, CircleCheckFilled, WarnTriangleFilled } from "@element-plus/icons-vue"
+import { CloseBold, Download, Delete } from "@element-plus/icons-vue"
 import { emoticons, emojiList, exportExcel, timespanToString, getNowTimespan } from "@/utils"
 import { useClipboard } from "@vueuse/core"
 import type { Column } from "exceljs"
@@ -143,6 +143,10 @@ onMounted(() => {
 
     intervalStore.addInterval("check_ws", getWsStatus, 1000)
     intervalStore.addInterval("get_danmaku", getDanmaku, 1000)
+})
+
+onActivated(() => {
+    initConfig()
 })
 </script>
 <template>
