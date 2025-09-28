@@ -16,6 +16,7 @@ const config = reactive<BiliConfigModel>({
     sing_prefix: '点歌',
     sing_cd: 0
 })
+const visible = ref(false)
 const timer = ref(0)
 // emoji表情
 const emojiexp = /\[[\u4E00-\u9FA5A-Za-z0-9_]+\]/g
@@ -151,6 +152,7 @@ onMounted(() => {
     const height = window.innerHeight - 100
     const dom = document.querySelector(".chat-main") as HTMLElement
     dom.style.height = `${height}px`
+    dom.style.overflow = "hidden"
 
     const infiniteListDom = document.querySelector(".infinite-list") as HTMLElement
     const listHeight = height * 0.7
@@ -190,11 +192,17 @@ onBeforeUnmount(() => {
                                     {{ item.uname }}： {{ item.msg }}
                                 </template>
                             </el-text>
-                            <el-text tag="span" class="chat-close" @click="remove(item)">
-                                <el-icon>
-                                    <CloseBold />
-                                </el-icon>
-                            </el-text>
+                            <el-tooltip :visible="visible">
+                                <template #content>
+                                    <span>移除点歌：{{ item.msg }}</span>
+                                </template>
+                                <el-text tag="span" class="chat-close" @click="remove(item)"
+                                    @mouseenter="visible = true" @mouseleave="visible = false">
+                                    <el-icon>
+                                        <CloseBold />
+                                    </el-icon>
+                                </el-text>
+                            </el-tooltip>
                         </div>
                     </template>
                 </div>

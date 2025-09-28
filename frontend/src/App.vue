@@ -344,7 +344,8 @@ onMounted(() => {
   top: 60px;
   right: 0;
   bottom: 0;
-  overflow: auto;
+  height: calc(100vh - 60px);
+  overflow: hidden;
   transition: left 0.3s ease-in-out;
 }
 
