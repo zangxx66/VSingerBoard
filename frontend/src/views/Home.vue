@@ -155,11 +155,7 @@ onActivated(() => {
             <el-card class="chat-card">
                 <template #header>
                     <div class="card-header">
-                        <span>点歌列表</span>&nbsp;(&nbsp;
-                        <PlatformStatus platform="douyin" :roomId="config.douyin_romm_id" :wsStatus="douyin_ws" />
-                        &nbsp;|&nbsp;
-                        <PlatformStatus platform="bilibili" :roomId="config.bilibili_room_id" :wsStatus="bili_ws" />
-                        )
+                        <span>点歌列表</span>
                     </div>
                 </template>
                 <div class="infinite-list" v-infinite-scroll="load">
@@ -206,6 +202,11 @@ onActivated(() => {
                                 <Download />
                             </el-icon>
                         </el-button>
+                        <div class="card-footer-right">
+                            <PlatformStatus platform="douyin" :roomId="config.douyin_romm_id" :wsStatus="douyin_ws" />
+                            <el-divider direction="vertical" />
+                            <PlatformStatus platform="bilibili" :roomId="config.bilibili_room_id" :wsStatus="bili_ws" />
+                        </div>
                     </div>
                 </template>
             </el-card>
@@ -256,6 +257,11 @@ onActivated(() => {
 
 .card-header {
     height: 24px;
+    display: flex;
+}
+
+.card-footer-right {
+    float: right;
     display: flex;
 }
 </style>

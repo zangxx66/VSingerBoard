@@ -34,13 +34,20 @@ const wsState = computed(() => {
 })
 </script>
 <template>
-    <img :src="`/assets/images/${platform}.png`" class="source-img" :alt="platform" width="24" />：{{ roomId }}
-    &nbsp;
-    <el-icon :color="wsState.color" class="source-img">
-        <component :is="wsState.icon" />
-    </el-icon>
+    <div class="platform-status-container">
+        <img :src="`/assets/images/${platform}.png`" class="source-img" :alt="platform" width="24" />：{{ roomId }}
+        &nbsp;
+        <el-icon :color="wsState.color" class="source-img">
+            <component :is="wsState.icon" />
+        </el-icon>
+    </div>
 </template>
 <style scoped>
+.platform-status-container {
+    display: flex;
+    align-items: center;
+}
+
 .source-img {
     margin: 1px;
     height: 24px;
