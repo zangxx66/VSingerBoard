@@ -5,7 +5,7 @@ import router from "@/router"
 import zhCn from "element-plus/es/locale/lang/zh-cn"
 import { Minus, Close, HomeFilled, Tools, List, InfoFilled, Sunny, Moon } from "@element-plus/icons-vue"
 import ContextMenu from '@imengyu/vue3-context-menu'
-import { ElLoading, ElMessage, ElMessageBox, ElNotification } from "element-plus"
+import { ElLoading, ElMessage, ElMessageBox } from "element-plus"
 import { request } from "@/api"
 import { toggleDark, checkUpdate, pasteToElement } from "@/utils"
 import { useIntervalStore, useContextMenuStore, useThemeStore } from "@/stores"
