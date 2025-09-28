@@ -57,10 +57,9 @@ const addOrUpdateConfig = () => {
             const themeValue = baseFormValue.dark_mode ? "mac dark" : "mac"
             contextmenuStore.setTheme(themeValue)
             if(baseFormValue.check_update){
-                intervalStore.addCallback("check_update", checkUpdate)
-                intervalStore.start(1000 * 60 * 60 * 6)
+                intervalStore.addInterval("check_update", checkUpdate, 1000 * 60 * 60 * 6)
             }else{
-                intervalStore.removeCallback("check_update")
+                intervalStore.removeInterval("check_update")
             }
             initConfig()
         }

@@ -67,3 +67,8 @@ type UpdateModel = {
     body: string
     published_at: string
 }
+
+type LiveModel = {
+    douyin_romm_id: number
+    bilibili_room_id: number
+}

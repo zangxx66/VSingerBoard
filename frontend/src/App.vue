@@ -125,7 +125,7 @@ const quit = () => {
         text: "正在退出...",
         background: "rgba(0, 0, 0, 0.7)"
       })
-      intervalStore.stopAndClear()
+      intervalStore.clearAllIntervals()
       window.pywebview.api.on_closing()
     })
     .catch((error) => {
@@ -155,8 +155,7 @@ const initGlobalConfig = async () => {
         contextmenuStore.setTheme(themeValue)
         if (model.check_update) {
           checkUpdate()
-          intervalStore.addCallback("check_update", checkUpdate)
-          intervalStore.start(1000 * 60 * 60 * 6)
+          intervalStore.addInterval("check_update", checkUpdate, 1000 * 60 * 60 * 6)
         }
       }
     }
@@ -165,52 +164,6 @@ const initGlobalConfig = async () => {
       ElMessage.error(error)
       console.error("获取全局配置失败", error)
     })
-}
-
-/**
- * 获取 WebSocket 连接状态
- * 
- * 该函数将获取哔哩哔哩和抖音的 WebSocket 连接状态，并将其以 Notification 的形式显示
- * 
- * @returns {Promise<void>} 无返回值 Promise
- */
-const getWsStatus = async () => {
-
-  const bili_ws: number = await window.pywebview.api.get_bili_ws_status()
-  let bili_msg = ""
-  if (bili_ws == -1) {
-    bili_msg = "哔哩哔哩未配置"
-  }
-  else if (bili_ws >= 0 && bili_ws <= 2) {
-    bili_msg = "哔哩哔哩已连接"
-  }
-  else {
-    bili_msg = "哔哩哔哩连接发生错误"
-  }
-  ElNotification({
-    title: "提示",
-    message: bili_msg,
-    type: bili_ws >= 0 && bili_ws <= 2 ? "success" : "warning",
-    position: "bottom-right"
-  })
-
-  const dy_ws: number = await window.pywebview.api.get_dy_ws_status()
-  let dy_msg = ""
-  if (dy_ws == -1) {
-    dy_msg = "抖音未配置"
-  }
-  else if (dy_ws == 1) {
-    dy_msg = "抖音已连接"
-  }
-  else {
-    dy_msg = "抖音连接发生错误"
-  }
-  ElNotification({
-    title: "提示",
-    message: dy_msg,
-    type: dy_ws > 0 ? "success" : "warning",
-    position: "bottom-right"
-  })
 }
 
 const mainStyle = computed(() => {
@@ -232,7 +185,6 @@ const isDarktheme = computed(() => {
 onMounted(() => {
   setTimeout(() => {
     initGlobalConfig()
-    getWsStatus()
   }, 1000)
 })
 
@@ -267,13 +219,16 @@ onMounted(() => {
           <template #title>关于</template>
         </el-menu-item>
         <el-menu-item index="4">
-          <el-switch v-model="isDarktheme" :active-action-icon="Moon" :inactive-action-icon="Sunny"
-            @change="themeStore.updateConfig(!isDarktheme)" />
+          <el-switch v-model="isDarktheme" 
+          :active-action-icon="Moon" 
+          :inactive-action-icon="Sunny"
+          style="--el-switch-on-color: var(--bg-color-mute)"
+          @change="themeStore.updateConfig(!isDarktheme)" />
         </el-menu-item>
       </el-menu>
     </el-aside>
 
-    <el-header class="glassmorphism pywebview-drag-region">
+    <el-header class="pywebview-drag-region">
       <el-menu :default-active="active" mode="horizontal" :ellipsis="false" class="toolbar">
         <el-menu-item index="0" @click="isCollapse = !isCollapse">
           <img src="/assets/images/logo.png" alt="logo" style="width:100px;" />

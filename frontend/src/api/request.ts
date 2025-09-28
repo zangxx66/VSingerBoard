@@ -100,6 +100,15 @@ class Request {
     async addOrUpdateGlobalConfig(params: {}): Promise<AxiosResponse<any>>{
         return await client.post("/api/add_or_update_global_config", params)
     }
+
+    /**
+     * Get live configuration.
+     * @param {Object} [params={}] Parameters object passed to the server.
+     * @returns {Promise<AxiosResponse<any>>} The response of the get operation.
+     */
+    async getLiveConfig(params: {}): Promise<AxiosResponse<any>>{
+        return await client.get("/api/get_live_config", params)
+    }
 }
 
 export const request = new Request()

@@ -2,94 +2,33 @@
 import { ref, reactive, onMounted, onBeforeUnmount } from "vue"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { request } from "@/api"
-import { CloseBold, Download, Delete } from "@element-plus/icons-vue"
+import { CloseBold, Download, Delete, CircleCloseFilled, CircleCheckFilled, WarnTriangleFilled } from "@element-plus/icons-vue"
 import { emoticons, emojiList, exportExcel, timespanToString, getNowTimespan } from "@/utils"
 import { useClipboard } from "@vueuse/core"
 import type { Column } from "exceljs"
+import { useIntervalStore } from "@/stores"
 
 const danmakuList = ref(Array<DanmakuModel>())
-const config = reactive<BiliConfigModel>({
-    id: 0,
-    room_id: 0,
-    modal_level: 0,
-    user_level: 0,
-    sing_prefix: '点歌',
-    sing_cd: 0
+const config = reactive<LiveModel>({
+    douyin_romm_id: 0,
+    bilibili_room_id: 0
 })
-const visible = ref(false)
-const timer = ref(0)
+const bili_ws = ref(-1)
+const douyin_ws = ref(-1)
+const intervalStore = useIntervalStore()
 // emoji表情
 const emojiexp = /\[[\u4E00-\u9FA5A-Za-z0-9_]+\]/g
 
 const initConfig = () => {
-    request.getBiliConfig({}).then(response => {
+    request.getLiveConfig({}).then(response => {
         const resp = response.data as ResponseModel
         if (resp.code != 0) {
             ElMessage.warning(resp.msg)
         } else {
-            if (!resp.data.data) return
-            const cfg = resp.data.data as BiliConfigModel
-            config.id = cfg.id
-            config.room_id = cfg.room_id
-            config.modal_level = cfg.modal_level
-            config.user_level = cfg.user_level
-            config.sing_prefix = cfg.sing_prefix
-            config.sing_cd = cfg.sing_cd
-            wsConnect()
+            const data = resp.data.data as LiveModel
+            Object.assign(config, data)
         }
     }).catch(error => ElMessage.error(error))
-}
-
-const wsConnect = () => {
-    timer.value = setInterval(async () => {
-        const list = await window.pywebview.api.get_danmu()
-        if (list) {
-            list.forEach(item => {
-                window.pywebview.api.send_notification("收到新的点歌", item.msg)
-                let result = item.msg
-                // 替换 emoji
-                const matchList = item.msg.match(emojiexp)
-                if(matchList){
-                    for (const value of matchList) {
-                        const emoji = emoticons.find((item) => value === item.emoji)
-                        if (emoji) {
-                            // 使用全局替换，防止同一个 emoji 多次出现只替换一次
-                            result = result.replaceAll(
-                                value,
-                                `<img src="${emoji.url}" referrerpolicy="no-referrer" width="20" />`,
-                            )
-                        }
-                    }
-                    item.html = `${item.uname}： ${result}`
-                }
-            })
-            danmakuList.value.push(...list)
-        }
-        const dylist = await window.pywebview.api.get_dy_danmu()
-        if (dylist) {
-            dylist.forEach(item => {
-                window.pywebview.api.send_notification("收到新的点歌", item.msg)
-                let result = item.msg
-                // 替换 emoji
-                const matchList = item.msg.match(emojiexp)
-                if(matchList){
-                    for (const value of matchList) {
-                        const emoji = emojiList.find((item) => value === item.display_name)
-                        if (emoji) {
-                            // 使用全局替换，防止同一个 emoji 多次出现只替换一次
-                            result = result.replaceAll(
-                                value,
-                                `<img src="${emoji.emoji_url.url_list[0]}" referrerpolicy="no-referrer" width="20" />`,
-                            )
-                        }
-                    }
-                    item.html = `${item.uname}： ${result}`
-                }
-            })
-            danmakuList.value.push(...dylist)
-        }
-
-    }, 1000)
 }
 
 const load = () => console.log("load")
@@ -148,6 +87,64 @@ const exportFile = () => {
     exportExcel(columns, data, filename)
 }
 
+const getBilibiliWs = async() => {
+    const ws: number = await window.pywebview.api.get_bili_ws_status()
+    bili_ws.value = ws
+}
+
+const getDouyinWs = async() => {
+    const ws: number = await window.pywebview.api.get_dy_ws_status()
+    douyin_ws.value = ws
+}
+
+const getBilibiliDanmaku = async () => {
+    const list = await window.pywebview.api.get_danmu()
+    list && list.forEach(item => {
+        window.pywebview.api.send_notification("收到新的点歌", item.msg)
+        let result = item.msg
+        // 替换 emoji
+        const matchList = item.msg.match(emojiexp)
+        if (matchList) {
+            for (const value of matchList) {
+                const emoji = emoticons.find((item) => value === item.emoji)
+                if (emoji) {
+                    // 使用全局替换，防止同一个 emoji 多次出现只替换一次
+                    result = result.replaceAll(
+                        value,
+                        `<img src="${emoji.url}" referrerpolicy="no-referrer" width="20" />`,
+                    )
+                }
+            }
+            item.html = `${item.uname}： ${result}`
+        }
+    })
+    danmakuList.value.push(...list)
+}
+
+const getDouyinDanmaku = async () => {
+    const dylist = await window.pywebview.api.get_dy_danmu()
+    dylist && dylist.forEach(item => {
+        window.pywebview.api.send_notification("收到新的点歌", item.msg)
+        let result = item.msg
+        // 替换 emoji
+        const matchList = item.msg.match(emojiexp)
+        if (matchList) {
+            for (const value of matchList) {
+                const emoji = emojiList.find((item) => value === item.display_name)
+                if (emoji) {
+                    // 使用全局替换，防止同一个 emoji 多次出现只替换一次
+                    result = result.replaceAll(
+                        value,
+                        `<img src="${emoji.emoji_url.url_list[0]}" referrerpolicy="no-referrer" width="20" />`,
+                    )
+                }
+            }
+            item.html = `${item.uname}： ${result}`
+        }
+    })
+    danmakuList.value.push(...dylist)
+}
+
 onMounted(() => {
     const height = window.innerHeight - 100
     const dom = document.querySelector(".chat-main") as HTMLElement
@@ -159,12 +156,13 @@ onMounted(() => {
     infiniteListDom.style.height = `${listHeight}px`
 
     initConfig()
+
+    intervalStore.addInterval("check_bilibili_ws", getBilibiliWs, 1000)
+    intervalStore.addInterval("check_douyin_ws", getDouyinWs, 1000)
+    intervalStore.addInterval("get_bilibili_danmaku", getBilibiliDanmaku, 1000)
+    intervalStore.addInterval("get_douyin_danmaku", getDouyinDanmaku, 1000)
 })
 
-onBeforeUnmount(() => {
-    clearInterval(timer.value)
-    timer.value = 0
-})
 </script>
 <template>
     <el-container class="chat-container">
@@ -172,7 +170,46 @@ onBeforeUnmount(() => {
             <el-card class="chat-card">
                 <template #header>
                     <div class="card-header">
-                        <span>点歌列表</span>
+                        <span>点歌列表</span>&nbsp;(&nbsp;
+                        <img src="/assets/images/douyin.png" class="source-img" alt="douyin" width="24" />：{{
+                        config.douyin_romm_id }}
+                        &nbsp;
+                        <template v-if="douyin_ws == -1">
+                            <el-icon color="#E6A23C" class="source-img">
+                                <WarnTriangleFilled />
+                            </el-icon>
+                        </template>
+                        <template v-else-if="douyin_ws == 1">
+                            <el-icon color="#67C23A" class="source-img">
+                                <CircleCheckFilled />
+                            </el-icon>
+                        </template>
+                        <template v-else>
+                            <el-icon color="#F56C6C" class="source-img">
+                                <CircleCloseFilled />
+                            </el-icon>
+                        </template>
+                        &nbsp;
+                        |&nbsp;
+                        <img src="/assets/images/bilibili.png" class="source-img" alt="bilibili" width="24" />：{{
+                            config.bilibili_room_id }}
+                        &nbsp;
+                        <template v-if="bili_ws == -1">
+                            <el-icon color="#E6A23C" class="source-img">
+                                <WarnTriangleFilled />
+                            </el-icon>
+                        </template>
+                        <template v-else-if="bili_ws >= 0 && bili_ws <= 2">
+                            <el-icon color="#67C23A" class="source-img">
+                                <CircleCheckFilled />
+                            </el-icon>
+                        </template>
+                        <template v-else>
+                            <el-icon color="#F56C6C" class="source-img">
+                                <CircleCloseFilled />
+                            </el-icon>
+                        </template>
+                        )
                     </div>
                 </template>
                 <div class="infinite-list" v-infinite-scroll="load">
@@ -192,12 +229,11 @@ onBeforeUnmount(() => {
                                     {{ item.uname }}： {{ item.msg }}
                                 </template>
                             </el-text>
-                            <el-tooltip :visible="visible">
+                            <el-tooltip placement="bottom">
                                 <template #content>
                                     <span>移除点歌：{{ item.msg }}</span>
                                 </template>
-                                <el-text tag="span" class="chat-close" @click="remove(item)"
-                                    @mouseenter="visible = true" @mouseleave="visible = false">
+                                <el-text tag="span" class="chat-close" @click="remove(item)">
                                     <el-icon>
                                         <CloseBold />
                                     </el-icon>
@@ -266,5 +302,10 @@ onBeforeUnmount(() => {
 .source-img {
     margin: 1px;
     height: 24px;
+}
+
+.card-header {
+    height: 24px;
+    display: flex;
 }
 </style>
