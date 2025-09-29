@@ -236,6 +236,7 @@ class Api:
 
     def send_notification(self, title, message):
         notification = Notify()
+        notification.application_name = "点歌姬"
         notification.title = title
         notification.message = message
         notification.icon = resource_path("logo.png")

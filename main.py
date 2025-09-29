@@ -5,19 +5,38 @@ import time
 import signal
 import sys
 import subprocess
+from PIL import Image
+from pystray import Icon, Menu, MenuItem
 from src.server import startup
-from src.utils import logger
+from src.utils import logger, resource_path
 from src.jsBridge import Api, start_bili, start_dy, stop_bili, stop_dy
 from webview.window import Window
 
 server_thread: threading.Thread = None
 dev_thread: threading.Thread = None
-stop_event = threading.Event()
+dev_process = None
+icon: Icon = None
+
+
+# A single, non-blocking shutdown function
+def shutdown():
+    logger.info("Initiating shutdown...")
+
+    stop_bili()
+    stop_dy()
+
+    if dev_process is not None:
+        dev_process.terminate()
+    if icon is not None:
+        icon.stop()
+
+    logger.info("Cleanup complete. Forcing exit.")
+    os._exit(0)
 
 
 def signal_handler(sig, frame):
-    logger.info("Received signal:", sig)
-    stop_event.set()
+    logger.info(f"Received signal: {sig}. Triggering shutdown.")
+    shutdown()
 
 
 def pro_server():
@@ -31,22 +50,11 @@ def ws_server():
 
 
 def dev_server():
+    # os.system("npm run -C frontend/ dev")
     global dev_process
-    kwargs = {}
-    if sys.platform == "win32":
-        kwargs['creationflags'] = subprocess.CREATE_NEW_PROCESS_GROUP
-    else:
-        kwargs['start_new_session'] = True
-
-    dev_process = subprocess.Popen(
-        "npm run dev",
-        cwd="frontend/",
-        shell=True,
-        **kwargs
-    )
-
+    dev_process = subprocess.Popen("npm run -C frontend/ dev", shell=True)
+    dev_process.communicate()
     logger.info("startup dev server")
-    dev_process.wait()
 
 
 def on_start(window: Window):
@@ -55,41 +63,46 @@ def on_start(window: Window):
 
 
 def on_closing():
-    global stop_event, server_thread, dev_thread, dev_process
-    webview.logger.info("click close")
+    webview.logger.info("Window closing event triggered.")
+    shutdown()
 
-    stop_event.set()
 
-    if dev_process:
-        webview.logger.info("Terminating dev server process group...")
-        if sys.platform == "win32":
-            dev_process.send_signal(signal.CTRL_BREAK_EVENT)
-        else:
-            os.killpg(os.getpgid(dev_process.pid), signal.SIGTERM)
-        dev_process.terminate()
-        dev_process.wait(5)
+def setup_tray(window: Window):
+    global icon
+    image = Image.open(resource_path("logo.png"))
 
-    if server_thread is not None and server_thread.is_alive:
-        webview.logger.info("Waiting for server thread to finish...")
-        server_thread.join(5)
+    def show_window(i, item):
+        window.show()
 
-    stop_bili()
-    stop_dy()
+    def hide_window(i, item):
+        window.hide()
 
-    os._exit(0)
+    def quit_app(i, item):
+        window.destroy()
+
+    menu = Menu(
+        MenuItem("显示主界面", show_window, default=True),
+        MenuItem("隐藏主界面", hide_window),
+        Menu.SEPARATOR,
+        MenuItem("退出程序", quit_app)
+    )
+
+    icon = Icon("VSingerBoard", image, "点歌姬", menu)
+    icon.run_detached()
 
 
 def main():
-    global stop_event, server_thread, dev_thread
+    global server_thread, dev_thread
     logger.info("------startup------")
 
+    # Setup signal handlers to gracefully shutdown
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
-    signal.signal(signal.SIGQUIT, signal_handler)
+    if sys.platform != "win32":
+        signal.signal(signal.SIGQUIT, signal_handler)
 
     # 是否在PyInstaller环境
     DEBUG = not getattr(sys, "frozen", False)
-
     PORT = 5173 if DEBUG else 8000
 
     try:
@@ -120,13 +133,10 @@ def main():
         }
 
         # 系统分辨率
-        screens = webview.screens
-        screens = screens[0]
-        width = screens.width
-        height = screens.height
+        screens = webview.screens[0]
         # 程序窗口大小
-        initWidth = int(width / 1.2)
-        initHeight = int(height / 1.2)
+        initWidth = int(screens.width / 1.2)
+        initHeight = int(screens.height / 1.2)
 
         webview.settings["OPEN_DEVTOOLS_IN_DEBUG"] = False
         webview.settings['ALLOW_DOWNLOADS'] = True
@@ -143,29 +153,29 @@ def main():
                                        frameless=True,
                                        easy_drag=True,)
 
+        window.expose(on_closing)
+
         if DEBUG:
             dev_thread = threading.Thread(target=dev_server, daemon=True, name="devServer")
             dev_thread.start()
             # Vite服务器启动较慢，手动给个时间等待
             time.sleep(3)
+
         server_thread = threading.Thread(target=pro_server, daemon=True, name="proServer")
         server_thread.start()
 
         ws_server()
-        # window.events.closing += on_closing
-        window.expose(on_closing)
-        webview.start(on_start, window, debug=DEBUG, gui="gtk", icon="logo.icns")
 
-        stop_event.wait()
+        setup_tray(window)
+
+        webview.start(on_start, window, debug=DEBUG, gui="gtk")
+
     except Exception as ex:
         logger.exception(ex)
     finally:
-        logger.info("Shutting down services...")
-
-        on_closing()
-
-        logger.info("Shutdown complete.")  # Wait
-        os._exit(0)
+        # This block will likely not be reached because shutdown() calls os._exit()
+        logger.info("Main function finally block reached.")
+        shutdown()
 
 
 if __name__ == "__main__":
