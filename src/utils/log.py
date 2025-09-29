@@ -12,8 +12,12 @@ console_handle = logging.StreamHandler()
 
 file_formatter = logging.Formatter(fmt="[%(asctime)s][%(levelname)s][%(module)s][%(funcName)s][%(lineno)d] - %(message)s", datefmt="%Y-%m-%d  %H:%M:%S")
 
-logger.setLevel(logging.INFO)
-console_handle.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
+# 是否正在以调试模式运行
+if sys.gettrace() is not None:
+    console_handle.setLevel(logging.DEBUG)
+else:
+    console_handle.setLevel(logging.INFO)
 file_handle.setLevel(logging.WARNING)
 
 file_handle.setFormatter(file_formatter)

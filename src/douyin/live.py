@@ -6,112 +6,21 @@
 # @Author:      bubu
 # @Project:     douyinLiveWebFetcher
 
-import codecs
 import gzip
-import hashlib
-import random
 import re
-import string
-import subprocess
 import threading
 import time
 import urllib.parse
-import execjs
-import os
-from contextlib import contextmanager
-from unittest.mock import patch
 
 import requests
 import websocket
-from py_mini_racer import MiniRacer
 from .ac_signature import get__ac_signature
+from .signature import execute_js, generateSignature, generateMsToken
 
 from src.protobuf.douyin import PushFrame, Response, ChatMessage, GiftMessage, LikeMessage, MemberMessage, SocialMessage, RoomUserSeqMessage, FansclubMessage, EmojiChatMessage, RoomMessage, RoomStatsMessage, RoomRankMessage, ControlMessage, RoomStreamAdaptationMessage
-from src.utils import Decorator, resource_path, logger
+from src.utils import Decorator, logger
 
 from urllib3.util.url import parse_url
-
-
-def get_real_path(filename):
-    res_path = resource_path("douyinjs")
-    js_path = os.path.join(res_path, filename)
-    return js_path
-
-
-def execute_js(js_file: str):
-    """
-    执行 JavaScript 文件
-    :param js_file: JavaScript 文件路径
-    :return: 执行结果
-    """
-    js_path = get_real_path(js_file)
-    with open(js_path, 'r', encoding='utf-8') as file:
-        js_code = file.read()
-
-    ctx = execjs.compile(js_code)
-    return ctx
-
-
-@contextmanager
-def patched_popen_encoding(encoding='utf-8'):
-    original_popen_init = subprocess.Popen.__init__
-
-    def new_popen_init(self, *args, **kwargs):
-        kwargs['encoding'] = encoding
-        original_popen_init(self, *args, **kwargs)
-
-    with patch.object(subprocess.Popen, '__init__', new_popen_init):
-        yield
-
-
-def generateSignature(wss, script_file='sign.js'):
-    """
-    出现gbk编码问题则修改 python模块subprocess.py的源码中Popen类的__init__函数参数encoding值为 "utf-8"
-    """
-    params = ("live_id,aid,version_code,webcast_sdk_version,"
-              "room_id,sub_room_id,sub_channel_id,did_rule,"
-              "user_unique_id,device_platform,device_type,ac,"
-              "identity").split(',')
-    wss_params = urllib.parse.urlparse(wss).query.split('&')
-    wss_maps = {i.split('=')[0]: i.split("=")[-1] for i in wss_params}
-    tpl_params = [f"{i}={wss_maps.get(i, '')}" for i in params]
-    param = ','.join(tpl_params)
-    md5 = hashlib.md5()
-    md5.update(param.encode())
-    md5_param = md5.hexdigest()
-
-    script_path = get_real_path(script_file)
-    with codecs.open(script_path, 'r', encoding='utf8') as f:
-        script = f.read()
-
-    ctx = MiniRacer()
-    ctx.eval(script)
-
-    try:
-        signature = ctx.call("get_sign", md5_param)
-        return signature
-    except Exception as e:
-        logger.error(e)
-
-    # 以下代码对应js脚本为sign_v0.js
-    # context = execjs.compile(script)
-    # with patched_popen_encoding(encoding='utf-8'):
-    #     ret = context.call('getSign', {'X-MS-STUB': md5_param})
-    # return ret.get('X-Bogus')
-
-
-def generateMsToken(length=182):
-    """
-    产生请求头部cookie中的msToken字段，其实为随机的182位字符
-    :param length:字符位数
-    :return:msToken
-    """
-    random_str = ''
-    base_str = string.ascii_letters + string.digits + '-_'
-    _len = len(base_str) - 1
-    for _ in range(length):
-        random_str += base_str[random.randint(0, _len)]
-    return random_str
 
 
 class DouyinLiveWebFetcher(Decorator):
@@ -375,7 +284,7 @@ class DouyinLiveWebFetcher(Decorator):
         user_name = message.user.nick_name
         user_id = message.user.id
         content = message.content
-        logger.info(f"【聊天msg】[{user_id}]{user_name}: {content}")
+        logger.debug(f"【聊天msg】[{user_id}]{user_name}: {content}")
         self.dispatch("danmu", {"user_name": user_name, "user_id": user_id, "content": content, "level": message.user.level, "fans_club_data": message.user.fans_club.data})
 
     def _parseGiftMsg(self, payload):
@@ -385,7 +294,7 @@ class DouyinLiveWebFetcher(Decorator):
         user_id = message.user.id
         gift_name = message.gift.name
         gift_cnt = message.combo_count
-        # print(f"【礼物msg】{user_name} 送出了 {gift_name}x{gift_cnt}")
+        logger.debug(f"【礼物msg】{user_name} 送出了 {gift_name}x{gift_cnt}")
         self.dispatch("gift", {"user_name": user_name, "user_id": user_id, "gift_name": gift_name, "gift_cnt": gift_cnt})
 
     def _parseLikeMsg(self, payload):
@@ -401,7 +310,7 @@ class DouyinLiveWebFetcher(Decorator):
         message = MemberMessage().parse(payload)
         user_name = message.user.nick_name
         user_id = message.user.id
-        gender = ["女", "男"][message.user.gender]
+        # gender = ["女", "男"][message.user.gender]
         # print(f"【进场msg】[{user_id}][{gender}]{user_name} 进入了直播间")
         self.dispatch("enter", {"user_name": user_name, "user_id": user_id})
 
@@ -409,7 +318,7 @@ class DouyinLiveWebFetcher(Decorator):
         '''关注消息'''
         message = SocialMessage().parse(payload)
         user_name = message.user.nick_name
-        user_id = message.user.id
+        # user_id = message.user.id
         # print(f"【关注msg】[{user_id}]{user_name} 关注了主播")
         self.dispatch("follow", {"user_name": user_name, "user_id": message.user.id})
 
@@ -425,7 +334,7 @@ class DouyinLiveWebFetcher(Decorator):
         '''粉丝团消息'''
         message = FansclubMessage().parse(payload)
         content = message.content
-        # print(f"【粉丝团msg】 {content}")
+        logger.debug(f"【粉丝团msg】 {content}")
 
     def _parseEmojiChatMsg(self, payload):
         '''聊天表情包消息'''
@@ -434,7 +343,7 @@ class DouyinLiveWebFetcher(Decorator):
         user = message.user
         common = message.common
         default_content = message.default_content
-        # print(f"【聊天表情包id】 {emoji_id},user：{user},common:{common},default_content:{default_content}")
+        logger.debug(f"【聊天表情包id】 {emoji_id},user：{user},common:{common},default_content:{default_content}")
 
     def _parseRoomMsg(self, payload):
         message = RoomMessage().parse(payload)
@@ -445,12 +354,12 @@ class DouyinLiveWebFetcher(Decorator):
     def _parseRoomStatsMsg(self, payload):
         message = RoomStatsMessage().parse(payload)
         display_long = message.display_long
-        # print(f"【直播间统计msg】{display_long}")
+        logger.debug(f"【直播间统计msg】{display_long}")
 
     def _parseRankMsg(self, payload):
         message = RoomRankMessage().parse(payload)
         ranks_list = message.ranks_list
-        # print(f"【直播间排行榜msg】{ranks_list}")
+        logger.debug(f"【直播间排行榜msg】{ranks_list}")
 
     def _parseControlMsg(self, payload):
         '''直播间状态消息'''

@@ -231,7 +231,12 @@ onMounted(() => {
     <el-header class="pywebview-drag-region">
       <el-menu :default-active="active" mode="horizontal" :ellipsis="false" class="toolbar">
         <el-menu-item index="0" @click="isCollapse = !isCollapse">
-          <img src="/assets/images/logo.png" alt="logo" style="width:100px;" />
+          <template v-if="isDarktheme">
+            <img src="/assets/images/logo_night.png" alt="logo" style="width:100px;" />
+          </template>
+          <template v-else>
+            <img src="/assets/images/logo.png" alt="logo" style="width:100px;" />
+          </template>
         </el-menu-item>
         <el-menu-item index="1" @click="minus">
           <el-icon>

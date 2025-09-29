@@ -1,2 +1,3 @@
-from .live import MyLive, DanmuInfo
+from .live import MyLive
 
+__all__ = ["MyLive"]

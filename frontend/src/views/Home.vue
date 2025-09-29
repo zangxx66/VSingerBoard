@@ -17,6 +17,7 @@ const config = reactive<LiveModel>({
 const bili_ws = ref(-1)
 const douyin_ws = ref(-1)
 const intervalStore = useIntervalStore()
+const infiniteList = ref<HTMLDivElement | null>(null)
 // emoji表情
 const emojiexp = /\[[\u4E00-\u9FA5A-Za-z0-9_]+\]/g
 
@@ -119,6 +120,9 @@ const processDanmaku = (list: DanmakuModel[], platform: "bilibili" | "douyin") =
         }
     })
     danmakuList.value.push(...list)
+    if(infiniteList.value && list.length > 0){
+        infiniteList.value.scrollTo({ behavior: "smooth", top: infiniteList.value.scrollHeight })
+    }
 }
 
 const getDanmaku = async() => {
@@ -158,7 +162,7 @@ onActivated(() => {
                         <span>点歌列表</span>
                     </div>
                 </template>
-                <div class="infinite-list" v-infinite-scroll="load">
+                <div class="infinite-list" ref="infiniteList" v-infinite-scroll="load">
                     <template v-for="item in danmakuList">
                         <div class="infinite-list-item">
                             <template v-if="item.source == 'bilibili'">

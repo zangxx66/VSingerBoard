@@ -1,18 +1,6 @@
 import time
 from bilibili_api import live, sync
-from typing import TypedDict, Optional
-from src.utils import Decorator, logger
-
-
-class DanmuInfo(TypedDict):
-    uid: int
-    uname: str
-    msg: str
-    medal_level: int
-    medal_name: str
-    guard_level: int
-    price: Optional[int]
-    send_time: int
+from src.utils import Decorator, logger, DanmuInfo
 
 
 class MyLive(Decorator):
@@ -67,6 +55,7 @@ class MyLive(Decorator):
             medal_name = user_info["medal"]["name"]
             guard_level = user_info["medal"]["guard_level"]
 
+        logger.debug(f"[{medal_name} {medal_level}]:{uname}:{msg}")
         if not msg.startswith(self.song_prefix):
             return
 
@@ -98,6 +87,7 @@ class MyLive(Decorator):
             medal_level = sc_data["medal_info"]["medal_level"]
             medal_name = sc_data["medal_info"]["medal_name"]
 
+        logger.debug(f"[{medal_name} {medal_level}]:{uname}:{message}")
         if not message.startswith(self.song_prefix):
             return
         song_name = message.replace(self.song_prefix, "").strip()

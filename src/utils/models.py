@@ -1,0 +1,48 @@
+from typing import TypedDict, Optional, Dict, Any
+from pydantic import BaseModel
+
+
+class DanmuInfo(TypedDict):
+    uid: int
+    uname: str
+    msg: str
+    medal_level: int
+    medal_name: str
+    guard_level: int
+    price: Optional[int]
+    send_time: int
+
+
+class ResponseItem(BaseModel):
+    code: int
+    msg: Optional[str]
+    data: Optional[Dict[str, Any]]
+
+
+class subItem(BaseModel):
+    id: int
+    room_id: int
+    source: str
+
+
+class bconfigItem(BaseModel):
+    id: int
+    room_id: int
+    modal_level: int
+    user_level: int
+    sing_prefix: str
+    sing_cd: int
+
+
+class dyconfigItem(BaseModel):
+    id: int
+    room_id: int
+    sing_prefix: str
+    sing_cd: int
+
+
+class globalfigItem(BaseModel):
+    id: int
+    dark_mode: Optional[bool] = None
+    check_update: Optional[bool] = None
+    startup: Optional[bool] = None

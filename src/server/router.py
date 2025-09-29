@@ -1,8 +1,6 @@
 import webview
 import base64
 import asyncio
-from pydantic import BaseModel
-from typing import Dict, Any, Optional
 from fastapi import APIRouter, Query, Body, Header, Depends, BackgroundTasks
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import HTTPException
@@ -10,7 +8,7 @@ from bilibili_api import Credential, user
 from bilibili_api.login_v2 import QrCodeLogin, QrCodeLoginChannel
 from src.database import Db
 from src.jsBridge import restart_bili, restart_dy
-from src.utils import setup_autostart
+from src.utils import setup_autostart, ResponseItem, bconfigItem, dyconfigItem, globalfigItem
 
 # Lock to serialize access to the bilibili-api library to prevent concurrency issues.
 bilibili_api_lock = asyncio.Lock()
@@ -23,41 +21,6 @@ def verify_token(x_token: str = Header()):
 
 router = APIRouter(tags=["api"], dependencies=[Depends(verify_token)])
 qr_code_login: QrCodeLogin
-
-
-class ResponseItem(BaseModel):
-    code: int
-    msg: Optional[str]
-    data: Optional[Dict[str, Any]]
-
-
-class subItem(BaseModel):
-    id: int
-    room_id: int
-    source: str
-
-
-class bconfigItem(BaseModel):
-    id: int
-    room_id: int
-    modal_level: int
-    user_level: int
-    sing_prefix: str
-    sing_cd: int
-
-
-class dyconfigItem(BaseModel):
-    id: int
-    room_id: int
-    sing_prefix: str
-    sing_cd: int
-
-
-class globalfigItem(BaseModel):
-    id: int
-    dark_mode: Optional[bool] = None
-    check_update: Optional[bool] = None
-    startup: Optional[bool] = None
 
 
 @router.get("/get_bili_config", response_model=ResponseItem)
