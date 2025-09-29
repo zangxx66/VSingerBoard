@@ -4,6 +4,7 @@ import threading
 import time
 import signal
 import sys
+import subprocess
 from src.server import startup
 from src.utils import logger
 from src.jsBridge import Api, start_bili, start_dy, stop_bili, stop_dy
@@ -30,8 +31,22 @@ def ws_server():
 
 
 def dev_server():
-    os.system("npm run -C frontend/ dev")
+    global dev_process
+    kwargs = {}
+    if sys.platform == "win32":
+        kwargs['creationflags'] = subprocess.CREATE_NEW_PROCESS_GROUP
+    else:
+        kwargs['start_new_session'] = True
+
+    dev_process = subprocess.Popen(
+        "npm run dev",
+        cwd="frontend/",
+        shell=True,
+        **kwargs
+    )
+
     logger.info("startup dev server")
+    dev_process.wait()
 
 
 def on_start(window: Window):
@@ -40,19 +55,26 @@ def on_start(window: Window):
 
 
 def on_closing():
-    global stop_event, server_thread, dev_thread
+    global stop_event, server_thread, dev_thread, dev_process
     webview.logger.info("click close")
 
     stop_event.set()
+
+    if dev_process:
+        webview.logger.info("Terminating dev server process group...")
+        if sys.platform == "win32":
+            dev_process.send_signal(signal.CTRL_BREAK_EVENT)
+        else:
+            os.killpg(os.getpgid(dev_process.pid), signal.SIGTERM)
+        dev_process.terminate()
+        dev_process.wait(5)
+
     if server_thread is not None and server_thread.is_alive:
         webview.logger.info("Waiting for server thread to finish...")
         server_thread.join(5)
-    if dev_thread is not None and dev_thread.is_alive:
-        webview.logger.info("Waiting for dev thread to finish...")
-        dev_thread.join(5)
+
     stop_bili()
     stop_dy()
-    # asyncio.run(conn.disconnect())
 
     os._exit(0)
 
@@ -71,9 +93,6 @@ def main():
     PORT = 5173 if DEBUG else 8000
 
     try:
-        # Initialize services
-        # asyncio.run(conn.init())
-
         localization = {
             'global.quitConfirmation': u'是否退出？',
             'global.ok': u'确定',
@@ -143,14 +162,7 @@ def main():
     finally:
         logger.info("Shutting down services...")
 
-        if server_thread is not None and server_thread.is_alive:
-            logger.info("Waiting for server thread to finish...")
-            server_thread.join(5)
-        if dev_thread is not None and dev_thread.is_alive:
-            logger.info("Waiting for dev thread to finish...")
-            dev_thread.join(5)
-        stop_bili()
-        stop_dy()
+        on_closing()
 
         logger.info("Shutdown complete.")  # Wait
         os._exit(0)
