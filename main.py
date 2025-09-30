@@ -65,13 +65,15 @@ def setup_tray(window: Window):
     image = Image.open(resource_path("logo.png"))
 
     def show_window(i, item):
-        window.show()
+        if window.hidden:
+            window.show()
 
     def hide_window(i, item):
         window.hide()
 
     def quit_app(i, item):
         window.destroy()
+        i.stop()
 
     menu = Menu(
         MenuItem("显示主界面", show_window, default=True),

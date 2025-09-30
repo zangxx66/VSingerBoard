@@ -15,10 +15,11 @@ file_formatter = logging.Formatter(fmt="[%(asctime)s][%(levelname)s][%(module)s]
 logger.setLevel(logging.DEBUG)
 # 是否正在以调试模式运行
 if 'pydevd' in sys.modules or 'debugpy' in sys.modules:
-    print("【调试模式】")
+    print("logging.debug")
     console_handle.setLevel(logging.DEBUG)
 else:
-    print("【正式模式】")
+    # GitHub Actions居然会因为编码报错
+    print("logging.info")
     console_handle.setLevel(logging.INFO)
 file_handle.setLevel(logging.WARNING)
 

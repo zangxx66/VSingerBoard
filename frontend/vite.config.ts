@@ -52,12 +52,33 @@ export default defineConfig({
   },
   build: {
     outDir: '../wwwroot',
-    minify: 'esbuild',
+    minify: 'terser',
     reportCompressedSize: false,
     rollupOptions: {
       output: {
         chunkFileNames: 'assets/[name]-[hash].js',
+        manualChunks(id: string){
+          if (id.includes('node_modules')){
+            const pkgName = id.split('node_modules/')[1].split('/')[0]
+            if (['vue', 'vue-router', 'pinia'].includes(pkgName)){
+              return 'vendor-vue'
+            }
+            if (pkgName === 'element-plus'){
+              return 'vendor-element-plus'
+            }
+            if (['exceljs', 'marked'].includes(pkgName)){
+              return `vendor-${pkgName}`
+            }
+            return 'vendor-libs'
+          }
+        }
       },
     },
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true
+      }
+    }
   },
 })

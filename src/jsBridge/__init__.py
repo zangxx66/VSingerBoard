@@ -193,6 +193,7 @@ class Api:
         if not window:
             return
         window.hide()
+        self.send_notification("提示", "主界面已隐藏到托盘图标")
 
     def check_clipboard(self):
         """
