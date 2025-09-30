@@ -7,6 +7,8 @@ echo "Starting build process for VSingerBoard..."
 
 # --- Frontend Build ---
 echo "[1/2] Building frontend assets..."
+rm -rf wwwroot
+
 if npm run -C frontend/ build; then
     echo "Frontend build successful."
 else
@@ -35,6 +37,10 @@ case "${OS}" in
         exit 1
         ;;
 esac
+
+echo "Removed old build and dist directories."
+rm -rf build dist
+
 
 if uv run pyinstaller VSingerBoard.spec; then
     echo "Application packaging successful."

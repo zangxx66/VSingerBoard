@@ -23,9 +23,10 @@ with open('src/utils/_version.py', 'w') as f:
 bilibili_api_datas, bilibili_api_binaries, bilibili_api_hiddenimports = collect_all('bilibili_api')
 tortoise_datas, tortoise_binaries, tortoise_hiddenimports = collect_all('tortoise')
 
+
 # --- Define data files ---
 # Add the entire wwwroot directory as a single data entry.
-datas = [('wwwroot', 'wwwroot'), ('douyinjs', 'douyinjs'), ('logo.png', '.')]
+datas = [('wwwroot', 'wwwroot'), ('douyinjs', 'douyinjs'), ('logo.png', '.'), ('logo.ico', '.'), ('logo.icns', '.')]
 datas += bilibili_api_datas
 datas += tortoise_datas
 

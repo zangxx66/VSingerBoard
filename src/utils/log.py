@@ -14,9 +14,11 @@ file_formatter = logging.Formatter(fmt="[%(asctime)s][%(levelname)s][%(module)s]
 
 logger.setLevel(logging.DEBUG)
 # 是否正在以调试模式运行
-if sys.gettrace() is not None:
+if 'pydevd' in sys.modules or 'debugpy' in sys.modules:
+    print("【调试模式】")
     console_handle.setLevel(logging.DEBUG)
 else:
+    print("【正式模式】")
     console_handle.setLevel(logging.INFO)
 file_handle.setLevel(logging.WARNING)
 

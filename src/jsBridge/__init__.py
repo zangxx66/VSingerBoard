@@ -67,7 +67,7 @@ class Bili:
             await async_worker.init_db()
             config = await Db.get_bconfig()
             if not config or config.room_id == 0:
-                webview.logger.info("Bilibili room_id not configured, skipping.")
+                logger.info("Bilibili room_id not configured, skipping.")
                 return
 
             bili_credential = await Db.get_bcredential(enable=True)
@@ -77,12 +77,12 @@ class Bili:
             self.live.on("danmu")(self.add_bdanmu)
             self.live.on("sc")(self.add_bdanmu)
 
-            webview.logger.info("Bilibili live client starting.")
+            logger.info("Bilibili live client starting.")
             await async_worker.run_blocking(self.live.start)
         except Exception as e:
-            webview.logger.error(f"Bilibili task failed: {e}")
+            logger.error(f"Bilibili task failed: {e}")
         finally:
-            webview.logger.info("Bilibili live client stopped.")
+            logger.info("Bilibili live client stopped.")
 
     def stop(self):
         if self.live:
@@ -118,19 +118,19 @@ class Douyin:
             await async_worker.init_db()
             config = await Db.get_dy_config()
             if not config or not config.room_id:
-                webview.logger.info("Douyin room_id not configured, skipping.")
+                logger.info("Douyin room_id not configured, skipping.")
                 return
 
             self.sing_prefix = config.sing_prefix
             self.live = DouyinLiveWebFetcher(live_id=config.room_id)
             self.live.on("danmu")(self.add_dydanmu)
 
-            webview.logger.info("Douyin live client starting.")
+            logger.info("Douyin live client starting.")
             await async_worker.run_blocking(self.live.start)
         except Exception as e:
-            webview.logger.error(f"Douyin task failed: {e}")
+            logger.error(f"Douyin task failed: {e}")
         finally:
-            webview.logger.info("Douyin live client stopped.")
+            logger.info("Douyin live client stopped.")
 
     def stop(self):
         if self.live:
@@ -192,7 +192,7 @@ class Api:
         window = webview.active_window()
         if not window:
             return
-        window.minimize()
+        window.hide()
 
     def check_clipboard(self):
         """

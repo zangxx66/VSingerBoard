@@ -18,28 +18,13 @@ dev_process = None
 icon: Icon = None
 
 
-# A single, non-blocking shutdown function
-def shutdown():
-    logger.info("Initiating shutdown...")
-
-    stop_bili()
-    stop_dy()
-
-    if dev_process is not None:
-        dev_process.terminate()
-    if icon is not None:
-        icon.stop()
-
-    logger.info("Cleanup complete. Forcing exit.")
-    os._exit(0)
-
-
 def signal_handler(sig, frame):
     logger.info(f"Received signal: {sig}. Triggering shutdown.")
-    shutdown()
+    on_closing()
 
 
 def pro_server():
+    logger.info("------start HTTP server------")
     startup()
 
 
@@ -50,21 +35,29 @@ def ws_server():
 
 
 def dev_server():
-    # os.system("npm run -C frontend/ dev")
     global dev_process
     dev_process = subprocess.Popen("npm run -C frontend/ dev", shell=True)
     dev_process.communicate()
-    logger.info("startup dev server")
+    logger.info("------startup Vite server------")
 
 
 def on_start(window: Window):
-    webview.logger.info("window start")
+    webview.logger.info("------window start------")
     webview.logger.debug(f"token:{webview.token}")
 
 
 def on_closing():
     webview.logger.info("Window closing event triggered.")
-    shutdown()
+    stop_bili()
+    stop_dy()
+
+    if dev_process is not None:
+        dev_process.terminate()
+    if icon is not None:
+        icon.stop()
+
+    logger.info("Cleanup complete. Forcing exit.")
+    os._exit(0)
 
 
 def setup_tray(window: Window):
@@ -175,7 +168,7 @@ def main():
     finally:
         # This block will likely not be reached because shutdown() calls os._exit()
         logger.info("Main function finally block reached.")
-        shutdown()
+        on_closing()
 
 
 if __name__ == "__main__":
