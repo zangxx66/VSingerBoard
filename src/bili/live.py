@@ -90,7 +90,7 @@ class MyLive(Decorator):
         logger.debug(f"[{medal_name} {medal_level}]:{uname}:{message}")
         if not message.startswith(self.song_prefix):
             return
-        song_name = message.replace(self.song_prefix, "").strip()
+        song_name = message.replace(self.song_prefix, "", 1).strip()
         logger.info(song_name)
         sc_info: DanmuInfo = {
             "uid": uid,
