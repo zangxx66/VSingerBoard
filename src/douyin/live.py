@@ -17,7 +17,7 @@ import websocket
 from .ac_signature import get__ac_signature
 from .signature import execute_js, generateSignature, generateMsToken
 
-from src.protobuf.douyin import PushFrame, Response, ChatMessage, GiftMessage, LikeMessage, MemberMessage, SocialMessage, RoomUserSeqMessage, FansclubMessage, EmojiChatMessage, RoomMessage, RoomStatsMessage, RoomRankMessage, ControlMessage, RoomStreamAdaptationMessage
+from .protobuf import PushFrame, Response, ChatMessage, GiftMessage, LikeMessage, MemberMessage, SocialMessage, RoomUserSeqMessage, FansclubMessage, EmojiChatMessage, RoomMessage, RoomStatsMessage, RoomRankMessage, ControlMessage, RoomStreamAdaptationMessage
 from src.utils import Decorator, logger
 
 from urllib3.util.url import parse_url
@@ -282,7 +282,8 @@ class DouyinLiveWebFetcher(Decorator):
         logger.error("WebSocket error: ", error)
 
     def _wsOnClose(self, ws, *args):
-        self.get_room_status()
+        # 已失效，不够稳定，先注释掉了
+        # self.get_room_status()
         self._is_ws_connected = False
         logger.info("WebSocket connection closed.")
 
@@ -355,7 +356,7 @@ class DouyinLiveWebFetcher(Decorator):
         message = RoomMessage().parse(payload)
         common = message.common
         room_id = common.room_id
-        logger.info(f"【直播间msg】直播间id:{room_id}")
+        logger.debug(f"【直播间msg】直播间id:{room_id}")
 
     def _parseRoomStatsMsg(self, payload):
         message = RoomStatsMessage().parse(payload)
@@ -373,10 +374,11 @@ class DouyinLiveWebFetcher(Decorator):
         message = ControlMessage().parse(payload)
 
         if message.status == 3:
-            logger.info("直播间已结束")
-            # self.stop()
+            logger.info("【直播间状态消息】直播已结束")
+        else:
+            logger.info(f"【直播间状态消息】未处理的直播间状态：{message.status}，method: {message.common.method}")
 
     def _parseRoomStreamAdaptationMsg(self, payload):
         message = RoomStreamAdaptationMessage().parse(payload)
         adaptationType = message.adaptation_type
-        logger.info(f'直播间adaptation: {adaptationType}')
+        logger.debug(f'直播间adaptation: {adaptationType}')

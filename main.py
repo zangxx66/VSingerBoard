@@ -15,7 +15,7 @@ from webview.window import Window
 server_thread: threading.Thread = None
 dev_thread: threading.Thread = None
 dev_process = None
-icon: Icon = None
+icon = None
 
 
 def signal_handler(sig, frame):
@@ -65,8 +65,7 @@ def setup_tray(window: Window):
     image = Image.open(resource_path("logo.png"))
 
     def show_window(i, item):
-        if window.hidden:
-            window.show()
+        window.show()
 
     def hide_window(i, item):
         window.hide()
