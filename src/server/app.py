@@ -10,7 +10,7 @@ from fastapi.exceptions import RequestValidationError, HTTPException
 from fastapi.responses import JSONResponse, HTMLResponse
 from fastapi.templating import Jinja2Templates
 from .router import router
-from src.jsBridge import async_worker
+from src.database import Db
 from src.utils import logger, resource_path
 
 
@@ -21,15 +21,13 @@ if not os.path.exists(dist_path):
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # on startup: call init_db on the worker and wait for it to complete.
-    future = async_worker.submit(async_worker.init_db())
-    future.result()  # Block until DB is initialized
-    logger.info("Database initialization requested by server.")
+    # on startup: directly initialize the database
+    await Db.init()
+    logger.info("Database initialization completed.")
     yield
-    # on shutdown: call disconnect_db on the worker and wait.
-    future = async_worker.submit(async_worker.disconnect_db())
-    future.result()  # Block until DB is disconnected
-    logger.info("Database disconnection requested by server.")
+    # on shutdown: directly disconnect the database
+    await Db.disconnect()
+    logger.info("Database disconnection completed.")
 
 app = FastAPI(
     title="vsingerboard",
@@ -69,6 +67,9 @@ def startup():
     """
     启动FastAPI应用
     """
-    log_config = uvicorn.config.LOGGING_CONFIG
-    log_config["formatters"]["default"]["fmt"] = "[%(asctime)s][%(levelname)s][%(funcName)s] - %(message)s"
-    uvicorn.run(app, host="127.0.0.1", port=8000, log_config=log_config, access_log=False)
+    try:
+        log_config = uvicorn.config.LOGGING_CONFIG
+        log_config["formatters"]["default"]["fmt"] = "[%(asctime)s][%(levelname)s][%(funcName)s] - %(message)s"
+        uvicorn.run(app, host="127.0.0.1", port=8000, log_config=log_config, access_log=False)
+    except Exception as e:
+        logger.error(e)
