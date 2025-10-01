@@ -5,7 +5,7 @@ declare interface Window {
             reload: () => void
             minus_window: () => void
             on_closing: () => void
-            check_for_updates: () => Promise<UpdateModel>
+            update_verion: () => Promise<UpdateModel>
             get_bili_ws_status: () => Promise<number>
             get_dy_ws_status: () => Promise<number>
             get_version: () => Promise<string>

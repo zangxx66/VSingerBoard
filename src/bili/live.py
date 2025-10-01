@@ -59,7 +59,7 @@ class MyLive(Decorator):
         if not msg.startswith(self.song_prefix):
             return
 
-        song_name = msg.replace(self.song_prefix, "").strip()
+        song_name = msg.replace(self.song_prefix, "", 1).strip()
         logger.info(song_name)
         danmu_info: DanmuInfo = {
             "uid": uid,

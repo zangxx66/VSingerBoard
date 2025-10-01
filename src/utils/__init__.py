@@ -22,4 +22,5 @@ __all__ = [
     "bconfigItem",
     "dyconfigItem",
     "globalfigItem",
+    "check_for_updates",
 ]

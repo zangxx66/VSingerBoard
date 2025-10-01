@@ -12,7 +12,7 @@ import { ElMessage, ElNotification } from "element-plus"
  * If there is no new version, the notification will have a warning message.
  */
 export const checkUpdate = async() => {
-  const result = await window.pywebview.api.check_for_updates()
+  const result = await window.pywebview.api.update_verion()
   if (result.code == 0 && result.url != "") {
         ElNotification({
           title: "提示",

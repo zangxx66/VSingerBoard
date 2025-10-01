@@ -44,6 +44,7 @@ class DouyinLiveWebFetcher(Decorator):
         }
         self._running = False
         self.ws = None
+        self._is_ws_connected = False
 
     def start(self):
         self._running = True
@@ -138,6 +139,10 @@ class DouyinLiveWebFetcher(Decorator):
         _a_bogus = ctx.call("get_ab", url, self.user_agent)
         return _a_bogus
 
+    @property
+    def ws_connect_status(self):
+        return self._is_ws_connected
+
     def get_room_status(self):
         """
         获取直播间开播状态:
@@ -228,6 +233,7 @@ class DouyinLiveWebFetcher(Decorator):
         连接建立成功
         """
         logger.info("【√】WebSocket连接成功.")
+        self._is_ws_connected = True
         threading.Thread(target=self._sendHeartbeat).start()
 
     def _wsOnMessage(self, ws, message):
@@ -272,10 +278,12 @@ class DouyinLiveWebFetcher(Decorator):
                 pass
 
     def _wsOnError(self, ws, error):
+        self._is_ws_connected = False
         logger.error("WebSocket error: ", error)
 
     def _wsOnClose(self, ws, *args):
         self.get_room_status()
+        self._is_ws_connected = False
         logger.info("WebSocket connection closed.")
 
     def _parseChatMsg(self, payload):
@@ -341,9 +349,7 @@ class DouyinLiveWebFetcher(Decorator):
         message = EmojiChatMessage().parse(payload)
         emoji_id = message.emoji_id
         user = message.user
-        common = message.common
-        default_content = message.default_content
-        logger.debug(f"【聊天表情包id】 {emoji_id},user：{user},common:{common},default_content:{default_content}")
+        logger.debug(f"【聊天表情包id】{user.nick_name}：{emoji_id}")
 
     def _parseRoomMsg(self, payload):
         message = RoomMessage().parse(payload)
@@ -359,7 +365,8 @@ class DouyinLiveWebFetcher(Decorator):
     def _parseRankMsg(self, payload):
         message = RoomRankMessage().parse(payload)
         ranks_list = message.ranks_list
-        logger.debug(f"【直播间排行榜msg】{ranks_list}")
+        result = [item.user.nick_name for item in ranks_list]
+        logger.debug(f"【直播间排行榜msg】{result}")
 
     def _parseControlMsg(self, payload):
         '''直播间状态消息'''

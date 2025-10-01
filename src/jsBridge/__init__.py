@@ -3,13 +3,12 @@ import threading
 import webview
 import pyperclip
 import time
-import requests
 import sys
 from src.bili import MyLive
 from src.database import Db
 from src.douyin import DouyinLiveWebFetcher
 from bilibili_api import Credential
-from src.utils import logger, resource_path, __version__ as CURRENT_VERSION
+from src.utils import logger, resource_path, check_for_updates, __version__ as CURRENT_VERSION
 from notifypy import Notify
 
 
@@ -141,14 +140,14 @@ class Douyin:
 
     def get_status(self):
         if self.live:
-            return 1 if self.live._running else 0
+            return 1 if self.live.ws_connect_status else 0
         else:
             return -1
 
     def add_dydanmu(self, danmu):
         content = danmu.get("content", "")
         if content.startswith(self.sing_prefix):
-            song_name = content.replace(self.sing_prefix, "").strip()
+            song_name = content.replace(self.sing_prefix, "", 1).strip()
             DdanmuList.append({"uid": danmu.get("user_id"), "uname": danmu.get("user_name"), "msg": song_name, "send_time": int(time.time()), "source": "douyin"})
 
 
@@ -256,49 +255,8 @@ class Api:
         """
         return CURRENT_VERSION
 
-    def check_for_updates(self):
-        """
-        Check if there is a new version of the VSingerBoard application.
-
-        This function will send a GET request to the GitHub Releases API to get the latest version of the VSingerBoard application.
-
-        It will then compare the latest version with the current version and return a dictionary with the following keys:
-            - code: The result of the check. 0 means there is a new version, -1 means there is no new version, and -2 means the check failed.
-            - version: The latest version of the VSingerBoard application.
-            - url: The URL of the latest release.
-            - body: The body of the latest release.
-            - published_at: The time the latest release was published.
-            - msg: A human-readable message describing the result of the check.
-
-        Returns:
-            dict: A dictionary with the result of the check.
-        """
-        REPO_URL = "https://api.github.com/repos/zangxx66/VSingerBoard/releases/latest"
-
-        def compare_versions(v1, v2):
-            v1_parts = [int(x) for x in v1.split('.')]
-            v2_parts = [int(x) for x in v2.split('.')]
-            max_len = max(len(v1_parts), len(v2_parts))
-            v1_parts.extend([0] * (max_len - len(v1_parts)))
-            v2_parts.extend([0] * (max_len - len(v2_parts)))
-            if v1_parts > v2_parts:
-                return 1
-            if v1_parts < v2_parts:
-                return -1
-            return 0
-
-        try:
-            response = requests.get(REPO_URL)
-            response.raise_for_status()
-            latest_release = response.json()
-            latest_version = latest_release["tag_name"]
-            if compare_versions(latest_version, CURRENT_VERSION) > 0:
-                return {"code": 0, "version": latest_version, "url": latest_release["html_url"], "body": latest_release["body"], "published_at": latest_release["published_at"], "msg": f"发现新版本: {latest_version} (当前版本: {CURRENT_VERSION})"}
-            else:
-                return {"code": 0, "version": CURRENT_VERSION, "url": "", "body": latest_release["body"], "published_at": latest_release["published_at"], "msg": "当前已是最新版本。"}
-        except Exception as e:
-            logger.exception(f"检查更新失败: {e}")
-            return {"code": -1, "version": CURRENT_VERSION, "url": "", "body": "", "published_at": "", "msg": "检查更新失败"}
+    def update_verion(self):
+        return check_for_updates()
 
 
 async def restart_bili():

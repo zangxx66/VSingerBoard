@@ -5,7 +5,10 @@ import tomllib
 import appdirs
 import logging
 import getpass
+import requests
+import re
 from pathlib import Path
+from ._version import __version__ as CURRENT_VERSION
 
 logger = logging.getLogger("danmaku")
 
@@ -194,3 +197,125 @@ def setup_autostart(enable: bool):
     except Exception as e:
         logger.error(f"设置自启动失败：{e}")
         return False
+
+
+def check_for_updates():
+    """
+    检查 VSingerBoard 的最新版本信息。
+
+    会返回一个 dict，包含以下字段：
+
+    - code: 0 表示当前已是最新版本，-1 表示检查更新失败，1 表示发现新版本。
+    - version: 当前是最新版本，否则为当前版本。
+    - url: 新版本的下载 URL。
+    - body: 新版本的发布说明。
+    - published_at: 新版本的发布时间。
+    - msg: 检查结果的提示信息。
+
+    如果检查更新失败，会返回一个包含错误信息的 dict。
+    """
+    repo_url = "https://api.github.com/repos/zangxx66/VSingerBoard/releases/latest"
+
+    def compare_versions(v1, v2):
+        v1_main_str, *v1_pre_list = v1.split('-', 1)
+        v2_main_str, *v2_pre_list = v2.split('-', 1)
+
+        v1_main = [int(p) for p in v1_main_str.split('.')]
+        v2_main = [int(p) for p in v2_main_str.split('.')]
+
+        max_len = max(len(v1_main), len(v2_main))
+        v1_main.extend([0] * (max_len - len(v1_main)))
+        v2_main.extend([0] * (max_len - len(v2_main)))
+
+        if v1_main > v2_main:
+            return 1
+        if v1_main < v2_main:
+            return -1
+
+        # 主线版本相同，检查pre-release标签
+        v1_pre = v1_pre_list[0] if v1_pre_list else None
+        v2_pre = v2_pre_list[0] if v2_pre_list else None
+
+        if v1_pre and not v2_pre:
+            return -1
+        if not v1_pre and v2_pre:
+            return 1
+
+        if v1_pre and v2_pre:
+            p1_parts = v1_pre.split('.')
+            p2_parts = v2_pre.split('.')
+
+            max_len_pre = max(len(p1_parts), len(p2_parts))
+
+            for i in range(max_len_pre):
+                if i >= len(p1_parts):
+                    return -1
+                if i >= len(p2_parts):
+                    return 1
+
+                part1 = p1_parts[i]
+                part2 = p2_parts[i]
+
+                is_part1_digit = part1.isdigit()
+                is_part2_digit = part2.isdigit()
+
+                if is_part1_digit and is_part2_digit:
+                    num1 = int(part1)
+                    num2 = int(part2)
+                    if num1 > num2:
+                        return 1
+                    if num1 < num2:
+                        return -1
+                elif is_part1_digit:
+                    return -1
+                elif is_part2_digit:
+                    return 1
+                else:
+                    if part1 > part2:
+                        return 1
+                    if part1 < part2:
+                        return -1
+
+            return 0
+
+    try:
+        response = requests.get(repo_url)
+        response.raise_for_status()
+        latest_release = response.json()
+
+        # 区分处理有release和没有release的场景
+        if "tag_name" not in latest_release:
+            # 场景: 没有release, API返回 "message": "Not Found"
+            return {"code": -1, "version": CURRENT_VERSION, "url": "", "body": "", "published_at": "", "msg": "当前没有发布任何版本。"}
+
+        latest_version_tag = latest_release["tag_name"]
+
+        version_pattern = re.compile(r"v?(\d+\.\d+\.\d+(?:-[\w\.]+)*)")
+
+        latest_match = version_pattern.search(latest_version_tag)
+        current_match = version_pattern.search(CURRENT_VERSION)
+
+        if not latest_match:
+            logger.error(f"Could not parse version from tag: {latest_version_tag}")
+            return {"code": -1, "version": CURRENT_VERSION, "url": "", "body": "", "published_at": "", "msg": "检查更新失败: 无法解析最新版本号"}
+
+        latest_version = latest_match.group(1)
+        current_version_parsed = current_match.group(1) if current_match else CURRENT_VERSION
+
+        is_current_pre = '-' in current_version_parsed
+        is_latest_pre = '-' in latest_version
+
+        is_update = False
+        # 如果当前是pre-release，它可以被更新为新的pre-release或稳定版本。
+        # 如果当前是稳定版本，它只能被更新为新的稳定版本。
+        if is_current_pre or not is_latest_pre:
+            if compare_versions(latest_version, current_version_parsed) > 0:
+                is_update = True
+
+        if is_update:
+            return {"code": 0, "version": latest_version, "url": latest_release["html_url"], "body": latest_release["body"], "published_at": latest_release["published_at"], "msg": f"发现新版本: {latest_version} (当前版本: {current_version_parsed})"}
+        else:
+            return {"code": 0, "version": current_version_parsed, "url": "", "body": latest_release["body"], "published_at": latest_release["published_at"], "msg": "当前已是最新版本。"}
+    except Exception as e:
+        logger.exception(f"检查更新失败: {e}")
+        return {"code": -1, "version": CURRENT_VERSION, "url": "", "body": "", "published_at": "", "msg": "检查更新失败"}

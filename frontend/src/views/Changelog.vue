@@ -21,7 +21,7 @@ const changelogHtml = computed(() => {
 
 onMounted(async() => {
     loading.value = true
-    const response = await window.pywebview.api.check_for_updates()
+    const response = await window.pywebview.api.update_verion()
     if(response.code == 0){
         version.value = response.version
         publishedAt.value = utcToLocal(response.published_at)
