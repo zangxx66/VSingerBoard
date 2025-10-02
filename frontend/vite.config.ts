@@ -66,8 +66,11 @@ export default defineConfig({
             if (pkgName === 'element-plus'){
               return 'vendor-element-plus'
             }
-            if (['exceljs', 'marked'].includes(pkgName)){
-              return `vendor-${pkgName}`
+            if (['marked', 'marked-highlight', 'highlight.js'].includes(pkgName)){
+              return 'vendor-marked'
+            }
+            if (pkgName === 'exceljs'){
+              return 'vendor-exceljs'
             }
             return 'vendor-libs'
           }

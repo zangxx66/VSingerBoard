@@ -313,9 +313,9 @@ def check_for_updates():
                 is_update = True
 
         if is_update:
-            return {"code": 0, "version": latest_version, "url": latest_release["html_url"], "body": latest_release["body"], "published_at": latest_release["published_at"], "msg": f"发现新版本: {latest_version} (当前版本: {current_version_parsed})"}
+            return {"code": 0, "version": latest_version_tag, "url": latest_release["html_url"], "body": latest_release["body"], "published_at": latest_release["published_at"], "msg": f"发现新版本: {latest_version} (当前版本: {current_version_parsed})"}
         else:
-            return {"code": 0, "version": current_version_parsed, "url": "", "body": latest_release["body"], "published_at": latest_release["published_at"], "msg": "当前已是最新版本。"}
+            return {"code": 0, "version": latest_version_tag, "url": "", "body": latest_release["body"], "published_at": latest_release["published_at"], "msg": "当前已是最新版本。"}
     except Exception as e:
         logger.exception(f"检查更新失败: {e}")
         return {"code": -1, "version": CURRENT_VERSION, "url": "", "body": "", "published_at": "", "msg": "检查更新失败"}
