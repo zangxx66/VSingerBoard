@@ -7,7 +7,7 @@
 
 # VSingerBoard - 您的专属虚拟主播点歌台
 
-![Build Status](https://github.com/zangxx66/VSingerBoard/actions/workflows/build.yml/badge.svg) ![Python Version](https://img.shields.io/badge/python-3.12-blue.svg) ![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)
+![Release Status](https://github.com/zangxx66/VSingerBoard/actions/workflows/release.yml/badge.svg) ![Push Status](https://github.com/zangxx66/VSingerBoard/actions/workflows/push.yml/badge.svg) ![Python Version](https://img.shields.io/badge/python-3.12-blue.svg) ![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)
 
 </div>
 
@@ -15,7 +15,7 @@
 
 > 在弹幕的海洋中，手动记录点歌请求不仅繁琐，还容易错失粉丝的热情。VSingerBoard 专为解决这一痛点而生，它是一座连接主播与粉丝的桥梁，一个为虚拟主播、歌手和音乐爱好者打造的跨平台智能点歌管理面板。
 > 
-> **VSingerBoard** 将混乱的弹幕点歌请求，转化为一个优雅、有序、可交互的列表，让您能专注于表演，而非手忙脚乱的管理。
+> **VSingerBoard** 将混乱的弹幕点歌请求，转化为一个优雅、有序、可交互的列表，让您能专注于直播，而非手忙脚乱的管理。
 
 ## ✨ 核心功能
 
@@ -47,7 +47,7 @@
 - **后端**: Python 3.12, FastAPI, Uvicorn, Tortoise-ORM
 - **前端**: Vue 3, Vite, Element Plus, TypeScript
 - **桌面端框架**: Pywebview
-- **直播平台接口**: `bilibili-api-python`, `websocket-client`, `py_mini_racer`, `Protobuf`
+- **直播平台接口**: `bilibili-api-python`, `websocket-client`, `pyexecjs`, `Protobuf`
 - **构建与打包**: PyInstaller, GitHub Actions
 
 ## 🤝 如何贡献

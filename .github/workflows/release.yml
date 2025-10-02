@@ -1,7 +1,7 @@
 # This workflow builds the application for multiple platforms and architectures,
 # then uploads the artifacts to a GitHub Release.
 
-name: Build and Release Application
+name: Release Application
 
 on:
   release:
