@@ -1,5 +1,4 @@
 import os
-import codecs
 import hashlib
 import random
 import string
@@ -8,7 +7,6 @@ import execjs
 import urllib.parse
 from contextlib import contextmanager
 from unittest.mock import patch
-from py_mini_racer import MiniRacer
 from src.utils import resource_path, logger
 
 
@@ -60,12 +58,7 @@ def generateSignature(wss, script_file='sign.js'):
     md5.update(param.encode())
     md5_param = md5.hexdigest()
 
-    script_path = get_real_path(script_file)
-    with codecs.open(script_path, 'r', encoding='utf8') as f:
-        script = f.read()
-
-    ctx = MiniRacer()
-    ctx.eval(script)
+    ctx = execute_js(script_file)
 
     try:
         signature = ctx.call("get_sign", md5_param)

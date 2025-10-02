@@ -59,7 +59,7 @@ class DouyinLiveWebFetcher(Decorator):
                 self.stop()
                 break
             except Exception as e:
-                logger.info(f"【X】连接时发生错误: {e}，5秒后将重新连接...")
+                logger.error(f"【X】连接时发生错误: {e}，5秒后将重新连接...")
                 time.sleep(5)
 
     def stop(self):
