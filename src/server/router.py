@@ -178,6 +178,12 @@ async def add_or_update_global_config(background_tasks: BackgroundTasks, data: g
         result = await Db.update_gloal_config(pk=data.id, **new_dic)
         msg = "更新成功" if result else "更新失败"
     else:
+        if "startup" not in new_dic:
+            new_dic["startup"] = False
+        if "check_update" not in new_dic:
+            new_dic["check_update"] = False
+        if "dark_mode" not in new_dic:
+            new_dic["dark_mode"] = False
         result = await Db.add_gloal_config(**new_dic)
         msg = "添加成功" if result else "添加失败"
     code = 0 if result else -1

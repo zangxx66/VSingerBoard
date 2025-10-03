@@ -14,6 +14,8 @@ declare interface Window {
             send_notification: (title: string, message: string) => void
             is_bundle: () => Promise<boolean>
             check_clipboard: () => Promise<string>
+            restart_bilibili: () => void
+            restart_douyin: () => void
         }
         token: string
     }

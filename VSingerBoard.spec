@@ -6,6 +6,7 @@ import os
 import platform
 import shutil
 import tempfile
+import configparser
 from PyInstaller.utils.hooks import collect_all
 
 # Use SPECPATH, the PyInstaller global variable for the spec file's directory,
@@ -21,17 +22,40 @@ from src.utils.tool import get_version
 
 ver = get_version()
 
-# Update the _version.py file to ensure it's in sync
-with open('src/utils/_version.py', 'w') as f:
-    f.write(f'__version__ = "{ver}"\n')
+# Update version.txt from pyproject.toml before build
+version_path = 'version.txt'
+version_info = configparser.ConfigParser(interpolation=None)
+version_info.optionxform = str  # Preserve case
 
-# 无需手动准备 JRE，这部分工作将由 hook-jre.py 处理
+if os.path.exists(version_path):
+    with open(version_path, 'r') as f:
+        content = '[version]\n' + f.read()
+        version_info.read_string(content)
+else:
+    version_info.add_section('version')
+
+current_version = version_info.get('version', 'FileVersion', fallback=None)
+
+if current_version != ver:
+    print(f"Version changed from {current_version} to {ver}. Updating version.txt.")
+    version_info.set('version', 'FileVersion', ver)
+    version_info.set('version', 'ProductVersion', ver)
+    
+    with open(version_path, 'w') as f:
+        for key, value in version_info['version'].items():
+            f.write(f"{key}={value}\n")
+    # Update the _version.py file to ensure it's in sync
+    with open('src/utils/_version.py', 'w') as f:
+        f.write(f'__version__ = "{ver}"\n')
+else:
+    print("Version has not changed. No update needed.")
 
 # --- Collect all submodules and data from specific packages ---
 # This is the most robust way to ensure a package is fully included.
 bilibili_api_datas, bilibili_api_binaries, bilibili_api_hiddenimports = collect_all('bilibili_api')
 tortoise_datas, tortoise_binaries, tortoise_hiddenimports = collect_all('tortoise')
 execjs_datas, execjs_binaries, execjs_hiddenimports = collect_all('execjs')
+notifypy_datas, notifypy_binaries, notifypy_hiddenimports = collect_all('notifypy')
 
 
 # --- Define data files ---
@@ -40,6 +64,7 @@ datas = [('wwwroot', 'wwwroot'), ('resources/douyinjs', 'resources/douyinjs'), (
 datas += bilibili_api_datas
 datas += tortoise_datas
 datas += execjs_datas
+datas += notifypy_datas
 
 # --- Define hidden imports ---
 # This list contains modules that PyInstaller's static analysis might miss.
@@ -51,6 +76,7 @@ hidden_packages = [
 hidden_packages += bilibili_api_hiddenimports
 hidden_packages += tortoise_hiddenimports
 hidden_packages += execjs_hiddenimports
+hidden_packages += notifypy_hiddenimports
 
 # --- Define the Info.plist dictionary (from py2app options) ---
 info_plist = {
@@ -59,7 +85,6 @@ info_plist = {
     "CFBundleShortVersionString": ver,
     "CFBundleVersion": ver,
     "CFBundleIdentifier": "com.ricardo.vsingerboard",
-    "LSMinimumSystemVersion": "13.0",
     "NSHumanReadableCopyright": "Copyright © 2025 Ricardo All rights reserved.",
     "NSAppTransportSecurity": {
         "NSAllowsArbitraryLoads": True,
@@ -89,7 +114,7 @@ info_plist = {
 a = Analysis(
     ['main.py'],
     pathex=[SPECPATH],
-    binaries=bilibili_api_binaries + tortoise_binaries + execjs_binaries,
+    binaries=bilibili_api_binaries + tortoise_binaries + execjs_binaries + notifypy_binaries,
     datas=datas,
     hiddenimports=hidden_packages,
     hookspath=[os.path.join(SPECPATH, 'hooks')],  # 使用绝对路径
@@ -107,16 +132,6 @@ exe = EXE(
     [],
     exclude_binaries=True,
     name='VSingerBoard',
-    version_info={
-                "CompanyName": "想象力有限公司",
-                "FileDescription": "多平台点歌板",
-                "FileVersion": ver,
-                "InternalName": "VSingerBoard",
-                "LegalCopyright": "Copyright © 2025 Ricardo All rights reserved.",
-                "OriginalFilename": "VSingerBoard.exe",
-                "ProductName": "点歌姬",
-                "ProductVersion": ver
-            },
     debug=False,
     bootloader_ignore_signals=False,
     strip=True,
@@ -128,6 +143,7 @@ exe = EXE(
     codesign_identity=None,
     entitlements_file=None,
     icon='resources/icons/logo.ico',
+    version='version.txt'
 )
 
 coll = COLLECT(

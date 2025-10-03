@@ -4,6 +4,7 @@ import webview
 import pyperclip
 import sys
 import os
+import time
 from src.utils import resource_path, check_for_updates, __version__ as CURRENT_VERSION
 from notifypy import Notify
 from .douyin import Douyin
@@ -112,6 +113,16 @@ class Api:
 
     def update_verion(self):
         return check_for_updates()
+
+    def restart_bilibili(self):
+        bili_manager.stop()
+        time.sleep(1)
+        bili_manager.start()
+
+    def restart_douyin(self):
+        dy_manager.stop()
+        time.sleep(1)
+        dy_manager.start()
 
 
 async def restart_bili():

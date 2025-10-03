@@ -8,13 +8,12 @@ import ContextMenu from '@imengyu/vue3-context-menu'
 import { ElLoading, ElMessage, ElMessageBox } from "element-plus"
 import { request } from "@/api"
 import { toggleDark, checkUpdate, pasteToElement } from "@/utils"
-import { useIntervalStore, useContextMenuStore, useThemeStore } from "@/stores"
+import { useIntervalStore, useThemeStore } from "@/stores"
 import { useClipboard } from "@vueuse/core"
 
 const active = ref("0")
 const isCollapse = ref(false)
 const intervalStore = useIntervalStore()
-const contextmenuStore = useContextMenuStore()
 const themeStore = useThemeStore()
 const { copy } = useClipboard()
 const cardConfig = {
@@ -89,7 +88,7 @@ const onContextMenu = async (e: MouseEvent) => {
   ContextMenu.showContextMenu({
     x: e.x,
     y: e.y,
-    theme: contextmenuStore.getTheme(),
+    theme: isDarktheme.value ? "mac dark" : "mac",
     zIndex: 100,
     minWidth: 230,
     items: items
@@ -151,8 +150,6 @@ const initGlobalConfig = async () => {
         const model = data as GlobalConfigModel
         toggleDark(model.dark_mode)
         themeStore.setDarkTheme(model.id, model.dark_mode)
-        const themeValue = model.dark_mode ? "mac dark" : "mac"
-        contextmenuStore.setTheme(themeValue)
         if (model.check_update) {
           checkUpdate()
           intervalStore.addInterval("check_update", checkUpdate, 1000 * 60 * 60 * 6)

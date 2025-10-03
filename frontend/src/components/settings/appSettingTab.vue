@@ -4,12 +4,11 @@ import { ElMessage, type FormInstance } from "element-plus"
 import { Close, Check } from "@element-plus/icons-vue"
 import { request } from "@/api"
 import { toggleDark, checkUpdate } from "@/utils"
-import { useIntervalStore, useContextMenuStore, useThemeStore } from "@/stores"
+import { useIntervalStore, useThemeStore } from "@/stores"
 
 const refForm = ref<FormInstance>()
 const btnLoading = ref(false)
 const intervalStore = useIntervalStore()
-const contextmenuStore = useContextMenuStore()
 const themeStore = useThemeStore()
 const baseFormValue = reactive<GlobalConfigModel>({
     id: 0,
@@ -54,8 +53,6 @@ const addOrUpdateConfig = () => {
             ElMessage.success(resp.msg || "保存成功")
             toggleDark(baseFormValue.dark_mode)
             themeStore.setDarkTheme(baseFormValue.id, baseFormValue.dark_mode)
-            const themeValue = baseFormValue.dark_mode ? "mac dark" : "mac"
-            contextmenuStore.setTheme(themeValue)
             if(baseFormValue.check_update){
                 intervalStore.addInterval("check_update", checkUpdate, 1000 * 60 * 60 * 6)
             }else{
@@ -71,9 +68,10 @@ const addOrUpdateConfig = () => {
     })
 }
 
-onMounted(() => {
-    initConfig()
-})
+// onMounted(() => {
+//     initConfig()
+// })
+defineExpose({ initConfig })
 </script>
 <template>
     <el-card>

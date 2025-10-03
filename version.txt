@@ -1,0 +1,9 @@
+CompanyName=想象力有限公司
+FileDescription=多平台点歌板
+FileVersion=1.0.0
+InternalName=VSingerBoard
+LegalCopyright=Copyright © 2025 Ricardo All rights reserved.
+OriginalFilename=VSingerBoard.exe
+ProductName=点歌姬
+ProductVersion=1.0.0
+Build=1019

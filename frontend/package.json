@@ -18,7 +18,7 @@
   "dependencies": {
     "@imengyu/vue3-context-menu": "^1.5.2",
     "axios": "^1.11.0",
-    "element-plus": "^2.11.1",
+    "element-plus": "^2.11.4",
     "exceljs": "^4.4.0",
     "highlight.js": "^11.11.1",
     "marked": "^16.3.0",

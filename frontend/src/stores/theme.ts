@@ -30,8 +30,16 @@ export const useThemeStore = defineStore('theme', () => {
             }
             globalCfg.dark_mode = mode
             toggleDark(mode)
+            return request.getGlobalConfig({})
 
-        }).catch(error => ElMessage.error(error))
+        })
+        .then(response => {
+            const resp = response!.data as ResponseModel
+            if (resp.code == 0 && globalCfg.id == 0){
+                globalCfg.id = (resp.data.data as GlobalConfigModel).id
+            }
+        })
+        .catch(error => ElMessage.error(error))
     }
 
     return { globalCfg, getDarkTheme, setDarkTheme, updateConfig }

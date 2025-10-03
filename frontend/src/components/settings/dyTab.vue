@@ -37,7 +37,9 @@ const addOrUpdateConfig = () => {
         }else{
             ElMessage.success(resp.msg)
             initConfig()
-            checkWsStatus()
+            setTimeout(() => {
+                checkWsStatus()
+            }, 1000)
         }
         btnLoading.value = false
     }).catch(error => {

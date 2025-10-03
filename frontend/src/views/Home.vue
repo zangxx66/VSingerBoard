@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, defineAsyncComponent, onActivated } from "vue"
+import { ref, reactive, onMounted, defineAsyncComponent, onActivated, computed } from "vue"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { request } from "@/api"
 import { CloseBold, Download, Delete } from "@element-plus/icons-vue"
@@ -133,6 +133,7 @@ const getDanmaku = async() => {
     douyinDanmaku && processDanmaku(douyinDanmaku, "douyin")
 }
 
+
 onMounted(() => {
     const height = window.innerHeight - 100
     const dom = document.querySelector(".chat-main") as HTMLElement
@@ -208,7 +209,6 @@ onActivated(() => {
                         </el-button>
                         <div class="card-footer-right">
                             <PlatformStatus platform="douyin" :roomId="config.douyin_romm_id" :wsStatus="douyin_ws" />
-                            <el-divider direction="vertical" />
                             <PlatformStatus platform="bilibili" :roomId="config.bilibili_room_id" :wsStatus="bili_ws" />
                         </div>
                     </div>
