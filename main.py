@@ -63,7 +63,9 @@ def on_closing():
 
 def setup_tray(window: Window):
     global icon
-    image = Image.open(resource_path("logo.png"))
+    logo_dir_path = resource_path("icons")
+    logo_path = os.path.join(logo_dir_path, "logo.png")
+    image = Image.open(logo_path)
 
     def show_window(i, item):
         window.show()

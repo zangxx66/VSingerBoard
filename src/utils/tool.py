@@ -86,18 +86,16 @@ def get_version():
     return "0.0.1"
 
 
-def resource_path(relative_path):
+def resource_path(relative_path, is_resources=True):
     """
-    获取资源文件的路径
-
-    如果当前环境是 PyInstaller 创建的，那么将使用 _MEIPASS 中的路径作为基路径。
-    否则，基路径将是项目的根目录。
+    获取项目中的资源文件路径
 
     Args:
         relative_path (str): 资源文件相对路径
+        is_resources (bool, optional): 是否属于 resources 目录. Defaults to True.
 
     Returns:
-        str: 资源文件的绝对路径
+        str: 资源文件的完整路径
     """
     try:
         # PyInstaller 创建一个临时文件夹，并将路径存储在 _MEIPASS 中
@@ -105,7 +103,9 @@ def resource_path(relative_path):
     except Exception:
         # 未打包状态下，基路径就是项目根目录
         base_path = os.path.abspath(".")
-
+    # 是否属于resources目录
+    if is_resources:
+        return os.path.join(base_path, "resources", relative_path)
     return os.path.join(base_path, relative_path)
 
 

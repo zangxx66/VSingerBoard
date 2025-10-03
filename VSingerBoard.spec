@@ -36,7 +36,7 @@ execjs_datas, execjs_binaries, execjs_hiddenimports = collect_all('execjs')
 
 # --- Define data files ---
 # Add the entire wwwroot directory as a single data entry.
-datas = [('wwwroot', 'wwwroot'), ('douyinjs', 'douyinjs'), ('logo.png', '.'), ('logo.ico', '.'), ('logo.icns', '.')]
+datas = [('wwwroot', 'wwwroot'), ('resources/douyinjs', 'resources/douyinjs'), ('resources/icons', 'resources/icons')]
 datas += bilibili_api_datas
 datas += tortoise_datas
 datas += execjs_datas
@@ -127,7 +127,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon='logo.ico',
+    icon='resources/icons/logo.ico',
 )
 
 coll = COLLECT(
@@ -145,7 +145,7 @@ coll = COLLECT(
 app = BUNDLE(
     coll,
     name='VSingerBoard.app',
-    icon='logo.icns',
+    icon='resources/icons/logo.icns',
     bundle_identifier=info_plist['CFBundleIdentifier'],
     info_plist=info_plist,
 )

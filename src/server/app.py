@@ -14,7 +14,7 @@ from src.database import Db
 from src.utils import logger, resource_path
 
 
-dist_path = resource_path("wwwroot")
+dist_path = resource_path("wwwroot", False)
 if not os.path.exists(dist_path):
     raise FileNotFoundError(f"文件夹 '{dist_path}' 不存在。")
 

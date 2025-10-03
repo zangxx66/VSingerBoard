@@ -3,6 +3,7 @@ import threading
 import webview
 import pyperclip
 import sys
+import os
 from src.utils import resource_path, check_for_updates, __version__ as CURRENT_VERSION
 from notifypy import Notify
 from .douyin import Douyin
@@ -86,11 +87,14 @@ class Api:
             window.load_url(window.get_current_url())
 
     def send_notification(self, title, message):
+        logo_dir_path = resource_path("icons")
+        logo_path = os.path.join(logo_dir_path, "logo.png")
+
         notification = Notify()
         notification.application_name = "点歌姬"
         notification.title = title
         notification.message = message
-        notification.icon = resource_path("logo.png")
+        notification.icon = logo_path
         notification.send(block=False)
 
     def is_bundle(self):
