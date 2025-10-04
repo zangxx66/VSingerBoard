@@ -28,7 +28,7 @@ version_info = configparser.ConfigParser(interpolation=None)
 version_info.optionxform = str  # Preserve case
 
 if os.path.exists(version_path):
-    with open(version_path, 'r') as f:
+    with open(version_path, 'r', encoding='utf-8') as f:
         content = '[version]\n' + f.read()
         version_info.read_string(content)
 else:
@@ -41,11 +41,11 @@ if current_version != ver:
     version_info.set('version', 'FileVersion', ver)
     version_info.set('version', 'ProductVersion', ver)
     
-    with open(version_path, 'w') as f:
+    with open(version_path, 'w', encoding='utf-8') as f:
         for key, value in version_info['version'].items():
             f.write(f"{key}={value}\n")
     # Update the _version.py file to ensure it's in sync
-    with open('src/utils/_version.py', 'w') as f:
+    with open('src/utils/_version.py', 'w', encoding='utf-8') as f:
         f.write(f'__version__ = "{ver}"\n')
 else:
     print("Version has not changed. No update needed.")
