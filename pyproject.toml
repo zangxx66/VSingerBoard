@@ -24,8 +24,8 @@ dependencies = [
     "websocket-client>=1.8.0",
     "websockets>=15.0.1",
     "pyexecjs>=1.5.1",
-    "notify-py>=0.3.43",
     "pystray>=0.19.5",
+    "loguru>=0.7.3",
 ]
 
 [[tool.uv.index]]

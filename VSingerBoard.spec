@@ -55,7 +55,6 @@ else:
 bilibili_api_datas, bilibili_api_binaries, bilibili_api_hiddenimports = collect_all('bilibili_api')
 tortoise_datas, tortoise_binaries, tortoise_hiddenimports = collect_all('tortoise')
 execjs_datas, execjs_binaries, execjs_hiddenimports = collect_all('execjs')
-notifypy_datas, notifypy_binaries, notifypy_hiddenimports = collect_all('notifypy')
 
 
 # --- Define data files ---
@@ -64,7 +63,6 @@ datas = [('wwwroot', 'wwwroot'), ('resources/douyinjs', 'resources/douyinjs'), (
 datas += bilibili_api_datas
 datas += tortoise_datas
 datas += execjs_datas
-datas += notifypy_datas
 
 # --- Define hidden imports ---
 # This list contains modules that PyInstaller's static analysis might miss.
@@ -76,7 +74,6 @@ hidden_packages = [
 hidden_packages += bilibili_api_hiddenimports
 hidden_packages += tortoise_hiddenimports
 hidden_packages += execjs_hiddenimports
-hidden_packages += notifypy_hiddenimports
 
 # --- Define the Info.plist dictionary (from py2app options) ---
 info_plist = {
@@ -114,7 +111,7 @@ info_plist = {
 a = Analysis(
     ['main.py'],
     pathex=[SPECPATH],
-    binaries=bilibili_api_binaries + tortoise_binaries + execjs_binaries + notifypy_binaries,
+    binaries=bilibili_api_binaries + tortoise_binaries + execjs_binaries,
     datas=datas,
     hiddenimports=hidden_packages,
     hookspath=[os.path.join(SPECPATH, 'hooks')],  # 使用绝对路径
