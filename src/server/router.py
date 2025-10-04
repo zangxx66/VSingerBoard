@@ -7,7 +7,7 @@ from fastapi.exceptions import HTTPException
 from bilibili_api import Credential, user
 from bilibili_api.login_v2 import QrCodeLogin, QrCodeLoginChannel
 from src.database import Db
-from src.jsBridge import restart_bili, restart_dy
+from src.jsBridge import restart_bili, restart_dy, async_worker
 from src.utils import setup_autostart, ResponseItem, bconfigItem, dyconfigItem, globalfigItem
 
 # Lock to serialize access to the bilibili-api library to prevent concurrency issues.
@@ -25,7 +25,7 @@ qr_code_login: QrCodeLogin
 
 @router.get("/get_bili_config", response_model=ResponseItem)
 async def get_bili_config():
-    config = await Db.get_bconfig()
+    config = await async_worker.run_db_operation(Db.get_bconfig())
     return ResponseItem(code=0, msg=None, data={"data": jsonable_encoder(config)})
 
 
@@ -35,10 +35,10 @@ async def add_or_update_bili_config(background_tasks: BackgroundTasks, data: bco
     new_dic = {k: v for k, v in data_dic.items() if v is not None and k != "id"}
     msg = ""
     if data.id > 0:
-        result = await Db.update_bconfig(pk=data.id, **new_dic)
+        result = await async_worker.run_db_operation(Db.update_bconfig(pk=data.id, **new_dic))
         msg = "更新成功" if result else "更新失败"
     else:
-        result = await Db.add_bconfig(**new_dic)
+        result = await async_worker.run_db_operation(Db.add_bconfig(**new_dic))
         msg = "添加成功" if result else "添加失败"
     if result:
         background_tasks.add_task(func=restart_bili)
@@ -49,7 +49,7 @@ async def add_or_update_bili_config(background_tasks: BackgroundTasks, data: bco
 @router.get("/get_bili_credential_list", response_model=ResponseItem)
 async def get_bili_credential_list():
     async with bilibili_api_lock:
-        query_list = await Db.get_bcredential_list()
+        query_list = await async_worker.run_db_operation(Db.get_bcredential_list())
         result = []
         for item in query_list:
             cred = Credential(
@@ -74,7 +74,7 @@ async def get_bili_credential_list():
 
 @router.get("/refresh_bili_credential", response_model=ResponseItem)
 async def refresh_bili_credential(id: int = Query(...)):
-    result = await Db.get_bcredential(pk=id)
+    result = await async_worker.run_db_operation(Db.get_bcredential(pk=id))
     if not result:
         return ResponseItem(code=-1, msg="id不存在", data=None)
     cred = Credential(
@@ -90,14 +90,14 @@ async def refresh_bili_credential(id: int = Query(...)):
             await cred.refresh()
             data_dic = result.__dict__
             new_dic = {k: v for k, v in data_dic.items() if v is not None and k != "id"}
-            await Db.update_bcredential(pk=result.id, **new_dic)
+            await async_worker.run_db_operation(Db.update_bcredential(pk=result.id, **new_dic))
         return ResponseItem(code=0, msg="刷新成功", data=None)
     return ResponseItem(code=-1, msg="fail", data=None)
 
 
 @router.post("/delete_bili_credential", response_model=ResponseItem)
 async def delete_bili_credential(id: int = Body(..., embed=True)):
-    result = await Db.delete_bcredential(pk=id)
+    result = await async_worker.run_db_operation(Db.delete_bcredential(pk=id))
     if result:
         return ResponseItem(code=0, msg="删除成功", data=None)
     else:
@@ -124,12 +124,12 @@ async def check_qr_code():
         uid = new_dic["dedeuserid"]
         new_dic["uid"] = uid
         new_dic["enable"] = False
-        cred = await Db.get_bcredential(uid=uid)
+        cred = await async_worker.run_db_operation(Db.get_bcredential(uid=uid))
         if not cred:
-            await Db.add_bcredential(new_dic)
+            await async_worker.run_db_operation(Db.add_bcredential(new_dic))
         else:
             new_dic["enable"] = cred.enable
-            await Db.update_bcredential(pk=cred.id, **new_dic)
+            await async_worker.run_db_operation(Db.update_bcredential(pk=cred.id, **new_dic))
         return ResponseItem(code=0, msg="success", data=None)
     qr_state = await qr_code_login.check_state()
     return ResponseItem(code=0, msg="qr_state", data={"data": qr_state.value})
@@ -137,7 +137,7 @@ async def check_qr_code():
 
 @router.get("/get_dy_config")
 async def get_dy_config():
-    result = await Db.get_dy_config()
+    result = await async_worker.run_db_operation(Db.get_dy_config())
     return ResponseItem(code=0, msg=None, data={"data": jsonable_encoder(result)})
 
 
@@ -147,10 +147,10 @@ async def add_or_update_dy_config(background_tasks: BackgroundTasks, data: dycon
     new_dic = {k: v for k, v in data_dic.items() if v is not None and k != "id"}
     msg = ""
     if data.id > 0:
-        result = await Db.update_dy_config(pk=data.id, **new_dic)
+        result = await async_worker.run_db_operation(Db.update_dy_config(pk=data.id, **new_dic))
         msg = "更新成功" if result else "更新失败"
     else:
-        result = await Db.add_dy_config(**new_dic)
+        result = await async_worker.run_db_operation(Db.add_dy_config(**new_dic))
         msg = "添加成功" if result else "添加失败"
     if result:
         background_tasks.add_task(func=restart_dy)
@@ -160,13 +160,12 @@ async def add_or_update_dy_config(background_tasks: BackgroundTasks, data: dycon
 
 @router.get("/get_global_config")
 async def get_global_config():
-    async with bilibili_api_lock:
-        result = await Db.get_gloal_config()
-        return ResponseItem(code=0, msg=None, data={"data": jsonable_encoder(result)})
+    result = await async_worker.run_db_operation(Db.get_gloal_config())
+    return ResponseItem(code=0, msg=None, data={"data": jsonable_encoder(result)})
 
 
 @router.post("/add_or_update_global_config")
-async def add_or_update_global_config(background_tasks: BackgroundTasks, data: globalfigItem = Body(..., embed=True)):
+async def add_or_update_global_config(data: globalfigItem = Body(..., embed=True)):
     data_dic = data.__dict__
     new_dic = {k: v for k, v in data_dic.items() if v is not None and k != "id"}
     msg = ""
@@ -175,7 +174,7 @@ async def add_or_update_global_config(background_tasks: BackgroundTasks, data: g
         if not startup_result:
             return ResponseItem(code=-1, msg="开机启动更新失败", data=None)
     if data.id > 0:
-        result = await Db.update_gloal_config(pk=data.id, **new_dic)
+        result = await async_worker.run_db_operation(Db.update_gloal_config(pk=data.id, **new_dic))
         msg = "更新成功" if result else "更新失败"
     else:
         if "startup" not in new_dic:
@@ -184,7 +183,7 @@ async def add_or_update_global_config(background_tasks: BackgroundTasks, data: g
             new_dic["check_update"] = False
         if "dark_mode" not in new_dic:
             new_dic["dark_mode"] = False
-        result = await Db.add_gloal_config(**new_dic)
+        result = await async_worker.run_db_operation(Db.add_gloal_config(**new_dic))
         msg = "添加成功" if result else "添加失败"
     code = 0 if result else -1
     return ResponseItem(code=code, msg=msg, data=None)
@@ -192,10 +191,22 @@ async def add_or_update_global_config(background_tasks: BackgroundTasks, data: g
 
 @router.get("/get_live_config")
 async def get_live_config():
-    bili_config = await Db.get_bconfig()
-    douyin_config = await Db.get_dy_config()
+    bili_config = await async_worker.run_db_operation(Db.get_bconfig())
+    douyin_config = await async_worker.run_db_operation(Db.get_dy_config())
     result = {
         "douyin_romm_id": douyin_config.room_id if douyin_config else 0,
         "bilibili_room_id": bili_config.room_id if bili_config else 0
     }
     return ResponseItem(code=0, msg=None, data={"data": jsonable_encoder(result)})
+
+
+@router.post("/restart_bilibili_ws")
+async def restart_bilibili_ws(background_tasks: BackgroundTasks):
+    background_tasks.add_task(func=restart_bili)
+    return ResponseItem(code=0, msg="success", data=None)
+
+
+@router.post("/restart_douyin_ws")
+async def restart_douyin_ws(background_tasks: BackgroundTasks):
+    background_tasks.add_task(func=restart_dy)
+    return ResponseItem(code=0, msg="success", data=None)

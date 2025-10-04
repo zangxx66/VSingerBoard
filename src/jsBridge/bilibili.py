@@ -1,8 +1,9 @@
 import time
+import asyncio
 from .worker import async_worker
 from src.utils import logger, DanmuInfo
 from src.database import Db
-from bilibili_api import live, sync, Credential
+from bilibili_api import live, Credential
 
 
 class Bili:
@@ -33,21 +34,29 @@ class Bili:
             self.live.on("DANMU_MSG")(self.on_msg)
             self.live.on("SUPER_CHAT_MESSAGE")(self.on_sc)
 
-            sync(self.live.connect())
+            await self.live.connect()
             logger.info("Bilibili live client starting.")
-            await async_worker.run_blocking(self.live.start)
         except Exception as e:
             logger.error(f"Bilibili task failed: {e}")
         finally:
+            if self.live:
+                await self.live.disconnect()
+                self.live.remove_event_listener("DANMU_MSG", self.on_msg)
+                self.live.remove_event_listener("SUPER_CHAT_MESSAGE", self.on_sc)
             logger.info("Bilibili live client stopped.")
 
-    def stop(self):
-        if self.live:
-            self.live.remove_event_listener("DANMU_MSG", self.on_msg)
-            self.live.remove_event_listener("SUPER_CHAT_MESSAGE", self.on_sc)
-            sync(self.live.disconnect())
-        if self._run_future:
-            self._run_future.cancel()
+    async def stop(self):
+        if self._run_future and not self._run_future.done():
+            self._stop_event.set()
+            try:
+                awaitable_future = asyncio.wrap_future(self._run_future)
+                await asyncio.wait_for(awaitable_future, timeout=15)
+            except asyncio.TimeoutError:
+                logger.error("【X】Timed out waiting for Bilibili task to stop.")
+                self._run_future.cancel()
+            except Exception as e:
+                logger.error(f"Error waiting for Bilibili task to stop: {e}")
+        self._run_future = None
 
     def get_status(self):
         if self.live:

@@ -1,3 +1,3 @@
-from .live import DouyinLiveWebFetcher
+from .client import DouyinLiveWebFetcher
 
 __all__ = ["DouyinLiveWebFetcher"]

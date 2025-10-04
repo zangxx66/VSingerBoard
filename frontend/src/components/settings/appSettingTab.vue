@@ -8,6 +8,7 @@ import { useIntervalStore, useThemeStore } from "@/stores"
 
 const refForm = ref<FormInstance>()
 const btnLoading = ref(false)
+const loading = ref(false)
 const intervalStore = useIntervalStore()
 const themeStore = useThemeStore()
 const baseFormValue = reactive<GlobalConfigModel>({
@@ -18,6 +19,7 @@ const baseFormValue = reactive<GlobalConfigModel>({
 })
 
 const initConfig = () => {
+    loading.value = true
     request
     .getGlobalConfig({})
     .then(response => {
@@ -34,10 +36,12 @@ const initConfig = () => {
                 baseFormValue.startup = model.startup
             }
         }
+        loading.value = false
     })
     .catch(error => {
         ElMessage.error(error)
         console.error("getGlobalConfig", error)
+        loading.value = false
     })
 }
 
@@ -74,7 +78,7 @@ const addOrUpdateConfig = () => {
 defineExpose({ initConfig })
 </script>
 <template>
-    <el-card>
+    <el-card v-loading="loading">
         <template #header>
             <div class="card-header">
                 <span>应用设置</span>

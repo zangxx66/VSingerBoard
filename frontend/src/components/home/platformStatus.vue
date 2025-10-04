@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { CircleCheckFilled, CircleCloseFilled, WarnTriangleFilled } from "@element-plus/icons-vue"
+import { request } from "@/api"
+import { ElMessage } from "element-plus"
 
 const props = defineProps<{
     platform: 'douyin' | 'bilibili'
@@ -12,14 +14,27 @@ const loading = ref(false)
 const refreshStatus = () => {
     loading.value = true
     if(props.platform == "bilibili") {
-        window.pywebview.api.restart_bilibili()
+        request.RestartBilibiliWs({})
+        .then(() => {
+            ElMessage.success("刷新成功")
+            loading.value = false
+        })
+        .catch(error => {
+            ElMessage.error(error)
+            loading.value = false
+        })
     }
     else{
-        window.pywebview.api.restart_douyin()
+        request.RestartDouyinWs({})
+        .then(() => {
+            ElMessage.success("刷新成功")
+            loading.value = false
+        })
+        .catch(error => {
+            ElMessage.error(error)
+            loading.value = false
+        })
     }
-    setTimeout(() => {
-        loading.value = false
-    }, 5000)
 }
 
 const wsState = computed(() => {

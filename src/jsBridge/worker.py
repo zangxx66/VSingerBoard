@@ -33,5 +33,9 @@ class AsyncWorker:
     async def disconnect_db(self):
         await Db.disconnect()
 
+    async def run_db_operation(self, func):
+        future = self.submit(func)
+        return await asyncio.wrap_future(future)
+
 
 async_worker = AsyncWorker()

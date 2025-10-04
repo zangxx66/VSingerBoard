@@ -1,5 +1,6 @@
 from tortoise import Tortoise
 from tortoise.connection import connections
+from tortoise.exceptions import DBConnectionError
 from .model import BiliConfig, BiliCredential, DyConfig, GloalConfig
 from src.utils import get_path, logger
 
@@ -16,20 +17,24 @@ class Db:
         if cls._initialized:
             return
 
-        config = {
-            "connections": {"default": f"sqlite://{get_path('vsingerboard.sqlite3', dir_name='data')}"},
-            "apps": {
-                "1.0": {
-                    "models": ["src.database.model"],
-                    "default_connection": "default"
+        try:
+            config = {
+                "connections": {"default": f"sqlite://{get_path('vsingerboard.sqlite3', dir_name='data')}"},
+                "apps": {
+                    "1.0": {
+                        "models": ["src.database.model"],
+                        "default_connection": "default"
+                    }
                 }
             }
-        }
 
-        await Tortoise.init(config=config)
-        await Tortoise.generate_schemas()
-        cls._initialized = True
-        logger.info("Database initialized successfully.")
+            await Tortoise.init(config=config)
+            await Tortoise.generate_schemas()
+            cls._initialized = True
+            logger.info("Database initialized successfully.")
+        except Exception as e:
+            logger.exception(f"Database initialization failed: {e}")
+            raise
 
     @classmethod
     async def disconnect(cls):

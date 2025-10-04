@@ -1,4 +1,5 @@
 import time
+import asyncio
 from .worker import async_worker
 from src.database import Db
 from src.douyin import DouyinLiveWebFetcher
@@ -11,13 +12,17 @@ class Douyin:
         self._run_future = None
         self.danmus: list[DanmuInfo] = []
         self.sing_prefix = ""
+        self._stop_event = asyncio.Event()
 
     def start(self):
         if self._run_future and not self._run_future.done():
             return
-        self._run_future = async_worker.submit(self._start_and_run_client())
+        self._stop_event.clear()
+        self._run_future = async_worker.submit(self._main())
+        logger.info("Douyin main task submitted to worker.")
 
-    async def _start_and_run_client(self):
+    async def _main(self):
+        self.live = None
         try:
             await async_worker.init_db()
             config = await Db.get_dy_config()
@@ -29,19 +34,37 @@ class Douyin:
             self.live = DouyinLiveWebFetcher(live_id=config.room_id)
             self.live.on("danmu")(self.add_dydanmu)
 
-            logger.info("Douyin live client starting.")
-            await async_worker.run_blocking(self.live.start)
-        except Exception as e:
-            logger.error(f"Douyin task failed: {e}")
-        finally:
-            logger.info("Douyin live client stopped.")
+            await self.live.connect_async()
+            logger.info("Douyin live client connected.")
 
-    def stop(self):
-        if self.live:
-            self.live.remove_listener("danmu", self.add_dydanmu)
-            self.live.stop()
-        if self._run_future:
-            self._run_future.cancel()
+            await self._stop_event.wait()
+
+        except asyncio.CancelledError:
+            logger.info("Douyin main task was cancelled.")
+        except Exception as e:
+            logger.error(f"Douyin main task failed: {e}")
+        finally:
+            logger.info("Douyin live client stopping.")
+            if self.live:
+                await self.live.disconnect_async()
+                self.live.remove_listener("danmu", self.add_dydanmu)
+                self.live = None
+
+    async def stop(self):
+        if self._run_future and not self._run_future.done():
+            logger.info("Stopping Douyin main task.")
+            self._stop_event.set()
+            try:
+                awaitable_future = asyncio.wrap_future(self._run_future)
+                await asyncio.wait_for(awaitable_future, timeout=15)
+            except asyncio.TimeoutError:
+                logger.error("【X】Timed out waiting for Douyin task to stop.")
+                self._run_future.cancel()
+            except Exception as e:
+                logger.error(f"Error waiting for Douyin task to stop: {e}")
+            logger.info("Douyin main task stopped.")
+
+        self._run_future = None
 
     def get_status(self):
         if self.live:

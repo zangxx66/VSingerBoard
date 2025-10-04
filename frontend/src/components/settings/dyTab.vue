@@ -2,9 +2,11 @@
 import { ref, reactive, onMounted } from "vue"
 import { ElMessage, ElNotification, type FormInstance } from "element-plus"
 import { request } from "@/api"
+import { lo } from "element-plus/es/locales.mjs"
 
 const refForm = ref<FormInstance>()
 const btnLoading = ref(false)
+const loading = ref(false)
 const baseFormValue = reactive<DyConfigModel>({
     id: 0,
     room_id: 0,
@@ -13,6 +15,7 @@ const baseFormValue = reactive<DyConfigModel>({
 })
 
 const initConfig = () => {
+    loading.value = true
     request.getDyConfig({}).then(response => {
         const resp = response.data as ResponseModel
         if (resp.code != 0) {
@@ -25,7 +28,11 @@ const initConfig = () => {
             baseFormValue.sing_prefix = cfg.sing_prefix
             baseFormValue.sing_cd = cfg.sing_cd
         }
-    }).catch(error => ElMessage.error(error))
+        loading.value = false
+    }).catch(error => {
+        ElMessage.error(error)
+        loading.value = false
+    })
 }
 
 const addOrUpdateConfig = () => {
@@ -74,7 +81,7 @@ onMounted(() => {
 </script>
 <template>
     <el-card>
-        <el-form :mode="baseFormValue" ref="refForm" label-width="auto">
+        <el-form :mode="baseFormValue" ref="refForm" label-width="auto" v-loading="loading">
             <el-form-item label="房间号" prop="room_id">
                 <el-input v-model="baseFormValue.room_id" type="text" min="1" />
             </el-form-item>

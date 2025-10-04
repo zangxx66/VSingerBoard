@@ -109,6 +109,14 @@ class Request {
     async getLiveConfig(params: {}): Promise<AxiosResponse<any>>{
         return await client.get("/api/get_live_config", params)
     }
+
+    async RestartBilibiliWs(params: {}): Promise<AxiosResponse<any>>{
+        return await client.post("/api/restart_bilibili_ws", params)
+    }
+
+    async RestartDouyinWs(params: {}): Promise<AxiosResponse<any>>{
+        return await client.post("/api/restart_douyin_ws", params)
+    }
 }
 
 export const request = new Request()

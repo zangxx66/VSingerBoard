@@ -106,20 +106,20 @@ def main():
         try:
             version_path = 'version.txt'
             if os.path.exists(version_path):
-                with open(version_path, 'r') as f:
+                with open(version_path, 'r', encoding='utf-8') as f:
                     lines = f.readlines()
-                
+
                 version_info = {}
                 for line in lines:
                     if '=' in line:
                         key, value = line.strip().split('=', 1)
                         version_info[key] = value
-                
+
                 if 'Build' in version_info:
                     build_number = int(version_info.get('Build', 0))
                     version_info['Build'] = str(build_number + 1)
-                
-                with open(version_path, 'w') as f:
+
+                with open(version_path, 'w', encoding='utf-8') as f:
                     for key, value in version_info.items():
                         f.write(f"{key}={value}\n")
         except Exception as e:

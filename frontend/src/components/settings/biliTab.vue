@@ -7,6 +7,7 @@ import { request } from '@/api'
 const refForm = ref<FormInstance>()
 const isShow = ref(false)
 const btnLoading = ref(false)
+const loading = ref(false)
 const timer = ref(0)
 const qrCode = ref('')
 const qrCodeText = ref('')
@@ -101,6 +102,7 @@ const credentialColumns: Column<any>[] = [
 ]
 
 const initConfig = () => {
+    loading.value = true
     request
         .getBiliConfig({})
         .then((response) => {
@@ -128,10 +130,12 @@ const initConfig = () => {
             } else {
                 credentialList.value = resp.data.rows
             }
+            loading.value = false
         })
         .catch((error) => {
             ElMessage.error(error)
             console.error("getBiliConfig", error)
+            loading.value = false
         })
 }
 
@@ -294,17 +298,18 @@ onMounted(() => {
 })
 </script>
 <template>
-    <el-card>
-        <template #header>
-            <div class="card-header">
-                <span>基础设置</span>
-            </div>
-        </template>
-        <el-form :model="baseFormValue" ref="refForm" label-width="auto">
-            <el-form-item label="房间号" prop="room_id">
-                <el-input v-model="baseFormValue.room_id" placeholder="B站直播间号" type="text" min="1" />
-            </el-form-item>
-            <!-- <el-form-item label="粉丝牌等级" prop="modal_level">
+    <div v-loading="loading">
+        <el-card>
+            <template #header>
+                <div class="card-header">
+                    <span>基础设置</span>
+                </div>
+            </template>
+            <el-form :model="baseFormValue" ref="refForm" label-width="auto">
+                <el-form-item label="房间号" prop="room_id">
+                    <el-input v-model="baseFormValue.room_id" placeholder="B站直播间号" type="text" min="1" />
+                </el-form-item>
+                <!-- <el-form-item label="粉丝牌等级" prop="modal_level">
                 <el-input v-model="baseFormValue.modal_level" placeholder="粉丝牌等级" type="text" min="0" />
             </el-form-item>
             <el-form-item label="用户等级" prop="user_level">
@@ -314,43 +319,44 @@ onMounted(() => {
                     </template>
                 </el-radio-group>
             </el-form-item> -->
-            <el-form-item label="点歌指令" prop="sing_prefix">
-                <el-input v-model="baseFormValue.sing_prefix" placeholder="点歌指令" type="text" />
-            </el-form-item>
-            <!-- <el-form-item label="点歌cd" prop="sing_cd">
+                <el-form-item label="点歌指令" prop="sing_prefix">
+                    <el-input v-model="baseFormValue.sing_prefix" placeholder="点歌指令" type="text" />
+                </el-form-item>
+                <!-- <el-form-item label="点歌cd" prop="sing_cd">
                 <el-input v-model="baseFormValue.sing_cd" placeholder="点歌cd，单位：秒" type="text" min="0" />
             </el-form-item> -->
-            <el-form-item>
-                <el-button type="primary" @click="addOrUpdateConfig()">保存</el-button>
-            </el-form-item>
-        </el-form>
-    </el-card>
-    <el-divider />
-    <el-card>
-        <template #header>
-            <div class="card-header">
-                <span>账号设置</span>
-                <el-alert title="未登录账号无法获取到弹幕用户昵称等信息，如有需要可添加一个小号" type="warning" :closable="false" />
+                <el-form-item>
+                    <el-button type="primary" @click="addOrUpdateConfig()">保存</el-button>
+                </el-form-item>
+            </el-form>
+        </el-card>
+        <el-divider />
+        <el-card>
+            <template #header>
+                <div class="card-header">
+                    <span>账号设置</span>
+                    <el-alert title="未登录账号无法获取到弹幕用户昵称等信息，如有需要可添加一个小号" type="warning" :closable="false" />
+                </div>
+            </template>
+            <div class="mb-4 flex items-center">
+                <el-button type="primary" @click="addSub">新增</el-button>
             </div>
-        </template>
-        <div class="mb-4 flex items-center">
-            <el-button type="primary" @click="addSub">新增</el-button>
-        </div>
-        <div style="height: 300px;">
-            <el-auto-resizer>
-                <template #default="{ width, height }">
-                    <el-table-v2 :columns="credentialColumns" :data="credentialList" :width="width" :height="height"
-                        fixed></el-table-v2>
-                </template>
-            </el-auto-resizer>
-        </div>
-    </el-card>
-    <el-dialog v-model="isShow" title="新增" width="720" @close="closeDialog" destroy-on-close>
-        <div class="avatar-image-container">
-            <img :src="qrCode" alt="qrcode" class="avatar" referrerpolicy="no-referrer" />
-            <div class="code-bage" v-if="qrCodeText.length > 0">{{ qrCodeText }}</div>
-        </div>
-    </el-dialog>
+            <div style="height: 300px;">
+                <el-auto-resizer>
+                    <template #default="{ width, height }">
+                        <el-table-v2 :columns="credentialColumns" :data="credentialList" :width="width" :height="height"
+                            fixed></el-table-v2>
+                    </template>
+                </el-auto-resizer>
+            </div>
+        </el-card>
+        <el-dialog v-model="isShow" title="新增" width="720" @close="closeDialog" destroy-on-close>
+            <div class="avatar-image-container">
+                <img :src="qrCode" alt="qrcode" class="avatar" referrerpolicy="no-referrer" />
+                <div class="code-bage" v-if="qrCodeText.length > 0">{{ qrCodeText }}</div>
+            </div>
+        </el-dialog>
+    </div>
 </template>
 <style scoped>
 .avatar-image-container {

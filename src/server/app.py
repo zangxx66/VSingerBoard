@@ -21,11 +21,11 @@ if not os.path.exists(dist_path):
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # on startup: directly initialize the database
+    # Database initialization will be handled by async_worker
     await Db.init()
     logger.info("Database initialization completed.")
     yield
-    # on shutdown: directly disconnect the database
+    # Database disconnection will be handled by async_worker
     await Db.disconnect()
     logger.info("Database disconnection completed.")
 

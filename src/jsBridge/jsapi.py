@@ -3,11 +3,11 @@ import threading
 import webview
 import pyperclip
 import sys
-import time
 from src.utils import check_for_updates, __version__ as CURRENT_VERSION
 from src.notifypy import Notify
 from .douyin import Douyin
 from .bilibili import Bili
+from .worker import async_worker
 
 
 thread_lock = threading.Lock()
@@ -109,27 +109,25 @@ class Api:
     def update_verion(self):
         return check_for_updates()
 
-    def restart_bilibili(self):
-        bili_manager.stop()
-        time.sleep(1)
-        bili_manager.start()
 
-    def restart_douyin(self):
-        dy_manager.stop()
-        time.sleep(1)
-        dy_manager.start()
-
-
-async def restart_bili():
+async def _restart_bili_async():
     bili_manager.stop()
     await asyncio.sleep(1)
     bili_manager.start()
 
 
-async def restart_dy():
-    dy_manager.stop()
+async def _restart_dy_async():
+    await dy_manager.stop()
     await asyncio.sleep(1)
     dy_manager.start()
+
+
+def restart_bili():
+    async_worker.submit(_restart_bili_async())
+
+
+def restart_dy():
+    async_worker.submit(_restart_dy_async())
 
 
 def start_bili():
@@ -141,8 +139,8 @@ def start_dy():
 
 
 def stop_bili():
-    bili_manager.stop()
+    async_worker.submit(bili_manager.stop())
 
 
 def stop_dy():
-    dy_manager.stop()
+    async_worker.submit(dy_manager.stop())

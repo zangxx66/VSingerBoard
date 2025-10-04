@@ -3,6 +3,7 @@ from .tool import *
 from .decorator import Decorator
 from ._version import __version__
 from .models import *
+from .ws_client import WebSocketClient
 
 __all__ = [
     "logger",
@@ -23,4 +24,5 @@ __all__ = [
     "dyconfigItem",
     "globalfigItem",
     "check_for_updates",
+    "WebSocketClient",
 ]
