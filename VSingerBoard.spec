@@ -86,7 +86,7 @@ datas += execjs_datas
 hidden_packages = [
     "webview", "uvloop", "uvicorn", "pydantic", "objc", "anyio", "appdirs",
     "aiohttp", "betterproto", "curl_cffi", "fastapi", "jinja2",
-    "pyperclip", "requests", "pkg_resources", "websocket"
+    "pyperclip", "requests", "pkg_resources"
 ]
 hidden_packages += bilibili_api_hiddenimports
 hidden_packages += tortoise_hiddenimports
