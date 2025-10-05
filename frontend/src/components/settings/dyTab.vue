@@ -2,7 +2,6 @@
 import { ref, reactive, onMounted } from "vue"
 import { ElMessage, ElNotification, type FormInstance } from "element-plus"
 import { request } from "@/api"
-import { lo } from "element-plus/es/locales.mjs"
 
 const refForm = ref<FormInstance>()
 const btnLoading = ref(false)

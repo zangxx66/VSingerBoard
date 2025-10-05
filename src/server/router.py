@@ -7,8 +7,8 @@ from fastapi.exceptions import HTTPException
 from bilibili_api import Credential, user
 from bilibili_api.login_v2 import QrCodeLogin, QrCodeLoginChannel
 from src.database import Db
-from src.jsBridge import restart_bili, restart_dy, async_worker
-from src.utils import setup_autostart, ResponseItem, bconfigItem, dyconfigItem, globalfigItem
+from src.jsBridge import restart_bili, restart_dy
+from src.utils import setup_autostart, ResponseItem, bconfigItem, dyconfigItem, globalfigItem, async_worker
 
 # Lock to serialize access to the bilibili-api library to prevent concurrency issues.
 bilibili_api_lock = asyncio.Lock()

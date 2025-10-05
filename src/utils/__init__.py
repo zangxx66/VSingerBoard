@@ -4,6 +4,7 @@ from .decorator import Decorator
 from ._version import __version__
 from .models import *
 from .ws_client import WebSocketClient
+from .worker import async_worker
 
 __all__ = [
     "logger",
@@ -25,4 +26,5 @@ __all__ = [
     "globalfigItem",
     "check_for_updates",
     "WebSocketClient",
+    "async_worker",
 ]

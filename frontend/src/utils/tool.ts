@@ -1,15 +1,15 @@
 import { ElMessage, ElNotification } from "element-plus"
 
 /**
- * Check if there is a new version of the VSingerBoard application.
+ * 检查VSingerBoard应用程序是否有新版本。
  *
- * This function will send a GET request to the GitHub Releases API to get the latest version of the VSingerBoard application.
+ * 此函数将向GitHub Releases API发送GET请求，以获取VSingerBoard应用程序的最新版本。
  *
- * It will then compare the latest version with the current version and notify the user with a notification.
+ * 然后，它将最新版本与当前版本进行比较，并通过通知告知用户。
  *
- * If there is a new version, the notification will have a link to the latest release.
+ * 如果有新版本，通知将包含指向最新版本的链接。
  *
- * If there is no new version, the notification will have a warning message.
+ * 如果没有新版本，通知将显示警告消息。
  */
 export const checkUpdate = async() => {
   const result = await window.pywebview.api.update_verion()

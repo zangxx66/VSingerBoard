@@ -7,8 +7,8 @@ import subprocess
 import webview
 from PIL import Image
 from pystray import Icon, Menu, MenuItem
-from src.server import startup
 from src.utils import logger, resource_path
+from src.server import startup
 from src.jsBridge import Api, start_bili, start_dy, stop_bili, stop_dy
 from webview.window import Window
 

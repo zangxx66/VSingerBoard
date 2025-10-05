@@ -13,6 +13,7 @@ const openGithub = () => {
     a.href = "https://github.com/zangxx66/VSingerBoard"
     a.target = "_blank"
     a.click()
+    a.remove()
 }
 
 const openHomepage = () => {
@@ -20,6 +21,7 @@ const openHomepage = () => {
     a.href = "https://space.bilibili.com/909267"
     a.target = "_blank"
     a.click()
+    a.remove()
 }
 
 const openIssues = () => {
@@ -27,6 +29,7 @@ const openIssues = () => {
     a.href = "https://github.com/zangxx66/VSingerBoard/issues"
     a.target = "_blank"
     a.click()
+    a.remove()
 }
 
 onMounted(() => {

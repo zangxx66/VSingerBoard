@@ -3,117 +3,127 @@ import type { AxiosResponse } from "axios"
 
 class Request {
     /**
-     * Get bilibili configuration.
-     * @param {Object} params Parameters object passed to the server.
-     * @returns {Promise<AxiosResponse<any>>} The response of the get operation.
+     * 获取Bilibili配置。
+     * @param {Object} params 传递给服务器的参数对象。
+     * @returns {Promise<AxiosResponse<any>>} 获取操作的响应。
      */
     async getBiliConfig(params: {}): Promise<AxiosResponse<any>>{
         return await client.get("/api/get_bili_config", params)
     }
 
     /**
-     * Add or update bilibili configuration.
-     * @param {Object} params Parameters object passed to the server.
-     * @returns {Promise<AxiosResponse<any>>} The response of the add or update operation.
+     * 添加或更新Bilibili配置。
+     * @param {Object} params 传递给服务器的参数对象。
+     * @returns {Promise<AxiosResponse<any>>} 添加或更新操作的响应。
      */
     async addOrUpdateBiliConfig(params: {}): Promise<AxiosResponse<any>>{
         return await client.post("/api/add_or_update_bili_config", params)
     }
 
     /**
-     * Get a list of BiliCredentials.
-     * @param {Object} params Parameters object passed to the server.
-     * @returns {Promise<AxiosResponse<any>>} The response of the get operation.
+     * 获取BiliCredential列表。
+     * @param {Object} params 传递给服务器的参数对象。
+     * @returns {Promise<AxiosResponse<any>>} 获取操作的响应。
      */
     async getBiliCredntialList(params: {}): Promise<AxiosResponse<any>>{
         return await client.get("/api/get_bili_credential_list", params)
     }
 
     /**
-     * Refresh a BiliCredential.
-     * @param {Object} params Parameters object passed to the server.
-     * @returns {Promise<AxiosResponse<any>>} The response of the refresh operation.
+     * 刷新BiliCredential。
+     * @param {Object} params 传递给服务器的参数对象。
+     * @returns {Promise<AxiosResponse<any>>} 刷新操作的响应。
      */
     async refreshBiliCredential(params: {}): Promise<AxiosResponse<any>>{
         return await client.get("/api/refresh_bili_credential", params)
     }
 
     /**
-     * Delete a BiliCredential by its primary key.
-     * @param {Object} params Parameters object passed to the server.
-     * @returns {Promise<AxiosResponse<any>>} The response of the delete operation.
+     * 根据主键删除BiliCredential。
+     * @param {Object} params 传递给服务器的参数对象。
+     * @returns {Promise<AxiosResponse<any>>} 删除操作的响应。
      */
     async deleteBiliCredential(params: {}): Promise<AxiosResponse<any>>{
         return await client.post("/api/delete_bili_credential", params)
     }
 
     /**
-     * Get a BiliCredential's QR code.
-     * @param {Object} params Parameters object passed to the server.
-     * @returns {Promise<AxiosResponse<any>>} The response of the get operation.
+     * 获取BiliCredential的二维码。
+     * @param {Object} params 传递给服务器的参数对象。
+     * @returns {Promise<AxiosResponse<any>>} 获取操作的响应。
      */
     async getBiliCredentialCode(params: {}): Promise<AxiosResponse<any>>{
         return await client.get("/api/get_bili_credential_code", params)
     }
 
     /**
-     * Check the status of a QR code.
-     * @param {Object} params Parameters object passed to the server.
-     * @returns {Promise<AxiosResponse<any>>} The response of the check operation.
+     * 检查二维码状态。
+     * @param {Object} params 传递给服务器的参数对象。
+     * @returns {Promise<AxiosResponse<any>>} 检查操作的响应。
      */
     async checkQrCode(params: {}): Promise<AxiosResponse<any>>{
         return await client.get("/api/check_qr_code", params)
     }
 
     /**
-     * Get a Douyin configuration.
-     * @param {Object} params Parameters object passed to the server.
-     * @returns {Promise<AxiosResponse<any>>} The response of the get operation.
+     * 获取抖音配置。
+     * @param {Object} params 传递给服务器的参数对象。
+     * @returns {Promise<AxiosResponse<any>>} 获取操作的响应。
      */
     async getDyConfig(params: {}): Promise<AxiosResponse<any>>{
         return await client.get("/api/get_dy_config", params)
     }
 
     /**
-     * Add or update a Douyin configuration.
-     * @param {Object} params Parameters object passed to the server.
-     * @returns {Promise<AxiosResponse<any>>} The response of the add or update operation.
+     * 添加或更新抖音配置。
+     * @param {Object} params 传递给服务器的参数对象。
+     * @returns {Promise<AxiosResponse<any>>} 添加或更新操作的响应。
      */
     async addOrUpdateDyConfig(params: {}): Promise<AxiosResponse<any>>{
         return await client.post("/api/add_or_update_dy_config", params)
     }
 
     /**
-     * Get a GlobalConfig by its keyword arguments.
-     * @param {Object} params Parameters object passed to the server.
-     * @returns {Promise<AxiosResponse<any>>} The response of the get operation.
+     * 根据关键字参数获取全局配置。
+     * @param {Object} params 传递给服务器的参数对象。
+     * @returns {Promise<AxiosResponse<any>>} 获取操作的响应。
      */
     async getGlobalConfig(params: {}): Promise<AxiosResponse<any>>{
         return await client.get("/api/get_global_config", params)
     }
 
     /**
-     * Add or update a GlobalConfig.
-     * @param {Object} params Parameters object passed to the server.
-     * @returns {Promise<AxiosResponse<any>>} The response of the add or update operation.
+     * 添加或更新全局配置。
+     * @param {Object} params 传递给服务器的参数对象。
+     * @returns {Promise<AxiosResponse<any>>} 添加或更新操作的响应。
      */
     async addOrUpdateGlobalConfig(params: {}): Promise<AxiosResponse<any>>{
         return await client.post("/api/add_or_update_global_config", params)
     }
 
     /**
-     * Get live configuration.
-     * @param {Object} [params={}] Parameters object passed to the server.
-     * @returns {Promise<AxiosResponse<any>>} The response of the get operation.
+     * 获取直播配置。
+     * @param {Object} [params={}] 传递给服务器的参数对象。
+     * @returns {Promise<AxiosResponse<any>>} 获取操作的响应。
      */
     async getLiveConfig(params: {}): Promise<AxiosResponse<any>>{
         return await client.get("/api/get_live_config", params)
     }
 
+    /**
+     * 重启Bilibili WebSocket。
+     * @param {Object} params 传递给服务器的参数对象。
+     * @returns {Promise<AxiosResponse<any>>} 重启操作的响应。
+     */
     async RestartBilibiliWs(params: {}): Promise<AxiosResponse<any>>{
         return await client.post("/api/restart_bilibili_ws", params)
     }
 
+    /**
+     * 重启抖音WebSocket。
+     * @param {Object} params 传递给服务器的参数对象。
+     * @returns {Promise<AxiosResponse<any>>} 重启操作的响应。
+     */
     async RestartDouyinWs(params: {}): Promise<AxiosResponse<any>>{
         return await client.post("/api/restart_douyin_ws", params)
     }

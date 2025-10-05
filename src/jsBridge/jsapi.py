@@ -3,11 +3,10 @@ import threading
 import webview
 import pyperclip
 import sys
-from src.utils import check_for_updates, __version__ as CURRENT_VERSION
+from src.utils import check_for_updates, async_worker, __version__ as CURRENT_VERSION
 from src.notifypy import Notify
 from .douyin import Douyin
 from .bilibili import Bili
-from .worker import async_worker
 
 
 thread_lock = threading.Lock()
@@ -18,27 +17,27 @@ dy_manager = Douyin()
 class Api:
     def get_danmu(self):
         """
-        Get the list of danmaku from Bilibili.
+        获取Bilibili的弹幕列表。
 
         Returns:
-            list: A list of danmaku from Bilibili.
+            list: Bilibili的弹幕列表。
         """
         with thread_lock:
             return bili_manager.get_list()
 
     def get_dy_danmu(self):
         """
-        Get the list of danmaku from Douyin.
+        获取抖音的弹幕列表。
 
         Returns:
-            list: A list of danmaku from Douyin.
+            list: 抖音的弹幕列表。
         """
         with thread_lock:
             return dy_manager.get_list()
 
     def minus_window(self):
         """
-        Minimize the current window.
+        最小化当前窗口。
         """
         window = webview.active_window()
         if not window:
@@ -48,36 +47,36 @@ class Api:
 
     def check_clipboard(self):
         """
-        Check the current clipboard contents.
+        检查当前剪贴板内容。
 
         Returns:
-            str: The current contents of the clipboard.
+            str: 剪贴板的当前内容。
         """
         return pyperclip.paste()
 
     def get_bili_ws_status(self):
         """
-        Get the status of the Bilibili WebSocket connection.
+        获取Bilibili WebSocket连接的状态。
 
         Returns:
-            int: The status of the Bilibili WebSocket connection. -1 means the connection is not configured, 0 means the connection is not running, and 1 means the connection is running.
+            int: Bilibili WebSocket连接的状态。-1表示连接未配置，0表示连接未运行，1表示连接正在运行。
         """
         return bili_manager.get_status()
 
     def get_dy_ws_status(self):
         """
-        Get the status of the Douyin WebSocket connection.
+        获取抖音WebSocket连接的状态。
 
         Returns:
-            int: The status of the Douyin WebSocket connection. -1 means the connection is not configured, 0 means the connection is not running, and 1 means the connection is running.
+            int: 抖音WebSocket连接的状态。-1表示连接未配置，0表示连接未运行，1表示连接正在运行。
         """
         return dy_manager.get_status()
 
     def reload(self):
         """
-        Reload the current page.
+        重新加载当前页面。
 
-        This function will reload the current page by loading the current URL again.
+        此函数将通过再次加载当前URL来重新加载当前页面。
 
         Returns:
             None
@@ -87,6 +86,16 @@ class Api:
             window.load_url(window.get_current_url())
 
     def send_notification(self, title, message):
+        """
+        发送桌面通知。
+
+        Args:
+            title (str): 通知标题。
+            message (str): 通知内容。
+
+        Returns:
+            None
+        """
         notification = Notify(enable_logging=True)
         notification.application_name = "点歌姬"
         notification.title = title
@@ -94,19 +103,33 @@ class Api:
         notification.send(block=False)
 
     def is_bundle(self):
+        """
+        检查当前Python环境是否是bundle环境。
+
+        在bundle环境中，sys.frozen将被设置为True。
+
+        Returns:
+            bool: 当前Python环境是否是bundle环境。
+        """
         is_bundle = getattr(sys, "frozen", False)
         return is_bundle
 
     def get_version(self):
         """
-        Get the current version of the VSingerBoard application.
+        获取VSingerBoard应用程序的当前版本。
 
         Returns:
-            str: The current version of the VSingerBoard application.
+            str: VSingerBoard应用程序的当前版本。
         """
         return CURRENT_VERSION
 
     def update_verion(self):
+        """
+        检查VSingerBoard应用程序的最新版本信息。
+
+        Returns:
+            dict: VSingerBoard应用程序的最新版本信息。
+        """
         return check_for_updates()
 
 

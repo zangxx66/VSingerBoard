@@ -1,9 +1,8 @@
 import time
 import asyncio
-from .worker import async_worker
 from src.database import Db
 from src.douyin import DouyinLiveWebFetcher
-from src.utils import logger, DanmuInfo
+from src.utils import logger, DanmuInfo, async_worker
 
 
 class Douyin:

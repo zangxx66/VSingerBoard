@@ -8,11 +8,11 @@ export const useIntervalStore = defineStore('interval', () => {
   const activeIntervals = ref<Record<string, number>>({})
 
   /**
-   * Add a interval to the store.
-   * If the key already exists in the store, the existing interval will be cleared.
-   * @param {string} key - the key to store the interval under
-   * @param {() => void} cb - the callback to execute when the interval fires
-   * @param {number} delay - the delay between interval executions in milliseconds
+   * 向store中添加一个定时器。
+   * 如果key已存在于store中，则现有定时器将被清除。
+   * @param {string} key - 存储定时器的键
+   * @param {() => void} cb - 定时器触发时执行的回调函数
+   * @param {number} delay - 定时器执行之间的延迟（毫秒）
    */
   const addInterval = (key: string, cb: () => void, delay: number) => {
     if(activeIntervals.value[key]) {
@@ -23,9 +23,9 @@ export const useIntervalStore = defineStore('interval', () => {
 
 
 /**
- * Remove an interval from the store by key.
- * If the interval exists in the store, it will be cleared.
- * @param {string} key - the key to remove the interval from
+ * 根据key从store中移除一个定时器。
+ * 如果定时器存在于store中，它将被清除。
+ * @param {string} key - 要移除的定时器的键
  */
   const removeInterval = (key: string) => {
     if(activeIntervals.value[key]) {
@@ -36,10 +36,9 @@ export const useIntervalStore = defineStore('interval', () => {
 
 
 /**
- * Clears all intervals from the store.
- * This method iterates over all keys in the activeIntervals object and
- * clears the interval associated with each key, then resets the
- * activeIntervals object to an empty object.
+ * 清除store中的所有定时器。
+ * 此方法遍历activeIntervals对象中的所有键，
+ * 清除与每个键关联的定时器，然后将activeIntervals对象重置为空对象。
  */
   const clearAllIntervals = () => {
     Object.keys(activeIntervals.value).forEach((key) => {

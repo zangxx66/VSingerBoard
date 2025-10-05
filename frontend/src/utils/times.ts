@@ -18,11 +18,11 @@ const timespanToString = (timespan: number) => {
 }
 
 /**
- *  Gets the relative time from the given date.
+ *  获取从给定日期开始的相对时间
  *
- *  @param {string | number} date - The date to get the relative time from.
- *  @param {string} format - The format of the date.
- *  @returns {string} The relative time.
+ *  @param {string | number} date - 获取相对时间所需的时间点
+ *  @param {string} format - 日期的格式
+ *  @returns {string} 相对时间
  */
 const getRelativeTime = (date: string | number, format: string): string => {
     return dayjs(date, format).fromNow()

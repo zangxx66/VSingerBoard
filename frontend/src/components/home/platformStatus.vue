@@ -11,55 +11,43 @@ const props = defineProps<{
 }>()
 
 const loading = ref(false)
-const refreshStatus = () => {
+const refreshStatus = async () => {
     loading.value = true
-    if(props.platform == "bilibili") {
-        request.RestartBilibiliWs({})
-        .then(() => {
-            ElMessage.success("刷新成功")
+    try {
+        if(props.platform == "bilibili") {
+            await request.RestartBilibiliWs({})
+        } else {
+            await request.RestartDouyinWs({})
+        }
+        ElMessage.success("刷新成功，请等待操作完成")
+    } catch (error: any) {
+        ElMessage.error(error)
+    } finally {
+        setTimeout(() => {
             loading.value = false
-        })
-        .catch(error => {
-            ElMessage.error(error)
-            loading.value = false
-        })
-    }
-    else{
-        request.RestartDouyinWs({})
-        .then(() => {
-            ElMessage.success("刷新成功")
-            loading.value = false
-        })
-        .catch(error => {
-            ElMessage.error(error)
-            loading.value = false
-        })
+        }, 5000)
     }
 }
 
+const wsStatusMap = {
+    bilibili: new Map<number, any>([
+        [-1, { color: '#E6A23C', icon: CircleCloseFilled, message: "未配置或出现错误" }],
+        [0, { color: '#F56C6C', icon: WarnTriangleFilled, message: "初始化" }],
+        [1, { color: '#67C23A', icon: WarnTriangleFilled, message: "连接建立中" }],
+        [2, { color: '#67C23A', icon: CircleCheckFilled, message: "已连接" }],
+        [3, { color: '#F56C6C', icon: WarnTriangleFilled, message: "断开连接中" }],
+        [4, { color: '#E6A23C', icon: CircleCloseFilled, message: "已断开" }],
+        [5, { color: '#E6A23C', icon: CircleCloseFilled, message: "出现错误" }]
+    ]),
+    douyin: new Map<number, any>([
+        [-1, { color: '#F56C6C', icon: CircleCloseFilled, message: "未配置或出现错误" }],
+        [0, { color: '#E6A23C', icon: WarnTriangleFilled, message: "已断开" }],
+        [1,  { color: '#67C23A', icon: CircleCheckFilled, message: "已连接" }]
+    ])
+}
+
 const wsState = computed(() => {
-    if (props.platform == "bilibili") {
-        if (props.wsStatus >= 0 && props.wsStatus <= 2) {
-            return { color: '#67C23A', icon: CircleCheckFilled, message: "已连接" }
-        }
-        else if (props.wsStatus == -1) {
-            return { color: '#E6A23C', icon: CircleCloseFilled, message: "未配置或出现错误" }
-        }
-        else {
-            return { color: '#F56C6C', icon: WarnTriangleFilled, message: "已断开" }
-        }
-    }
-    else {
-        if (props.wsStatus == 1) {
-            return { color: '#67C23A', icon: CircleCheckFilled, message: "已连接" }
-        }
-        else if (props.wsStatus == 0) {
-            return { color: '#E6A23C', icon: WarnTriangleFilled, message: "已断开" }
-        }
-        else {
-            return { color: '#F56C6C', icon: CircleCloseFilled, message: "未配置或出现错误" }
-        }
-    }
+    return wsStatusMap[props.platform].get(props.wsStatus)
 })
 </script>
 <template>

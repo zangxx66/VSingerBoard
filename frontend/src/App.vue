@@ -33,8 +33,8 @@ const messageConfig = {
 }
 
 /**
- * Jump to the specified page
- * @param {string} name The name of the page to jump to
+ * 跳转到指定页面
+ * @param {string} name 路由的name
  */
 const goto = (name: string) => {
   router.push({ name: name })

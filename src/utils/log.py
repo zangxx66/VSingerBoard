@@ -12,13 +12,13 @@ file_formatter = logging.Formatter(fmt="[%(asctime)s][%(levelname)s][%(module)s]
 file_handle.setFormatter(file_formatter)
 logger.addHandler(file_handle)
 
-# Set log levels based on environment
+# 根据环境设置日志级别
 if getattr(sys, 'frozen', False):
-    # Packaged app
+    # 打包环境
     logger.setLevel(logging.INFO)
     file_handle.setLevel(logging.WARNING)
 else:
-    # Development environment
+    # 开发环境
     console_handle = logging.StreamHandler()
     console_handle.setFormatter(file_formatter)
     logger.addHandler(console_handle)

@@ -6,4 +6,4 @@ LegalCopyright=Copyright (c) 2025 Ricardo All rights reserved.
 OriginalFilename=VSingerBoard.exe
 ProductName=点歌姬
 ProductVersion=1.0.0
-Build=1185
+Build=1190

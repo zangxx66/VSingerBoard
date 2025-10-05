@@ -1,6 +1,5 @@
 from tortoise import Tortoise
 from tortoise.connection import connections
-from tortoise.exceptions import DBConnectionError
 from .model import BiliConfig, BiliCredential, DyConfig, GloalConfig
 from src.utils import get_path, logger
 
@@ -11,8 +10,9 @@ class Db:
     @classmethod
     async def init(cls):
         """
-        Initialize database connection.
-        This method should be idempotent and only called from a single asyncio event loop.
+        初始化database连接
+
+        此方法应具有幂等性，并且只能从单个 asyncio 事件循环中调用。
         """
         if cls._initialized:
             return
@@ -39,7 +39,7 @@ class Db:
     @classmethod
     async def disconnect(cls):
         """
-        Close all database connections.
+       关闭所有database连接
         """
         if not cls._initialized:
             return

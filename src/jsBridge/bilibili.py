@@ -1,7 +1,6 @@
 import time
 import asyncio
-from .worker import async_worker
-from src.utils import logger, DanmuInfo
+from src.utils import logger, DanmuInfo, async_worker
 from src.database import Db
 from bilibili_api import live, Credential
 
