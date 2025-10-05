@@ -17,7 +17,6 @@ class DouyinLiveWebFetcher(Decorator, WebSocketClient):
         self.heartheat_task = None
         self.max_retries = max_retries
         self.retry_delay = retry_delay
-        self._is_running = False
         self.http_session = requests.Session()
         self.live_id = str(live_id)
         self.host = "https://www.douyin.com/"
@@ -29,12 +28,18 @@ class DouyinLiveWebFetcher(Decorator, WebSocketClient):
 
     @property
     def ws_connect_status(self):
-        return self._is_running
+        """
+        获取详细的WebSocket连接状态码。
+
+        :return: int, 0:未连接, 1:已连接, 2:已断开, 3:连接失败
+        """
+        return self.status_code
 
     @property
     def ttwid(self):
         """
         产生请求头部cookie中的ttwid字段，访问抖音网页版直播间首页可以获取到响应cookie中的ttwid
+
         :return: ttwid
         """
         if self.__ttwid:
@@ -55,6 +60,7 @@ class DouyinLiveWebFetcher(Decorator, WebSocketClient):
     def room_id(self):
         """
         根据直播间的地址获取到真正的直播间roomId，有时会有错误，可以重试请求解决
+
         :return:room_id
         """
         if self.__room_id:
@@ -142,7 +148,6 @@ class DouyinLiveWebFetcher(Decorator, WebSocketClient):
         while self._is_running:
             try:
                 heartbeat = PushFrame(payload_type='hb').SerializeToString()
-                # self.send(heartbeat, websocket.ABNF.OPCODE_PING)
                 await self.ws.ping(heartbeat)
                 # print("【√】发送心跳包")
             except Exception as e:

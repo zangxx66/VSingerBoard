@@ -127,20 +127,11 @@ class MacOSNotifier(BaseNotifier):
                     stderr=subprocess.STDOUT,
                 )
 
-            # generated_command = [
-            #     self._notificator_binary,
-            #     "--title",
-            #     application_name,
-            #     "--subtitle",
-            #     notification_title,
-            #     "--message",
-            #     notification_subtitle,
-            # ]
             generated_command = [
                 self._notificator_binary,
                 notification_subtitle,
-                notification_title,
                 application_name,
+                notification_title,
             ]
 
             subprocess.check_output(generated_command)

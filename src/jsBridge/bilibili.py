@@ -1,6 +1,6 @@
 import time
 import asyncio
-from src.utils import logger, DanmuInfo, async_worker
+from src.utils import logger, DanmuInfo, async_worker, send_notification
 from src.database import Db
 from bilibili_api import live, Credential
 
@@ -70,7 +70,7 @@ class Bili:
         self.danmus.clear()
         return result
 
-    def on_msg(self, event):
+    async def on_msg(self, event):
         info = event["data"]["info"]
         msg = str(info[1])
         uid = info[2][0]
@@ -91,6 +91,7 @@ class Bili:
 
         song_name = msg.replace(self.sing_prefix, "", 1).strip()
         logger.info(song_name)
+
         danmu_info: DanmuInfo = {
             "uid": uid,
             "uname": uname,
@@ -103,7 +104,13 @@ class Bili:
         }
         self.danmus.append(danmu_info)
 
-    def on_sc(self, event):
+        config = await Db.get_gloal_config()
+        if not config or not config.notification:
+            return
+
+        send_notification("收到新的点歌", song_name)
+
+    async def on_sc(self, event):
         sc_data = event["data"]["data"]
         uname = sc_data["user_info"]["uname"]
         uid = sc_data["uid"]
@@ -120,8 +127,10 @@ class Bili:
         logger.debug(f"[{medal_name} {medal_level}]:{uname}:{message}")
         if not message.startswith(self.sing_prefix):
             return
+
         song_name = message.replace(self.sing_prefix, "", 1).strip()
         logger.info(song_name)
+
         sc_info: DanmuInfo = {
             "uid": uid,
             "uname": uname,
@@ -134,3 +143,9 @@ class Bili:
             "source": "bilibili"
         }
         self.danmus.append(sc_info)
+
+        config = await Db.get_gloal_config()
+        if not config or not config.notification:
+            return
+
+        send_notification("收到新的点歌", song_name)

@@ -57,6 +57,7 @@ type GlobalConfigModel = {
     dark_mode: boolean
     check_update: boolean
     startup: boolean
+    notification: boolean
 }
 
 type UpdateModel = {

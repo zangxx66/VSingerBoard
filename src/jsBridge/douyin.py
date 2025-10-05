@@ -2,7 +2,7 @@ import time
 import asyncio
 from src.database import Db
 from src.douyin import DouyinLiveWebFetcher
-from src.utils import logger, DanmuInfo, async_worker
+from src.utils import logger, DanmuInfo, async_worker, send_notification
 
 
 class Douyin:
@@ -30,7 +30,7 @@ class Douyin:
                 return
 
             self.sing_prefix = config.sing_prefix
-            self.live = DouyinLiveWebFetcher(live_id=config.room_id)
+            self.live = DouyinLiveWebFetcher(live_id=config.room_id, max_retries=99)
             self.live.on("danmu")(self.add_dydanmu)
 
             await self.live.connect_async()
@@ -67,7 +67,7 @@ class Douyin:
 
     def get_status(self):
         if self.live:
-            return 1 if self.live.ws_connect_status else 0
+            return self.live.ws_connect_status
         else:
             return -1
 
@@ -78,15 +78,25 @@ class Douyin:
         self.danmus.clear()
         return result
 
-    def add_dydanmu(self, danmu):
+    async def add_dydanmu(self, danmu):
         content = danmu.get("content", "")
-        if content.startswith(self.sing_prefix):
-            song_name = content.replace(self.sing_prefix, "", 1).strip()
-            danmu_info: DanmuInfo = {
-                "uid": danmu.get("user_id"),
-                "uname": danmu.get("user_name"),
-                "msg": song_name,
-                "send_time": int(time.time()),
-                "source": "douyin"
-            }
-            self.danmus.append(danmu_info)
+        if not content.startswith(self.sing_prefix):
+            return
+
+        song_name = content.replace(self.sing_prefix, "", 1).strip()
+        logger.info(song_name)
+
+        danmu_info: DanmuInfo = {
+            "uid": danmu.get("user_id"),
+            "uname": danmu.get("user_name"),
+            "msg": song_name,
+            "send_time": int(time.time()),
+            "source": "douyin"
+        }
+        self.danmus.append(danmu_info)
+
+        config = await Db.get_gloal_config()
+        if not config or not config.notification:
+            return
+
+        send_notification("收到新的点歌", song_name)

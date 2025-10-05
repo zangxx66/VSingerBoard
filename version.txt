@@ -34,8 +34,8 @@ StringFileInfo(
     StringStruct(u'LegalCopyright', u'Copyright (c) 2025 Ricardo All rights reserved.'),
     StringStruct(u'OriginalFilename', u'VSingerBoard.exe'),
     StringStruct(u'ProductName', u'点歌姬'),
-    StringStruct(u'ProductVersion', u'1.0.0')]),
-    stringStruct(u'Build', u'1191'))
+    StringStruct(u'ProductVersion', u'1.0.0'),
+    stringStruct(u'Build', u'1198')])
   ]),
 VarFileInfo([VarStruct(u'Translation', [2052, 1200])])
   ]

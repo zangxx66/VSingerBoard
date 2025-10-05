@@ -183,6 +183,8 @@ async def add_or_update_global_config(data: globalfigItem = Body(..., embed=True
             new_dic["check_update"] = False
         if "dark_mode" not in new_dic:
             new_dic["dark_mode"] = False
+        if "notification" not in new_dic:
+            new_dic["notification"] = False
         result = await async_worker.run_db_operation(Db.add_gloal_config(**new_dic))
         msg = "添加成功" if result else "添加失败"
     code = 0 if result else -1

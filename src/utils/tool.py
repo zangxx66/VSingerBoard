@@ -9,6 +9,7 @@ import requests
 import re
 from pathlib import Path
 from ._version import __version__ as CURRENT_VERSION
+from src.notifypy import Notify
 
 logger = logging.getLogger("danmaku")
 
@@ -107,6 +108,24 @@ def resource_path(relative_path, is_resources=True):
     if is_resources:
         return os.path.join(base_path, "resources", relative_path)
     return os.path.join(base_path, relative_path)
+
+
+def send_notification(title, message):
+    """
+    发送桌面通知。
+
+    Args:
+        title (str): 通知标题。
+        message (str): 通知内容。
+
+    Returns:
+        None
+    """
+    notification = Notify(enable_logging=True)
+    notification.application_name = "点歌姬"
+    notification.title = title
+    notification.message = message
+    notification.send(block=False)
 
 
 def get_autostart_command():

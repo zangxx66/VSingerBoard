@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, defineAsyncComponent, onActivated, computed } from "vue"
+import { ref, reactive, onMounted, defineAsyncComponent, onActivated } from "vue"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { request } from "@/api"
 import { CloseBold, Download, Delete } from "@element-plus/icons-vue"
@@ -96,7 +96,6 @@ const getWsStatus = async() => {
 
 const processDanmaku = (list: DanmakuModel[], platform: "bilibili" | "douyin") => {
     list.forEach(item => {
-        window.pywebview.api.send_notification("收到新的点歌", item.msg)
         let result = item.msg
         const matchList = item.msg.match(emojiexp)
         if(matchList){

@@ -80,6 +80,7 @@ class GloalConfig(BaseModel):
     dark_mode = fields.BooleanField()
     check_update = fields.BooleanField()
     startup = fields.BooleanField()
+    notification = fields.BooleanField()
 
 
 def ignore_none(kwargs):

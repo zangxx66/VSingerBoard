@@ -3,8 +3,7 @@ import threading
 import webview
 import pyperclip
 import sys
-from src.utils import check_for_updates, async_worker, __version__ as CURRENT_VERSION
-from src.notifypy import Notify
+from src.utils import check_for_updates, async_worker, send_notification, __version__ as CURRENT_VERSION
 from .douyin import Douyin
 from .bilibili import Bili
 
@@ -43,7 +42,7 @@ class Api:
         if not window:
             return
         window.hide()
-        self.send_notification("提示", "主界面已隐藏到托盘图标")
+        send_notification("提示", "主界面已隐藏到托盘图标")
 
     def check_clipboard(self):
         """
@@ -85,23 +84,6 @@ class Api:
         if window:
             window.load_url(window.get_current_url())
 
-    def send_notification(self, title, message):
-        """
-        发送桌面通知。
-
-        Args:
-            title (str): 通知标题。
-            message (str): 通知内容。
-
-        Returns:
-            None
-        """
-        notification = Notify(enable_logging=True)
-        notification.application_name = "点歌姬"
-        notification.title = title
-        notification.message = message
-        notification.send(block=False)
-
     def is_bundle(self):
         """
         检查当前Python环境是否是bundle环境。
@@ -134,7 +116,7 @@ class Api:
 
 
 async def _restart_bili_async():
-    bili_manager.stop()
+    await bili_manager.stop()
     await asyncio.sleep(1)
     bili_manager.start()
 

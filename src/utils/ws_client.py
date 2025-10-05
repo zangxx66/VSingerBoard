@@ -7,6 +7,7 @@ from .log import logger
 class WebSocketClient:
     """
     一个基础的WebSocket客户端，用于连接指定的WebSocket服务器，并接收消息。
+
     支持自动重连机制。
     """
     url = ""
@@ -18,6 +19,16 @@ class WebSocketClient:
     _is_running = False
     _retry_count = 0
     _reconnect_task: Optional[asyncio.Task] = None
+    status_code = 0  # 0:未连接, 1:已连接, 2:已断开, 3:连接失败
+
+    @property
+    def is_connected(self):
+        """
+        获取真实的WebSocket布尔连接状态。
+
+        :return: bool, True表示已连接，False表示未连接。
+        """
+        return self.ws is not None and not self.ws.closed
 
     async def connect(self):
         """
@@ -30,6 +41,7 @@ class WebSocketClient:
             self.ws = await self.session.ws_connect(self.url)
             logger.info(f"成功连接到 {self.url}")
             self._is_running = True
+            self.status_code = 1  # 已连接
             self._retry_count = 0  # 重置重连计数器
             asyncio.create_task(self.listen())
         except aiohttp.ClientError as e:
@@ -76,7 +88,7 @@ class WebSocketClient:
 
         :param data: 要发送的数据。
         """
-        if self.ws and not self.ws.closed:
+        if self.is_connected:
             if isinstance(data, bytes):
                 await self.ws.send_bytes(data)
             else:
@@ -93,8 +105,10 @@ class WebSocketClient:
             logger.info(f"将在 {self.retry_delay} 秒后尝试重新连接 (第 {self._retry_count}/{self.max_retries} 次)")
             self._reconnect_task = asyncio.create_task(self._reconnect())
         else:
-            logger.error("已达到最大重连次数，将关闭客户端。")
-            await self.close()
+            if self._is_running:
+                logger.error("已达到最大重连次数，将关闭客户端。")
+                self.status_code = 3  # 连接失败
+                await self.close()
 
     async def _reconnect(self):
         """
@@ -107,7 +121,10 @@ class WebSocketClient:
         """
         关闭WebSocket连接和客户端会话。
         """
+        if self._is_running and self.status_code != 3:
+            self.status_code = 2  # 已断开
         self._is_running = False
+
         if self._reconnect_task and not self._reconnect_task.done():
             self._reconnect_task.cancel()
         if self.ws and not self.ws.closed:
@@ -124,4 +141,5 @@ class WebSocketClient:
         启动客户端并开始连接。
         """
         if not self._is_running:
+            self.status_code = 0  # 重置状态
             await self.connect()

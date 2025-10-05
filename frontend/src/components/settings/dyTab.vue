@@ -20,12 +20,12 @@ const initConfig = () => {
         if (resp.code != 0) {
             ElMessage.warning(resp.msg)
         } else {
-            if(!resp.data.data)return
+            if(!resp.data.data){
+                loading.value = false
+                return
+            }
             const cfg = resp.data.data as DyConfigModel
-            baseFormValue.id = cfg.id
-            baseFormValue.room_id = cfg.room_id
-            baseFormValue.sing_prefix = cfg.sing_prefix
-            baseFormValue.sing_cd = cfg.sing_cd
+            Object.assign(baseFormValue, cfg)
         }
         loading.value = false
     }).catch(error => {

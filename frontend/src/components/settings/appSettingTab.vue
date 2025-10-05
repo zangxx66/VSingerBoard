@@ -15,7 +15,8 @@ const baseFormValue = reactive<GlobalConfigModel>({
     id: 0,
     dark_mode: false,
     check_update: false,
-    startup: false
+    startup: false,
+    notification: false
 })
 
 const initConfig = () => {
@@ -30,10 +31,7 @@ const initConfig = () => {
             const data = resp.data.data
             if(data){
                 const model = data as GlobalConfigModel
-                baseFormValue.id = model.id
-                baseFormValue.dark_mode = model.dark_mode
-                baseFormValue.check_update = model.check_update
-                baseFormValue.startup = model.startup
+                Object.assign(baseFormValue, model)
             }
         }
         loading.value = false
@@ -84,7 +82,7 @@ defineExpose({ initConfig })
                 <span>应用设置</span>
             </div>
         </template>
-        <el-form :model="baseFormValue" ref="refForm" label-width="auto">
+        <el-form :model="baseFormValue" ref="refForm" label-width="auto" inline>
             <el-form-item label="黑暗模式" prop="dark_mode">
                 <el-switch 
                 v-model="baseFormValue.dark_mode"
@@ -92,6 +90,15 @@ defineExpose({ initConfig })
                 style="--el-switch-off-color: #ff4949"
                 :active-icon="Check"
                 :inactive-icon="Close"
+                ></el-switch>
+            </el-form-item>
+            <el-form-item label="桌面通知" prop="notification">
+                <el-switch 
+                v-model="baseFormValue.notification"
+                inline-prompt
+                style="--el-switch-off-color: #ff4949"
+                :active-icon="Check"
+                :inactive-icon="Close"  
                 ></el-switch>
             </el-form-item>
             <el-form-item label="自动检查更新" prop="check_update">
@@ -105,11 +112,11 @@ defineExpose({ initConfig })
             </el-form-item>
             <el-form-item label="开机启动" prop="startup">
                 <el-switch 
-                :model-value="baseFormValue.startup"
+                v-model="baseFormValue.startup"
                 inline-prompt
                 style="--el-switch-off-color: #ff4949"  
-                active-text="开"
-                inactiveText="关"
+                :active-icon="Check"
+                :inactive-icon="Close"
                 ></el-switch>
             </el-form-item>
             <el-form-item>

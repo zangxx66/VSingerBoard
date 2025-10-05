@@ -80,6 +80,7 @@ const onContextMenu = async (e: MouseEvent) => {
       label: "重新加载",
       disabled: false,
       onClick: () => {
+        intervalStore.clearAllIntervals()
         window.pywebview.api.reload()
       }
     })

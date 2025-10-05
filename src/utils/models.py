@@ -46,3 +46,4 @@ class globalfigItem(BaseModel):
     dark_mode: Optional[bool] = None
     check_update: Optional[bool] = None
     startup: Optional[bool] = None
+    notification: Optional[bool] = None

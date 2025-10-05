@@ -2,9 +2,7 @@ import platform
 import os
 import pathlib
 import threading
-
-
-from src.utils import logger
+import logging
 from .exceptions import (
     UnsupportedPlatform,
     InvalidAudioPath,
@@ -14,6 +12,8 @@ from .exceptions import (
 )
 
 from .os_notifiers._base import BaseNotifier
+
+logger = logging.getLogger("danmaku")
 
 
 class Notify:
@@ -114,7 +114,7 @@ class Notify:
 
                 return WindowsNotifier
 
-            if override_windows_version_detection == True:
+            if override_windows_version_detection is True:
                 from .os_notifiers.windows import WindowsNotifier
 
                 return WindowsNotifier
@@ -251,7 +251,7 @@ class Notify:
 
     @property
     def urgency(self):
-        """The urgency of the notification (low, normal, critical) 
+        """The urgency of the notification (low, normal, critical)
         Works only with libnotify (Linux), as of now
 
         Returns:

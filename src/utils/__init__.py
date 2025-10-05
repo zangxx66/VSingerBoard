@@ -27,4 +27,5 @@ __all__ = [
     "check_for_updates",
     "WebSocketClient",
     "async_worker",
+    "send_notification",
 ]

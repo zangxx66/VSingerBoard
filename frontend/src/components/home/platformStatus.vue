@@ -31,18 +31,20 @@ const refreshStatus = async () => {
 
 const wsStatusMap = {
     bilibili: new Map<number, any>([
-        [-1, { color: '#E6A23C', icon: CircleCloseFilled, message: "未配置或出现错误" }],
-        [0, { color: '#F56C6C', icon: WarnTriangleFilled, message: "初始化" }],
-        [1, { color: '#67C23A', icon: WarnTriangleFilled, message: "连接建立中" }],
+        [-1, { color: '#F56C6C', icon: CircleCloseFilled, message: "未配置或出现错误" }],
+        [0, { color: '#E6A23C', icon: WarnTriangleFilled, message: "初始化" }],
+        [1, { color: '#E6A23C', icon: WarnTriangleFilled, message: "连接建立中" }],
         [2, { color: '#67C23A', icon: CircleCheckFilled, message: "已连接" }],
-        [3, { color: '#F56C6C', icon: WarnTriangleFilled, message: "断开连接中" }],
-        [4, { color: '#E6A23C', icon: CircleCloseFilled, message: "已断开" }],
-        [5, { color: '#E6A23C', icon: CircleCloseFilled, message: "出现错误" }]
+        [3, { color: '#E6A23C', icon: WarnTriangleFilled, message: "断开连接中" }],
+        [4, { color: '#F56C6C', icon: CircleCloseFilled, message: "已断开" }],
+        [5, { color: '#F56C6C', icon: CircleCloseFilled, message: "出现错误" }]
     ]),
     douyin: new Map<number, any>([
         [-1, { color: '#F56C6C', icon: CircleCloseFilled, message: "未配置或出现错误" }],
-        [0, { color: '#E6A23C', icon: WarnTriangleFilled, message: "已断开" }],
-        [1,  { color: '#67C23A', icon: CircleCheckFilled, message: "已连接" }]
+        [0, { color: '#E6A23C', icon: WarnTriangleFilled, message: "未连接" }],
+        [1,  { color: '#67C23A', icon: CircleCheckFilled, message: "已连接" }],
+        [2, { color: '#E6A23C', icon: WarnTriangleFilled, message: "已断开" }],
+        [3, { color: '#F56C6C', icon: CircleCloseFilled, message: "出现错误" }]
     ])
 }
 
