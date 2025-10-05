@@ -7,6 +7,7 @@ import platform
 import shutil
 import tempfile
 import configparser
+import re
 from PyInstaller.utils.hooks import collect_all
 
 # Use SPECPATH, the PyInstaller global variable for the spec file's directory,
@@ -24,31 +25,47 @@ ver = get_version()
 
 # Update version.txt from pyproject.toml before build
 version_path = 'version.txt'
-version_info = configparser.ConfigParser(interpolation=None)
-version_info.optionxform = str  # Preserve case
+# Get version from pyproject.toml
+# ver is already defined from get_version()
 
-if os.path.exists(version_path):
-    with open(version_path, 'r', encoding='utf-8') as f:
-        content = '[version]\n' + f.read()
-        version_info.read_string(content)
-else:
-    version_info.add_section('version')
+# Parse the version string
+version_parts = ver.split('.')
+major = version_parts[0] if len(version_parts) > 0 else '0'
+minor = version_parts[1] if len(version_parts) > 1 else '0'
+patch = version_parts[2] if len(version_parts) > 2 else '0'
 
-current_version = version_info.get('version', 'FileVersion', fallback=None)
+try:
+    if os.path.exists(version_path):
+        with open(version_path, 'r', encoding='utf-8') as f:
+            content = f.read()
 
-if current_version != ver:
-    print(f"Version changed from {current_version} to {ver}. Updating version.txt.")
-    version_info.set('version', 'FileVersion', ver)
-    version_info.set('version', 'ProductVersion', ver)
-    
-    with open(version_path, 'w', encoding='utf-8') as f:
-        for key, value in version_info['version'].items():
-            f.write(f"{key}={value}\n")
+        # Update filevers and prodvers
+        new_tuple_str = f"({major}, {minor}, {patch}, 0)"
+        content = re.sub(
+            r"(filevers|prodvers)=\(\d+,\s*\d+,\s*\d+,\s*\d+\)",
+            r"\g<1>=" + new_tuple_str,
+            content
+        )
+
+        # Update FileVersion and ProductVersion StringStructs
+        content = re.sub(
+            r"(StringStruct\(u'(?:File|Product)Version',\s*u')(\d+\.\d+\.\d+)(')",
+            r"\g<1>" + ver + r"\g<3>",
+            content
+        )
+
+        with open(version_path, 'w', encoding='utf-8') as f:
+            f.write(content)
+        print(f"Updated version.txt with version {ver}.")
+    else:
+        print(f"Warning: {version_path} not found. Skipping version update.")
+
     # Update the _version.py file to ensure it's in sync
     with open('src/utils/_version.py', 'w', encoding='utf-8') as f:
         f.write(f'__version__ = "{ver}"\n')
-else:
-    print("Version has not changed. No update needed.")
+
+except Exception as e:
+    print(f"Error updating version.txt or _version.py: {e}")
 
 # --- Collect all submodules and data from specific packages ---
 # This is the most robust way to ensure a package is fully included.

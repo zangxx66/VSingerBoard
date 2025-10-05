@@ -1,3 +1,4 @@
+import re
 import os
 import sys
 import threading
@@ -107,21 +108,24 @@ def main():
             version_path = 'version.txt'
             if os.path.exists(version_path):
                 with open(version_path, 'r', encoding='utf-8') as f:
-                    lines = f.readlines()
+                    content = f.read()
 
-                version_info = {}
-                for line in lines:
-                    if '=' in line:
-                        key, value = line.strip().split('=', 1)
-                        version_info[key] = value
-
-                if 'Build' in version_info:
-                    build_number = int(version_info.get('Build', 0))
-                    version_info['Build'] = str(build_number + 1)
-
-                with open(version_path, 'w', encoding='utf-8') as f:
-                    for key, value in version_info.items():
-                        f.write(f"{key}={value}\n")
+                # 使用正则找到Build
+                match = re.search(r"stringStruct\(u'Build',\s*u'(\d+)'\)", content)
+                if match:
+                    current_build_number = int(match.group(1))
+                    new_build_number = current_build_number + 1
+                    # 使用新的Build替换
+                    new_content = re.sub(
+                        r"(stringStruct\(u'Build',\s*u')(\d+)(')",
+                        r"\g<1>" + str(new_build_number) + r"\g<3>",
+                        content
+                    )
+                    with open(version_path, 'w', encoding='utf-8') as f:
+                        f.write(new_content)
+                    logger.info(f"Updated build number in version.txt from {current_build_number} to {new_build_number}")
+                else:
+                    logger.warning("Could not find 'Build' number in version.txt")
         except Exception as e:
             logger.error(f"Failed to update build number: {e}")
 
