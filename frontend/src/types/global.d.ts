@@ -58,6 +58,7 @@ type GlobalConfigModel = {
     check_update: boolean
     startup: boolean
     notification: boolean
+    navSideTour: boolean
 }
 
 type UpdateModel = {

@@ -47,3 +47,4 @@ class globalfigItem(BaseModel):
     check_update: Optional[bool] = None
     startup: Optional[bool] = None
     notification: Optional[bool] = None
+    navSideTour: Optional[bool] = None

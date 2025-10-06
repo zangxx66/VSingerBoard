@@ -23,8 +23,8 @@ class Douyin:
     async def _main(self):
         self.live = None
         try:
-            config = await async_worker.run_db_operation(Db.get_dy_config())
-            if not config or not config.room_id:
+            config = await Db.get_dy_config()
+            if not config or config.room_id == 0:
                 logger.info("Douyin room_id not configured, skipping.")
                 return
 
@@ -94,7 +94,7 @@ class Douyin:
         }
         self.danmus.append(danmu_info)
 
-        config = await async_worker.run_db_operation(Db.get_gloal_config())
+        config = await Db.get_gloal_config()
         if not config or not config.notification:
             return
 

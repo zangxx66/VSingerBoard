@@ -207,8 +207,8 @@ onActivated(() => {
                             </el-icon>
                         </el-button>
                         <div class="card-footer-right">
-                            <PlatformStatus platform="douyin" :roomId="config.douyin_romm_id" :wsStatus="douyin_ws" />
-                            <PlatformStatus platform="bilibili" :roomId="config.bilibili_room_id" :wsStatus="bili_ws" />
+                            <PlatformStatus platform="douyin" v-if="config.douyin_romm_id > 0" :roomId="config.douyin_romm_id" :wsStatus="douyin_ws" />
+                            <PlatformStatus platform="bilibili" v-if="config.bilibili_room_id > 0" :roomId="config.bilibili_room_id" :wsStatus="bili_ws" />
                         </div>
                     </div>
                 </template>

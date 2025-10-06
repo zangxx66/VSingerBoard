@@ -16,7 +16,8 @@ const baseFormValue = reactive<GlobalConfigModel>({
     dark_mode: false,
     check_update: false,
     startup: false,
-    notification: false
+    notification: false,
+    navSideTour: false
 })
 
 const initConfig = () => {

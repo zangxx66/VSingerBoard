@@ -6,17 +6,16 @@ import time
 import signal
 import subprocess
 import webview
-import asyncio
+import multiprocessing
 from PIL import Image
 from pystray import Icon, Menu, MenuItem
-from src.database import Db
-from src.utils import logger, resource_path
+from src.utils import logger, resource_path, async_worker
 from src.server import startup
 from src.jsBridge import Api, start_bili, start_dy, stop_bili, stop_dy
 from webview.window import Window
 
 
-server_thread: threading.Thread = None
+server_thread = None
 dev_thread: threading.Thread = None
 dev_process = None
 icon = None
@@ -27,15 +26,18 @@ def signal_handler(sig, frame):
     on_closing()
 
 
-def pro_server():
+def pro_server(token: str):
+    global server_thread
     logger.info("------start HTTP server------")
-    startup()
+    multiprocessing.set_start_method("spawn")
+    server_thread = multiprocessing.Process(target=startup, args=(token,), name="FastApi")
+    server_thread.start()
 
 
 def ws_server():
     logger.info("------start websocket------")
-    start_dy()
     start_bili()
+    start_dy()
 
 
 def dev_server():
@@ -55,8 +57,14 @@ def on_closing():
     stop_bili()
     stop_dy()
 
+    async_worker.stop()
+
     if dev_process is not None:
         dev_process.terminate()
+    if server_thread is not None:
+        server_thread.kill()
+        server_thread.join(timeout=5)
+        server_thread.close()
     if icon is not None:
         icon.stop()
 
@@ -92,7 +100,7 @@ def setup_tray(window: Window):
 
 
 def main():
-    global server_thread, dev_thread
+    global dev_thread
     logger.info("------startup------")
 
     # Setup signal handlers to gracefully shutdown
@@ -101,7 +109,8 @@ def main():
     if sys.platform != "win32":
         signal.signal(signal.SIGQUIT, signal_handler)
 
-    asyncio.run(Db.init())
+    async_worker.start()
+
     # 是否在PyInstaller环境
     DEBUG = not getattr(sys, "frozen", False)
     PORT = 5173 if DEBUG else 8000
@@ -133,6 +142,18 @@ def main():
             logger.error(f"Failed to update build number: {e}")
 
     try:
+        api = Api()
+        # 启动HTTP服务器
+        pro_server(webview.token)
+
+        if DEBUG:
+            dev_thread = threading.Thread(target=dev_server, daemon=True, name="ViteServer")
+            dev_thread.start()
+            # Vite服务器启动较慢，手动给个时间等待
+            time.sleep(3)
+
+        ws_server()
+
         localization = {
             'global.quitConfirmation': u'是否退出？',
             'global.ok': u'确定',
@@ -169,7 +190,6 @@ def main():
         webview.settings['ALLOW_DOWNLOADS'] = True
         os.environ["PYWEBVIE_WLOG"] = "debug"
 
-        api = Api()
         window = webview.create_window("点歌姬",
                                        url=f"http://127.0.0.1:{PORT}/",
                                        js_api=api,
@@ -181,17 +201,6 @@ def main():
                                        easy_drag=True,)
 
         window.expose(on_closing)
-
-        if DEBUG:
-            dev_thread = threading.Thread(target=dev_server, daemon=True, name="devServer")
-            dev_thread.start()
-            # Vite服务器启动较慢，手动给个时间等待
-            time.sleep(3)
-
-        server_thread = threading.Thread(target=pro_server, daemon=True, name="proServer")
-        server_thread.start()
-
-        ws_server()
 
         setup_tray(window)
 

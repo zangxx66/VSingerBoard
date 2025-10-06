@@ -2,7 +2,7 @@ import uvicorn
 import os
 from pathlib import Path
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Header, Depends
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -15,8 +15,14 @@ from src.utils import logger, resource_path
 
 
 dist_path = resource_path("wwwroot", False)
+_token = ""
 if not os.path.exists(dist_path):
     raise FileNotFoundError(f"文件夹 '{dist_path}' 不存在。")
+
+
+def verify_token(x_token: str = Header()):
+    if x_token != _token:
+        raise HTTPException(status_code=500, detail="Authentication error")
 
 
 @asynccontextmanager
@@ -36,7 +42,8 @@ app = FastAPI(
     docs_url=None,
     redoc_url=None,
     openapi_url=None,
-    lifespan=lifespan
+    lifespan=lifespan,
+    dependencies=[Depends(verify_token)],
 )
 
 
@@ -63,11 +70,13 @@ async def main(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
-def startup():
+def startup(token: str):
     """
     启动FastAPI应用
     """
+    global _token
     try:
+        _token = token
         log_config = uvicorn.config.LOGGING_CONFIG
         log_config["formatters"]["default"]["fmt"] = "[%(asctime)s][%(levelname)s][%(funcName)s] - %(message)s"
         uvicorn.run(app, host="127.0.0.1", port=8000, log_config=log_config, access_log=False)

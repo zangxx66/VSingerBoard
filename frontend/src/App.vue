@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue"
+import { ref, reactive, onMounted, computed } from "vue"
 import { RouterView } from "vue-router"
 import router from "@/router"
 import zhCn from "element-plus/es/locale/lang/zh-cn"
-import { Minus, Close, HomeFilled, Tools, List, InfoFilled, Sunny, Moon } from "@element-plus/icons-vue"
+import { Minus, Close, HomeFilled, Tools, List, InfoFilled, Sunny, Moon, Right } from "@element-plus/icons-vue"
 import ContextMenu from '@imengyu/vue3-context-menu'
-import { ElLoading, ElMessage, ElMessageBox } from "element-plus"
+import { ElLoading, ElMessage, ElMessageBox, type MenuItemInstance } from "element-plus"
 import { request } from "@/api"
 import { toggleDark, checkUpdate, pasteToElement } from "@/utils"
 import { useIntervalStore, useThemeStore } from "@/stores"
@@ -30,6 +30,40 @@ const dialogConfig = {
 const messageConfig = {
   offset: 70,
   plain: true
+}
+
+// 新手教程
+const globalConfig = reactive<GlobalConfigModel>({
+  id: 0,
+  dark_mode: false,
+  check_update: false,
+  startup: false,
+  notification: false,
+  navSideTour: false
+})
+const navSideTour = ref(false)
+const homeRef = ref<MenuItemInstance>()
+const settingsRef = ref<MenuItemInstance>()
+const themeRef = ref<MenuItemInstance>()
+const collapseRef = ref<MenuItemInstance>()
+const minusRef = ref<MenuItemInstance>()
+const quitRef = ref<MenuItemInstance>()
+const finishTour = () => {
+  globalConfig.navSideTour = true
+  request
+  .addOrUpdateGlobalConfig({data: globalConfig})
+  .then(response => {
+    const resp = response.data as ResponseModel
+    if(resp.code != 0){
+      ElMessage.warning(resp.msg || "保存失败")
+    }
+  })
+  .catch(error => {
+    ElMessage.error(error)
+  })
+  .finally(() => {
+    navSideTour.value = false
+  })
 }
 
 /**
@@ -149,12 +183,18 @@ const initGlobalConfig = async () => {
       const data = resp.data.data
       if (data) {
         const model = data as GlobalConfigModel
+        Object.assign(globalConfig, model)
         toggleDark(model.dark_mode)
         themeStore.setDarkTheme(model.id, model.dark_mode)
         if (model.check_update) {
           checkUpdate()
           intervalStore.addInterval("check_update", checkUpdate, 1000 * 60 * 60 * 6)
         }
+        if(!model.navSideTour){
+          navSideTour.value = true
+        }
+      }else{
+        navSideTour.value = true
       }
     }
   })
@@ -192,13 +232,13 @@ onMounted(() => {
   <el-container class="layout-container-demo">
     <el-aside :style="asideStyle">
       <el-menu :collapse="isCollapse" class="layout-aside-menu">
-        <el-menu-item index="0" @click="goto('home')">
+        <el-menu-item index="0" @click="goto('home')" ref="homeRef">
           <el-icon>
             <HomeFilled />
           </el-icon>
           <template #title>点歌板</template>
         </el-menu-item>
-        <el-menu-item index="1" @click="goto('settings')">
+        <el-menu-item index="1" @click="goto('settings')" ref="settingsRef">
           <el-icon>
             <Tools />
           </el-icon>
@@ -216,7 +256,7 @@ onMounted(() => {
           </el-icon>
           <template #title>关于</template>
         </el-menu-item>
-        <el-menu-item index="4">
+        <el-menu-item index="4" ref="themeRef">
           <el-switch v-model="isDarktheme" 
           :active-action-icon="Moon" 
           :inactive-action-icon="Sunny"
@@ -228,7 +268,7 @@ onMounted(() => {
 
     <el-header class="pywebview-drag-region">
       <el-menu :default-active="active" mode="horizontal" :ellipsis="false" class="toolbar">
-        <el-menu-item index="0" @click="isCollapse = !isCollapse">
+        <el-menu-item index="0" @click="isCollapse = !isCollapse" ref="collapseRef">
           <template v-if="isDarktheme">
             <img src="/assets/images/logo_night.png" alt="logo" style="width:100px;" />
           </template>
@@ -236,12 +276,12 @@ onMounted(() => {
             <img src="/assets/images/logo.png" alt="logo" style="width:100px;" />
           </template>
         </el-menu-item>
-        <el-menu-item index="1" @click="minus">
+        <el-menu-item index="1" @click="minus" ref="minusRef">
           <el-icon>
             <Minus />
           </el-icon>
         </el-menu-item>
-        <el-menu-item index="2" @click="quit">
+        <el-menu-item index="2" @click="quit" ref="quitRef">
           <el-icon>
             <Close />
           </el-icon>
@@ -257,6 +297,15 @@ onMounted(() => {
           </keep-alive>
         </router-view>
         <el-backtop :right="100" :bottom="100" />
+        <el-tour v-model="navSideTour" @close="finishTour" @finish="finishTour">
+          <el-tour-step title="提示" description="欢迎使用抖破点歌姬" @close="finishTour"></el-tour-step>
+          <el-tour-step title="提示" description="这里是点歌，可以查看抖和破站的点歌列表" placement="right"  @close="finishTour" :target="homeRef?.$el"></el-tour-step>
+          <el-tour-step title="提示" description="这里是设置，可以设置抖和破站的直播间监听" placement="right"  @close="finishTour" :target="settingsRef?.$el"></el-tour-step>
+          <el-tour-step title="提示" description="这是主题开关，可以切换主题" placement="right"  @close="finishTour" :target="themeRef?.$el"></el-tour-step>
+          <el-tour-step title="提示" description="点击这里可以收缩/展开侧边栏" placement="bottom"  @close="finishTour" :target="collapseRef?.$el"></el-tour-step>
+          <el-tour-step title="提示" description="点击这里最小化" placement="bottom"  @close="finishTour" :target="minusRef?.$el"></el-tour-step>
+          <el-tour-step title="提示" description="点击这里退出" placement="bottom"  @close="finishTour" :target="quitRef?.$el"></el-tour-step>
+        </el-tour>
       </el-config-provider>
     </el-main>
   </el-container>

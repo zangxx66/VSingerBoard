@@ -11,15 +11,19 @@ class Bili:
         self._run_future = None
         self.danmus: list[DanmuInfo] = []
         self.sing_prefix = ""
+        self._stop_event = asyncio.Event()
 
     def start(self):
         if self._run_future and not self._run_future.done():
             return
+        self._stop_event.clear()
         self._run_future = async_worker.submit(self._start_and_run_client())
+        logger.info("Bilibili main task submitted to worker.")
 
     async def _start_and_run_client(self):
+        self.live = None
         try:
-            config = await async_worker.run_db_operation(Db.get_bconfig())
+            config = await Db.get_bconfig()
             if not config or config.room_id == 0:
                 logger.info("Bilibili room_id not configured, skipping.")
                 return
@@ -34,6 +38,9 @@ class Bili:
 
             await self.live.connect()
             logger.info("Bilibili live client starting.")
+            await self._stop_event.wait()
+        except asyncio.CancelledError:
+            logger.info("Bilibili main task was cancelled.")
         except Exception as e:
             logger.error(f"Bilibili task failed: {e}")
         finally:
@@ -41,10 +48,12 @@ class Bili:
                 await self.live.disconnect()
                 self.live.remove_event_listener("DANMU_MSG", self.on_msg)
                 self.live.remove_event_listener("SUPER_CHAT_MESSAGE", self.on_sc)
+                self.live = None
             logger.info("Bilibili live client stopped.")
 
     async def stop(self):
         if self._run_future and not self._run_future.done():
+            logger.info("Stopping Bilibili main task.")
             self._stop_event.set()
             try:
                 awaitable_future = asyncio.wrap_future(self._run_future)
@@ -54,6 +63,7 @@ class Bili:
                 self._run_future.cancel()
             except Exception as e:
                 logger.error(f"Error waiting for Bilibili task to stop: {e}")
+            logger.info("Bilibili main task stopped.")
         self._run_future = None
 
     def get_status(self):
@@ -103,7 +113,7 @@ class Bili:
         }
         self.danmus.append(danmu_info)
 
-        config = await async_worker.run_db_operation(Db.get_gloal_config())
+        config = await Db.get_gloal_config()
         if not config or not config.notification:
             return
 
@@ -143,7 +153,7 @@ class Bili:
         }
         self.danmus.append(sc_info)
 
-        config = await async_worker.run_db_operation(Db.get_gloal_config())
+        config = await Db.get_gloal_config()
         if not config or not config.notification:
             return
 
