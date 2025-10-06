@@ -109,24 +109,6 @@ class Request {
     async getLiveConfig(params: {}): Promise<AxiosResponse<any>>{
         return await client.get("/api/get_live_config", params)
     }
-
-    /**
-     * 重启Bilibili WebSocket。
-     * @param {Object} params 传递给服务器的参数对象。
-     * @returns {Promise<AxiosResponse<any>>} 重启操作的响应。
-     */
-    async RestartBilibiliWs(params: {}): Promise<AxiosResponse<any>>{
-        return await client.post("/api/restart_bilibili_ws", params)
-    }
-
-    /**
-     * 重启抖音WebSocket。
-     * @param {Object} params 传递给服务器的参数对象。
-     * @returns {Promise<AxiosResponse<any>>} 重启操作的响应。
-     */
-    async RestartDouyinWs(params: {}): Promise<AxiosResponse<any>>{
-        return await client.post("/api/restart_douyin_ws", params)
-    }
 }
 
 export const request = new Request()

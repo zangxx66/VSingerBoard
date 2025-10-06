@@ -64,6 +64,7 @@ def setup_node_runtime():
     else:
         print("Error: final_node_dir path does not exist after extraction attempt.")
 
+
 def setup_notificator():
     """
     On macOS, extracts the Notificator.app bundle to the app support directory on first run.
@@ -92,10 +93,11 @@ def setup_notificator():
         except Exception as e:
             print(f"FATAL: Error during Notificator.app extraction: {e}")
             if os.path.exists(final_notificator_path):
-                shutil.rmtree(final_notificator_path) # Clean up partial extraction
+                shutil.rmtree(final_notificator_path)  # Clean up partial extraction
             return
     else:
         print("Notificator.app already found in Application Support. Skipping extraction.")
+
 
 setup_node_runtime()
 setup_notificator()

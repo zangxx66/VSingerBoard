@@ -13,6 +13,8 @@ declare interface Window {
             get_dy_danmu: () => Promise<Array<DanmakuModel>>
             is_bundle: () => Promise<boolean>
             check_clipboard: () => Promise<string>
+            restart_bilibili_ws: () => void
+            restart_douyin_ws: () => void
         }
         token: string
     }

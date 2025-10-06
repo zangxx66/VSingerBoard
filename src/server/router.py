@@ -1,11 +1,10 @@
 import base64
 import asyncio
-from fastapi import APIRouter, Query, Body, BackgroundTasks
+from fastapi import APIRouter, Query, Body
 from fastapi.encoders import jsonable_encoder
 from bilibili_api import Credential, user
 from bilibili_api.login_v2 import QrCodeLogin, QrCodeLoginChannel
 from src.database import Db
-from src.jsBridge import restart_bili, restart_dy
 from src.utils import setup_autostart, ResponseItem, bconfigItem, dyconfigItem, globalfigItem
 
 # Lock to serialize access to the bilibili-api library to prevent concurrency issues.
@@ -23,7 +22,7 @@ async def get_bili_config():
 
 
 @router.post("/add_or_update_bili_config", response_model=ResponseItem)
-async def add_or_update_bili_config(background_tasks: BackgroundTasks, data: bconfigItem = Body(..., embed=True)):
+async def add_or_update_bili_config(data: bconfigItem = Body(..., embed=True)):
     data_dic = data.__dict__
     new_dic = {k: v for k, v in data_dic.items() if v is not None and k != "id"}
     msg = ""
@@ -33,8 +32,6 @@ async def add_or_update_bili_config(background_tasks: BackgroundTasks, data: bco
     else:
         result = await Db.add_bconfig(**new_dic)
         msg = "添加成功" if result else "添加失败"
-    if result:
-        background_tasks.add_task(func=restart_bili)
     code = 0 if result else -1
     return ResponseItem(code=code, msg=msg, data=None)
 
@@ -135,7 +132,7 @@ async def get_dy_config():
 
 
 @router.post("/add_or_update_dy_config", response_model=ResponseItem)
-async def add_or_update_dy_config(background_tasks: BackgroundTasks, data: dyconfigItem = Body(..., embed=True)):
+async def add_or_update_dy_config(data: dyconfigItem = Body(..., embed=True)):
     data_dic = data.__dict__
     new_dic = {k: v for k, v in data_dic.items() if v is not None and k != "id"}
     msg = ""
@@ -145,8 +142,6 @@ async def add_or_update_dy_config(background_tasks: BackgroundTasks, data: dycon
     else:
         result = await Db.add_dy_config(**new_dic)
         msg = "添加成功" if result else "添加失败"
-    if result:
-        background_tasks.add_task(func=restart_dy)
     code = 0 if result else -1
     return ResponseItem(code=code, msg=msg, data=None)
 
@@ -195,15 +190,3 @@ async def get_live_config():
         "bilibili_room_id": bili_config.room_id if bili_config else 0
     }
     return ResponseItem(code=0, msg=None, data={"data": jsonable_encoder(result)})
-
-
-@router.post("/restart_bilibili_ws")
-async def restart_bilibili_ws(background_tasks: BackgroundTasks):
-    background_tasks.add_task(func=restart_bili)
-    return ResponseItem(code=0, msg="success", data=None)
-
-
-@router.post("/restart_douyin_ws")
-async def restart_douyin_ws(background_tasks: BackgroundTasks):
-    background_tasks.add_task(func=restart_dy)
-    return ResponseItem(code=0, msg="success", data=None)

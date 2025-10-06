@@ -113,12 +113,7 @@ const initConfig = () => {
                 const data = resp.data.data
                 if (data) {
                     const model = data as BiliConfigModel
-                    baseFormValue.id = model.id
-                    baseFormValue.room_id = model.room_id
-                    baseFormValue.modal_level = model.modal_level
-                    baseFormValue.user_level = model.user_level
-                    baseFormValue.sing_prefix = model.sing_prefix
-                    baseFormValue.sing_cd = model.sing_cd
+                    Object.assign(baseFormValue, model)
                 }
             }
             return request.getBiliCredntialList({})
@@ -158,6 +153,7 @@ const addOrUpdateConfig = () => {
             if (resp.code != 0) {
                 ElMessage.warning(resp.msg)
             } else {
+                window.pywebview.api.restart_bilibili_ws()
                 ElMessage.success(resp.msg)
                 initConfig()
                 setTimeout(() => {

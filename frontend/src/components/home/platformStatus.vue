@@ -11,13 +11,13 @@ const props = defineProps<{
 }>()
 
 const loading = ref(false)
-const refreshStatus = async () => {
+const refreshStatus = () => {
     loading.value = true
     try {
         if(props.platform == "bilibili") {
-            await request.RestartBilibiliWs({})
+            window.pywebview.api.restart_bilibili_ws()
         } else {
-            await request.RestartDouyinWs({})
+            window.pywebview.api.restart_douyin_ws()
         }
         ElMessage.success("刷新成功，请等待操作完成")
     } catch (error: any) {

@@ -23,7 +23,6 @@ dependencies = [
     "uvicorn[standard]>=0.35.0",
     "pyexecjs>=1.5.1",
     "pystray>=0.19.5",
-    "loguru>=0.7.3",
 ]
 
 [[tool.uv.index]]

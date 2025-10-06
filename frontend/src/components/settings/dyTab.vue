@@ -41,6 +41,7 @@ const addOrUpdateConfig = () => {
         if (resp.code != 0) {
             ElMessage.warning(resp.msg)
         }else{
+            window.pywebview.api.restart_douyin_ws()
             ElMessage.success(resp.msg)
             initConfig()
             setTimeout(() => {
@@ -60,8 +61,14 @@ const checkWsStatus = async() => {
     if (dy_ws == -1) {
         dy_msg = "抖音未配置"
     }
+    else if (dy_ws == 0){
+        dy_msg = "抖音未连接"
+    }
     else if (dy_ws == 1) {
         dy_msg = "抖音已重新连接"
+    }
+    else if (dy_ws == 2) {
+        dy_msg = "抖音连接已断开"
     }
     else {
         dy_msg = "抖音连接发生错误"

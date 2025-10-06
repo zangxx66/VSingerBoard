@@ -171,14 +171,20 @@ onActivated(() => {
                             <template v-else-if="item.source == 'douyin'">
                                 <img src="/assets/images/douyin.png" class="source-img" alt="douyin" width="24" />
                             </template>
-                            <el-text tag="span" class="chat-tag" @click="copyToClipboard(item.msg)">
-                                <template v-if="item.html != undefined">
-                                    <el-text v-html="item.html" style="display: flex;"></el-text>
+                            <el-tooltip placement="bottom">
+                                <template #content>
+                                    <span>点击复制歌名：{{ item.msg }}</span>
                                 </template>
-                                <template v-else>
-                                    {{ item.uname }}： {{ item.msg }}
-                                </template>
-                            </el-text>
+                                <el-text tag="span" class="chat-tag" @click="copyToClipboard(item.msg)">
+                                    <template v-if="item.html != undefined">
+                                        <el-text v-html="item.html" style="display: flex;"></el-text>
+                                    </template>
+                                    <template v-else>
+                                        {{ item.uname }}： {{ item.msg }}
+                                    </template>
+                                </el-text>
+                            </el-tooltip>
+
                             <el-tooltip placement="bottom">
                                 <template #content>
                                     <span>移除点歌：{{ item.msg }}</span>
@@ -207,8 +213,10 @@ onActivated(() => {
                             </el-icon>
                         </el-button>
                         <div class="card-footer-right">
-                            <PlatformStatus platform="douyin" v-if="config.douyin_romm_id > 0" :roomId="config.douyin_romm_id" :wsStatus="douyin_ws" />
-                            <PlatformStatus platform="bilibili" v-if="config.bilibili_room_id > 0" :roomId="config.bilibili_room_id" :wsStatus="bili_ws" />
+                            <PlatformStatus platform="douyin" v-if="config.douyin_romm_id > 0"
+                                :roomId="config.douyin_romm_id" :wsStatus="douyin_ws" />
+                            <PlatformStatus platform="bilibili" v-if="config.bilibili_room_id > 0"
+                                :roomId="config.bilibili_room_id" :wsStatus="bili_ws" />
                         </div>
                     </div>
                 </template>

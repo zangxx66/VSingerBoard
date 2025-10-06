@@ -71,6 +71,22 @@ class Api:
         """
         return dy_manager.get_status()
 
+    def restart_bilibili_ws(self):
+        """
+        重新启动Bilibili WebSocket连接。
+
+        此函数将异步重新启动Bilibili WebSocket连接。
+        """
+        async_worker.submit(_restart_bili_async())
+
+    def restart_douyin_ws(self):
+        """
+        重新启动抖音WebSocket连接。
+
+        此函数将异步重新启动抖音WebSocket连接。
+        """
+        async_worker.submit(_restart_dy_async())
+
     def reload(self):
         """
         重新加载当前页面。
