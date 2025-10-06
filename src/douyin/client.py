@@ -84,7 +84,8 @@ class DouyinLiveWebFetcher(Decorator, WebSocketClient):
 
             return self.__room_id
 
-    async def connect_async(self):
+    @property
+    def _wss_url(self):
         wss = ("wss://webcast100-ws-web-lq.douyin.com/webcast/im/push/v2/?app_name=douyin_web"
                "&version_code=180800&webcast_sdk_version=1.0.14-beta.0"
                "&update_version_code=1.0.14-beta.0&compress=gzip&device_platform=web&cookie_enabled=true"
@@ -103,7 +104,11 @@ class DouyinLiveWebFetcher(Decorator, WebSocketClient):
 
         signature = generateSignature(wss)
         wss += f"&signature={signature}"
-        self.url = wss
+
+        return wss
+
+    async def connect_async(self):
+        self.url = self._wss_url
 
         self.headers = {
             "cookie": f"ttwid={self.ttwid}",
@@ -111,6 +116,11 @@ class DouyinLiveWebFetcher(Decorator, WebSocketClient):
         }
         await self.start()
         self.heartheat_task = asyncio.create_task(self._sendHeartbeat())
+
+    async def _reconnect(self):
+        # 不确定抖子这边掉线频繁是否跟签名有关，先试试效果
+        self.url = self._wss_url
+        await super()._reconnect()
 
     async def disconnect_async(self):
         if self.heartheat_task and not self.heartheat_task.done():

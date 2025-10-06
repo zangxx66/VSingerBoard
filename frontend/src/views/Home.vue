@@ -106,7 +106,7 @@ const processDanmaku = (list: DanmakuModel[], platform: "bilibili" | "douyin") =
                     if(emoji) emojiUrl = emoji.url
                 }else{
                     const emoji = emojiList.find((item) => value === item.display_name)
-                    if(emoji) emojiUrl = emoji.emoji_url.url_list[0]
+                    if(emoji) emojiUrl = emoji.url
                 }
                 if(emojiUrl){
                     result = result.replaceAll(

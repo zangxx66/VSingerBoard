@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted } from "vue"
+import { ref, reactive } from "vue"
 import { ElMessage, type FormInstance } from "element-plus"
 import { Close, Check } from "@element-plus/icons-vue"
 import { request } from "@/api"
@@ -70,9 +70,6 @@ const addOrUpdateConfig = () => {
     })
 }
 
-// onMounted(() => {
-//     initConfig()
-// })
 defineExpose({ initConfig })
 </script>
 <template>
