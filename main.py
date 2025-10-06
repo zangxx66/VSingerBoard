@@ -6,8 +6,10 @@ import time
 import signal
 import subprocess
 import webview
+import asyncio
 from PIL import Image
 from pystray import Icon, Menu, MenuItem
+from src.database import Db
 from src.utils import logger, resource_path
 from src.server import startup
 from src.jsBridge import Api, start_bili, start_dy, stop_bili, stop_dy
@@ -99,6 +101,7 @@ def main():
     if sys.platform != "win32":
         signal.signal(signal.SIGQUIT, signal_handler)
 
+    asyncio.run(Db.init())
     # 是否在PyInstaller环境
     DEBUG = not getattr(sys, "frozen", False)
     PORT = 5173 if DEBUG else 8000
@@ -111,13 +114,13 @@ def main():
                     content = f.read()
 
                 # 使用正则找到Build
-                match = re.search(r"stringStruct\(u'Build',\s*u'(\d+)'\)", content)
+                match = re.search(r"StringStruct\(u'Build',\s*u'(\d+)'\)", content)
                 if match:
                     current_build_number = int(match.group(1))
                     new_build_number = current_build_number + 1
                     # 使用新的Build替换
                     new_content = re.sub(
-                        r"(stringStruct\(u'Build',\s*u')(\d+)(')",
+                        r"(StringStruct\(u'Build',\s*u')(\d+)(')",
                         r"\g<1>" + str(new_build_number) + r"\g<3>",
                         content
                     )

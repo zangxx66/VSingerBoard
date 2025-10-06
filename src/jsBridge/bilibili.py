@@ -19,8 +19,7 @@ class Bili:
 
     async def _start_and_run_client(self):
         try:
-            await async_worker.init_db()
-            config = await Db.get_bconfig()
+            config = await async_worker.run_db_operation(Db.get_bconfig())
             if not config or config.room_id == 0:
                 logger.info("Bilibili room_id not configured, skipping.")
                 return
@@ -104,7 +103,7 @@ class Bili:
         }
         self.danmus.append(danmu_info)
 
-        config = await Db.get_gloal_config()
+        config = await async_worker.run_db_operation(Db.get_gloal_config())
         if not config or not config.notification:
             return
 
@@ -144,7 +143,7 @@ class Bili:
         }
         self.danmus.append(sc_info)
 
-        config = await Db.get_gloal_config()
+        config = await async_worker.run_db_operation(Db.get_gloal_config())
         if not config or not config.notification:
             return
 

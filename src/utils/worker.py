@@ -1,84 +1,105 @@
 import asyncio
-import threading
-from src.database import Db
+from concurrent.futures import ThreadPoolExecutor
+from typing import Coroutine, Callable, Any
+
+
+# 定义回调函数的类型签名
+DoneCallback = Callable[[Any], None]
+FailCallback = Callable[[Exception], None]
 
 
 class AsyncWorker:
     """
-    一个在后台线程中运行asyncio事件循环的辅助类。
-    这允许在主同步线程中提交异步任务。
+    一个在线程池中执行异步任务的后台工作者。
+    它支持两种任务模式：
+    1. awaitable 模式 (run_db_operation): 异步等待任务结果返回。
+    2. 回调模式 (submit): 提交任务后立即返回，通过回调函数处理结果。
     """
-    def __init__(self):
-        """
-        初始化AsyncWorker，创建一个新的事件循环和后台线程。
-        """
-        self._loop = asyncio.new_event_loop()
-        self._thread = threading.Thread(target=self._run_loop, daemon=True, name="async_worker")
-        self._db_init_task = None
-        self._thread.start()
 
-    def _run_loop(self):
+    def __init__(self, max_workers=10):
         """
-        后台线程运行的目标方法。
-        设置并永久运行事件循环。
+        初始化 Worker，并自动提交数据库初始化任务。
+        :param max_workers: 线程池的最大线程数。
         """
-        asyncio.set_event_loop(self._loop)
-        self._loop.run_forever()
+        self.executor = ThreadPoolExecutor(max_workers=max_workers)
+        self._is_running = True
 
-    def submit(self, coro):
+    async def run_db_operation(self, coro: Coroutine) -> Any:
         """
-        从任何线程向工作者的事件循环提交一个协程。
-        这是一个线程安全的方法。
+        [awaitable] 在后台线程池中执行一个协程，并异步地返回结果。
+        这个方法本身是异步的，可以被调用者 await。
 
-        :param coro: 要执行的协程。
-        :return: 一个concurrent.futures.Future对象，可用于获取结果。
+        :param coro: 需要在后台执行的协程 (例如一个 tortoise-orm 的数据库操作)。
+        :return: 协程的执行结果。
         """
-        return asyncio.run_coroutine_threadsafe(coro, self._loop)
+        if not self._is_running:
+            raise RuntimeError("工作者已停止运行。")
 
-    def run_blocking(self, func, *args):
-        """
-        在事件循环的执行器中运行一个阻塞函数（如普通函数）。
-        这可以防止阻塞函数阻塞事件循环。
+        main_loop = asyncio.get_running_loop()
 
-        :param func: 要运行的阻塞函数。
-        :param args: 传递给函数的参数。
-        :return: 一个Future对象。
-        """
-        return self._loop.run_in_executor(None, func, *args)
+        def run_coro_in_new_loop():
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            try:
+                return loop.run_until_complete(coro)
+            finally:
+                loop.close()
 
-    async def init_db(self):
+        # 将 'run_coro_in_new_loop' 函数提交到线程池执行。
+        # 这会返回一个 concurrent.futures.Future 对象。
+        conc_future = self.executor.submit(run_coro_in_new_loop)
+
+        # 使用 wrap_future 将 concurrent.futures.Future 包装成 asyncio.Future，
+        # 这样它就可以在主事件循环中被 await。
+        asyncio_future = asyncio.wrap_future(conc_future, loop=main_loop)
+
+        return await asyncio_future
+
+    def submit(self, coro: Coroutine, on_done: DoneCallback = None, on_fail: FailCallback = None):
         """
-        异步初始化数据库连接。
-        如果初始化已在进行中或已完成，则不会重复执行。
+        [回调模式] 提交一个协程到线程池中执行，通过回调处理结果。
+
+        :param coro: 需要执行的协程。
+        :param on_done: (可选) 任务成功完成时调用的回调函数。
+        :param on_fail: (可选) 任务失败时调用的回调函数。
         """
-        if self._db_init_task and not self._db_init_task.done():
-            await self._db_init_task
+        if not self._is_running:
+            if on_fail:
+                on_fail(Exception("工作者已停止运行。"))
             return
-        if Db._initialized:
-            return
 
-        self._db_init_task = self._loop.create_task(Db.init())
-        await self._db_init_task
+        def run_coro_in_new_loop():
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            try:
+                return loop.run_until_complete(coro)
+            finally:
+                loop.close()
 
-    async def disconnect_db(self):
+        def task_done_callback(future):
+            try:
+                result = future.result()
+                if on_done:
+                    on_done(result)
+            except Exception as e:
+                if on_fail:
+                    on_fail(e)
+
+        future = self.executor.submit(run_coro_in_new_loop)
+        if on_done or on_fail:
+            future.add_done_callback(task_done_callback)
+
+    def stop(self):
         """
-        异步断开数据库连接。
+        优雅地关闭线程池。
         """
-        await Db.disconnect()
-
-    async def run_db_operation(self, func):
-        """
-        在工作者线程中运行一个数据库操作，并等待其完成。
-
-        :param func: 要作为数据库操作运行的异步函数。
-        :return: 数据库操作的结果。
-        """
-        future = self.submit(func)
-        return await asyncio.wrap_future(future)
+        self._is_running = False
+        self.executor.shutdown(wait=True)
 
 
-# 全局AsyncWorker实例，方便在应用各处使用
 async_worker = AsyncWorker()
 """
-全局AsyncWorker实例，方便在应用各处使用
+全局单例
+
+可以在项目的其他模块中直接导入此实例来使用
 """
