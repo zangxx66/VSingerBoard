@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, computed } from "vue"
+import { ref, reactive, onMounted, computed, nextTick, watchEffect } from "vue"
 import { RouterView } from "vue-router"
 import router from "@/router"
 import zhCn from "element-plus/es/locale/lang/zh-cn"
@@ -48,7 +48,15 @@ const themeRef = ref<MenuItemInstance>()
 const collapseRef = ref<MenuItemInstance>()
 const minusRef = ref<MenuItemInstance>()
 const quitRef = ref<MenuItemInstance>()
-const finishTour = async() => {
+const finishTour = () => {
+  updateTourStatus()
+}
+const closeTour = async() => {
+  await nextTick()
+  if(globalConfig.navSideTour) return
+  updateTourStatus()
+}
+const updateTourStatus = () => {
   globalConfig.navSideTour = true
   request
   .addOrUpdateGlobalConfig({data: globalConfig})
@@ -65,6 +73,11 @@ const finishTour = async() => {
     navSideTour.value = false
   })
 }
+watchEffect(() => {
+  if(navSideTour.value){
+    globalConfig.navSideTour = false
+  }
+})
 
 /**
  * 跳转到指定页面
@@ -294,9 +307,9 @@ onMounted(() => {
           </keep-alive>
         </router-view>
         <el-backtop :right="100" :bottom="100" />
-        <!-- el-tour组件有bug，finish会同时触发close事件，只能强制用户完成 -->
-        <el-tour v-model="navSideTour" @finish="finishTour" :target-area-clickable="false"
-          :close-on-press-escape="false" :show-close="false">
+        <!-- el-tour组件的finish会同时触发close事件 -->
+        <el-tour v-model="navSideTour" @close="closeTour" @finish="finishTour" :target-area-clickable="false"
+          :close-on-press-escape="false">
           <el-tour-step title="提示" description="欢迎使用抖破点歌姬"></el-tour-step>
           <el-tour-step title="提示" description="这里是点歌，可以查看抖和破站的点歌列表" placement="right"
             :target="homeRef?.$el"></el-tour-step>

@@ -13,17 +13,17 @@ file_handle.setFormatter(file_formatter)
 logger.addHandler(file_handle)
 
 # 根据环境设置日志级别
-if getattr(sys, 'frozen', False):
-    # 打包环境
-    logger.setLevel(logging.INFO)
-    file_handle.setLevel(logging.WARNING)
-else:
+if 'pydevd' in sys.modules or 'debugpy' in sys.modules:
     # 开发环境
     console_handle = logging.StreamHandler()
     console_handle.setFormatter(file_formatter)
     logger.addHandler(console_handle)
     logger.setLevel(logging.DEBUG)
     console_handle.setLevel(logging.DEBUG)
+else:
+    # 打包环境
+    logger.setLevel(logging.INFO)
+    file_handle.setLevel(logging.WARNING)
 
 
 def exception_handle(exc_type, exc_obj, exc_traceback):
