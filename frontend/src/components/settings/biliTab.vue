@@ -1,6 +1,6 @@
 <script setup lang="tsx">
 import { ref, reactive, onMounted } from 'vue'
-import { ElMessage, ElMessageBox, ElNotification, ElText, ElButton, ElSwitch, type Column, type FormInstance } from 'element-plus'
+import { ElMessage, ElMessageBox, ElText, ElButton, ElSwitch, type Column, type FormInstance } from 'element-plus'
 import { Delete, Refresh } from '@element-plus/icons-vue'
 import { request } from '@/api'
 
@@ -156,9 +156,6 @@ const addOrUpdateConfig = () => {
                 window.pywebview.api.restart_bilibili_ws()
                 ElMessage.success(resp.msg)
                 initConfig()
-                setTimeout(() => {
-                    checkWsStatus()
-                }, 1000)
             }
         })
         .catch((error) => ElMessage.error(error))
@@ -267,26 +264,6 @@ const checkQrCode = () => {
 const closeDialog = () => {
     clearInterval(timer.value)
     timer.value = 0
-}
-
-const checkWsStatus = async () => {
-    const bili_ws: number = await window.pywebview.api.get_bili_ws_status()
-    let bili_msg = ""
-    if (bili_ws == -1) {
-        bili_msg = "哔哩哔哩未配置"
-    }
-    else if (bili_ws >= 0 && bili_ws <= 2) {
-        bili_msg = "哔哩哔哩已重新连接"
-    }
-    else {
-        bili_msg = "哔哩哔哩连接发生错误"
-    }
-    ElNotification({
-        title: "提示",
-        message: bili_msg,
-        type: bili_ws >= 0 && bili_ws <= 2 ? "success" : "warning",
-        position: "bottom-right"
-    })
 }
 
 onMounted(() => {

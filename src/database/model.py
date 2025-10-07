@@ -81,6 +81,7 @@ class GloalConfig(BaseModel):
     check_update = fields.BooleanField()
     startup = fields.BooleanField()
     notification = fields.BooleanField()
+    navSideTour = fields.BooleanField()
 
 
 def ignore_none(kwargs):

@@ -49,7 +49,7 @@ app = FastAPI(
 
 @app.exception_handler(RequestValidationError)
 async def exception_handle(request: Request, exc: RequestValidationError):
-    logger.error(f"fastapi请求异常：{exc.errors()}")
+    logger.error(f"fastapi请求异常：{exc.errors()}，{request.url}")
     return JSONResponse(status_code=200, content={"code": -1, "msg": f"{exc.errors()}", "data": None})
 
 

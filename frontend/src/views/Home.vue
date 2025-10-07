@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, defineAsyncComponent, onActivated } from "vue"
 import { ElMessage, ElMessageBox } from "element-plus"
-import { request } from "@/api"
 import { CloseBold, Download, Delete } from "@element-plus/icons-vue"
 import { emoticons, emojiList, exportExcel, timespanToString, getNowTimespan } from "@/utils"
 import { useClipboard } from "@vueuse/core"
@@ -21,16 +20,9 @@ const infiniteList = ref<HTMLDivElement | null>(null)
 // emoji表情
 const emojiexp = /\[[\u4E00-\u9FA5A-Za-z0-9_]+\]/g
 
-const initConfig = () => {
-    request.getLiveConfig({}).then(response => {
-        const resp = response.data as ResponseModel
-        if (resp.code != 0) {
-            ElMessage.warning(resp.msg)
-        } else {
-            const data = resp.data.data as LiveModel
-            Object.assign(config, data)
-        }
-    }).catch(error => ElMessage.error(error))
+const initConfig = async() => {
+    const data = await window.pywebview.api.get_live_config()
+    Object.assign(config, data)
 }
 
 const load = () => console.log("load")

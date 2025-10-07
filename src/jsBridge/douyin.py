@@ -7,11 +7,12 @@ from src.utils import logger, DanmuInfo, async_worker, send_notification
 
 class Douyin:
     def __init__(self):
-        self.live = None
         self._run_future = None
+        self._stop_event = asyncio.Event()
+        self.live = None
         self.danmus: list[DanmuInfo] = []
         self.sing_prefix = ""
-        self._stop_event = asyncio.Event()
+        self.room_id = 0
 
     def start(self):
         if self._run_future and not self._run_future.done():
@@ -25,11 +26,14 @@ class Douyin:
         try:
             config = await Db.get_dy_config()
             if not config or config.room_id == 0:
+                if config:
+                    self.room_id = config.room_id
                 logger.info("Douyin room_id not configured, skipping.")
                 return
 
             self.sing_prefix = config.sing_prefix
-            self.live = DouyinLiveWebFetcher(live_id=config.room_id, max_retries=99)
+            self.room_id = config.room_id
+            self.live = DouyinLiveWebFetcher(live_id=self.room_id, max_retries=99)
             self.live.on("danmu")(self.add_dydanmu)
 
             await self.live.connect_async()

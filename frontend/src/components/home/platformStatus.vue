@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { CircleCheckFilled, CircleCloseFilled, WarnTriangleFilled } from "@element-plus/icons-vue"
-import { request } from "@/api"
 import { ElMessage } from "element-plus"
 
 const props = defineProps<{

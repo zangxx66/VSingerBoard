@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
+import { ref, onMounted, computed } from "vue"
 import { checkUpdate } from "@/utils"
+import { useThemeStore } from "@/stores"
 
 const version = ref("")
+const themeStore = useThemeStore()
 
 const getVersion = async() =>{
     version.value = await window.pywebview.api.get_version()
@@ -32,6 +34,10 @@ const openIssues = () => {
     a.remove()
 }
 
+const isDarktheme = computed(() => {
+  return themeStore.getDarkTheme()
+})
+
 onMounted(() => {
     getVersion()
 })
@@ -45,7 +51,12 @@ onMounted(() => {
             </div>
         </template>
         <div class="about-container">
-            <img src="/assets/images/logo.png" alt="logo" class="about-logo" width="70" />
+            <template v-if="isDarktheme">
+                <img src="/assets/images/logo_night.png" alt="logo" class="about-logo" width="70" />
+            </template>
+            <template v-else>
+                <img src="/assets/images/logo.png" alt="logo" class="about-logo" width="70" />
+            </template>
             <div class="about-title">点歌姬</div>
             <div class="about-version">
                 v{{ version }}

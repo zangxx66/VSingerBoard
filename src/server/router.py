@@ -179,14 +179,3 @@ async def add_or_update_global_config(data: globalfigItem = Body(..., embed=True
         msg = "添加成功" if result else "添加失败"
     code = 0 if result else -1
     return ResponseItem(code=code, msg=msg, data=None)
-
-
-@router.get("/get_live_config")
-async def get_live_config():
-    bili_config = await Db.get_bconfig()
-    douyin_config = await Db.get_dy_config()
-    result = {
-        "douyin_romm_id": douyin_config.room_id if douyin_config else 0,
-        "bilibili_room_id": bili_config.room_id if bili_config else 0
-    }
-    return ResponseItem(code=0, msg=None, data={"data": jsonable_encoder(result)})

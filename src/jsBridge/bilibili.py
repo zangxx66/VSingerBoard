@@ -7,11 +7,12 @@ from bilibili_api import live, Credential
 
 class Bili:
     def __init__(self):
-        self.live = None
+        self._stop_event = asyncio.Event()
         self._run_future = None
+        self.live = None
         self.danmus: list[DanmuInfo] = []
         self.sing_prefix = ""
-        self._stop_event = asyncio.Event()
+        self.room_id = 0
 
     def start(self):
         if self._run_future and not self._run_future.done():
@@ -25,14 +26,17 @@ class Bili:
         try:
             config = await Db.get_bconfig()
             if not config or config.room_id == 0:
+                if config:
+                    self.room_id = config.room_id
                 logger.info("Bilibili room_id not configured, skipping.")
                 return
 
             self.sing_prefix = config.sing_prefix
+            self.room_id = config.room_id
             bili_credential = await Db.get_bcredential(enable=True)
             credential = Credential(**bili_credential.__dict__) if bili_credential else None
 
-            self.live = live.LiveDanmaku(room_display_id=config.room_id, credential=credential, max_retry=99)
+            self.live = live.LiveDanmaku(room_display_id=self.room_id, credential=credential, max_retry=99)
             self.live.on("DANMU_MSG")(self.on_msg)
             self.live.on("SUPER_CHAT_MESSAGE")(self.on_sc)
 
@@ -57,7 +61,7 @@ class Bili:
             self._stop_event.set()
             try:
                 awaitable_future = asyncio.wrap_future(self._run_future)
-                await asyncio.wait_for(awaitable_future, timeout=15)
+                await asyncio.wait_for(awaitable_future, timeout=5)
             except asyncio.TimeoutError:
                 logger.error("【X】Timed out waiting for Bilibili task to stop.")
                 self._run_future.cancel()

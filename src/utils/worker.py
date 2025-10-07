@@ -97,6 +97,22 @@ class AsyncWorker:
         future = asyncio.run_coroutine_threadsafe(coro, self._loop)
         return await asyncio.to_thread(future.result)  # 异步地等待 concurrent.futures.Future 的结果
 
+    def run_sync(self, coro: Coroutine) -> Any:
+        """
+        同步执行一个异步方法并返回结果。
+
+        这个方法会阻塞当前线程直到异步方法执行完毕。
+
+        :param coro: 要执行的协程
+        :return: 协程的返回值
+        """
+        if self._loop is None or not self._loop.is_running():
+            raise RuntimeError("AsyncWorker is not running.")
+
+        future = asyncio.run_coroutine_threadsafe(coro, self._loop)
+        # 等待 future 完成并获取结果，这将阻塞当前线程
+        return future.result()
+
 
 # 创建全局单例
 async_worker = AsyncWorker()

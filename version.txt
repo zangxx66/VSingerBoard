@@ -35,7 +35,7 @@ StringFileInfo(
     StringStruct(u'OriginalFilename', u'VSingerBoard.exe'),
     StringStruct(u'ProductName', u'点歌姬'),
     StringStruct(u'ProductVersion', u'1.0.0'),
-    StringStruct(u'Build', u'1279')])
+    StringStruct(u'Build', u'1347')])
   ]),
 VarFileInfo([VarStruct(u'Translation', [2052, 1200])])
   ]

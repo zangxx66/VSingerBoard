@@ -3,7 +3,7 @@ import { ref, reactive, onMounted, computed } from "vue"
 import { RouterView } from "vue-router"
 import router from "@/router"
 import zhCn from "element-plus/es/locale/lang/zh-cn"
-import { Minus, Close, HomeFilled, Tools, List, InfoFilled, Sunny, Moon, Right } from "@element-plus/icons-vue"
+import { Minus, Close, HomeFilled, Tools, List, InfoFilled, Sunny, Moon } from "@element-plus/icons-vue"
 import ContextMenu from '@imengyu/vue3-context-menu'
 import { ElLoading, ElMessage, ElMessageBox, type MenuItemInstance } from "element-plus"
 import { request } from "@/api"
@@ -48,7 +48,7 @@ const themeRef = ref<MenuItemInstance>()
 const collapseRef = ref<MenuItemInstance>()
 const minusRef = ref<MenuItemInstance>()
 const quitRef = ref<MenuItemInstance>()
-const finishTour = () => {
+const finishTour = async() => {
   globalConfig.navSideTour = true
   request
   .addOrUpdateGlobalConfig({data: globalConfig})
@@ -134,7 +134,7 @@ const onContextMenu = async (e: MouseEvent) => {
  * 最小化应用
  * @returns {void} 无返回值
  */
-const minus = () => {
+const minus = (): void => {
   window.pywebview.api.minus_window()
   active.value = "0"
 }
@@ -143,7 +143,7 @@ const minus = () => {
  * 退出应用
  * @returns {Promise<void>} 退出应用 Promise
  */
-const quit = () => {
+const quit = (): void => {
   ElMessageBox.confirm(
     "是否退出?",
     "提示",
@@ -174,7 +174,7 @@ const quit = () => {
  * 如果获取失败，将显示错误信息
  * @returns {Promise<void>} 无返回值 Promise
  */
-const initGlobalConfig = async () => {
+const initGlobalConfig = async (): Promise<void> => {
   request.getGlobalConfig({}).then(response => {
     const resp = response.data as ResponseModel
     if (resp.code != 0) {
@@ -231,7 +231,7 @@ onMounted(() => {
 <template>
   <el-container class="layout-container-demo">
     <el-aside :style="asideStyle">
-      <el-menu :collapse="isCollapse" class="layout-aside-menu">
+      <el-menu default-active="0" :collapse="isCollapse" class="layout-aside-menu">
         <el-menu-item index="0" @click="goto('home')" ref="homeRef">
           <el-icon>
             <HomeFilled />
@@ -257,11 +257,8 @@ onMounted(() => {
           <template #title>关于</template>
         </el-menu-item>
         <el-menu-item index="4" ref="themeRef">
-          <el-switch v-model="isDarktheme" 
-          :active-action-icon="Moon" 
-          :inactive-action-icon="Sunny"
-          style="--el-switch-on-color: var(--bg-color-mute)"
-          @change="themeStore.updateConfig(!isDarktheme)" />
+          <el-switch v-model="isDarktheme" :active-action-icon="Moon" :inactive-action-icon="Sunny"
+            style="--el-switch-on-color: var(--bg-color-mute)" @change="themeStore.updateConfig(!isDarktheme)" />
         </el-menu-item>
       </el-menu>
     </el-aside>
@@ -297,14 +294,19 @@ onMounted(() => {
           </keep-alive>
         </router-view>
         <el-backtop :right="100" :bottom="100" />
-        <el-tour v-model="navSideTour" @close="finishTour" @finish="finishTour">
-          <el-tour-step title="提示" description="欢迎使用抖破点歌姬" @close="finishTour"></el-tour-step>
-          <el-tour-step title="提示" description="这里是点歌，可以查看抖和破站的点歌列表" placement="right"  @close="finishTour" :target="homeRef?.$el"></el-tour-step>
-          <el-tour-step title="提示" description="这里是设置，可以设置抖和破站的直播间监听" placement="right"  @close="finishTour" :target="settingsRef?.$el"></el-tour-step>
-          <el-tour-step title="提示" description="这是主题开关，可以切换主题" placement="right"  @close="finishTour" :target="themeRef?.$el"></el-tour-step>
-          <el-tour-step title="提示" description="点击这里可以收缩/展开侧边栏" placement="bottom"  @close="finishTour" :target="collapseRef?.$el"></el-tour-step>
-          <el-tour-step title="提示" description="点击这里最小化" placement="bottom"  @close="finishTour" :target="minusRef?.$el"></el-tour-step>
-          <el-tour-step title="提示" description="点击这里退出" placement="bottom"  @close="finishTour" :target="quitRef?.$el"></el-tour-step>
+        <!-- el-tour组件有bug，finish会同时触发close事件，只能强制用户完成 -->
+        <el-tour v-model="navSideTour" @finish="finishTour" :target-area-clickable="false"
+          :close-on-press-escape="false" :show-close="false">
+          <el-tour-step title="提示" description="欢迎使用抖破点歌姬"></el-tour-step>
+          <el-tour-step title="提示" description="这里是点歌，可以查看抖和破站的点歌列表" placement="right"
+            :target="homeRef?.$el"></el-tour-step>
+          <el-tour-step title="提示" description="这里是设置，可以设置抖和破站的直播间监听" placement="right"
+            :target="settingsRef?.$el"></el-tour-step>
+          <el-tour-step title="提示" description="这是主题开关，可以切换主题" placement="right" :target="themeRef?.$el"></el-tour-step>
+          <el-tour-step title="提示" description="点击这里可以收缩/展开侧边栏" placement="bottom"
+            :target="collapseRef?.$el"></el-tour-step>
+          <el-tour-step title="提示" description="点击这里最小化" placement="bottom" :target="minusRef?.$el"></el-tour-step>
+          <el-tour-step title="提示" description="点击这里退出" placement="bottom" :target="quitRef?.$el"></el-tour-step>
         </el-tour>
       </el-config-provider>
     </el-main>

@@ -100,15 +100,6 @@ class Request {
     async addOrUpdateGlobalConfig(params: {}): Promise<AxiosResponse<any>>{
         return await client.post("/api/add_or_update_global_config", params)
     }
-
-    /**
-     * 获取直播配置。
-     * @param {Object} [params={}] 传递给服务器的参数对象。
-     * @returns {Promise<AxiosResponse<any>>} 获取操作的响应。
-     */
-    async getLiveConfig(params: {}): Promise<AxiosResponse<any>>{
-        return await client.get("/api/get_live_config", params)
-    }
 }
 
 export const request = new Request()

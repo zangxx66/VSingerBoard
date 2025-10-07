@@ -66,6 +66,7 @@ const addOrUpdateConfig = () => {
         btnLoading.value = false
     })
     .catch(error => {
+        console.log(error)
         ElMessage.error(error)
         btnLoading.value = false
     })

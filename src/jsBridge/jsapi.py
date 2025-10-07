@@ -13,7 +13,45 @@ bili_manager = Bili()
 dy_manager = Douyin()
 
 
+async def _restart_bili_async():
+    await bili_manager.stop()
+    await asyncio.sleep(1)
+    bili_manager.start()
+
+
+async def _restart_dy_async():
+    await dy_manager.stop()
+    await asyncio.sleep(1)
+    dy_manager.start()
+
+
+def restart_bili():
+    async_worker.submit(_restart_bili_async())
+
+
+def restart_dy():
+    async_worker.submit(_restart_dy_async())
+
+
+def start_bili():
+    bili_manager.start()
+
+
+def start_dy():
+    dy_manager.start()
+
+
+def stop_bili():
+    async_worker.submit(bili_manager.stop())
+
+
+def stop_dy():
+    async_worker.submit(dy_manager.stop())
+
+
 class Api:
+    _qr_code_login = None
+
     def get_danmu(self):
         """
         获取Bilibili的弹幕列表。
@@ -130,38 +168,8 @@ class Api:
         """
         return check_for_updates()
 
-
-async def _restart_bili_async():
-    await bili_manager.stop()
-    await asyncio.sleep(1)
-    bili_manager.start()
-
-
-async def _restart_dy_async():
-    await dy_manager.stop()
-    await asyncio.sleep(1)
-    dy_manager.start()
-
-
-def restart_bili():
-    async_worker.submit(_restart_bili_async())
-
-
-def restart_dy():
-    async_worker.submit(_restart_dy_async())
-
-
-def start_bili():
-    bili_manager.start()
-
-
-def start_dy():
-    dy_manager.start()
-
-
-def stop_bili():
-    async_worker.submit(bili_manager.stop())
-
-
-def stop_dy():
-    async_worker.submit(dy_manager.stop())
+    def get_live_config(self):
+        return {
+            "douyin_romm_id": dy_manager.room_id,
+            "bilibili_room_id": bili_manager.room_id
+        }
