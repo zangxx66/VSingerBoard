@@ -174,7 +174,7 @@ sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/ff/2e/abfed7a721928e
 
 [[package]]
 name = "bilibili-api-python"
-version = "17.3.0"
+version = "17.4.0"
 source = { registry = "https://pypi.tuna.tsinghua.edu.cn/simple" }
 dependencies = [
     { name = "apscheduler" },
@@ -190,9 +190,9 @@ dependencies = [
     { name = "qrcode-terminal" },
     { name = "yarl" },
 ]
-sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/28/59/f4f238a7e3a73583b13f1de54f158cc75241a6a612be2e6cf8ee12c92813/bilibili_api_python-17.3.0.tar.gz", hash = "sha256:4659f3df0b34db7c79322c1a6c6478800447d1b75482e7288b120c46a8fe67ae", size = 1411556, upload-time = "2025-06-30T13:21:17.397Z" }
+sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/54/b3/ca6c715311d80604ad37437bc1422c4bec7159db6ab49a311478f38e45ed/bilibili_api_python-17.4.0.tar.gz", hash = "sha256:396310c1820fd931a46a10c6115233be250e8db315a266eea608c0f625cdf1ef", size = 1417870, upload-time = "2025-10-08T05:26:35.474Z" }
 wheels = [
-    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/b1/52/957fc90a5cd6bfb3564ec5f068f960e8674fb8bd596426af73554ed676de/bilibili_api_python-17.3.0-py3-none-any.whl", hash = "sha256:8a7af3883cf5ce53825a236a49719858331054ee35cd788538df2bde712feccc", size = 379456, upload-time = "2025-06-30T13:21:16.226Z" },
+    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/79/1d/71e2a56f25effbc4e2618a49e55015928748a1c47dda3271d9274cf1f206/bilibili_api_python-17.4.0-py3-none-any.whl", hash = "sha256:79881aa011c23d74c0562765aee707d5fc410a02649091ec6aecf83f990fbdc5", size = 385523, upload-time = "2025-10-08T05:26:33.753Z" },
 ]
 
 [[package]]
