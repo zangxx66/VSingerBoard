@@ -11,7 +11,8 @@ from fastapi.responses import JSONResponse, HTMLResponse
 from fastapi.templating import Jinja2Templates
 from .router import router
 from src.database import Db
-from src.utils import logger, resource_path
+from src.utils import logger, resource_path, IPCManager
+from . import ipc_instance
 
 
 dist_path = resource_path("wwwroot", False)
@@ -70,13 +71,14 @@ async def main(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
-def startup(token: str):
+def startup(token: str, ipc_manager: IPCManager):
     """
     启动FastAPI应用
     """
     global _token
     try:
         _token = token
+        ipc_instance.ipc_manager = ipc_manager
         log_config = uvicorn.config.LOGGING_CONFIG
         log_config["formatters"]["default"]["fmt"] = "[%(asctime)s][%(levelname)s][%(funcName)s] - %(message)s"
         uvicorn.run(app, host="127.0.0.1", port=8000, log_config=log_config, access_log=False)

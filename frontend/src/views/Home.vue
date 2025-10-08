@@ -11,10 +11,10 @@ const PlatformStatus = defineAsyncComponent(() => import("@/components/home/plat
 const danmakuList = ref(Array<DanmakuModel>())
 const config = reactive<LiveModel>({
     douyin_romm_id: 0,
-    bilibili_room_id: 0
+    bilibili_room_id: 0,
+    douyin_ws_status: -1,
+    bilibili_ws_status: -1
 })
-const bili_ws = ref(-1)
-const douyin_ws = ref(-1)
 const intervalStore = useIntervalStore()
 const infiniteList = ref<HTMLDivElement | null>(null)
 // emoji表情
@@ -81,10 +81,6 @@ const exportFile = () => {
     exportExcel(columns, data, filename)
 }
 
-const getWsStatus = async() => {
-    bili_ws.value = await window.pywebview.api.get_bili_ws_status()
-    douyin_ws.value = await window.pywebview.api.get_dy_ws_status()
-}
 
 const processDanmaku = (list: DanmakuModel[], platform: "bilibili" | "douyin") => {
     list.forEach(item => {
@@ -135,14 +131,8 @@ onMounted(() => {
     const listHeight = height * 0.7
     infiniteListDom.style.height = `${listHeight}px`
 
-    initConfig()
-
-    intervalStore.addInterval("check_ws", getWsStatus, 1000)
     intervalStore.addInterval("get_danmaku", getDanmaku, 1000)
-})
-
-onActivated(() => {
-    initConfig()
+    intervalStore.addInterval("get_live_config", initConfig, 1000)
 })
 </script>
 <template>
@@ -206,9 +196,9 @@ onActivated(() => {
                         </el-button>
                         <div class="card-footer-right">
                             <PlatformStatus platform="douyin" v-if="config.douyin_romm_id > 0"
-                                :roomId="config.douyin_romm_id" :wsStatus="douyin_ws" />
+                                :roomId="config.douyin_romm_id" :wsStatus="config.douyin_ws_status" />
                             <PlatformStatus platform="bilibili" v-if="config.bilibili_room_id > 0"
-                                :roomId="config.bilibili_room_id" :wsStatus="bili_ws" />
+                                :roomId="config.bilibili_room_id" :wsStatus="config.bilibili_ws_status" />
                         </div>
                     </div>
                 </template>

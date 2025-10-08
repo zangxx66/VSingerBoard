@@ -7,7 +7,7 @@
 
 # VSingerBoard - 您的专属虚拟主播点歌台
 
-![Release Status](https://github.com/zangxx66/VSingerBoard/actions/workflows/release.yml/badge.svg) ![Push Status](https://github.com/zangxx66/VSingerBoard/actions/workflows/push.yml/badge.svg) ![Python Version](https://img.shields.io/badge/python-3.12-blue.svg) ![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)
+![Release Status](https://github.com/zangxx66/VSingerBoard/actions/workflows/release.yml/badge.svg) ![Push Status](https://github.com/zangxx66/VSingerBoard/actions/workflows/push.yml/badge.svg) ![Python Version](https://img.shields.io/badge/python-3.12-blue.svg) ![Node.js Version](https://img.shields.io/badge/node.js-24.0-blue.svg) ![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)
 
 </div>
 

@@ -5,6 +5,7 @@ from ._version import __version__
 from .models import *
 from .ws_client import WebSocketClient
 from .worker import async_worker
+from .ipc import IPCManager, MessageQueueEmpty
 
 __all__ = [
     "logger",
@@ -28,4 +29,6 @@ __all__ = [
     "WebSocketClient",
     "async_worker",
     "send_notification",
+    "IPCManager",
+    "MessageQueueEmpty",
 ]

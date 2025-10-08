@@ -31,8 +31,7 @@ const initConfig = () => {
         }else{
             const data = resp.data.data
             if(data){
-                const model = data as GlobalConfigModel
-                Object.assign(baseFormValue, model)
+                Object.assign(baseFormValue, data)
             }
         }
         loading.value = false

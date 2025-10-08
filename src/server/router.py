@@ -6,6 +6,7 @@ from bilibili_api import Credential, user
 from bilibili_api.login_v2 import QrCodeLogin, QrCodeLoginChannel
 from src.database import Db
 from src.utils import setup_autostart, ResponseItem, bconfigItem, dyconfigItem, globalfigItem
+from . import ipc_instance
 
 # Lock to serialize access to the bilibili-api library to prevent concurrency issues.
 bilibili_api_lock = asyncio.Lock()
@@ -33,6 +34,8 @@ async def add_or_update_bili_config(data: bconfigItem = Body(..., embed=True)):
         result = await Db.add_bconfig(**new_dic)
         msg = "添加成功" if result else "添加失败"
     code = 0 if result else -1
+    if result and ipc_instance.ipc_manager:
+        ipc_instance.ipc_manager.send_message("bilibili_ws_reconnect")
     return ResponseItem(code=code, msg=msg, data=None)
 
 
@@ -143,6 +146,8 @@ async def add_or_update_dy_config(data: dyconfigItem = Body(..., embed=True)):
         result = await Db.add_dy_config(**new_dic)
         msg = "添加成功" if result else "添加失败"
     code = 0 if result else -1
+    if result and ipc_instance.ipc_manager:
+        ipc_instance.ipc_manager.send_message("douyin_ws_reconnect")
     return ResponseItem(code=code, msg=msg, data=None)
 
 

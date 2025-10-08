@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, computed, nextTick, watchEffect } from "vue"
+import { ref, reactive, onMounted, computed, nextTick } from "vue"
 import { RouterView } from "vue-router"
 import router from "@/router"
 import zhCn from "element-plus/es/locale/lang/zh-cn"
@@ -52,7 +52,9 @@ const finishTour = () => {
   updateTourStatus()
 }
 const closeTour = async() => {
+  // 等待dom更新
   await nextTick()
+  // 如果finish已经关闭tour，什么也不做
   if(globalConfig.navSideTour) return
   updateTourStatus()
 }
@@ -73,11 +75,6 @@ const updateTourStatus = () => {
     navSideTour.value = false
   })
 }
-watchEffect(() => {
-  if(navSideTour.value){
-    globalConfig.navSideTour = false
-  }
-})
 
 /**
  * 跳转到指定页面
@@ -193,9 +190,8 @@ const initGlobalConfig = async (): Promise<void> => {
     if (resp.code != 0) {
       ElMessage.warning(resp.msg)
     } else {
-      const data = resp.data.data
-      if (data) {
-        const model = data as GlobalConfigModel
+      const model = resp.data.data
+      if (model) {
         Object.assign(globalConfig, model)
         toggleDark(model.dark_mode)
         themeStore.setDarkTheme(model.id, model.dark_mode)
@@ -307,7 +303,10 @@ onMounted(() => {
           </keep-alive>
         </router-view>
         <el-backtop :right="100" :bottom="100" />
-        <!-- el-tour组件的finish会同时触发close事件 -->
+        <!-- 
+        el-tour组件finish和close事件的的使用示例
+        https://github.com/element-plus/element-plus/issues/22419 
+        -->
         <el-tour v-model="navSideTour" @close="closeTour" @finish="finishTour" :target-area-clickable="false"
           :close-on-press-escape="false">
           <el-tour-step title="提示" description="欢迎使用抖破点歌姬"></el-tour-step>

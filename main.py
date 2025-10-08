@@ -9,9 +9,9 @@ import webview
 import multiprocessing
 from PIL import Image
 from pystray import Icon, Menu, MenuItem
-from src.utils import logger, resource_path, async_worker
+from src.utils import logger, resource_path, async_worker, IPCManager, MessageQueueEmpty
 from src.server import startup
-from src.jsBridge import Api, start_bili, start_dy, stop_bili, stop_dy
+from src.jsBridge import Api, start_bili, start_dy, stop_bili, stop_dy, restart_bili, restart_dy
 from webview.window import Window
 
 
@@ -19,6 +19,9 @@ server_thread = None
 dev_thread: threading.Thread = None
 dev_process = None
 icon = None
+is_done = None
+ipc_task_thread = None
+ipc_manager = IPCManager()
 
 
 def signal_handler(sig, frame):
@@ -29,8 +32,7 @@ def signal_handler(sig, frame):
 def pro_server(token: str):
     global server_thread
     logger.info("------start HTTP server------")
-    multiprocessing.set_start_method("spawn")
-    server_thread = multiprocessing.Process(target=startup, args=(token,), name="FastApi")
+    server_thread = multiprocessing.Process(target=startup, args=(token, ipc_manager), name="FastApi")
     server_thread.start()
 
 
@@ -42,9 +44,28 @@ def ws_server():
 
 def dev_server():
     global dev_process
+    logger.info("------startup Vite server------")
     dev_process = subprocess.Popen("npm run -C frontend/ dev", shell=True)
     dev_process.communicate()
-    logger.info("------startup Vite server------")
+
+
+def ipc_task():
+    while not is_done:
+        try:
+            received_data = ipc_manager.receive_message_nonblocking()
+            if received_data == "bilibili_ws_reconnect":
+                logger.info("bilibili_ws_reconnect")
+                restart_bili()
+            elif received_data == "douyin_ws_reconnect":
+                logger.info("douyin_ws_reconnect")
+                restart_dy()
+            else:
+                logger.info(f"Received data: {received_data}")
+        except MessageQueueEmpty:
+            pass
+        time.sleep(0.1)
+
+    logger.info("IPC task stopped.")
 
 
 def on_start(window: Window):
@@ -53,7 +74,10 @@ def on_start(window: Window):
 
 
 def on_closing():
+    global is_done
     webview.logger.info("Window closing event triggered.")
+    is_done = True
+
     stop_bili()
     stop_dy()
 
@@ -62,9 +86,17 @@ def on_closing():
     if dev_process is not None:
         dev_process.terminate()
     if server_thread is not None:
-        server_thread.kill()
+        server_thread.terminate()
         server_thread.join(timeout=5)
+        if server_thread.is_alive():
+            logger.warning("Server process did not terminate in time, forcing kill.")
+            server_thread.kill()
+            server_thread.join()
         server_thread.close()
+    if ipc_task_thread is not None:
+        ipc_task_thread.join()
+        logger.info("IPC task thread joined.")
+    ipc_manager.close()
     if icon is not None:
         icon.stop()
 
@@ -100,7 +132,7 @@ def setup_tray(window: Window):
 
 
 def main():
-    global dev_thread
+    global dev_thread, ipc_task_thread
     logger.info("------startup------")
 
     # Setup signal handlers to gracefully shutdown
@@ -151,8 +183,11 @@ def main():
             dev_thread.start()
             # Vite服务器启动较慢，手动给个时间等待
             time.sleep(3)
-
+        # 启动WebSocket服务器
         ws_server()
+        # ipc
+        ipc_task_thread = threading.Thread(target=ipc_task, name="ipc_task")
+        ipc_task_thread.start()
 
         localization = {
             'global.quitConfirmation': u'是否退出？',
@@ -198,7 +233,7 @@ def main():
                                        height=initHeight,
                                        resizable=False,
                                        frameless=True,
-                                       easy_drag=True,)
+                                       easy_drag=False,)
 
         window.expose(on_closing)
 

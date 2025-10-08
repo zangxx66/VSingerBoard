@@ -24,8 +24,7 @@ const initConfig = () => {
                 loading.value = false
                 return
             }
-            const cfg = resp.data.data as DyConfigModel
-            Object.assign(baseFormValue, cfg)
+            Object.assign(baseFormValue, resp.data.data)
         }
         loading.value = false
     }).catch(error => {
@@ -41,7 +40,6 @@ const addOrUpdateConfig = () => {
         if (resp.code != 0) {
             ElMessage.warning(resp.msg)
         }else{
-            window.pywebview.api.restart_douyin_ws()
             ElMessage.success(resp.msg)
             initConfig()
         }

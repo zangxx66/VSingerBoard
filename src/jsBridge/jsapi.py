@@ -171,5 +171,7 @@ class Api:
     def get_live_config(self):
         return {
             "douyin_romm_id": dy_manager.room_id,
-            "bilibili_room_id": bili_manager.room_id
+            "bilibili_room_id": bili_manager.room_id,
+            "douyin_ws_status": dy_manager.get_status(),
+            "bilibili_ws_status": bili_manager.get_status(),
         }

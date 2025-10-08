@@ -73,4 +73,6 @@ type UpdateModel = {
 type LiveModel = {
     douyin_romm_id: number
     bilibili_room_id: number
+    douyin_ws_status: number
+    bilibili_ws_status: number
 }
