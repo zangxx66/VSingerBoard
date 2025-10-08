@@ -4,10 +4,6 @@ declare interface Window {
         api: {
             /** 重新加载 */
             reload: () => void
-            /** 最小化 */
-            minus_window: () => void
-            /** 退出应用 */
-            on_closing: () => void
             /** 检查更新 */
             update_verion: () => Promise<UpdateModel>
             /** 获取bilibili websocket状态 */

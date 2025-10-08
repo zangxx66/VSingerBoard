@@ -82,6 +82,7 @@ class GloalConfig(BaseModel):
     startup = fields.BooleanField()
     notification = fields.BooleanField()
     navSideTour = fields.BooleanField()
+    collapse = fields.BooleanField()
 
 
 def ignore_none(kwargs):

@@ -59,6 +59,7 @@ type GlobalConfigModel = {
     startup: boolean
     notification: boolean
     navSideTour: boolean
+    collapse: boolean
 }
 
 type UpdateModel = {

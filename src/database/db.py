@@ -74,15 +74,20 @@ class Db:
         return res
 
     @classmethod
-    async def add_bconfig(cls, **kwargs):
-        if not await BiliConfig.add(**kwargs):
-            return False
-        return True
-
-    @classmethod
-    async def update_bconfig(cls, pk, **kwargs):
-        res = await BiliConfig.get(id=pk).update(**kwargs)
-        return res
+    async def add_or_update_bili_config(cls, **kwargs):
+        id = kwargs.get("id")
+        del kwargs["id"]
+        bconfig = await BiliConfig.get(id=id).first()
+        try:
+            if bconfig:
+                await bconfig.get(id=id).update(**kwargs)
+                return bconfig.id
+            else:
+                bconfig = await BiliConfig.create(**kwargs)
+                return bconfig.id
+        except Exception as e:
+            logger.error(f"add_or_update_bili_config error: {e}")
+            return 0
 
     @classmethod
     async def get_bconfig(cls, **kwargs):
@@ -95,28 +100,38 @@ class Db:
         return res
 
     @classmethod
-    async def update_dy_config(cls, pk, **kwargs):
-        res = await DyConfig.get(id=pk).update(**kwargs)
-        return res
-
-    @classmethod
-    async def add_dy_config(cls, **kwargs):
-        if not await DyConfig.add(**kwargs):
-            return False
-        return True
-
-    @classmethod
-    async def add_gloal_config(cls, **kwargs):
-        if not await GloalConfig.add(**kwargs):
-            return False
-        return True
-
-    @classmethod
-    async def update_gloal_config(cls, pk, **kwargs):
-        res = await GloalConfig.get(id=pk).update(**kwargs)
-        return res
+    async def add_or_updae_dy_config(cls, **kwargs):
+        id = kwargs.get("id")
+        del kwargs["id"]
+        dy_config = await DyConfig.get(id=id).first()
+        try:
+            if dy_config:
+                await dy_config.get(id=id).update(**kwargs)
+                return dy_config.id
+            else:
+                dy_config = await DyConfig.create(**kwargs)
+                return dy_config.id
+        except Exception as e:
+            logger.error(f"add_or_update_dy_config error: {e}")
+            return 0
 
     @classmethod
     async def get_gloal_config(cls, **kwargs):
         res = await GloalConfig.get(**kwargs).first()
         return res
+
+    @classmethod
+    async def add_or_update_gloal_config(cls, **kwargs):
+        id = kwargs.get("id")
+        del kwargs["id"]
+        gloal_config = await GloalConfig.get(id=id).first()
+        try:
+            if gloal_config:
+                await gloal_config.get(id=id).update(**kwargs)
+                return gloal_config.id
+            else:
+                gloal_config = await GloalConfig.create(**kwargs)
+                return gloal_config.id
+        except Exception as e:
+            logger.error(f"add_or_update_gloal_config error: {e}")
+            return 0

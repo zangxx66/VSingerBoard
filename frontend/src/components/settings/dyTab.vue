@@ -41,7 +41,7 @@ const addOrUpdateConfig = () => {
             ElMessage.warning(resp.msg)
         }else{
             ElMessage.success(resp.msg)
-            initConfig()
+            baseFormValue.id = resp.data
         }
         btnLoading.value = false
     }).catch(error => {

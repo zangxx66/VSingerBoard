@@ -17,7 +17,8 @@ const baseFormValue = reactive<GlobalConfigModel>({
     check_update: false,
     startup: false,
     notification: false,
-    navSideTour: false
+    navSideTour: false,
+    collapse: false
 })
 
 const initConfig = () => {
@@ -52,15 +53,15 @@ const addOrUpdateConfig = () => {
         if(resp.code != 0){
             ElMessage.warning(resp.msg || "保存失败")
         }else{
+            baseFormValue.id = resp.data
             ElMessage.success(resp.msg || "保存成功")
             toggleDark(baseFormValue.dark_mode)
-            themeStore.setDarkTheme(baseFormValue.id, baseFormValue.dark_mode)
+            themeStore.setDarkTheme(baseFormValue.dark_mode)
             if(baseFormValue.check_update){
                 intervalStore.addInterval("check_update", checkUpdate, 1000 * 60 * 60 * 6)
             }else{
                 intervalStore.removeInterval("check_update")
             }
-            initConfig()
         }
         btnLoading.value = false
     })

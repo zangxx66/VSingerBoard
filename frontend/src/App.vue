@@ -3,16 +3,14 @@ import { ref, reactive, onMounted, computed, nextTick } from "vue"
 import { RouterView } from "vue-router"
 import router from "@/router"
 import zhCn from "element-plus/es/locale/lang/zh-cn"
-import { Minus, Close, HomeFilled, Tools, List, InfoFilled, Sunny, Moon } from "@element-plus/icons-vue"
+import { HomeFilled, Tools, List, InfoFilled, Sunny, Moon } from "@element-plus/icons-vue"
 import ContextMenu from '@imengyu/vue3-context-menu'
-import { ElLoading, ElMessage, ElMessageBox, type MenuItemInstance } from "element-plus"
+import { ElMessage, type MenuItemInstance, type MainInstance } from "element-plus"
 import { request } from "@/api"
 import { toggleDark, checkUpdate, pasteToElement } from "@/utils"
 import { useIntervalStore, useThemeStore } from "@/stores"
 import { useClipboard } from "@vueuse/core"
 
-const active = ref("0")
-const isCollapse = ref(false)
 const intervalStore = useIntervalStore()
 const themeStore = useThemeStore()
 const { copy } = useClipboard()
@@ -39,40 +37,41 @@ const globalConfig = reactive<GlobalConfigModel>({
   check_update: false,
   startup: false,
   notification: false,
-  navSideTour: false
+  navSideTour: false,
+  collapse: false
 })
 const navSideTour = ref(false)
 const homeRef = ref<MenuItemInstance>()
 const settingsRef = ref<MenuItemInstance>()
 const themeRef = ref<MenuItemInstance>()
-const collapseRef = ref<MenuItemInstance>()
-const minusRef = ref<MenuItemInstance>()
-const quitRef = ref<MenuItemInstance>()
+const mainRef = ref<MainInstance>()
 const finishTour = () => {
-  updateTourStatus()
+  globalConfig.navSideTour = true
+  updateGlobalConfig()
+  navSideTour.value = false
 }
 const closeTour = async() => {
   // 等待dom更新
   await nextTick()
   // 如果finish已经关闭tour，什么也不做
   if(globalConfig.navSideTour) return
-  updateTourStatus()
-}
-const updateTourStatus = () => {
   globalConfig.navSideTour = true
+  updateGlobalConfig()
+  navSideTour.value = false
+}
+const updateGlobalConfig = () => {
   request
   .addOrUpdateGlobalConfig({data: globalConfig})
   .then(response => {
     const resp = response.data as ResponseModel
     if(resp.code != 0){
       ElMessage.warning(resp.msg || "保存失败")
+    }else{
+      globalConfig.id = resp.data
     }
   })
   .catch(error => {
     ElMessage.error(error)
-  })
-  .finally(() => {
-    navSideTour.value = false
   })
 }
 
@@ -81,6 +80,11 @@ const updateTourStatus = () => {
  * @param {string} name 路由的name
  */
 const goto = (name: string) => {
+  if(router.currentRoute.value.name == name){
+    globalConfig.collapse = !globalConfig.collapse
+    updateGlobalConfig()
+    return
+  }
   router.push({ name: name })
 }
 
@@ -141,44 +145,6 @@ const onContextMenu = async (e: MouseEvent) => {
 }
 
 /**
- * 最小化应用
- * @returns {void} 无返回值
- */
-const minus = (): void => {
-  window.pywebview.api.minus_window()
-  active.value = "0"
-}
-
-/**
- * 退出应用
- * @returns {Promise<void>} 退出应用 Promise
- */
-const quit = (): void => {
-  ElMessageBox.confirm(
-    "是否退出?",
-    "提示",
-    {
-      confirmButtonText: "确定",
-      cancelButtonText: "取消",
-      type: "warning",
-    }
-  )
-    .then(() => {
-      const loading = ElLoading.service({
-        lock: true,
-        text: "正在退出...",
-        background: "rgba(0, 0, 0, 0.7)"
-      })
-      intervalStore.clearAllIntervals()
-      window.pywebview.api.on_closing()
-    })
-    .catch((error) => {
-      if ('string' == typeof error && 'cancel' == error) return
-      ElMessage.error(error)
-    })
-}
-
-/**
  * 初始化全局配置
  * 从服务器获取全局配置，并将其保存到应用程序中
  * 如果获取失败，将显示错误信息
@@ -194,7 +160,7 @@ const initGlobalConfig = async (): Promise<void> => {
       if (model) {
         Object.assign(globalConfig, model)
         toggleDark(model.dark_mode)
-        themeStore.setDarkTheme(model.id, model.dark_mode)
+        themeStore.setDarkTheme(model.dark_mode)
         if (model.check_update) {
           checkUpdate()
           intervalStore.addInterval("check_update", checkUpdate, 1000 * 60 * 60 * 6)
@@ -213,15 +179,22 @@ const initGlobalConfig = async (): Promise<void> => {
     })
 }
 
+const updateTheme = () => {
+  globalConfig.dark_mode = !globalConfig.dark_mode
+  updateGlobalConfig()
+  toggleDark(globalConfig.dark_mode)
+  themeStore.setDarkTheme(globalConfig.dark_mode)
+}
+
 const mainStyle = computed(() => {
   return {
-    left: isCollapse.value ? '64px' : '200px'
+    left: globalConfig.collapse ? '64px' : '200px'
   }
 })
 
 const asideStyle = computed(() => {
   return {
-    width: isCollapse.value ? '64px' : '200px'
+    width: globalConfig.collapse ? '64px' : '200px'
   }
 })
 
@@ -240,7 +213,7 @@ onMounted(() => {
 <template>
   <el-container class="layout-container-demo">
     <el-aside :style="asideStyle">
-      <el-menu default-active="0" :collapse="isCollapse" class="layout-aside-menu">
+      <el-menu default-active="0" :collapse="globalConfig.collapse" class="layout-aside-menu">
         <el-menu-item index="0" @click="goto('home')" ref="homeRef">
           <el-icon>
             <HomeFilled />
@@ -267,35 +240,12 @@ onMounted(() => {
         </el-menu-item>
         <el-menu-item index="4" ref="themeRef">
           <el-switch v-model="isDarktheme" :active-action-icon="Moon" :inactive-action-icon="Sunny"
-            style="--el-switch-on-color: var(--bg-color-mute)" @change="themeStore.updateConfig(!isDarktheme)" />
+            style="--el-switch-on-color: var(--bg-color-mute)" @change="updateTheme" />
         </el-menu-item>
       </el-menu>
     </el-aside>
 
-    <el-header class="pywebview-drag-region">
-      <el-menu :default-active="active" mode="horizontal" :ellipsis="false" class="toolbar">
-        <el-menu-item index="0" @click="isCollapse = !isCollapse" ref="collapseRef">
-          <template v-if="isDarktheme">
-            <img src="/assets/images/logo_night.png" alt="logo" style="width:100px;" />
-          </template>
-          <template v-else>
-            <img src="/assets/images/logo.png" alt="logo" style="width:100px;" />
-          </template>
-        </el-menu-item>
-        <el-menu-item index="1" @click="minus" ref="minusRef">
-          <el-icon>
-            <Minus />
-          </el-icon>
-        </el-menu-item>
-        <el-menu-item index="2" @click="quit" ref="quitRef">
-          <el-icon>
-            <Close />
-          </el-icon>
-        </el-menu-item>
-      </el-menu>
-    </el-header>
-
-    <el-main @contextmenu="onContextMenu" :style="mainStyle">
+    <el-main @contextmenu="onContextMenu" :style="mainStyle" ref="mainRef">
       <el-config-provider :locale="zhCn" :card="cardConfig" :dialog="dialogConfig" :message="messageConfig">
         <router-view v-slot="{ Component }">
           <keep-alive :include="['Home']">
@@ -315,10 +265,7 @@ onMounted(() => {
           <el-tour-step title="提示" description="这里是设置，可以设置抖和破站的直播间监听" placement="right"
             :target="settingsRef?.$el"></el-tour-step>
           <el-tour-step title="提示" description="这是主题开关，可以切换主题" placement="right" :target="themeRef?.$el"></el-tour-step>
-          <el-tour-step title="提示" description="点击这里可以收缩/展开侧边栏" placement="bottom"
-            :target="collapseRef?.$el"></el-tour-step>
-          <el-tour-step title="提示" description="点击这里最小化" placement="bottom" :target="minusRef?.$el"></el-tour-step>
-          <el-tour-step title="提示" description="点击这里退出" placement="bottom" :target="quitRef?.$el"></el-tour-step>
+          <el-tour-step title="提示" description="这里是主界面" placement="left" :target="mainRef?.$el"></el-tour-step>
         </el-tour>
       </el-config-provider>
     </el-main>
@@ -339,10 +286,12 @@ onMounted(() => {
 .layout-container-demo .el-aside {
   position: fixed;
   left: 0;
-  top: 60px;
+  top: 30px;
   bottom: 0;
   z-index: 90;
   transition: width 0.3s ease-in-out;
+  border-right: solid 1px var(--el-border-color-light);
+  border-top: solid 1px var(--el-border-color-light);
 }
 
 /* The menu should fill the aside */
@@ -354,41 +303,17 @@ onMounted(() => {
   width: 200px;
 }
 
-.layout-container-demo .el-header {
-  position: fixed;
-  width: 100%;
-  left: 0;
-  top: 0;
-  right: 0;
-  z-index: 100;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  color: var(--el-text-color-primary);
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
-}
-
 .layout-container-demo .el-menu {
   border-right: none;
 }
 
 .layout-container-demo .el-main {
   position: absolute;
-  top: 60px;
+  top: 0px;
   right: 0;
   bottom: 0;
-  height: calc(100vh - 60px);
+  height: calc(100vh - 0px);
   overflow: hidden;
   transition: left 0.3s ease-in-out;
-}
-
-.layout-container-demo .toolbar {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 60px;
-  width: 100%;
-  right: 0;
-  background-color: transparent;
-  text-align: right;
-  font-size: 24px;
 }
 </style>

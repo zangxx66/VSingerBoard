@@ -3,7 +3,7 @@ import threading
 import webview
 import pyperclip
 import sys
-from src.utils import check_for_updates, async_worker, send_notification, __version__ as CURRENT_VERSION
+from src.utils import check_for_updates, async_worker, __version__ as CURRENT_VERSION
 from .douyin import Douyin
 from .bilibili import Bili
 
@@ -71,16 +71,6 @@ class Api:
         """
         with thread_lock:
             return dy_manager.get_list()
-
-    def minus_window(self):
-        """
-        最小化当前窗口。
-        """
-        window = webview.active_window()
-        if not window:
-            return
-        window.hide()
-        send_notification("提示", "主界面已隐藏到托盘图标")
 
     def check_clipboard(self):
         """

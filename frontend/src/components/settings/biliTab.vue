@@ -153,7 +153,7 @@ const addOrUpdateConfig = () => {
                 ElMessage.warning(resp.msg)
             } else {
                 ElMessage.success(resp.msg)
-                initConfig()
+                baseFormValue.id = resp.data
             }
         })
         .catch((error) => ElMessage.error(error))

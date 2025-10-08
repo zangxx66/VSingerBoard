@@ -48,3 +48,4 @@ class globalfigItem(BaseModel):
     startup: Optional[bool] = None
     notification: Optional[bool] = None
     navSideTour: Optional[bool] = None
+    collapse: Optional[bool] = None

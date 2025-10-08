@@ -2,6 +2,7 @@ import base64
 import asyncio
 from fastapi import APIRouter, Query, Body
 from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
 from bilibili_api import Credential, user
 from bilibili_api.login_v2 import QrCodeLogin, QrCodeLoginChannel
 from src.database import Db
@@ -24,19 +25,12 @@ async def get_bili_config():
 
 @router.post("/add_or_update_bili_config", response_model=ResponseItem)
 async def add_or_update_bili_config(data: bconfigItem = Body(..., embed=True)):
-    data_dic = data.__dict__
-    new_dic = {k: v for k, v in data_dic.items() if v is not None and k != "id"}
-    msg = ""
-    if data.id > 0:
-        result = await Db.update_bconfig(pk=data.id, **new_dic)
-        msg = "更新成功" if result else "更新失败"
-    else:
-        result = await Db.add_bconfig(**new_dic)
-        msg = "添加成功" if result else "添加失败"
-    code = 0 if result else -1
-    if result and ipc_instance.ipc_manager:
+    result = await Db.add_or_update_bili_config(**data.__dict__)
+    msg = "设置成功" if result > 0 else "设置失败"
+    code = 0 if result > 0 else -1
+    if result > 0 and ipc_instance.ipc_manager:
         ipc_instance.ipc_manager.send_message("bilibili_ws_reconnect")
-    return ResponseItem(code=code, msg=msg, data=None)
+    return JSONResponse(status_code=200, content={"code": code, "msg": msg, "data": result})
 
 
 @router.get("/get_bili_credential_list", response_model=ResponseItem)
@@ -136,19 +130,12 @@ async def get_dy_config():
 
 @router.post("/add_or_update_dy_config", response_model=ResponseItem)
 async def add_or_update_dy_config(data: dyconfigItem = Body(..., embed=True)):
-    data_dic = data.__dict__
-    new_dic = {k: v for k, v in data_dic.items() if v is not None and k != "id"}
-    msg = ""
-    if data.id > 0:
-        result = await Db.update_dy_config(pk=data.id, **new_dic)
-        msg = "更新成功" if result else "更新失败"
-    else:
-        result = await Db.add_dy_config(**new_dic)
-        msg = "添加成功" if result else "添加失败"
-    code = 0 if result else -1
-    if result and ipc_instance.ipc_manager:
+    result = await Db.add_or_updae_dy_config(**data.__dict__)
+    msg = "设置成功" if result > 0 else "设置失败"
+    code = 0 if result > 0 else -1
+    if result > 0 and ipc_instance.ipc_manager:
         ipc_instance.ipc_manager.send_message("douyin_ws_reconnect")
-    return ResponseItem(code=code, msg=msg, data=None)
+    return JSONResponse(status_code=200, content={"code": code, "msg": msg, "data": result})
 
 
 @router.get("/get_global_config")
@@ -159,28 +146,11 @@ async def get_global_config():
 
 @router.post("/add_or_update_global_config")
 async def add_or_update_global_config(data: globalfigItem = Body(..., embed=True)):
-    data_dic = data.__dict__
-    new_dic = {k: v for k, v in data_dic.items() if v is not None and k != "id"}
-    msg = ""
     if data.startup is not None:
         startup_result = setup_autostart(data.startup)
         if not startup_result:
             return ResponseItem(code=-1, msg="开机启动更新失败", data=None)
-    if data.id > 0:
-        result = await Db.update_gloal_config(pk=data.id, **new_dic)
-        msg = "更新成功" if result else "更新失败"
-    else:
-        if "startup" not in new_dic:
-            new_dic["startup"] = False
-        if "check_update" not in new_dic:
-            new_dic["check_update"] = False
-        if "dark_mode" not in new_dic:
-            new_dic["dark_mode"] = False
-        if "notification" not in new_dic:
-            new_dic["notification"] = False
-        if "navSideTour" not in new_dic:
-            new_dic["navSideTour"] = False
-        result = await Db.add_gloal_config(**new_dic)
-        msg = "添加成功" if result else "添加失败"
-    code = 0 if result else -1
-    return ResponseItem(code=code, msg=msg, data=None)
+    result = await Db.add_or_update_gloal_config(**data.__dict__)
+    code = 0 if result > 0 else -1
+    msg = "设置成功" if result > 0 else "设置失败"
+    return JSONResponse(status_code=200, content={"code": code, "msg": msg, "data": result})

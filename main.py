@@ -7,9 +7,10 @@ import signal
 import subprocess
 import webview
 import multiprocessing
+import asyncio
 from PIL import Image
 from pystray import Icon, Menu, MenuItem
-from src.utils import logger, resource_path, async_worker, IPCManager, MessageQueueEmpty
+from src.utils import logger, resource_path, async_worker, IPCManager, MessageQueueEmpty, send_notification
 from src.server import startup
 from src.jsBridge import Api, start_bili, start_dy, stop_bili, stop_dy, restart_bili, restart_dy
 from webview.window import Window
@@ -49,7 +50,8 @@ def dev_server():
     dev_process.communicate()
 
 
-def ipc_task():
+async def ipc_task():
+    logger.info("IPC task started.")
     while not is_done:
         try:
             received_data = ipc_manager.receive_message_nonblocking()
@@ -63,7 +65,7 @@ def ipc_task():
                 logger.info(f"Received data: {received_data}")
         except MessageQueueEmpty:
             pass
-        time.sleep(0.1)
+        await asyncio.sleep(0.1)
 
     logger.info("IPC task stopped.")
 
@@ -71,6 +73,13 @@ def ipc_task():
 def on_start(window: Window):
     webview.logger.info("------window start------")
     webview.logger.debug(f"token:{webview.token}")
+
+
+def on_minimized():
+    window = webview.active_window()
+    if window:
+        window.hide()
+        send_notification("提示", "主界面已隐藏到托盘图标")
 
 
 def on_closing():
@@ -186,8 +195,9 @@ def main():
         # 启动WebSocket服务器
         ws_server()
         # ipc
-        ipc_task_thread = threading.Thread(target=ipc_task, name="ipc_task")
-        ipc_task_thread.start()
+        # ipc_task_thread = threading.Thread(target=ipc_task, name="ipc_task")
+        # ipc_task_thread.start()
+        async_worker.submit(ipc_task())
 
         localization = {
             'global.quitConfirmation': u'是否退出？',
@@ -223,6 +233,7 @@ def main():
 
         webview.settings["OPEN_DEVTOOLS_IN_DEBUG"] = False
         webview.settings['ALLOW_DOWNLOADS'] = True
+        webview.settings["SHOW_DEFAULT_MENUS"] = False
         os.environ["PYWEBVIE_WLOG"] = "debug"
 
         window = webview.create_window("点歌姬",
@@ -232,10 +243,10 @@ def main():
                                        width=initWidth,
                                        height=initHeight,
                                        resizable=False,
-                                       frameless=True,
                                        easy_drag=False,)
 
-        window.expose(on_closing)
+        window.events.closing += on_closing
+        window.events.minimized += on_minimized
 
         setup_tray(window)
 
