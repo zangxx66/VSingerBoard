@@ -58,19 +58,20 @@
 │   └── workflows/ # 自动化工作流定义
 ├── doc/ # 项目文档和截图
 ├── frontend/ # 前端项目源代码
-│   ├── api/ # API 服务定义
-│   ├── assets/ # 静态资源文件
-│   ├── components/ # Vue 组件
-│   │   ├── home/ # 首页相关组件
-│   │   └── settings/ # 设置页面相关组件
 │   ├── public/ # 静态文件，直接复制到根目录
-│   │   └── assets/ # 公共资源
+│   │   └── assets/
 │   │       └── images/ # 图片资源
-│   ├── router/ # Vue Router 配置
-│   ├── stores/ # Pinia 状态管理
-│   ├── types/ # TypeScript 类型定义
-│   ├── utils/ # 前端工具函数
-│   └── views/ # Vue 页面组件
+│   └── src/ # 前端核心代码
+│       ├── api/ # API 服务定义
+│       ├── assets/ # 静态资源文件
+│       ├── components/ # Vue 组件
+│       │   ├── home/ # 首页相关组件
+│       │   └── settings/ # 设置页面相关组件
+│       ├── router/ # Vue Router 配置
+│       ├── stores/ # Pinia 状态管理
+│       ├── types/ # TypeScript 类型定义
+│       ├── utils/ # 前端工具函数
+│       └── views/ # Vue 页面组件
 ├── hooks/ # PyInstaller 钩子文件
 ├── resources/ # 应用程序运行时资源文件
 │   ├── douyinjs/ # 抖音直播相关 JavaScript 文件
@@ -80,6 +81,7 @@
 │   ├── database/ # 数据库模型和操作
 │   ├── douyin/ # 抖音直播相关逻辑
 │   ├── jsBridge/ # Python 与 JavaScript 桥接逻辑
+│   ├── manager/ # 核心管理器模块
 │   ├── notifypy/ # 通知功能库
 │   │   └── os_notifiers/ # 操作系统特定的通知实现
 │   ├── server/ # FastAPI 后端服务

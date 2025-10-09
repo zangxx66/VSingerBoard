@@ -6,7 +6,7 @@ from src.utils import logger
 
 def update_build():
     try:
-        version_path = Path(os.getcwd()).parent / 'version.txt'
+        version_path = Path(os.getcwd()) / 'version.txt'
         if os.path.exists(version_path):
             with open(version_path, 'r', encoding='utf-8') as f:
                 content = f.read()
