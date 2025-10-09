@@ -1,4 +1,5 @@
 import logging
+import logging.handlers
 import datetime
 import sys
 from .tool import get_path
@@ -9,7 +10,7 @@ dir_path = get_path(file_name, dir_name="logs")
 logger = logging.getLogger("danmaku")
 logger.setLevel(logging.DEBUG)
 
-file_handle = logging.FileHandler(filename=dir_path, mode="a", encoding="utf8")
+file_handle = logging.handlers.TimedRotatingFileHandler(dir_path, when="midnight", interval=1, backupCount=30, encoding="utf-8")
 file_formatter = logging.Formatter(fmt="[%(asctime)s][%(levelname)s][%(module)s][%(funcName)s][%(lineno)d] - %(message)s", datefmt="%Y-%m-%d  %H:%M:%S")
 file_handle.setFormatter(file_formatter)
 file_handle.setLevel(logging.WARNING)

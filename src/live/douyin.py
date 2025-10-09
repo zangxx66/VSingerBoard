@@ -103,3 +103,6 @@ class Douyin:
             return
 
         send_notification("收到新的点歌", song_name)
+
+
+douyin_manager = Douyin()

@@ -184,18 +184,18 @@ class DouyinLiveWebFetcher(Decorator, WebSocketClient):
             try:
                 {
                     'WebcastChatMessage': self._parseChatMsg,  # 聊天消息
-                    'WebcastGiftMessage': self._parseGiftMsg,  # 礼物消息
-                    'WebcastLikeMessage': self._parseLikeMsg,  # 点赞消息
-                    'WebcastMemberMessage': self._parseMemberMsg,  # 进入直播间消息
-                    'WebcastSocialMessage': self._parseSocialMsg,  # 关注消息
-                    'WebcastRoomUserSeqMessage': self._parseRoomUserSeqMsg,  # 直播间统计
-                    'WebcastFansclubMessage': self._parseFansclubMsg,  # 粉丝团消息
+                    # 'WebcastGiftMessage': self._parseGiftMsg,  # 礼物消息
+                    # 'WebcastLikeMessage': self._parseLikeMsg,  # 点赞消息
+                    # 'WebcastMemberMessage': self._parseMemberMsg,  # 进入直播间消息
+                    # 'WebcastSocialMessage': self._parseSocialMsg,  # 关注消息
+                    # 'WebcastRoomUserSeqMessage': self._parseRoomUserSeqMsg,  # 直播间统计
+                    # 'WebcastFansclubMessage': self._parseFansclubMsg,  # 粉丝团消息
                     'WebcastControlMessage': self._parseControlMsg,  # 直播间状态消息
-                    'WebcastEmojiChatMessage': self._parseEmojiChatMsg,  # 聊天表情包消息
-                    'WebcastRoomStatsMessage': self._parseRoomStatsMsg,  # 直播间统计信息
+                    # 'WebcastEmojiChatMessage': self._parseEmojiChatMsg,  # 聊天表情包消息
+                    # 'WebcastRoomStatsMessage': self._parseRoomStatsMsg,  # 直播间统计信息
                     'WebcastRoomMessage': self._parseRoomMsg,  # 直播间信息
-                    'WebcastRoomRankMessage': self._parseRankMsg,  # 直播间排行榜信息
-                    'WebcastRoomStreamAdaptationMessage': self._parseRoomStreamAdaptationMsg,  # 直播间流配置
+                    # 'WebcastRoomRankMessage': self._parseRankMsg,  # 直播间排行榜信息
+                    # 'WebcastRoomStreamAdaptationMessage': self._parseRoomStreamAdaptationMsg,  # 直播间流配置
                 }.get(method)(msg.payload)
             except Exception:
                 pass

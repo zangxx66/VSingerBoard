@@ -4,13 +4,10 @@ import webview
 import pyperclip
 import sys
 from src.utils import check_for_updates, async_worker, __version__ as CURRENT_VERSION
-from .douyin import Douyin
-from .bilibili import Bili
+from src.live import bili_manager, douyin_manager
 
 
 thread_lock = threading.Lock()
-bili_manager = Bili()
-dy_manager = Douyin()
 
 
 async def _restart_bili_async():
@@ -20,33 +17,9 @@ async def _restart_bili_async():
 
 
 async def _restart_dy_async():
-    await dy_manager.stop()
+    await douyin_manager.stop()
     await asyncio.sleep(1)
-    dy_manager.start()
-
-
-def restart_bili():
-    async_worker.submit(_restart_bili_async())
-
-
-def restart_dy():
-    async_worker.submit(_restart_dy_async())
-
-
-def start_bili():
-    bili_manager.start()
-
-
-def start_dy():
-    dy_manager.start()
-
-
-def stop_bili():
-    async_worker.submit(bili_manager.stop())
-
-
-def stop_dy():
-    async_worker.submit(dy_manager.stop())
+    douyin_manager.start()
 
 
 class Api:
@@ -70,7 +43,7 @@ class Api:
             list: 抖音的弹幕列表。
         """
         with thread_lock:
-            return dy_manager.get_list()
+            return douyin_manager.get_list()
 
     def check_clipboard(self):
         """
@@ -97,7 +70,7 @@ class Api:
         Returns:
             int: 抖音WebSocket连接的状态。-1表示连接未配置，0表示连接未运行，1表示连接正在运行。
         """
-        return dy_manager.get_status()
+        return douyin_manager.get_status()
 
     def restart_bilibili_ws(self):
         """
@@ -160,8 +133,8 @@ class Api:
 
     def get_live_config(self):
         return {
-            "douyin_romm_id": dy_manager.room_id,
+            "douyin_romm_id": douyin_manager.room_id,
             "bilibili_room_id": bili_manager.room_id,
-            "douyin_ws_status": dy_manager.get_status(),
+            "douyin_ws_status": douyin_manager.get_status(),
             "bilibili_ws_status": bili_manager.get_status(),
         }

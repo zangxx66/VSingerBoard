@@ -38,6 +38,6 @@ if __name__ == "__main__":
     except Exception as ex:
         logger.exception(ex)
     finally:
-        lifecycle.on_closing()
+        # lifecycle.on_closing()
         async_worker.stop()
         os._exit(0)

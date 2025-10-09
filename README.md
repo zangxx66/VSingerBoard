@@ -81,6 +81,7 @@
 │   ├── database/ # 数据库模型和操作
 │   ├── douyin/ # 抖音直播相关逻辑
 │   ├── jsBridge/ # Python 与 JavaScript 桥接逻辑
+│   ├── live/ # 直播平台实现
 │   ├── manager/ # 核心管理器模块
 │   ├── notifypy/ # 通知功能库
 │   │   └── os_notifiers/ # 操作系统特定的通知实现

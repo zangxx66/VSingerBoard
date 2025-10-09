@@ -1,8 +1,8 @@
 import multiprocessing
 import subprocess
-from src.utils import IPCManager, logger
+from src.utils import IPCManager, logger, async_worker
 from src.server import startup
-from src.jsBridge import start_bili, start_dy, stop_bili, stop_dy
+from src.live import bili_manager, douyin_manager
 
 server_process = None
 dev_process = None
@@ -24,16 +24,18 @@ def start_vite_server():
 
 def start_websocket_server():
     logger.info("------start websocket------")
-    start_bili()
-    start_dy()
+    bili_manager.start()
+    douyin_manager.start()
 
 
 def stop_all_servers():
-    stop_bili()
-    stop_dy()
-    if dev_process is not None:
+    async_worker.run_sync(bili_manager.stop())
+    async_worker.run_sync(douyin_manager.stop())
+
+    if dev_process:
         dev_process.terminate()
-    if server_process is not None:
+        logger.info("Vite server stopped.")
+    if server_process and server_process.exitcode:
         server_process.terminate()
         server_process.join(timeout=5)
         if server_process.is_alive():
@@ -41,3 +43,4 @@ def stop_all_servers():
             server_process.kill()
             server_process.join()
         server_process.close()
+        logger.info("FastApi server stopped.")

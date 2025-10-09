@@ -7,7 +7,6 @@ from src.utils import logger
 
 def signal_handler(sig, frame):
     logger.info(f"Received signal: {sig}. Triggering shutdown.")
-    on_closing()
 
 
 def setup_signal_handlers():

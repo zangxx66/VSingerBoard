@@ -1,12 +1,16 @@
 import asyncio
 import threading
-from typing import Coroutine, Callable, Any
-
+import logging
+from typing import Coroutine, Callable, Any, TypeVar, Union
+from asyncio.futures import Future as AsyncioFuture
+from concurrent.futures import Future as ConcurrentFuture, ThreadPoolExecutor
 from src.database import Db
 
 # 定义回调函数的类型签名
 DoneCallback = Callable[[Any], None]
 FailCallback = Callable[[Exception], None]
+T = TypeVar("T")
+logger = logging.getLogger("danmaku")
 
 
 class AsyncWorker:
@@ -58,6 +62,7 @@ class AsyncWorker:
         self._thread.join()
         self._thread = None
         self._loop = None
+        logger.info("AsyncWorker stopped.")
 
     def submit(self, coro: Coroutine, on_done: DoneCallback = None, on_fail: FailCallback = None) -> asyncio.Future:
         """将一个协程提交到工作者的事件循环上运行。"""
@@ -97,21 +102,31 @@ class AsyncWorker:
         future = asyncio.run_coroutine_threadsafe(coro, self._loop)
         return await asyncio.to_thread(future.result)  # 异步地等待 concurrent.futures.Future 的结果
 
-    def run_sync(self, coro: Coroutine) -> Any:
+    def __ensure_event_loop(self) -> None:
+        try:
+            asyncio.get_event_loop()
+        except Exception:
+            asyncio.set_event_loop(asyncio.new_event_loop())
+        return asyncio.get_event_loop()
+
+    def run_sync(self, coroutine: Union[Coroutine[Any, Any, T], AsyncioFuture, ConcurrentFuture]) -> T:
         """
         同步执行一个异步方法并返回结果。
 
         这个方法会阻塞当前线程直到异步方法执行完毕。
 
-        :param coro: 要执行的协程
+        :param coroutine: 要执行的协程
         :return: 协程的返回值
         """
-        if self._loop is None or not self._loop.is_running():
-            raise RuntimeError("AsyncWorker is not running.")
-
-        future = asyncio.run_coroutine_threadsafe(coro, self._loop)
-        # 等待 future 完成并获取结果，这将阻塞当前线程
-        return future.result()
+        try:
+            asyncio.get_running_loop()
+        except RuntimeError:
+            return self.__ensure_event_loop().run_until_complete(coroutine)
+        else:
+            with ThreadPoolExecutor() as executor:
+                return executor.submit(
+                    lambda x: self.__ensure_event_loop().run_until_complete(x), coroutine
+                ).result()
 
 
 # 创建全局单例

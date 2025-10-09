@@ -1,6 +1,6 @@
 import asyncio
 from src.utils import IPCManager, MessageQueueEmpty, logger, async_worker
-from src.jsBridge import restart_bili, restart_dy
+from src.live import bili_manager, douyin_manager
 
 ipc_manager = IPCManager()
 is_done = False
@@ -14,10 +14,14 @@ async def ipc_task():
             received_data = ipc_manager.receive_message_nonblocking()
             if received_data == "bilibili_ws_reconnect":
                 logger.info("bilibili_ws_reconnect")
-                restart_bili()
+                await bili_manager.stop()
+                await asyncio.sleep(1)
+                bili_manager.start()
             elif received_data == "douyin_ws_reconnect":
                 logger.info("douyin_ws_reconnect")
-                restart_dy()
+                await douyin_manager.stop()
+                await asyncio.sleep(1)
+                douyin_manager.start()
             else:
                 logger.info(f"Received data: {received_data}")
         except MessageQueueEmpty:
