@@ -102,8 +102,8 @@ def on_closing():
             server_thread.kill()
             server_thread.join()
         server_thread.close()
-    if ipc_task_thread is not None:
-        ipc_task_thread.join()
+    if ipc_task_thread and not ipc_task_thread.done():
+        ipc_task_thread.cancel()
         logger.info("IPC task thread joined.")
     ipc_manager.close()
     if icon is not None:
@@ -197,7 +197,7 @@ def main():
         # ipc
         # ipc_task_thread = threading.Thread(target=ipc_task, name="ipc_task")
         # ipc_task_thread.start()
-        async_worker.submit(ipc_task())
+        ipc_task_thread = async_worker.submit(ipc_task())
 
         localization = {
             'global.quitConfirmation': u'是否退出？',
