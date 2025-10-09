@@ -58,7 +58,7 @@ class Douyin:
             self._stop_event.set()
             try:
                 awaitable_future = asyncio.wrap_future(self._run_future)
-                await asyncio.wait_for(awaitable_future, timeout=15)
+                await asyncio.wait_for(awaitable_future, timeout=5)
             except asyncio.TimeoutError:
                 logger.error("【X】Timed out waiting for Douyin task to stop.")
                 self._run_future.cancel()
