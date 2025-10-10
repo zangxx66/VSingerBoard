@@ -1,9 +1,8 @@
 import sys
 import os
-import webview
-import threading
 import time
-from src.utils import async_worker, logger
+import webview
+from src.utils import logger, async_worker
 from src.manager import gui_manager, ipc_handler, lifecycle, server_manager, version_manager
 
 
@@ -23,8 +22,7 @@ def main():
     if DEBUG:
         version_manager.update_build()
         # 启动Vite
-        dev_thread = threading.Thread(target=server_manager.start_vite_server, daemon=True, name="ViteServer")
-        dev_thread.start()
+        server_manager.start_vite_server()
         time.sleep(3)
 
     # 启动websocket

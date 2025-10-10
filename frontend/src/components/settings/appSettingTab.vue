@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive } from "vue"
+import { ref, reactive, watchEffect } from "vue"
 import { ElMessage, type FormInstance } from "element-plus"
 import { Close, Check } from "@element-plus/icons-vue"
 import { request } from "@/api"
@@ -71,6 +71,11 @@ const addOrUpdateConfig = () => {
         btnLoading.value = false
     })
 }
+
+watchEffect(() => {
+    const darkTheme = themeStore.getDarkTheme()
+    baseFormValue.dark_mode = darkTheme
+})
 
 defineExpose({ initConfig })
 </script>

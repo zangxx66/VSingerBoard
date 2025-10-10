@@ -13,15 +13,15 @@ async def ipc_task():
         try:
             received_data = ipc_manager.receive_message_nonblocking()
             if received_data == "bilibili_ws_reconnect":
-                logger.info("bilibili_ws_reconnect")
                 await bili_manager.stop()
                 await asyncio.sleep(1)
                 bili_manager.start()
             elif received_data == "douyin_ws_reconnect":
-                logger.info("douyin_ws_reconnect")
                 await douyin_manager.stop()
                 await asyncio.sleep(1)
                 douyin_manager.start()
+            elif received_data == "exit":
+                clear_task()
             else:
                 logger.info(f"Received data: {received_data}")
         except MessageQueueEmpty:
@@ -29,6 +29,18 @@ async def ipc_task():
         await asyncio.sleep(0.1)
 
     logger.info("IPC task stopped.")
+
+
+def clear_task():
+    global is_done
+    while not is_done:
+        try:
+            _ = ipc_manager.receive_message_nonblocking()
+        except MessageQueueEmpty:
+            pass
+        finally:
+            is_done = True
+            logger.info("IPC queue cleared.")
 
 
 def start_ipc_task():
@@ -42,3 +54,4 @@ def stop_ipc_task():
     if ipc_task_thread and not ipc_task_thread.done():
         ipc_task_thread.cancel()
         logger.info("IPC task thread joined.")
+    ipc_manager.close()

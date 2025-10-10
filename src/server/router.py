@@ -1,20 +1,22 @@
 import base64
-import asyncio
 from fastapi import APIRouter, Query, Body
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel
 from bilibili_api import Credential, user
 from bilibili_api.login_v2 import QrCodeLogin, QrCodeLoginChannel
 from src.database import Db
 from src.utils import setup_autostart, ResponseItem, bconfigItem, dyconfigItem, globalfigItem
 from . import ipc_instance
 
-# Lock to serialize access to the bilibili-api library to prevent concurrency issues.
-bilibili_api_lock = asyncio.Lock()
-
 
 router = APIRouter(tags=["api"])
 qr_code_login: QrCodeLogin
+
+
+class BiliCredential(BaseModel):
+    id: int
+    enable: bool
 
 
 @router.get("/get_bili_config", response_model=ResponseItem)
@@ -35,28 +37,27 @@ async def add_or_update_bili_config(data: bconfigItem = Body(..., embed=True)):
 
 @router.get("/get_bili_credential_list", response_model=ResponseItem)
 async def get_bili_credential_list():
-    async with bilibili_api_lock:
-        query_list = await Db.get_bcredential_list()
-        result = []
-        for item in query_list:
-            cred = Credential(
-                sessdata=item.sessdata,
-                bili_jct=item.bili_jct,
-                buvid3=item.buvid3,
-                buvid4=item.buvid4,
-                dedeuserid=item.dedeuserid,
-                ac_time_value=item.ac_time_value
-            )
-            up = user.User(uid=item.uid, credential=cred)
-            up_info = await up.get_user_info()
-            result.append({
-                "id": item.id,
-                "uname": up_info["name"],
-                "avatar": up_info["face"],
-                "uid": item.uid,
-                "enable": item.enable
-            })
-        return ResponseItem(code=0, msg=None, data={"rows": jsonable_encoder(result)})
+    query_list = await Db.get_bcredential_list()
+    result = []
+    for item in query_list:
+        cred = Credential(
+            sessdata=item.sessdata,
+            bili_jct=item.bili_jct,
+            buvid3=item.buvid3,
+            buvid4=item.buvid4,
+            dedeuserid=item.dedeuserid,
+            ac_time_value=item.ac_time_value
+        )
+        up = user.User(uid=item.uid, credential=cred)
+        up_info = await up.get_user_info()
+        result.append({
+            "id": item.id,
+            "uname": up_info["name"],
+            "avatar": up_info["face"],
+            "uid": item.uid,
+            "enable": item.enable
+        })
+    return ResponseItem(code=0, msg=None, data={"rows": jsonable_encoder(result)})
 
 
 @router.get("/refresh_bili_credential", response_model=ResponseItem)
@@ -91,6 +92,15 @@ async def delete_bili_credential(id: int = Body(..., embed=True)):
         return ResponseItem(code=-1, msg="删除失败", data=None)
 
 
+@router.post("/update_bili_credential")
+async def update_bili_credential(data: BiliCredential = Body(..., embed=True)):
+    result = await Db.update_bcredential(pk=data.id, enable=data.enable)
+    if result:
+        ipc_instance.ipc_manager.send_message("bilibili_ws_reconnect")
+        return ResponseItem(code=0, msg="设置成功", data=None)
+    return ResponseItem(code=-1, msg="设置失败", data=None)
+
+
 @router.get("/get_bili_credential_code")
 async def get_bili_credential_code():
     global qr_code_login
@@ -105,20 +115,23 @@ async def get_bili_credential_code():
 @router.get("/check_qr_code")
 async def check_qr_code():
     global qr_code_login
+    qr_state = await qr_code_login.check_state()
     if qr_code_login.has_done():
         bili_cred = qr_code_login.get_credential()
         new_dic = bili_cred.__dict__
-        uid = new_dic["dedeuserid"]
-        new_dic["uid"] = uid
-        new_dic["enable"] = False
+        model_fileds = ['ac_time_value', 'bili_jct', 'buvid3', 'buvid4', 'dedeuserid', 'enable', 'id', 'sessdata', 'uid']
+        model_dic = {k: v for k, v in new_dic.items() if v is not None and k in model_fileds}
+        uid = model_dic["dedeuserid"]
+        model_dic["uid"] = uid
+        model_dic["enable"] = False
         cred = await Db.get_bcredential(uid=uid)
         if not cred:
-            await Db.add_bcredential(new_dic)
+            await Db.add_bcredential(**model_dic)
         else:
             new_dic["enable"] = cred.enable
-            await Db.update_bcredential(pk=cred.id, **new_dic)
+            await Db.update_bcredential(pk=cred.id, **model_dic)
+        qr_code_login = None
         return ResponseItem(code=0, msg="success", data=None)
-    qr_state = await qr_code_login.check_state()
     return ResponseItem(code=0, msg="qr_state", data={"data": qr_state.value})
 
 

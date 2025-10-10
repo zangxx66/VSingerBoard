@@ -51,6 +51,7 @@ class Douyin:
                 await self.live.disconnect_async()
                 self.live.remove_listener("danmu", self.add_dydanmu)
                 self.live = None
+            logger.info("Douyin live client stopped.")
 
     async def stop(self):
         if self._run_future and not self._run_future.done():

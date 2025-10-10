@@ -34,6 +34,8 @@ async def lifespan(app: FastAPI):
     yield
     # Database disconnection will be handled by async_worker
     await Db.disconnect()
+    ipc_instance.ipc_manager.send_message("exit")
+    ipc_instance.ipc_manager.close()
     logger.info("Database disconnection completed.")
 
 app = FastAPI(

@@ -100,6 +100,15 @@ class Request {
     async addOrUpdateGlobalConfig(params: {}): Promise<AxiosResponse<any>>{
         return await client.post("/api/add_or_update_global_config", params)
     }
+    
+    /**
+     * 更新BiliCredential。
+     * @param {Object} params 传递给服务器的参数对象。
+     * @returns {Promise<AxiosResponse<any>>} 更新操作的响应。
+     */
+    async UpdateBiliCredential(params: {}): Promise<AxiosResponse<any>>{
+        return await client.post("/api/update_bili_credential", params)
+    }
 }
 
 export const request = new Request()

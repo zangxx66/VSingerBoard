@@ -34,7 +34,16 @@ class Bili:
             self.sing_prefix = config.sing_prefix
             self.room_id = config.room_id
             bili_credential = await Db.get_bcredential(enable=True)
-            credential = Credential(**bili_credential.__dict__) if bili_credential else None
+            credential = None
+            if bili_credential:
+                credential = Credential(
+                    sessdata=bili_credential.sessdata,
+                    bili_jct=bili_credential.bili_jct,
+                    buvid3=bili_credential.buvid3,
+                    buvid4=bili_credential.buvid4,
+                    dedeuserid=bili_credential.dedeuserid,
+                    ac_time_value=bili_credential.ac_time_value
+                )
 
             self.live = live.LiveDanmaku(room_display_id=self.room_id, credential=credential, max_retry=99)
             self.live.on("DANMU_MSG")(self.on_msg)

@@ -114,6 +114,7 @@ class WebSocketClient:
         """
         执行重连操作。
         """
+        self.status_code = 2
         await asyncio.sleep(self.retry_delay)
         await self.connect()
 

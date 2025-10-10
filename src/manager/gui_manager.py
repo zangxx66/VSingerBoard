@@ -8,9 +8,11 @@ from pystray import Icon, Menu, MenuItem
 from src.utils import logger, resource_path, send_notification
 from src.jsBridge import Api
 
+icon = None
+window = None
+
 
 def on_minimized():
-    window = webview.active_window()
     if window:
         window.hide()
         send_notification("提示", "主界面已隐藏到托盘图标")
@@ -22,6 +24,7 @@ def on_start(window: Window):
 
 
 def setup_tray(window: Window):
+    global icon
     logo_dir_path = resource_path("icons")
     logo_path = os.path.join(logo_dir_path, "logo.png")
     image = Image.open(logo_path)
@@ -48,6 +51,7 @@ def setup_tray(window: Window):
 
 
 def create_window(DEBUG: bool):
+    global window
     PORT = 5173 if DEBUG else 8000
 
     localization = {
@@ -95,7 +99,6 @@ def create_window(DEBUG: bool):
                                    height=initHeight,
                                    resizable=False,
                                    easy_drag=False,)
-
     window.events.minimized += on_minimized
     return window
 

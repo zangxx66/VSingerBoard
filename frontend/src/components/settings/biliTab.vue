@@ -44,14 +44,14 @@ const credentialColumns: Column<any>[] = [
         key: 'uid',
         dataKey: 'uid',
         title: 'uid',
-        width: 100,
+        width: 200,
         cellRenderer: ({ cellData: uid }) => <ElText>{uid} </ElText>,
     },
     {
         key: 'uname',
         dataKey: 'uname',
         title: '昵称',
-        width: 250,
+        width: 300,
         cellRenderer: ({ cellData: uname }) => <ElText>{uname} </ElText>,
     },
     {
@@ -63,7 +63,7 @@ const credentialColumns: Column<any>[] = [
             <ElSwitch
                 modelValue={rowData.enable}
                 inline-prompt
-                style="--el-switch-off-color: #ff4949"
+                style="--el-switch-off-color: #ff4949; --el-switch-on-color: #13ce66"
                 activeText="启用"
                 inactiveText="禁用"
                 onChange={(val: string | number | boolean) => {
@@ -78,11 +78,13 @@ const credentialColumns: Column<any>[] = [
     {
         key: 'operations',
         title: '操作',
-        width: 100,
+        width: 200,
+        maxWidth: 1020,
+        minWidth: 100,
         cellRenderer: ({ rowData }) => (
             <>
                 <ElButton
-                    type="primary"
+                    type="success"
                     icon={Refresh}
                     loading={btnLoading.value}
                     onClick={(evt: MouseEvent) => refreshSub(rowData.id)}
@@ -160,13 +162,37 @@ const addOrUpdateConfig = () => {
 
 }
 
+/** 更改状态 */
 const changeStatus = (val: string | number | boolean, id: number) => {
-    credentialList.value.forEach((value, index, array) => {
-        if (value.id == id) return
-        value.enable = !val
-    })
+    request.UpdateBiliCredential({ data: { id: id, enable: val } })
+        .then(response => {
+            const resp = response.data as ResponseModel
+            if (resp.code != 0) {
+                ElMessage.warning(resp.msg || "设置失败")
+                revertLocalValue(id, !val)
+                return
+            }
+            ElMessage.success(resp.msg || "设置成功")
+            credentialList.value.forEach((value, index, array) => {
+                if (value.id == id) return
+                value.enable = !val
+            })
+        })
+        .catch(error => {
+            ElMessage.error(error)
+            revertLocalValue(id, !val)
+        })
 }
 
+/** 修改状态失败时恢复原样 */
+const revertLocalValue = (id: number, value: boolean | string | number) => {
+    const index = credentialList.value.findIndex(item => item.id === id)
+    if (index !== -1) {
+        (credentialList.value[index] as any)["enable"] = value
+    }
+}
+
+/** 打开登录二维码弹窗 */
 const addSub = () => {
     request
         .getBiliCredentialCode({})
@@ -183,6 +209,7 @@ const addSub = () => {
         .catch((error) => ElMessage.error(error))
 }
 
+/** 删除凭证 */
 const removeSub = (id: number) => {
     ElMessageBox.confirm('是否删除？', '提示', {
         confirmButtonText: '确定',
@@ -206,6 +233,7 @@ const removeSub = (id: number) => {
         })
 }
 
+/** 刷新凭证 */
 const refreshSub = (id: number) => {
     btnLoading.value = true
     request
@@ -225,6 +253,7 @@ const refreshSub = (id: number) => {
         })
 }
 
+/** 轮询二维码状态 */
 const checkQrCode = () => {
     request
         .checkQrCode({})
@@ -242,7 +271,7 @@ const checkQrCode = () => {
                 if (resp.msg == 'qr_state') {
                     switch (resp.data.data) {
                         case 'confirm':
-                            qrCodeText.value = '未确认登录'
+                            qrCodeText.value = '已扫码'
                             break
                         case 'timeout':
                             qrCodeText.value = '二维码已过期'
@@ -312,7 +341,7 @@ onMounted(() => {
             <div class="mb-4 flex items-center">
                 <el-button type="primary" @click="addSub">新增</el-button>
             </div>
-            <div style="height: 300px;">
+            <div style="height: 300px;padding-top: 1rem;">
                 <el-auto-resizer>
                     <template #default="{ width, height }">
                         <el-table-v2 :columns="credentialColumns" :data="credentialList" :width="width" :height="height"
