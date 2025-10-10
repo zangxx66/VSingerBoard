@@ -10,19 +10,24 @@ from src.manager import gui_manager, ipc_handler, lifecycle, server_manager, ver
 def main():
     logger.info("------ Application Startup ------")
 
+    # 注册信号处理
     lifecycle.setup_signal_handlers()
 
+    # 启动异步任务
     async_worker.start()
 
+    # 启动FastApi
     server_manager.start_http_server(webview.token, ipc_handler.ipc_manager)
 
     DEBUG = not getattr(sys, "frozen", False)
     if DEBUG:
         version_manager.update_build()
+        # 启动Vite
         dev_thread = threading.Thread(target=server_manager.start_vite_server, daemon=True, name="ViteServer")
         dev_thread.start()
         time.sleep(3)
 
+    # 启动websocket
     server_manager.start_websocket_server()
     ipc_handler.start_ipc_task()
 

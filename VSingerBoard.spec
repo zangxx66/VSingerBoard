@@ -85,7 +85,7 @@ datas += execjs_datas
 # This list contains modules that PyInstaller's static analysis might miss.
 hidden_packages = [
     "webview", "uvloop", "uvicorn", "pydantic", "objc", "anyio", "appdirs",
-    "aiohttp", "betterproto", "curl_cffi", "fastapi", "jinja2",
+    "aiohttp", "betterproto2", "curl_cffi", "fastapi", "jinja2",
     "pyperclip", "requests", "pkg_resources"
 ]
 hidden_packages += bilibili_api_hiddenimports

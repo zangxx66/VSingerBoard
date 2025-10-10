@@ -58,7 +58,7 @@
 │   └── workflows/ # 自动化工作流定义
 ├── doc/ # 项目文档和截图
 ├── frontend/ # 前端项目源代码
-│   ├── public/ # 静态文件，直接复制到根目录
+│   ├── public/ # 静态文件
 │   │   └── assets/
 │   │       └── images/ # 图片资源
 │   └── src/ # 前端核心代码
@@ -80,6 +80,7 @@
 ├── src/ # 后端 Python 源代码
 │   ├── database/ # 数据库模型和操作
 │   ├── douyin/ # 抖音直播相关逻辑
+│   │   └── lib/ # 抖音库文件
 │   ├── jsBridge/ # Python 与 JavaScript 桥接逻辑
 │   ├── live/ # 直播平台实现
 │   ├── manager/ # 核心管理器模块

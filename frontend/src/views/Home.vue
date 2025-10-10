@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, defineAsyncComponent, onActivated } from "vue"
+import { ref, reactive, onMounted, defineAsyncComponent, nextTick } from "vue"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { CloseBold, Download, Delete } from "@element-plus/icons-vue"
 import { emoticons, emojiList, exportExcel, timespanToString, getNowTimespan } from "@/utils"
@@ -82,7 +82,7 @@ const exportFile = () => {
 }
 
 
-const processDanmaku = (list: DanmakuModel[], platform: "bilibili" | "douyin") => {
+const processDanmaku = async(list: DanmakuModel[], platform: "bilibili" | "douyin") => {
     list.forEach(item => {
         let result = item.msg
         const matchList = item.msg.match(emojiexp)
@@ -108,6 +108,7 @@ const processDanmaku = (list: DanmakuModel[], platform: "bilibili" | "douyin") =
     })
     danmakuList.value.push(...list)
     if(infiniteList.value && list.length > 0){
+        await nextTick()
         infiniteList.value.scrollTo({ behavior: "smooth", top: infiniteList.value.scrollHeight })
     }
 }

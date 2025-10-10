@@ -5,7 +5,7 @@ import requests
 import asyncio
 from .ac_signature import get__ac_signature
 from .signature import execute_js, generateSignature, generateMsToken
-from .protobuf import PushFrame, Response, ChatMessage, GiftMessage, LikeMessage, MemberMessage, SocialMessage, RoomUserSeqMessage, FansclubMessage, EmojiChatMessage, RoomMessage, RoomStatsMessage, RoomRankMessage, ControlMessage, RoomStreamAdaptationMessage
+from .lib import PushFrame, Response, ChatMessage, GiftMessage, LikeMessage, MemberMessage, SocialMessage, RoomUserSeqMessage, FansclubMessage, EmojiChatMessage, RoomMessage, RoomStatsMessage, RoomRankMessage, ControlMessage, RoomStreamAdaptationMessage
 from src.utils import Decorator, logger, WebSocketClient
 
 

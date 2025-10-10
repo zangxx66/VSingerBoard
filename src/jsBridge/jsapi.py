@@ -23,7 +23,6 @@ async def _restart_dy_async():
 
 
 class Api:
-    _qr_code_login = None
 
     def get_danmu(self):
         """
