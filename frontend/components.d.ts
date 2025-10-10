@@ -9,6 +9,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AppSettingTab: typeof import('./src/components/settings/appSettingTab.vue')['default']
+    BiliCredential: typeof import('./src/components/settings/biliCredential.vue')['default']
     BiliTab: typeof import('./src/components/settings/biliTab.vue')['default']
     DyTab: typeof import('./src/components/settings/dyTab.vue')['default']
     ElAlert: typeof import('element-plus/es')['ElAlert']
