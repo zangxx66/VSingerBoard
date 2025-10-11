@@ -3,6 +3,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 import ContextMenu from "@imengyu/vue3-context-menu"
+import linkIcon from "@/components/linkIcon"
 import 'nprogress/nprogress.css'
 import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/base.css'
@@ -15,4 +16,5 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(ContextMenu)
+app.component("link-icon", linkIcon)
 app.mount('#app')

@@ -35,7 +35,7 @@ def main():
     webview.start(gui_manager.on_start, window, debug=DEBUG, gui="gtk")
 
 
-if __name__ == "__main__":
+def run_app():
     try:
         main()
     except Exception as ex:
@@ -44,3 +44,7 @@ if __name__ == "__main__":
         # lifecycle.on_closing()
         async_worker.stop()
         os._exit(0)
+
+
+if __name__ == "__main__":
+    run_app()

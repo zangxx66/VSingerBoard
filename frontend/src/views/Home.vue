@@ -142,7 +142,10 @@ onMounted(() => {
             <el-card class="chat-card">
                 <template #header>
                     <div class="card-header">
-                        <span>点歌列表</span>
+                        <span>
+                            点歌列表
+                            <link-icon />
+                        </span>
                     </div>
                 </template>
                 <div class="infinite-list" ref="infiniteList" v-infinite-scroll="load">

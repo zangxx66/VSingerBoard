@@ -225,30 +225,30 @@ onMounted(() => {
 </script>
 <template>
     <el-card>
-            <template #header>
-                <div class="card-header">
-                    <span>账号设置</span>
-                    <el-alert title="未登录账号无法获取到弹幕用户昵称等信息，如有需要可添加一个小号" type="warning" :closable="false" />
-                </div>
-            </template>
-            <div class="mb-4 flex items-center">
-                <el-button type="primary" @click="addSub">新增</el-button>
+        <template #header>
+            <div class="card-header">
+                <span>账号设置</span>
+                <el-alert title="未登录账号无法获取到弹幕用户昵称等信息，如有需要可添加一个小号" type="warning" :closable="false" />
             </div>
-            <div style="height: 300px;padding-top: 1rem;">
-                <el-auto-resizer>
-                    <template #default="{ width, height }">
-                        <el-table-v2 :columns="credentialColumns" :data="credentialList" :width="width" :height="height"
-                            fixed></el-table-v2>
-                    </template>
-                </el-auto-resizer>
-            </div>
-        </el-card>
-        <el-dialog v-model="isShow" title="新增" width="720" @close="closeDialog" destroy-on-close>
-            <div class="avatar-image-container">
-                <img :src="qrCode" alt="qrcode" class="avatar" referrerpolicy="no-referrer" />
-                <div class="code-bage" v-if="qrCodeText.length > 0">{{ qrCodeText }}</div>
-            </div>
-        </el-dialog>
+        </template>
+        <div class="mb-4 flex items-center">
+            <el-button type="primary" @click="addSub">新增</el-button>
+        </div>
+        <div style="height: 300px;padding-top: 1rem;">
+            <el-auto-resizer>
+                <template #default="{ width, height }">
+                    <el-table-v2 :columns="credentialColumns" :data="credentialList" :width="width" :height="height"
+                        fixed></el-table-v2>
+                </template>
+            </el-auto-resizer>
+        </div>
+    </el-card>
+    <el-dialog v-model="isShow" title="新增" width="720" @close="closeDialog" destroy-on-close>
+        <div class="avatar-image-container">
+            <img :src="qrCode" alt="qrcode" class="avatar" referrerpolicy="no-referrer" />
+            <div class="code-bage" v-if="qrCodeText.length > 0">{{ qrCodeText }}</div>
+        </div>
+    </el-dialog>
 </template>
 <style scoped>
 .avatar-image-container {

@@ -4,7 +4,6 @@ import logging
 from typing import Coroutine, Callable, Any, TypeVar, Union
 from asyncio.futures import Future as AsyncioFuture
 from concurrent.futures import Future as ConcurrentFuture, ThreadPoolExecutor
-from src.database import Db
 
 # 定义回调函数的类型签名
 DoneCallback = Callable[[Any], None]
@@ -38,6 +37,7 @@ class AsyncWorker:
         asyncio.set_event_loop(self._loop)
 
         # 在此循环中初始化数据库，然后再开始永久运行
+        from src.database import Db
         self._loop.run_until_complete(Db.init())
 
         self._ready.set()  # 发信号通知循环已准备好

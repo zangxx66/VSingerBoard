@@ -3,7 +3,7 @@
 import time
 
 
-def get__ac_signature(one_site: str, one_nonce: str, ua_n: str,one_time_stamp: int=int(time.time())) -> str:
+def get__ac_signature(one_site: str, one_nonce: str, ua_n: str, one_time_stamp: int = int(time.time())) -> str:
     """计算x音的 _ac_signature 参数
 
     参数:
