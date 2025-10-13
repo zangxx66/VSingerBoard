@@ -24,26 +24,6 @@ async def _restart_dy_async():
 
 class Api:
 
-    def get_danmu(self):
-        """
-        获取Bilibili的弹幕列表。
-
-        Returns:
-            list: Bilibili的弹幕列表。
-        """
-        with thread_lock:
-            return bili_manager.get_list()
-
-    def get_dy_danmu(self):
-        """
-        获取抖音的弹幕列表。
-
-        Returns:
-            list: 抖音的弹幕列表。
-        """
-        with thread_lock:
-            return douyin_manager.get_list()
-
     def check_clipboard(self):
         """
         检查当前剪贴板内容。

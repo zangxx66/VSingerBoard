@@ -2,7 +2,7 @@ import uvicorn
 import os
 from pathlib import Path
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, Request, Header, Depends
+from fastapi import FastAPI, Request, Depends
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -21,8 +21,9 @@ if not os.path.exists(dist_path):
     raise FileNotFoundError(f"文件夹 '{dist_path}' 不存在。")
 
 
-def verify_token(x_token: str = Header()):
-    if x_token != _token:
+def verify_token(request: Request):
+    x_token = request.headers.get("x-token")
+    if x_token != _token and request.url.path != "/danamu":
         raise HTTPException(status_code=500, detail="Authentication error")
 
 

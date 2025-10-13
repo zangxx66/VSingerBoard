@@ -16,10 +16,12 @@ async def ipc_task():
                 await bili_manager.stop()
                 await asyncio.sleep(1)
                 bili_manager.start()
+
             elif received_data == "douyin_ws_reconnect":
                 await douyin_manager.stop()
                 await asyncio.sleep(1)
                 douyin_manager.start()
+
             elif received_data == "exit":
                 clear_task()
             else:
@@ -33,13 +35,12 @@ async def ipc_task():
 
 def clear_task():
     global is_done
-    while not is_done:
+    while True:
         try:
             _ = ipc_manager.receive_message_nonblocking()
         except MessageQueueEmpty:
-            pass
+            break
         finally:
-            is_done = True
             logger.info("IPC queue cleared.")
 
 

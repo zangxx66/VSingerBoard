@@ -12,10 +12,6 @@ declare interface Window {
             get_dy_ws_status: () => Promise<number>
             /** 获取当前版本 */
             get_version: () => Promise<string>
-            /** 获取bilibili点歌列表 */
-            get_danmu: () => Promise<Array<DanmakuModel>>
-            /** 获取抖音点歌列表 */
-            get_dy_danmu: () => Promise<Array<DanmakuModel>>
             /** 是否是bundle */
             is_bundle: () => Promise<boolean>
             /** 检查剪贴板 */

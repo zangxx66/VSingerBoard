@@ -42,7 +42,7 @@ class Douyin:
             await self._stop_event.wait()
 
         except asyncio.CancelledError:
-            logger.info("Douyin main task was cancelled.")
+            logger.warning("Douyin main task was cancelled.")
         except Exception as e:
             logger.error(f"Douyin main task failed: {e}")
         finally:
@@ -77,7 +77,7 @@ class Douyin:
 
     def get_list(self):
         if len(self.danmus) == 0:
-            return None
+            return []
         result = self.danmus.copy()
         self.danmus.clear()
         return result

@@ -11,6 +11,7 @@ class DanmuInfo(TypedDict):
     guard_level: int
     price: Optional[int]
     send_time: int
+    status: Optional[int]
 
 
 class ResponseItem(BaseModel):

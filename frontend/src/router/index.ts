@@ -7,24 +7,41 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      name: "home",
-      component: () => import("../views/Home.vue")
+      component: () => import("../components/layout/defaultLayout.vue"),
+      children: [
+        {
+          path: "",
+          name: "home",
+          component: () => import("../views/Home.vue")
+        },
+        {
+          path: "/settings",
+          name: "settings",
+          component: () => import("../views/Settings.vue")
+        },
+        {
+          path: "/changelog",
+          name: "changelog",
+          component: () => import("../views/Changelog.vue")
+        },
+        {
+          path: "/about",
+          name: "about",
+          component: () => import("../views/About.vue")
+        },
+      ]
     },
     {
-      path: "/settings",
-      name: "settings",
-      component: () => import("../views/Settings.vue")
-    },
-    {
-      path: "/changelog",
-      name: "changelog",
-      component: () => import("../views/Changelog.vue")
-    },
-    {
-      path: "/about",
-      name: "about",
-      component: () => import("../views/About.vue")
-    },
+      path: "/danmaku",
+      component: () => import("../components/layout/blankLayout.vue"),
+      children: [
+        {
+          path: "",
+          name: "danmaku",
+          component: () => import("../views/Danmaku.vue")
+        }
+      ]
+    }
   ],
 })
 

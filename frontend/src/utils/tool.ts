@@ -1,4 +1,8 @@
 import { ElMessage, ElNotification } from "element-plus"
+import { emojiList } from "./emoji"
+import { emoticons } from "./emoticons"
+
+const emojiexp = /\[[\u4E00-\u9FA5A-Za-z0-9_]+\]/g
 
 /**
  * 检查VSingerBoard应用程序是否有新版本。
@@ -54,4 +58,32 @@ export const pasteToElement = async(activeEl: HTMLElement | null) => {
       console.error(error)
     }
   }
+}
+
+
+export const processDanmaku = (list: DanmakuModel[], platform: "bilibili" | "douyin") => {
+  list.forEach(item => {
+    let result = item.msg
+    const matchList = item.msg.match(emojiexp)
+    if(matchList) {
+      for(const value of matchList) {
+        let emojiUrl: string | undefined
+        if(platform == "bilibili") {
+          const emoji = emoticons.find((e) => value === e.emoji)
+          if (emoji) emojiUrl = emoji.url
+        }else {
+          const emoji = emojiList.find((item) => value === item.display_name)
+          if (emoji) emojiUrl = emoji.url
+        }
+        if(emojiUrl) {
+          result = result.replaceAll(
+            value,
+            `<img src="${emojiUrl}" referrerpolicy="no-referrer" width="20" />`
+          )
+        }
+      }
+      item.html = result
+    }
+  })
+  return list
 }

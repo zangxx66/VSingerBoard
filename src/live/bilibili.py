@@ -53,7 +53,7 @@ class Bili:
             logger.info("Bilibili live client starting.")
             await self._stop_event.wait()
         except asyncio.CancelledError:
-            logger.info("Bilibili main task was cancelled.")
+            logger.warning("Bilibili main task was cancelled.")
         except Exception as e:
             logger.error(f"Bilibili task failed: {e}")
         finally:
@@ -87,7 +87,7 @@ class Bili:
 
     def get_list(self):
         if len(self.danmus) == 0:
-            return None
+            return []
         result = self.danmus.copy()
         self.danmus.clear()
         return result

@@ -4,6 +4,7 @@ import time
 import webview
 from src.utils import logger, async_worker
 from src.manager import gui_manager, ipc_handler, lifecycle, server_manager, version_manager
+from src.jsBridge import Api
 
 
 def main():
@@ -29,7 +30,8 @@ def main():
     server_manager.start_websocket_server()
     ipc_handler.start_ipc_task()
 
-    window = gui_manager.create_window(DEBUG)
+    api = Api()
+    window = gui_manager.create_window(DEBUG, api)
     window.events.closing += lifecycle.on_closing
     gui_manager.setup_tray(window)
     webview.start(gui_manager.on_start, window, debug=DEBUG, gui="gtk")
@@ -41,7 +43,7 @@ def run_app():
     except Exception as ex:
         logger.exception(ex)
     finally:
-        # lifecycle.on_closing()
+        lifecycle.on_closing()
         async_worker.stop()
         os._exit(0)
 

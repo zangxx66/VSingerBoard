@@ -3,7 +3,7 @@ import subprocess
 import threading
 from src.utils import IPCManager, logger, async_worker
 from src.server import startup
-from src.live import bili_manager, douyin_manager
+from src.live import bili_manager, douyin_manager, doubi_manager
 
 server_process = None
 dev_process = None
@@ -32,15 +32,18 @@ def start_vite_server():
 
 
 def start_websocket_server():
+    global doubi_thread
     logger.info("------start websocket------")
     bili_manager.start()
     douyin_manager.start()
+    doubi_manager.start()
 
 
 def stop_all_servers():
     global dev_process, vite_thread, server_process
     async_worker.submit(bili_manager.stop())
     async_worker.submit(douyin_manager.stop())
+    async_worker.submit(doubi_manager.stop())
 
     if dev_process:
         dev_process.terminate()

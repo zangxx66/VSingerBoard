@@ -74,7 +74,34 @@ body {
   display: none;
 }
 
-
+/* 弹幕列表CSS */
+.danmaku-container {
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    list-style: none;
+    overflow: auto;
+}
+.danmaku-item {
+    width: 95%;
+    display: flex;
+    margin: 10px;
+    height: 50px;
+    text-align: left;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+}
+.danmaku-source-img {
+    margin: 1px;
+    height: 24px;
+}
+.danmaku-tag {
+    display: inline-block;
+    width: 90%;
+    margin-left: 1%;
+}
+/* 弹幕列表CSS end */
 
 a,
 .green {

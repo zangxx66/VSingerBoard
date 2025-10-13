@@ -6,16 +6,13 @@ from webview.window import Window
 from PIL import Image
 from pystray import Icon, Menu, MenuItem
 from src.utils import logger, resource_path, send_notification
-from src.jsBridge import Api
 
 icon = None
-window = None
 
 
-def on_minimized():
-    if window:
-        window.hide()
-        send_notification("提示", "主界面已隐藏到托盘图标")
+def on_minimized(window):
+    window.hide()
+    send_notification("提示", "主界面已隐藏到托盘图标")
 
 
 def on_start(window: Window):
@@ -36,7 +33,10 @@ def setup_tray(window: Window):
         window.hide()
 
     def quit_app(i, item):
-        window.destroy()
+        global window
+        items = webview.windows
+        for item in items:
+            item.destroy()
         icon.stop()
 
     menu = Menu(
@@ -50,8 +50,7 @@ def setup_tray(window: Window):
     icon.run_detached()
 
 
-def create_window(DEBUG: bool):
-    global window
+def create_window(DEBUG: bool, api):
     PORT = 5173 if DEBUG else 8000
 
     localization = {
@@ -90,7 +89,6 @@ def create_window(DEBUG: bool):
     webview.settings["SHOW_DEFAULT_MENUS"] = False
     os.environ["PYWEBVIE_WLOG"] = "debug"
 
-    api = Api()
     window = webview.create_window("点歌姬",
                                    url=f"http://127.0.0.1:{PORT}/",
                                    js_api=api,

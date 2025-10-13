@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, defineAsyncComponent, nextTick } from "vue"
+import { ref, reactive, onMounted, defineAsyncComponent, nextTick, watch } from "vue"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { CloseBold, Download, Delete } from "@element-plus/icons-vue"
-import { emoticons, emojiList, exportExcel, timespanToString, getNowTimespan } from "@/utils"
-import { useClipboard } from "@vueuse/core"
+import { exportExcel, timespanToString, getNowTimespan, processDanmaku } from "@/utils"
+import { useClipboard, useWebSocket } from "@vueuse/core"
 import type { Column } from "exceljs"
 import { useIntervalStore } from "@/stores"
 
@@ -17,8 +17,6 @@ const config = reactive<LiveModel>({
 })
 const intervalStore = useIntervalStore()
 const infiniteList = ref<HTMLDivElement | null>(null)
-// emoji表情
-const emojiexp = /\[[\u4E00-\u9FA5A-Za-z0-9_]+\]/g
 
 const initConfig = async() => {
     const data = await window.pywebview.api.get_live_config()
@@ -82,45 +80,52 @@ const exportFile = () => {
 }
 
 
-const processDanmaku = async(list: DanmakuModel[], platform: "bilibili" | "douyin") => {
-    list.forEach(item => {
-        let result = item.msg
-        const matchList = item.msg.match(emojiexp)
-        if(matchList){
-            for(const value of matchList){
-                let emojiUrl: string | undefined
-                if(platform == "bilibili"){
-                    const emoji = emoticons.find((e) => value === e.emoji)
-                    if(emoji) emojiUrl = emoji.url
-                }else{
-                    const emoji = emojiList.find((item) => value === item.display_name)
-                    if(emoji) emojiUrl = emoji.url
-                }
-                if(emojiUrl){
-                    result = result.replaceAll(
-                        value,
-                        `<img src="${emojiUrl}" referrerpolicy="no-referrer" width="20" />`
-                    )
-                }
-            }
-            item.html = `${item.uname}： ${result}`
-        }
-    })
-    danmakuList.value.push(...list)
+const appendDanmaku = async(list: DanmakuModel[], platform: "bilibili" | "douyin") => {
+    const result = processDanmaku(list, platform)
+    danmakuList.value.push(...result)
     if(infiniteList.value && list.length > 0){
         await nextTick()
         infiniteList.value.scrollTo({ behavior: "smooth", top: infiniteList.value.scrollHeight })
     }
 }
 
-const getDanmaku = async() => {
-    const bilibiliDanmaku = await window.pywebview.api.get_danmu()
-    bilibiliDanmaku && processDanmaku(bilibiliDanmaku, "bilibili")
-
-    const douyinDanmaku = await window.pywebview.api.get_dy_danmu()
-    douyinDanmaku && processDanmaku(douyinDanmaku, "douyin")
+const getDanmaku = () => {
+    const { status, open } = useWebSocket("ws://127.0.0.1:8080", {
+        autoReconnect: true,
+        autoClose: true,
+        heartbeat: {
+            message: "heartbeat",
+            interval: 5000,
+            pongTimeout: 10000
+        },
+        onMessage: (ws: WebSocket, event: MessageEvent) => {
+            if(event.data.startsWith("Echo")){
+                return
+            }else{
+                const value = JSON.parse(event.data) as Array<DanmakuModel>
+                const douyin = value.filter(item => item.source == "douyin")
+                const bilibili = value.filter(item => item.source == "bilibili")
+                console.log(value)
+                danmakuList.value = [...danmakuList.value, ...processDanmaku(douyin, "douyin"), ...processDanmaku(bilibili, "bilibili")]
+            }
+        }
+    })
 }
 
+const openDanmakuWindow = async() => {
+    const isBundle = await window.pywebview.api.is_bundle()
+    const port = isBundle ? 8000 : 5173
+    const a = document.createElement("a")
+    a.href = `http://127.0.0.1:${port}/danmaku`
+    a.target = "_blank"
+    a.click()
+    a.remove()
+}
+
+watch(danmakuList, async () => {
+    await nextTick()
+    infiniteList.value && infiniteList.value.scrollTo({ behavior: "smooth", top: infiniteList.value.scrollHeight })
+})
 
 onMounted(() => {
     const height = window.innerHeight - 100
@@ -132,7 +137,8 @@ onMounted(() => {
     const listHeight = height * 0.7
     infiniteListDom.style.height = `${listHeight}px`
 
-    intervalStore.addInterval("get_danmaku", getDanmaku, 1000)
+    getDanmaku()
+
     intervalStore.addInterval("get_live_config", initConfig, 1000)
 })
 </script>
@@ -144,7 +150,7 @@ onMounted(() => {
                     <div class="card-header">
                         <span>
                             点歌列表
-                            <link-icon />
+                            <link-icon style="cursor: pointer;" @click="openDanmakuWindow" />
                         </span>
                     </div>
                 </template>
@@ -163,6 +169,7 @@ onMounted(() => {
                                 </template>
                                 <el-text tag="span" class="chat-tag" @click="copyToClipboard(item.msg)">
                                     <template v-if="item.html != undefined">
+                                        {{ item.uname }}；
                                         <el-text v-html="item.html" style="display: flex;"></el-text>
                                     </template>
                                     <template v-else>

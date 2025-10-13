@@ -11,6 +11,8 @@ declare module 'vue' {
     AppSettingTab: typeof import('./src/components/settings/appSettingTab.vue')['default']
     BiliCredential: typeof import('./src/components/settings/biliCredential.vue')['default']
     BiliTab: typeof import('./src/components/settings/biliTab.vue')['default']
+    BlankLayout: typeof import('./src/components/layout/blankLayout.vue')['default']
+    DefaultLayout: typeof import('./src/components/layout/defaultLayout.vue')['default']
     DyTab: typeof import('./src/components/settings/dyTab.vue')['default']
     ElAlert: typeof import('element-plus/es')['ElAlert']
     ElAside: typeof import('element-plus/es')['ElAside']
