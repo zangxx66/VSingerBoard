@@ -1,20 +1,22 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, defineAsyncComponent, nextTick, watch } from "vue"
+import { ref, reactive, onMounted, defineAsyncComponent, nextTick, watch, computed } from "vue"
 import { ElMessage, ElMessageBox } from "element-plus"
-import { CloseBold, Download, Delete } from "@element-plus/icons-vue"
+import { CloseBold, Download, Delete, EditPen } from "@element-plus/icons-vue"
 import { exportExcel, timespanToString, getNowTimespan, processDanmaku } from "@/utils"
 import { useClipboard, useWebSocket } from "@vueuse/core"
 import type { Column } from "exceljs"
-import { useIntervalStore } from "@/stores"
+import { useIntervalStore, useDanmakuStore } from "@/stores"
 
 const PlatformStatus = defineAsyncComponent(() => import("@/components/home/platformStatus.vue"))
-const danmakuList = ref(Array<DanmakuModel>())
+const addSingDialog = defineAsyncComponent(() => import("@/components/home/addSingDialog.vue"))
+const singDialogRef = ref<null | InstanceType<typeof addSingDialog>>()
 const config = reactive<LiveModel>({
     douyin_romm_id: 0,
     bilibili_room_id: 0,
     douyin_ws_status: -1,
     bilibili_ws_status: -1
 })
+const danmakuStore = useDanmakuStore()
 const intervalStore = useIntervalStore()
 const infiniteList = ref<HTMLDivElement | null>(null)
 
@@ -34,10 +36,7 @@ const copyToClipboard = (txt: string) => {
 }
 
 const remove = (danmaku: DanmakuModel) => {
-    const index = danmakuList.value.indexOf(danmaku)
-    if(index > -1){
-        danmakuList.value.splice(index, 1)
-    }
+    danmakuStore.removeDanmakuList(danmaku)
 }
 
 const clear = () => {
@@ -51,7 +50,7 @@ const clear = () => {
         }
     )
     .then(() => {
-        danmakuList.value = []
+        danmakuStore.clearDanmakuList()
     })
     .catch((error) => {
         if ('string' == typeof error && 'cancel' == error) return
@@ -79,16 +78,6 @@ const exportFile = () => {
     exportExcel(columns, data, filename)
 }
 
-
-const appendDanmaku = async(list: DanmakuModel[], platform: "bilibili" | "douyin") => {
-    const result = processDanmaku(list, platform)
-    danmakuList.value.push(...result)
-    if(infiniteList.value && list.length > 0){
-        await nextTick()
-        infiniteList.value.scrollTo({ behavior: "smooth", top: infiniteList.value.scrollHeight })
-    }
-}
-
 const getDanmaku = () => {
     const { status, open } = useWebSocket("ws://127.0.0.1:8080", {
         autoReconnect: true,
@@ -105,8 +94,8 @@ const getDanmaku = () => {
                 const value = JSON.parse(event.data) as Array<DanmakuModel>
                 const douyin = value.filter(item => item.source == "douyin")
                 const bilibili = value.filter(item => item.source == "bilibili")
-                console.log(value)
-                danmakuList.value = [...danmakuList.value, ...processDanmaku(douyin, "douyin"), ...processDanmaku(bilibili, "bilibili")]
+                const result = [...danmakuList.value, ...processDanmaku(douyin, "douyin"), ...processDanmaku(bilibili, "bilibili")]
+                danmakuStore.setDanmakuList(result)
             }
         }
     })
@@ -121,6 +110,14 @@ const openDanmakuWindow = async() => {
     a.click()
     a.remove()
 }
+
+const openSingDialog = () => {
+    singDialogRef.value && singDialogRef.value.openDialog()
+}
+
+const danmakuList = computed(() => {
+    return danmakuStore.getDanmakuList()
+})
 
 watch(danmakuList, async () => {
     await nextTick()
@@ -157,12 +154,7 @@ onMounted(() => {
                 <div class="infinite-list" ref="infiniteList" v-infinite-scroll="load">
                     <template v-for="item in danmakuList">
                         <div class="infinite-list-item">
-                            <template v-if="item.source == 'bilibili'">
-                                <img src="/assets/images/bilibili.png" class="source-img" alt="bilibili" width="24" />
-                            </template>
-                            <template v-else-if="item.source == 'douyin'">
-                                <img src="/assets/images/douyin.png" class="source-img" alt="douyin" width="24" />
-                            </template>
+                            <img :src="`/assets/images/${item.source}.png`" class="source-img" :alt="item.source" width="24" />
                             <el-tooltip placement="bottom">
                                 <template #content>
                                     <span>点击复制歌名：{{ item.msg }}</span>
@@ -193,6 +185,12 @@ onMounted(() => {
                 </div>
                 <template #footer>
                     <div class="card-footer">
+                        <el-button type="primary" @click="openSingDialog">
+                            手动点歌
+                            <el-icon>
+                                <EditPen />
+                            </el-icon>
+                        </el-button>
                         <el-button type="danger" :disabled="danmakuList.length == 0" @click="clear">
                             清空点歌列表
                             <el-icon class="el-icon--right">
@@ -214,6 +212,7 @@ onMounted(() => {
                     </div>
                 </template>
             </el-card>
+            <addSingDialog ref="singDialogRef"></addSingDialog>
         </el-main>
     </el-container>
 </template>
@@ -242,7 +241,7 @@ onMounted(() => {
 }
 
 .chat-tag {
-    display: inline-block;
+    display: flex;
     width: 90%;
     cursor: pointer;
     margin-left: 1%;

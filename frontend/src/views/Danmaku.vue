@@ -36,12 +36,7 @@ onMounted(() => {
     <div class="danmaku-container" v-infinite-scroll="load">
         <template v-for="item in list">
             <div class="danmaku-item">
-                <template v-if="item.source == 'bilibili'">
-                    <img src="/assets/images/bilibili.png" class="danmaku-source-img" alt="bilibili" width="24" />
-                </template>
-                <template v-else-if="item.source == 'douyin'">
-                    <img src="/assets/images/douyin.png" class="danmaku-source-img" alt="douyin" width="24" />
-                </template>
+                <img :src="`/assets/images/${item.source}.png`" class="danmaku-source-img" :alt="item.source" width="24" />
                 <el-text tag="span" class="danmaku-tag">
                     <template v-if="item.html != undefined">
                         <el-text v-html="item.html" style="display: flex;"></el-text>

@@ -80,7 +80,7 @@ body {
     margin: 0;
     background: transparent;
     list-style: none;
-    overflow: auto;
+    overflow-y: auto;
 }
 .danmaku-item {
     width: 95%;
@@ -97,7 +97,7 @@ body {
     height: 24px;
 }
 .danmaku-tag {
-    display: inline-block;
+    display: flex;
     width: 90%;
     margin-left: 1%;
 }

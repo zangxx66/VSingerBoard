@@ -8,6 +8,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AddSingDialog: typeof import('./src/components/home/addSingDialog.vue')['default']
     AppSettingTab: typeof import('./src/components/settings/appSettingTab.vue')['default']
     BiliCredential: typeof import('./src/components/settings/biliCredential.vue')['default']
     BiliTab: typeof import('./src/components/settings/biliTab.vue')['default']
@@ -32,6 +33,8 @@ declare module 'vue' {
     ElMain: typeof import('element-plus/es')['ElMain']
     ElMenu: typeof import('element-plus/es')['ElMenu']
     ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
+    ElOption: typeof import('element-plus/es')['ElOption']
+    ElSelect: typeof import('element-plus/es')['ElSelect']
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
     ElTableV2: typeof import('element-plus/es')['ElTableV2']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']

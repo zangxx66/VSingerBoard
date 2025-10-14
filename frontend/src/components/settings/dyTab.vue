@@ -2,6 +2,7 @@
 import { ref, reactive, onMounted } from "vue"
 import { ElMessage, type FormInstance } from "element-plus"
 import { request } from "@/api"
+import { useDanmakuStore } from "@/stores"
 
 const refForm = ref<FormInstance>()
 const btnLoading = ref(false)
@@ -12,6 +13,7 @@ const baseFormValue = reactive<DyConfigModel>({
     sing_prefix: '点歌',
     sing_cd: 0
 })
+const danmakuStore = useDanmakuStore()
 
 const initConfig = () => {
     loading.value = true
@@ -42,6 +44,7 @@ const addOrUpdateConfig = () => {
         }else{
             ElMessage.success(resp.msg)
             baseFormValue.id = resp.data
+            danmakuStore.clearDanmakuList()
         }
         btnLoading.value = false
     }).catch(error => {
