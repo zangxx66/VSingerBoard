@@ -11,6 +11,9 @@ type DanmakuModel = {
     send_time: number
     source: string
     html?: string
+    medal_name: string
+    medal_level: number
+    guard_level: number
 }
 
 type SubscribeModel = {

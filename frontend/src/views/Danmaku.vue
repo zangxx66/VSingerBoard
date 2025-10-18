@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
+import { ref, onMounted, defineAsyncComponent } from "vue"
 import { processDanmaku } from "@/utils"
 import { useWebSocket } from "@vueuse/core"
 
+const fansMedal = defineAsyncComponent(() => import("@/components/common/fansMedal.vue"))
 const list = ref(Array<DanmakuModel>())
-
 const load = () => console.log("load")
 const getDanmaku = () => {
     const { status, open } = useWebSocket("ws://127.0.0.1:8080", {
@@ -16,9 +16,9 @@ const getDanmaku = () => {
             pongTimeout: 10000
         },
         onMessage: (ws: WebSocket, event: MessageEvent) => {
-            if(event.data.startsWith("Echo")){
+            if (event.data.startsWith("Echo")) {
                 return
-            }else{
+            } else {
                 const value = JSON.parse(event.data) as Array<DanmakuModel>
                 const douyin = value.filter(item => item.source == "douyin")
                 const bilibili = value.filter(item => item.source == "bilibili")
@@ -29,24 +29,40 @@ const getDanmaku = () => {
 }
 
 onMounted(() => {
+    document.title = "点歌列表"
     getDanmaku()
 })
 </script>
 <template>
-    <div class="danmaku-container" v-infinite-scroll="load">
-        <template v-for="item in list">
-            <div class="danmaku-item">
-                <img :src="`/assets/images/${item.source}.png`" class="danmaku-source-img" :alt="item.source" width="24" />
-                <el-text tag="span" class="danmaku-tag">
-                    <template v-if="item.html != undefined">
-                        <el-text v-html="item.html" style="display: flex;"></el-text>
-                    </template>
-                    <template v-else>
-                        {{ item.msg }}
-                    </template>
-                    {{ item.uname }}
-                </el-text>
+    <el-container class="danmaku-container">
+        <el-main>
+            <div class="danmaku-list" v-infinite-scroll="load">
+                <template v-for="item in list">
+                    <div class="danmaku-list-item">
+                        <el-text tag="span" class="danmaku-sing">
+                            <template v-if="item.html != undefined && item.html.length > 0">
+                                <el-text v-html="item.html" style="display: flex;"></el-text>
+                            </template>
+                            <template v-else>
+                                {{ item.msg }}
+                            </template>
+                        </el-text>
+                        <el-text tag="span" class="danmaku-uname">
+                            {{ item.uname }}
+                            <template v-if="item.medal_level > 0">
+                                <template v-if="item.source == 'bilibili'">
+                                    <fans-medal :medal_name="item.medal_name" :medal_level="item.medal_level"
+                                        :guard_level="item.guard_level" />
+                                </template>
+                                <template v-if="item.source == 'douyin'">
+                                    <fans-club :medal_name="item.medal_name" :medal_level="item.medal_level"
+                                        :guard_level="item.guard_level" />
+                                </template>
+                            </template>
+                        </el-text>
+                    </div>
+                </template>
             </div>
-        </template>
-    </div>
+        </el-main>
+    </el-container>
 </template>

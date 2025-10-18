@@ -9,6 +9,7 @@ import { useIntervalStore, useDanmakuStore } from "@/stores"
 
 const PlatformStatus = defineAsyncComponent(() => import("@/components/home/platformStatus.vue"))
 const addSingDialog = defineAsyncComponent(() => import("@/components/home/addSingDialog.vue"))
+const fansMedal = defineAsyncComponent(() => import("@/components/common/fansMedal.vue"))
 const singDialogRef = ref<null | InstanceType<typeof addSingDialog>>()
 const config = reactive<LiveModel>({
     douyin_romm_id: 0,
@@ -116,7 +117,9 @@ const openSingDialog = () => {
 }
 
 const danmakuList = computed(() => {
-    return danmakuStore.getDanmakuList()
+    const list = danmakuStore.getDanmakuList()
+    console.log(list)
+    return list
 })
 
 watch(danmakuList, async () => {
@@ -160,7 +163,15 @@ onMounted(() => {
                                     <span>点击复制歌名：{{ item.msg }}</span>
                                 </template>
                                 <el-text tag="span" class="chat-tag" @click="copyToClipboard(item.msg)">
-                                    <template v-if="item.html != undefined">
+                                    <template v-if="item.medal_level > 0">
+                                        <template v-if="item.source == 'bilibili'">
+                                            <fans-medal :medal_name="item.medal_name" :medal_level="item.medal_level" :guard_level="item.guard_level" />
+                                        </template>
+                                        <template v-if="item.source == 'douyin'">
+                                            <fans-club :medal_name="item.medal_name" :medal_level="item.medal_level" :guard_level="item.guard_level" />
+                                        </template>
+                                    </template>
+                                    <template v-if="item.html != undefined && item.html.length > 0">
                                         {{ item.uname }}；
                                         <el-text v-html="item.html" style="display: flex;"></el-text>
                                     </template>
@@ -245,6 +256,7 @@ onMounted(() => {
     width: 90%;
     cursor: pointer;
     margin-left: 1%;
+    align-items: center;
 }
 
 .chat-close {

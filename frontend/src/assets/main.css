@@ -20,6 +20,7 @@ body {
   backdrop-filter: blur(10px);
 }
 
+/* 右键菜单 */
 .mx-menu-bar.mac,
 .mx-context-menu.mac {
   --menu-font-family: Inter, 'Helvetica Neue', Helvetica, 'PingFang SC',
@@ -73,35 +74,42 @@ body {
 .mx-context-menu-item-hide {
   display: none;
 }
+/* 右键菜单 END */
 
 /* 弹幕列表CSS */
 .danmaku-container {
-    padding: 0;
-    margin: 0;
+    height: 100%;
+    width: 800px;
     background: transparent;
-    list-style: none;
-    overflow-y: auto;
+    overflow: hidden;
 }
-.danmaku-item {
-    width: 95%;
+.danmaku-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  overflow-y: auto;
+}
+.danmaku-list-item {
+    width: 100%;
     display: flex;
-    margin: 10px;
     height: 50px;
     text-align: left;
-    align-items: center;
-    justify-content: center;
     color: #000;
+    font-size: 50px;
+    font-weight: bold;
 }
 .danmaku-source-img {
     margin: 1px;
     height: 24px;
 }
-.danmaku-tag {
-    display: flex;
-    width: 90%;
-    margin-left: 1%;
+.danmaku-sing {
+    width: 30%;
+    word-wrap: break-word;
 }
-/* 弹幕列表CSS end */
+.danmaku-uname {
+  width: 50%;
+}
+/* 弹幕列表CSS END */
 
 a,
 .green {

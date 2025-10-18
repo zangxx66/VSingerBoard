@@ -90,12 +90,24 @@ class Douyin:
         song_name = content.replace(self.sing_prefix, "", 1).strip()
         logger.info(song_name)
 
+        fans_club_data = danmu.get("fans_club_data")
+        medal_level = 0
+        medal_name = ""
+        guard_level = 0
+        if "level" in fans_club_data:
+            medal_level = fans_club_data["level"]
+        if "club_name" in fans_club_data:
+            medal_name = fans_club_data["club_name"]
+
         danmu_info: DanmuInfo = {
             "uid": danmu.get("user_id"),
             "uname": danmu.get("user_name"),
             "msg": song_name,
             "send_time": int(time.time()),
-            "source": "douyin"
+            "source": "douyin",
+            "guard_level": guard_level,
+            "medal_level": medal_level,
+            "medal_name": medal_name,
         }
         self.danmus.append(danmu_info)
 
