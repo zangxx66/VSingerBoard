@@ -20,7 +20,7 @@ export default defineConfig({
   rules: [
     [
       'font-yahei',
-      { 'font-family': '"Inter","Helvetica Neue","Helvetica","PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑","Arial",sans-serif"' },
+      {'font-family': '"Inter","Helvetica Neue","Helvetica","PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑","Arial",sans-serif"'},
     ],
   ],
   theme: {},

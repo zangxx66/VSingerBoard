@@ -20,6 +20,7 @@ const config = reactive<LiveModel>({
 const danmakuStore = useDanmakuStore()
 const intervalStore = useIntervalStore()
 const infiniteList = ref<HTMLDivElement | null>(null)
+let wsSend: (data: string | ArrayBuffer | Blob, useBuffer?: boolean | undefined) => boolean
 
 const initConfig = async() => {
     const data = await window.pywebview.api.get_live_config()
@@ -38,6 +39,8 @@ const copyToClipboard = (txt: string) => {
 
 const remove = (danmaku: DanmakuModel) => {
     danmakuStore.removeDanmakuList(danmaku)
+    const jsonStr = JSON.stringify(danmaku)
+    wsSend(`delete${jsonStr}`)
 }
 
 const clear = () => {
@@ -52,6 +55,7 @@ const clear = () => {
     )
     .then(() => {
         danmakuStore.clearDanmakuList()
+        wsSend("clear danmaku")
     })
     .catch((error) => {
         if ('string' == typeof error && 'cancel' == error) return
@@ -80,7 +84,7 @@ const exportFile = () => {
 }
 
 const getDanmaku = () => {
-    const { status, open } = useWebSocket("ws://127.0.0.1:8080", {
+    const { status, open, send } = useWebSocket("ws://127.0.0.1:8080", {
         autoReconnect: true,
         autoClose: true,
         heartbeat: {
@@ -100,6 +104,7 @@ const getDanmaku = () => {
             }
         }
     })
+    wsSend = send
 }
 
 const openDanmakuWindow = async() => {

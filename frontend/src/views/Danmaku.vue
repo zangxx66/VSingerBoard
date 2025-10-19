@@ -18,7 +18,21 @@ const getDanmaku = () => {
         onMessage: (ws: WebSocket, event: MessageEvent) => {
             if (event.data.startsWith("Echo")) {
                 return
-            } else {
+            }
+            else if(event.data == "clear danmaku"){
+                list.value = []
+            }
+            else if(event.data.startsWith("delete")){
+                const data = JSON.parse(event.data.substring(6)) as DanmakuModel
+                const danmaku = list.value.find(item => item.uid == data.uid && item.send_time == data.send_time)
+                if (danmaku){
+                    const index = list.value.indexOf(danmaku)
+                    if(index > -1){
+                        list.value.splice(index, 1)
+                    }
+                }
+            }
+            else {
                 const value = JSON.parse(event.data) as Array<DanmakuModel>
                 const douyin = value.filter(item => item.source == "douyin")
                 const bilibili = value.filter(item => item.source == "bilibili")
@@ -38,7 +52,7 @@ onMounted(() => {
         <el-main>
             <div class="danmaku-list" v-infinite-scroll="load">
                 <template v-for="item in list">
-                    <div class="danmaku-list-item">
+                    <div class="danmaku-list-item el-zoom-in-center">
                         <el-text tag="span" class="danmaku-sing">
                             <template v-if="item.html != undefined && item.html.length > 0">
                                 <el-text v-html="item.html" style="display: flex;"></el-text>

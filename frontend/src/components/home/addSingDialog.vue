@@ -11,6 +11,9 @@ const formValue = reactive<DanmakuModel>({
     msg: "",
     send_time: 0,
     source: "douyin",
+    medal_level: 0,
+    medal_name: "",
+    guard_level: 0
 })
 const platform = [
     {

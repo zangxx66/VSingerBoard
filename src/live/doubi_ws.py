@@ -1,5 +1,6 @@
 import asyncio
 import json
+from aiohttp import web
 from src.utils import WebSocketServer, logger, async_worker
 from . import douyin_manager, bili_manager
 
@@ -54,6 +55,7 @@ class DoubiWs:
         try:
             self._ws = WebSocketServer(host="127.0.0.1")
             await self._ws.start()
+            self._ws.on_message = self._on_message
             logger.info("DoubiWs WebSocket server started.")
 
             # 将周期性广播作为后台任务启动
@@ -76,6 +78,14 @@ class DoubiWs:
                 await self._ws.stop()
                 self._ws = None
             logger.info("DoubiWs resources cleaned up.")
+
+    async def _on_message(self, ws: web.WebSocketResponse, message: str):
+        if message == "clear danmaku":
+            await self._ws.broadcast("clear danmaku")
+        elif message.startswith("delete"):
+            await self._ws.broadcast(message)
+        else:
+            await ws.send_str(f"Echo: {message}")
 
     async def stop(self):
         """

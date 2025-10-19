@@ -65,7 +65,9 @@
 │       ├── api/ # API 服务定义
 │       ├── assets/ # 静态资源文件
 │       ├── components/ # Vue 组件
+│       │   ├── common/ # 通用组件
 │       │   ├── home/ # 首页相关组件
+│       │   ├── layout/ # 布局组件
 │       │   └── settings/ # 设置页面相关组件
 │       ├── router/ # Vue Router 配置
 │       ├── stores/ # Pinia 状态管理
@@ -76,7 +78,7 @@
 ├── resources/ # 应用程序运行时资源文件
 │   ├── douyinjs/ # 抖音直播相关 JavaScript 文件
 │   ├── icons/ # 应用程序图标
-│   └── Notificator.app # macOS 通知应用
+│   └── Notificator.app/ # macOS 通知应用
 ├── src/ # 后端 Python 源代码
 │   ├── database/ # 数据库模型和操作
 │   ├── douyin/ # 抖音直播相关逻辑
