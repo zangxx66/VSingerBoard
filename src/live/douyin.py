@@ -88,10 +88,12 @@ class Douyin:
 
     async def add_dydanmu(self, danmu):
         content = danmu.get("content", "")
+        uid = danmu.get("user_id")
         fans_club_data = danmu.get("fans_club_data")
         medal_level = 0
         medal_name = ""
         guard_level = 0
+        now = int(time.time())
         if "level" in fans_club_data:
             medal_level = fans_club_data["level"]
         if "club_name" in fans_club_data:
@@ -101,21 +103,27 @@ class Douyin:
             return
         if self.fans_level > 0 and medal_level < self.fans_level:
             return
+        if self.sing_cd > 0:
+            history = await Db.get_song_history(uid=uid, source="douyin")
+            if history and (now - history.create_time) / 1000 < self.sing_cd:
+                return
 
         song_name = content.replace(self.sing_prefix, "", 1).strip()
         logger.info(song_name)
 
         danmu_info: DanmuInfo = {
-            "uid": danmu.get("user_id"),
+            "uid": uid,
             "uname": danmu.get("user_name"),
             "msg": song_name,
-            "send_time": int(time.time()),
+            "send_time": now,
             "source": "douyin",
             "guard_level": guard_level,
             "medal_level": medal_level,
             "medal_name": medal_name,
         }
         self.danmus.append(danmu_info)
+
+        await Db.add_song_history(uid=uid, song_name=song_name, source="douyin", create_time=now)
 
         config = await Db.get_gloal_config()
         if not config or not config.notification:

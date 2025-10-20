@@ -86,5 +86,13 @@ class GloalConfig(BaseModel):
     collapse = fields.BooleanField()
 
 
+class SongHistory(BaseModel):
+    id = fields.BigIntField(primary_key=True, generated=True)
+    uid = fields.BigIntField()
+    song_name = fields.CharField(max_length=500)
+    source = fields.CharField(max_length=100)
+    create_time = fields.BigIntField()
+
+
 def ignore_none(kwargs):
     return {k: v for k, v in kwargs.items() if v is not None}

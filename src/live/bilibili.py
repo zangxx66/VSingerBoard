@@ -120,6 +120,10 @@ class Bili:
             return
         if self.user_level > 0 and guard_level > self.user_level:
             return
+        if self.sing_cd > 0:
+            history = await Db.get_song_history(uid=uid, source="bilibili")
+            if history and (now - history.create_time) / 1000 < self.sing_cd:
+                return
 
         song_name = msg.replace(self.sing_prefix, "", 1).strip()
         logger.info(song_name)
@@ -136,6 +140,8 @@ class Bili:
         }
         self.danmus.append(danmu_info)
 
+        await Db.add_song_history(uid=uid, song_name=song_name, source="bilibili", create_time=now)
+
         config = await Db.get_gloal_config()
         if not config or not config.notification:
             return
@@ -148,6 +154,7 @@ class Bili:
         uid = sc_data["uid"]
         message = str(sc_data["message"])
         price = sc_data["price"]
+        now = int(time.time())
         medal_level = 0
         medal_name = ""
         guard_level = 0
@@ -163,6 +170,10 @@ class Bili:
             return
         if self.user_level > 0 and guard_level > self.user_level:
             return
+        if self.sing_cd > 0:
+            history = await Db.get_song_history(uid=uid, source="bilibili")
+            if history and (now - history.create_time) / 1000 < self.sing_cd:
+                return
 
         song_name = message.replace(self.sing_prefix, "", 1).strip()
         logger.info(song_name)
@@ -175,10 +186,12 @@ class Bili:
             "medal_name": medal_name,
             "guard_level": guard_level,
             "price": price,
-            "send_time": int(time.time()),
+            "send_time": now,
             "source": "bilibili"
         }
         self.danmus.append(sc_info)
+
+        await Db.add_song_history(uid=uid, song_name=song_name, source="bilibili", create_time=now)
 
         config = await Db.get_gloal_config()
         if not config or not config.notification:

@@ -1,6 +1,6 @@
 from tortoise import Tortoise
 from tortoise.connection import connections
-from .model import BiliConfig, BiliCredential, DyConfig, GloalConfig
+from .model import BiliConfig, BiliCredential, DyConfig, GloalConfig, SongHistory
 from src.utils import get_path, logger
 
 
@@ -135,3 +135,13 @@ class Db:
         except Exception as e:
             logger.error(f"add_or_update_gloal_config error: {e}")
             return 0
+
+    @classmethod
+    async def get_song_history(cls, uid: int, source: str):
+        res = await SongHistory.get(uid=uid, source=source).order_by("-create_time").first()
+        return res
+
+    @classmethod
+    async def add_song_history(cls, **kwargs):
+        res = await SongHistory.create(**kwargs)
+        return res
