@@ -40,6 +40,7 @@ class dyconfigItem(BaseModel):
     room_id: int
     sing_prefix: str
     sing_cd: int
+    fans_level: int
 
 
 class globalfigItem(BaseModel):

@@ -13,6 +13,9 @@ class Bili:
         self.danmus: list[DanmuInfo] = []
         self.sing_prefix = ""
         self.room_id = 0
+        self.sing_cd = 0
+        self.user_level = 0
+        self.modal_level = 0
 
     def start(self):
         if self._run_future and not self._run_future.done():
@@ -33,6 +36,9 @@ class Bili:
 
             self.sing_prefix = config.sing_prefix
             self.room_id = config.room_id
+            self.sing_cd = config.sing_cd
+            self.user_level = config.user_level
+            self.modal_level = config.modal_level
             bili_credential = await Db.get_bcredential(enable=True)
             credential = None
             if bili_credential:
@@ -110,6 +116,10 @@ class Bili:
         logger.debug(f"[{medal_name} {medal_level}]:{uname}:{msg}")
         if not msg.startswith(self.sing_prefix):
             return
+        if self.modal_level > 0 and medal_level < self.modal_level:
+            return
+        if self.user_level > 0 and guard_level > self.user_level:
+            return
 
         song_name = msg.replace(self.sing_prefix, "", 1).strip()
         logger.info(song_name)
@@ -148,6 +158,10 @@ class Bili:
 
         logger.debug(f"[{medal_name} {medal_level}]:{uname}:{message}")
         if not message.startswith(self.sing_prefix):
+            return
+        if self.modal_level > 0 and medal_level < self.modal_level:
+            return
+        if self.user_level > 0 and guard_level > self.user_level:
             return
 
         song_name = message.replace(self.sing_prefix, "", 1).strip()

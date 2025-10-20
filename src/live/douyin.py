@@ -13,6 +13,8 @@ class Douyin:
         self.danmus: list[DanmuInfo] = []
         self.sing_prefix = ""
         self.room_id = 0
+        self.sing_cd = 0
+        self.fans_level = 0
 
     def start(self):
         if self._run_future and not self._run_future.done():
@@ -33,6 +35,8 @@ class Douyin:
 
             self.sing_prefix = config.sing_prefix
             self.room_id = config.room_id
+            self.sing_cd = config.sing_cd
+            self.fans_level = config.fans_level
             self.live = DouyinLiveWebFetcher(live_id=self.room_id, max_retries=99)
             self.live.on("danmu")(self.add_dydanmu)
 
@@ -84,12 +88,6 @@ class Douyin:
 
     async def add_dydanmu(self, danmu):
         content = danmu.get("content", "")
-        if not content.startswith(self.sing_prefix):
-            return
-
-        song_name = content.replace(self.sing_prefix, "", 1).strip()
-        logger.info(song_name)
-
         fans_club_data = danmu.get("fans_club_data")
         medal_level = 0
         medal_name = ""
@@ -98,6 +96,14 @@ class Douyin:
             medal_level = fans_club_data["level"]
         if "club_name" in fans_club_data:
             medal_name = fans_club_data["club_name"]
+
+        if not content.startswith(self.sing_prefix):
+            return
+        if self.fans_level > 0 and medal_level < self.fans_level:
+            return
+
+        song_name = content.replace(self.sing_prefix, "", 1).strip()
+        logger.info(song_name)
 
         danmu_info: DanmuInfo = {
             "uid": danmu.get("user_id"),

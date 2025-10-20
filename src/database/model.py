@@ -73,6 +73,7 @@ class DyConfig(BaseModel):
     room_id = fields.BigIntField()
     sing_prefix = fields.CharField(max_length=100)
     sing_cd = fields.IntField()
+    fans_level = fields.IntField()
 
 
 class GloalConfig(BaseModel):

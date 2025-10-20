@@ -16,13 +16,6 @@ type DanmakuModel = {
     guard_level: number
 }
 
-type SubscribeModel = {
-    id: number
-    room_id: number
-    source: string
-    create_time: number
-}
-
 type BiliConfigModel = {
     id: number
     room_id: number
@@ -45,14 +38,7 @@ type DyConfigModel = {
     room_id: number
     sing_prefix: string
     sing_cd: number
-}
-
-type DyDanmuModel = {
-    user_id: number
-    user_name: string
-    content: string
-    level: number
-    fans_club_data: any
+    fans_level: number
 }
 
 type GlobalConfigModel = {
