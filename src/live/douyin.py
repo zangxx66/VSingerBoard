@@ -90,14 +90,10 @@ class Douyin:
         content = danmu.get("content", "")
         uid = danmu.get("user_id")
         fans_club_data = danmu.get("fans_club_data")
-        medal_level = 0
-        medal_name = ""
+        medal_level = getattr(fans_club_data, "level", 0)
+        medal_name = getattr(fans_club_data, "club_name", "")
         guard_level = 0
         now = int(time.time())
-        if "level" in fans_club_data:
-            medal_level = fans_club_data["level"]
-        if "club_name" in fans_club_data:
-            medal_name = fans_club_data["club_name"]
 
         if not content.startswith(self.sing_prefix):
             return

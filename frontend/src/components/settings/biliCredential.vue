@@ -61,7 +61,7 @@ const credentialColumns: Column<any>[] = [
                     loading={btnLoading.value}
                     onClick={(evt: MouseEvent) => refreshSub(rowData.id)}
                 >
-                    刷新
+                    刷新凭证
                 </ElButton>
                 <ElButton
                     type="danger"

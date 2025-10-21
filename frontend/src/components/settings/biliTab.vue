@@ -106,10 +106,10 @@ onMounted(() => {
             </template>
             <el-form :model="baseFormValue" ref="refForm" label-width="auto">
                 <el-form-item label="房间号" prop="room_id">
-                    <el-input v-model="baseFormValue.room_id" placeholder="B站直播间号" type="text" min="1" />
+                    <el-input-number v-model="baseFormValue.room_id" placeholder="B站直播间号" :min="1" :controls="false" />
                 </el-form-item>
                 <el-form-item label="粉丝牌等级" prop="modal_level">
-                <el-input v-model="baseFormValue.modal_level" placeholder="粉丝牌等级" type="text" min="0" />
+                <el-input-number v-model="baseFormValue.modal_level" placeholder="粉丝牌等级" :min="0" :controls="false" />
             </el-form-item>
             <el-form-item label="用户等级" prop="user_level">
                 <el-radio-group v-model="baseFormValue.user_level">
@@ -119,10 +119,10 @@ onMounted(() => {
                 </el-radio-group>
             </el-form-item>
                 <el-form-item label="点歌指令" prop="sing_prefix">
-                    <el-input v-model="baseFormValue.sing_prefix" placeholder="点歌指令" type="text" />
+                    <el-input v-model="baseFormValue.sing_prefix" placeholder="点歌指令" type="text" style="width: 240px;" />
                 </el-form-item>
                 <el-form-item label="点歌cd" prop="sing_cd">
-                <el-input v-model="baseFormValue.sing_cd" placeholder="点歌cd，单位：秒" type="text" min="0" />
+                <el-input-number v-model="baseFormValue.sing_cd" placeholder="点歌cd，单位：秒" :min="0" :controls="false" />
             </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="addOrUpdateConfig()">保存</el-button>
