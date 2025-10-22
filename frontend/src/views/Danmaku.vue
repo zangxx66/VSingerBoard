@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref, onMounted, defineAsyncComponent } from "vue"
+import { ref, onMounted, defineAsyncComponent, nextTick, watch } from "vue"
 import { processDanmaku } from "@/utils"
 import { useWebSocket } from "@vueuse/core"
 
 const fansMedal = defineAsyncComponent(() => import("@/components/common/fansMedal.vue"))
 const list = ref(Array<DanmakuModel>())
+const infiniteList = ref<HTMLDivElement | null>(null)
 const load = () => console.log("load")
 const getDanmaku = () => {
     const { status, open } = useWebSocket("ws://127.0.0.1:8080", {
@@ -42,6 +43,11 @@ const getDanmaku = () => {
     })
 }
 
+watch(list, async() => {
+    await nextTick()
+    infiniteList.value && infiniteList.value.scrollTo({ behavior: "smooth", top: infiniteList.value.scrollHeight })
+})
+
 onMounted(() => {
     document.title = "点歌列表"
     getDanmaku()
@@ -50,7 +56,7 @@ onMounted(() => {
 <template>
     <el-container class="danmaku-container">
         <el-main>
-            <div class="danmaku-list" v-infinite-scroll="load">
+            <div class="danmaku-list" ref="infiniteList" v-infinite-scroll="load">
                 <template v-for="item in list">
                     <div class="danmaku-list-item el-zoom-in-center">
                         <el-text tag="span" class="danmaku-sing">

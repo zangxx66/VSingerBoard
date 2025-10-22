@@ -7,13 +7,11 @@ import { HomeFilled, Tools, List, InfoFilled, Sunny, Moon } from "@element-plus/
 import ContextMenu from '@imengyu/vue3-context-menu'
 import { ElMessage, type MenuItemInstance, type MainInstance } from "element-plus"
 import { request } from "@/api"
-import { toggleDark, checkUpdate, pasteToElement } from "@/utils"
+import { toggleDark, checkUpdate, pasteToElement, copyToClipboard } from "@/utils"
 import { useIntervalStore, useThemeStore } from "@/stores"
-import { useClipboard } from "@vueuse/core"
 
 const intervalStore = useIntervalStore()
 const themeStore = useThemeStore()
-const { copy } = useClipboard()
 const cardConfig = {
   shadow: "always"
 }
@@ -110,7 +108,7 @@ const onContextMenu = async (e: MouseEvent) => {
     disabled: !selectTxt,
     onClick: () => {
       if (selectTxt) {
-        copy(selectTxt)
+        copyToClipboard(selectTxt)
         ElMessage.success("拷贝成功")
       }
     }

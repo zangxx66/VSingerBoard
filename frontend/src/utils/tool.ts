@@ -1,8 +1,10 @@
 import { ElMessage, ElNotification } from "element-plus"
 import { emojiList } from "./emoji"
 import { emoticons } from "./emoticons"
+import { useClipboard } from "@vueuse/core"
 
 const emojiexp = /\[[\u4E00-\u9FA5A-Za-z0-9_]+\]/g
+const { copy } = useClipboard()
 
 /**
  * 检查VSingerBoard应用程序是否有新版本。
@@ -86,4 +88,9 @@ export const processDanmaku = (list: DanmakuModel[], platform: "bilibili" | "dou
     }
   })
   return list
+}
+
+
+export const copyToClipboard = (text: string) => {
+  copy(text)
 }

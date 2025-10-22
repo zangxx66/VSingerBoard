@@ -5,6 +5,7 @@ import router from './router'
 import ContextMenu from "@imengyu/vue3-context-menu"
 import linkIcon from "@/components/common/linkIcon"
 import fansClub from "@/components/common/fansClub"
+import lineHeader from "@/components/common/lineHeader"
 import 'nprogress/nprogress.css'
 import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/base.css'
@@ -20,4 +21,5 @@ app.use(createPinia())
 .use(ContextMenu)
 .component("link-icon", linkIcon)
 .component("fans-club", fansClub)
+.component("line-header", lineHeader)
 .mount("#app")

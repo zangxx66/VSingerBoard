@@ -21,6 +21,7 @@ body {
 }
 
 /* 右键菜单 */
+
 .mx-menu-bar.mac,
 .mx-context-menu.mac {
   --menu-font-family: Inter, 'Helvetica Neue', Helvetica, 'PingFang SC',
@@ -74,9 +75,11 @@ body {
 .mx-context-menu-item-hide {
   display: none;
 }
+
 /* 右键菜单 END */
 
 /* 弹幕列表CSS */
+
 .danmaku-container {
     height: 100%;
     width: 800px;
@@ -109,7 +112,37 @@ body {
 .danmaku-uname {
   width: 50%;
 }
+
 /* 弹幕列表CSS END */
+
+/* 自定义表头 */
+
+.line-header {
+    padding: 10px 0;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.line-header-title {
+    color: #1890ff;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1;
+    padding-left: 15px;
+    position: relative;
+}
+
+.line-header-title::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: #1890ff;
+}
+
+/* 自定义表头 END */
 
 a,
 .green {

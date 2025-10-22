@@ -2,8 +2,8 @@
 import { ref, reactive, onMounted, defineAsyncComponent, nextTick, watch, computed } from "vue"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { CloseBold, Download, Delete, EditPen } from "@element-plus/icons-vue"
-import { exportExcel, timespanToString, getNowTimespan, processDanmaku } from "@/utils"
-import { useClipboard, useWebSocket } from "@vueuse/core"
+import { exportExcel, timespanToString, getNowTimespan, processDanmaku, copyToClipboard } from "@/utils"
+import { useWebSocket } from "@vueuse/core"
 import type { Column } from "exceljs"
 import { useIntervalStore, useDanmakuStore } from "@/stores"
 
@@ -29,11 +29,8 @@ const initConfig = async() => {
 
 const load = () => console.log("load")
 
-const copyToClipboard = (txt: string) => {
-    const { copy } = useClipboard({
-        source: txt
-    })
-    copy(txt)
+const copy = (txt: string) => {
+    copyToClipboard(txt)
     ElMessage.success("拷贝成功")
 }
 
@@ -123,7 +120,6 @@ const openSingDialog = () => {
 
 const danmakuList = computed(() => {
     const list = danmakuStore.getDanmakuList()
-    console.log(list)
     return list
 })
 
@@ -167,7 +163,7 @@ onMounted(() => {
                                 <template #content>
                                     <span>点击复制歌名：{{ item.msg }}</span>
                                 </template>
-                                <el-text tag="span" class="chat-tag" @click="copyToClipboard(item.msg)">
+                                <el-text tag="span" class="chat-tag" @click="copy(item.msg)">
                                     <template v-if="item.medal_level > 0">
                                         <template v-if="item.source == 'bilibili'">
                                             <fans-medal :medal_name="item.medal_name" :medal_level="item.medal_level" :guard_level="item.guard_level" />
