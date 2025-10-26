@@ -101,32 +101,27 @@ const guardImg = `${window.location.origin}/assets/images/guard-${props.guard_le
 </script>
 <template>
       <div
-    class="mr-5px ml-6px relative v-middle inline-block lh-18px text-12px fans-medal-container"
+    class="fans-medal-container"
     title="这是 TA 的粉丝勋章 (●'◡'●)ﾉ♥"
   >
     <div
-      class="relative block box-content h-14px lh-14px ws-nowrap font-yahei"
-      border="1px solid transparent rd-2px"
-      text="white 12px"
+      class="fans-medal-guard-level"
       :style="{ borderColor: guard_level === 0 ? medalColor.start : medalBorderColor[guard_level] }"
     >
       <div
-        class="flex flex-center float-left box-content min-w-12px h-full lh-14px p-x-4px b-rd-l-1px"
-        text="white 12px center ws-nowrap"
+        class="fans-medal-bg"
         :style="{ backgroundImage: `linear-gradient(45deg,${medalColor.start},${medalColor.end})` }"
       >
         <i
           v-show="props.guard_level !== 0"
-          class="block -ml-12px mr-2px w22px h22px"
-          bg="no-repeat contain center-center"
+          class="fans-medal-guard-img"
         >
-          <img class="w-full h-full" :src="props.guard_level === 0 ? '' : `${guardImg}`" alt="" />
+          <img style="width: 100%;height: 100%;" :src="props.guard_level === 0 ? '' : `${guardImg}`" alt="" />
         </i>
-        <span class="block">{{ props.medal_name }}</span>
+        <span style="display: block;">{{ props.medal_name }}</span>
       </div>
       <div
-        class="block box-content h-full w16px bg-#fff float-left fans-medal-level"
-        text="center transparent"
+        class="fans-medal-level"
         :style="{ color: medalColor.start }"
       >
         {{ props.medal_level }}
@@ -137,10 +132,66 @@ const guardImg = `${window.location.origin}/assets/images/guard-${props.guard_le
 <style scoped>
 .fans-medal-container {
   user-select: none;
+  margin-right: 5px;
+  margin-left: 6px;
+  line-height: 18px;
+  font-size: 12px;
+  position: relative;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.fans-medal-guard-level {
+  position: relative;
+  display: block;
+  box-sizing: content-box;
+  height: 14px;
+  line-height: 14px;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  color: white;
+  font-size: 12px;
+}
+
+.fans-medal-bg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  float: left;
+  box-sizing: content-box;
+  min-width: 12px;
+  height: 100%;
+  line-height: 14px;
+  padding-left: 4px;
+  padding-right: 4px;
+  border-top-left-radius: 1px;
+  border-bottom-left-radius: 1px;
+  color: white;
+  font-size: 12px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.fans-medal-guard-img {
+  display: block;
+  margin-left: -12px;
+  margin-right: 2px;
+  width: 22px;
+  height: 22px;
+  background: no-repeat contain;
+  background-position: center center;
 }
 
 .fans-medal-level {
   border-top-right-radius: 1px;
   border-bottom-right-radius: 1px;
+  float: left;
+  box-sizing: content-box;
+  display: block;
+  height: 100%;
+  width: 16px;
+  background: #fff;
+  text-align: center;
 }
 </style>
