@@ -78,42 +78,64 @@ body {
 
 /* 右键菜单 END */
 
-/* 弹幕列表CSS */
 
+/* 弹幕列表CSS */
 .danmaku-container {
-    height: 100%;
-    width: 800px;
+    height: 600px;
+    width: 500px;
     background: transparent;
     overflow: hidden;
 }
 .danmaku-list {
   padding: 0;
-  margin: 0;
+  margin-left: 1%;
   list-style: none;
   overflow-y: auto;
 }
 .danmaku-list-item {
-    width: 100%;
+    width: 500px;
     display: flex;
+    align-items: center;
     height: 50px;
     text-align: left;
     color: #000;
-    font-size: 50px;
+    font-size: 16px;
     font-weight: bold;
+    overflow: hidden;
 }
 .danmaku-source-img {
     margin: 1px;
     height: 24px;
 }
 .danmaku-sing {
-    width: 30%;
-    word-wrap: break-word;
-}
-.danmaku-uname {
-  width: 50%;
+    width: 200px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
+.danmaku-uname {
+  width: 180px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin-left: 1rem;
+}
+
+.fans-club-img {
+  margin-left: 10px;
+}
+
+.fans-medal-container {
+  margin-left: 10px;
+}
+
+.danmaku-fans {
+  width: 100px;
+  margin: 0 auto;
+}
 /* 弹幕列表CSS END */
+
 
 /* 自定义表头 */
 

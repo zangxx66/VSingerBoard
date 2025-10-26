@@ -17,7 +17,7 @@ export default defineComponent({
         const clubImg = `${window.location.origin}/assets/images/fansclub_new_advanced_badge_${props.medal_level}_xmp.png`
 
         return () => (
-            <div class="fans-club-container" style="padding-right: 5px;">
+            <div class="fans-club-container">
                 <img src={clubImg} alt="fansclub" class="fans-club-img" width="24" />
             </div>
         )

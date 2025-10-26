@@ -20,15 +20,15 @@ const getDanmaku = () => {
             if (event.data.startsWith("Echo")) {
                 return
             }
-            else if(event.data == "clear danmaku"){
+            else if (event.data == "clear danmaku") {
                 list.value = []
             }
-            else if(event.data.startsWith("delete")){
+            else if (event.data.startsWith("delete")) {
                 const data = JSON.parse(event.data.substring(6)) as DanmakuModel
                 const danmaku = list.value.find(item => item.uid == data.uid && item.send_time == data.send_time)
-                if (danmaku){
+                if (danmaku) {
                     const index = list.value.indexOf(danmaku)
-                    if(index > -1){
+                    if (index > -1) {
                         list.value.splice(index, 1)
                     }
                 }
@@ -43,7 +43,7 @@ const getDanmaku = () => {
     })
 }
 
-watch(list, async() => {
+watch(list, async () => {
     await nextTick()
     infiniteList.value && infiniteList.value.scrollTo({ behavior: "smooth", top: infiniteList.value.scrollHeight })
 })
@@ -58,17 +58,19 @@ onMounted(() => {
         <el-main>
             <div class="danmaku-list" ref="infiniteList" v-infinite-scroll="load">
                 <template v-for="item in list">
-                    <div class="danmaku-list-item el-zoom-in-center">
-                        <el-text tag="span" class="danmaku-sing">
+                    <div class="danmaku-list-item">
+                        <div class="danmaku-sing">
                             <template v-if="item.html != undefined && item.html.length > 0">
                                 <el-text v-html="item.html" style="display: flex;"></el-text>
                             </template>
                             <template v-else>
                                 {{ item.msg }}
                             </template>
-                        </el-text>
-                        <el-text tag="span" class="danmaku-uname">
+                        </div>
+                        <div class="danmaku-uname">
                             {{ item.uname }}
+                        </div>
+                        <div class="danmaku-fans">
                             <template v-if="item.medal_level > 0">
                                 <template v-if="item.source == 'bilibili'">
                                     <fans-medal :medal_name="item.medal_name" :medal_level="item.medal_level"
@@ -79,7 +81,7 @@ onMounted(() => {
                                         :guard_level="item.guard_level" />
                                 </template>
                             </template>
-                        </el-text>
+                        </div>
                     </div>
                 </template>
             </div>

@@ -11,35 +11,56 @@ const css = ref(`
 /* 弹幕列表CSS */
 .danmaku-container {
     height: 600px;
-    width: 600px;
+    width: 500px;
     background: transparent;
     overflow: hidden;
 }
 .danmaku-list {
   padding: 0;
-  margin: 0;
+  margin-left: 1%;
   list-style: none;
   overflow-y: auto;
 }
 .danmaku-list-item {
-    width: 100%;
+    width: 500px;
     display: flex;
+    align-items: center;
     height: 50px;
     text-align: left;
     color: #000;
-    font-size: 50px;
+    font-size: 16px;
     font-weight: bold;
+    overflow: hidden;
 }
 .danmaku-source-img {
     margin: 1px;
     height: 24px;
 }
 .danmaku-sing {
-    width: 30%;
-    word-wrap: break-word;
+    width: 200px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
+
 .danmaku-uname {
-  width: 50%;
+  width: 180px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin-left: 1rem;
+}
+
+.fans-club-img {
+  margin-left: 10px;
+}
+.fans-medal-container {
+  margin-left: 10px;
+}
+
+.danmaku-fans {
+  width: 100px;
+  margin: 0 auto;
 }
 /* 弹幕列表CSS END */
 `)
@@ -54,7 +75,7 @@ const pushTestData = () => {
     for (let i = 0; i < 10; i++) {
         previewData.value.push({
             uid: i,
-            msg: "测试弹幕",
+            msg: "点歌弹幕",
             uname: "username",
             medal_level: i,
             medal_name: "粉丝团",
@@ -103,22 +124,24 @@ onMounted(() => {
                         </div>
                     </el-splitter-panel>
                     <el-splitter-panel :resizable="false">
-                        <div class="css-editor">
+                        <div class="css-editor-preview">
                             <line-header title="样式预览"></line-header>
                             <div class="danmaku-container">
                                 <div class="danmaku-list">
                                     <template v-for="item in previewData">
-                                        <div class="danmaku-list-item el-zoom-in-center">
-                                            <el-text tag="span" class="danmaku-sing">
+                                        <div class="danmaku-list-item">
+                                            <div class="danmaku-sing">
                                                 <template v-if="item.html != undefined && item.html.length > 0">
                                                     <el-text v-html="item.html" style="display: flex;"></el-text>
                                                 </template>
                                                 <template v-else>
                                                     {{ item.msg }}
                                                 </template>
-                                            </el-text>
-                                            <el-text tag="span" class="danmaku-uname">
+                                            </div>
+                                            <div class="danmaku-uname">
                                                 {{ item.uname }}
+                                            </div>
+                                            <div class="danmaku-fans">
                                                 <template v-if="item.medal_level > 0">
                                                     <template v-if="item.source == 'bilibili'">
                                                         <fans-medal :medal_name="item.medal_name"
@@ -131,7 +154,7 @@ onMounted(() => {
                                                             :guard_level="item.guard_level" />
                                                     </template>
                                                 </template>
-                                            </el-text>
+                                            </div>
                                         </div>
                                     </template>
                                 </div>
@@ -145,7 +168,21 @@ onMounted(() => {
     <component :is="'style'">{{ css }}</component>
 </template>
 <style scoped>
-.css-editor {
+.css-editor,
+.css-editor-preview {
     padding: 1rem;
+}
+.css-editor-preview .danmaku-container {
+    --grid-size: 20px;
+    --color-light: #f0f0f0;
+    --color-dark: #cccccc;
+
+    background: 
+        repeating-conic-gradient(
+            var(--color-light) 0% 25%, 
+            var(--color-dark) 0% 50%
+        );
+
+    background-size: var(--grid-size) var(--grid-size);
 }
 </style>
