@@ -1,1 +1,0 @@
-import{d as a}from"./vendor-vue-aS4A03Y7.js";import{r as s}from"./vendor-libs-BJ1SQKxe.js";const e=a("danmaku",()=>{const a=s(Array());return{danmakuList:a,getDanmakuList:()=>a.value,setDanmakuList:s=>{a.value=s},pushDanmakuList:s=>{a.value.push(...s)},clearDanmakuList:()=>{a.value=[]},removeDanmakuList:s=>{const e=a.value.indexOf(s);e>-1&&a.value.splice(e,1)}}});export{e as u};

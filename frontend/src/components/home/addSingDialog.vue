@@ -70,4 +70,3 @@ defineExpose({ openDialog })
         </el-form>
     </el-dialog>
 </template>
-<style scoped></style>

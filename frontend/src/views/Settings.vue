@@ -16,9 +16,9 @@ const tabClickHandle = (pane: TabsPaneContext, ev: Event) => {
 
 </script>
 <template>
-  <el-container class="home-container">
-    <el-main class="home-main">
-      <el-tabs v-model="activeName" type="border-card" class="demo-tabs" @tab-click="tabClickHandle">
+  <el-container class="settings-container">
+    <el-main class="settings-main">
+      <el-tabs v-model="activeName" type="border-card" class="settings-tabs" @tab-click="tabClickHandle">
         <el-tab-pane label="哔哩哔哩设置" name="1">
           <bili-tab></bili-tab>
         </el-tab-pane>
@@ -32,8 +32,3 @@ const tabClickHandle = (pane: TabsPaneContext, ev: Event) => {
     </el-main>
   </el-container>
 </template>
-<style scoped>
-.home-container {
-  height: calc(100vh - 60px);
-}
-</style>

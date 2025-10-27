@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted, defineAsyncComponent, nextTick, watch } from "vue"
+import { ref, onMounted, nextTick, watch } from "vue"
 import { processDanmaku } from "@/utils"
 import { useWebSocket } from "@vueuse/core"
 
-const fansMedal = defineAsyncComponent(() => import("@/components/common/fansMedal.vue"))
 const list = ref(Array<DanmakuModel>())
 const infiniteList = ref<HTMLDivElement | null>(null)
 const load = () => console.log("load")

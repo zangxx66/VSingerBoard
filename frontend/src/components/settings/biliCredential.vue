@@ -244,41 +244,9 @@ onMounted(() => {
         </div>
     </el-card>
     <el-dialog v-model="isShow" title="新增" width="720" @close="closeDialog" destroy-on-close>
-        <div class="avatar-image-container">
-            <img :src="qrCode" alt="qrcode" class="avatar" referrerpolicy="no-referrer" />
-            <div class="code-bage" v-if="qrCodeText.length > 0">{{ qrCodeText }}</div>
+        <div class="qcode-image-container">
+            <img :src="qrCode" alt="qrcode" class="qcode" referrerpolicy="no-referrer" />
+            <div class="qcode-bage" v-if="qrCodeText.length > 0">{{ qrCodeText }}</div>
         </div>
     </el-dialog>
 </template>
-<style scoped>
-.avatar-image-container {
-    position: relative;
-    display: block;
-}
-
-.avatar {
-    margin: 0 auto;
-    display: block;
-    width: 240px;
-    height: 240px;
-}
-
-.code-bage {
-    width: 240px;
-    height: 240px;
-    font-size: 36px;
-    opacity: 0.6;
-    text-align: center;
-    color: #000;
-    background-color: #fff;
-    z-index: 1;
-    user-select: none;
-    line-height: 240px;
-    text-decoration: none;
-    font-weight: bold;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
-}
-</style>

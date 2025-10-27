@@ -9,7 +9,6 @@ import { useIntervalStore, useDanmakuStore } from "@/stores"
 
 const PlatformStatus = defineAsyncComponent(() => import("@/components/home/platformStatus.vue"))
 const addSingDialog = defineAsyncComponent(() => import("@/components/home/addSingDialog.vue"))
-const fansMedal = defineAsyncComponent(() => import("@/components/common/fansMedal.vue"))
 const singDialogRef = ref<null | InstanceType<typeof addSingDialog>>()
 const config = reactive<LiveModel>({
     douyin_romm_id: 0,
@@ -134,7 +133,7 @@ onMounted(() => {
     dom.style.height = `${height}px`
     dom.style.overflow = "hidden"
 
-    const infiniteListDom = document.querySelector(".infinite-list") as HTMLElement
+    const infiniteListDom = document.querySelector(".chat-infinite-list") as HTMLElement
     const listHeight = height * 0.7
     infiniteListDom.style.height = `${listHeight}px`
 
@@ -155,9 +154,9 @@ onMounted(() => {
                         </span>
                     </div>
                 </template>
-                <div class="infinite-list" ref="infiniteList" v-infinite-scroll="load">
+                <div class="chat-infinite-list" ref="infiniteList" v-infinite-scroll="load">
                     <template v-for="item in danmakuList">
-                        <div class="infinite-list-item">
+                        <div class="chat-infinite-list-item">
                             <img :src="`/assets/images/${item.source}.png`" class="source-img" :alt="item.source" width="24" />
                             <el-tooltip placement="bottom">
                                 <template #content>
@@ -196,7 +195,7 @@ onMounted(() => {
                     </template>
                 </div>
                 <template #footer>
-                    <div class="card-footer">
+                    <div class="chat-card-footer">
                         <el-button type="primary" @click="openSingDialog">
                             手动点歌
                             <el-icon>
@@ -228,56 +227,3 @@ onMounted(() => {
         </el-main>
     </el-container>
 </template>
-<style scoped>
-.chat-card {
-    height: 100%;
-}
-
-.infinite-list {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-    overflow: auto;
-}
-
-.infinite-list-item {
-    width: 95%;
-    display: flex;
-    margin: 10px;
-    height: 50px;
-    text-align: left;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--el-color-primary-light-9);
-    color: var(--el-color-primary);
-}
-
-.chat-tag {
-    display: flex;
-    width: 90%;
-    cursor: pointer;
-    margin-left: 1%;
-    align-items: center;
-}
-
-.chat-close {
-    width: 1%;
-    margin-right: 1%;
-    cursor: pointer;
-}
-
-.source-img {
-    margin: 1px;
-    height: 24px;
-}
-
-.card-header {
-    height: 24px;
-    display: flex;
-}
-
-.card-footer-right {
-    float: right;
-    display: flex;
-}
-</style>

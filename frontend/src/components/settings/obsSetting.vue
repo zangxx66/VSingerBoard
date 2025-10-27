@@ -167,22 +167,3 @@ onMounted(() => {
     </el-card>
     <component :is="'style'">{{ css }}</component>
 </template>
-<style scoped>
-.css-editor,
-.css-editor-preview {
-    padding: 1rem;
-}
-.css-editor-preview .danmaku-container {
-    --grid-size: 20px;
-    --color-light: #f0f0f0;
-    --color-dark: #cccccc;
-
-    background: 
-        repeating-conic-gradient(
-            var(--color-light) 0% 25%, 
-            var(--color-dark) 0% 50%
-        );
-
-    background-size: var(--grid-size) var(--grid-size);
-}
-</style>

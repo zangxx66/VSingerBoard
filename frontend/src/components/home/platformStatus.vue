@@ -67,14 +67,3 @@ const wsState = computed(() => {
         </el-tooltip>
     </div>
 </template>
-<style scoped>
-.platform-status-container {
-    display: flex;
-    align-items: center;
-}
-
-.source-img {
-    margin: 1px;
-    height: 24px;
-}
-</style>
