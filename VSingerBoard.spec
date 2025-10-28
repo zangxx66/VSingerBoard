@@ -135,7 +135,7 @@ a = Analysis(
     hooksconfig={},
     runtime_hooks=[os.path.join(SPECPATH, 'hooks', 'rthook.py')],
     excludes=[],
-    noarchive=True,  # 禁用打包以保持文件名不变
+    noarchive=False,  # 禁用打包以保持文件名不变
 )
 
 pyz = PYZ(a.pure)
@@ -148,7 +148,7 @@ exe = EXE(
     name='VSingerBoard',
     debug=False,
     bootloader_ignore_signals=False,
-    strip=True,
+    strip=False, # Changed from True to False
     upx=True,
     console=False,  # This is a GUI app, so no console window.
     disable_windowed_traceback=False,
@@ -165,7 +165,7 @@ coll = COLLECT(
     a.binaries,
     a.zipfiles,
     a.datas,
-    strip=True,
+    strip=False, # Changed from True to False
     upx=True,
     upx_exclude=[],
     name='VSingerBoard',

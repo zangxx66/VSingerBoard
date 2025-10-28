@@ -23,20 +23,20 @@ jobs:
           - os: macos-15
             arch: arm64
           - os: macos-13
-            arch: x86_64
+            arch: x64
           # Linux Build
           - os: ubuntu-latest
-            arch: x86_64
+            arch: x64
           # Windows Build
           - os: windows-latest
-            arch: x86_64
+            arch: x64
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Python 3.12
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
@@ -45,9 +45,6 @@ jobs:
 
       - name: Install project dependencies with uv
         run: uv sync
-
-      - name: Install PyInstaller
-        run: uv pip install pyinstaller
 
       - name: Install Linux system dependencies
         if: runner.os == 'Linux'
@@ -68,7 +65,13 @@ jobs:
           npm run build -C frontend
 
       - name: Build the application with PyInstaller
-        run: uv run pyinstaller VSingerBoard.spec
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            NODE_PATH=$(where node)
+            echo "NODE_BINARY_PATH=$NODE_PATH" >> $GITHUB_ENV
+          fi
+          uv run pyinstaller VSingerBoard.spec
 
       - name: Package and Name Artifact (macOS)
         if: runner.os == 'macOS'

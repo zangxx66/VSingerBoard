@@ -61,7 +61,13 @@ jobs:
           npm run build -C frontend
 
       - name: Build the application with PyInstaller
-        run: uv run pyinstaller VSingerBoard.spec
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            NODE_PATH=$(where node)
+            echo "NODE_BINARY_PATH=$NODE_PATH" >> $GITHUB_ENV
+          fi
+          uv run pyinstaller VSingerBoard.spec
 
       - name: Package Artifact
         shell: bash
