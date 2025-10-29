@@ -62,12 +62,7 @@ jobs:
 
       - name: Build the application with PyInstaller
         shell: bash
-        run: |
-          if [ "$RUNNER_OS" == "Windows" ]; then
-            NODE_PATH=$(where node)
-            echo "NODE_BINARY_PATH=$NODE_PATH" >> $GITHUB_ENV
-          fi
-          uv run pyinstaller VSingerBoard.spec
+        run: uv run pyinstaller VSingerBoard.spec
 
       - name: Package Artifact
         shell: bash
