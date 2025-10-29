@@ -34,7 +34,7 @@ def main():
     window = gui_manager.create_window(DEBUG, api)
     window.events.closing += lifecycle.on_closing
     gui_manager.setup_tray(window)
-    webview.start(gui_manager.on_start, window, debug=DEBUG, gui="gtk")
+    webview.start(gui_manager.on_start, window, debug=DEBUG)
 
 
 def run_app():
