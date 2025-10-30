@@ -128,7 +128,7 @@ watch(danmakuList, async () => {
 })
 
 onMounted(() => {
-    const height = window.innerHeight - 100
+    const height = window.innerHeight - 60
     const dom = document.querySelector(".chat-main") as HTMLElement
     dom.style.height = `${height}px`
     dom.style.overflow = "hidden"

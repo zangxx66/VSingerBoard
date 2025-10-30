@@ -22,7 +22,7 @@ const css = ref(`
   overflow-y: auto;
 }
 .danmaku-list-item {
-    width: 500px;
+    width: 450px;
     display: flex;
     align-items: center;
     height: 50px;

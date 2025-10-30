@@ -290,6 +290,7 @@ onMounted(() => {
   transition: width 0.3s ease-in-out;
   border-right: solid 1px var(--el-border-color-light);
   border-top: solid 1px var(--el-border-color-light);
+  overflow: hidden;
 }
 
 /* The menu should fill the aside */

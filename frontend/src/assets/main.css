@@ -93,7 +93,7 @@ body {
   overflow-y: auto;
 }
 .danmaku-list-item {
-    width: 500px;
+    width: 450px;
     display: flex;
     align-items: center;
     height: 50px;
@@ -244,6 +244,11 @@ body {
     height: 24px;
 }
 
+.b-credential-card-header {
+    display: block;
+    align-items: center;
+}
+
 .qcode-image-container {
     position: relative;
     display: block;
@@ -289,6 +294,7 @@ body {
         );
 
     background-size: var(--grid-size) var(--grid-size);
+    overflow: hidden;
 }
 
 .about-container {

@@ -226,9 +226,9 @@ onMounted(() => {
 <template>
     <el-card>
         <template #header>
-            <div class="card-header">
+            <div class="b-credential-card-header">
                 <span>账号设置</span>
-                <el-alert title="未登录账号无法获取到弹幕用户昵称等信息，如有需要可添加一个小号" type="warning" :closable="false" />
+                <el-alert title="未登录账号无法获取到弹幕用户昵称等信息，如有需要可添加一个小号" type="warning" :closable="false" style="margin-top: 1rem;" />
             </div>
         </template>
         <div class="mb-4 flex items-center">

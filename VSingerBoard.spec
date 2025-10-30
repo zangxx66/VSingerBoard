@@ -73,6 +73,8 @@ bilibili_api_datas, bilibili_api_binaries, bilibili_api_hiddenimports = collect_
 tortoise_datas, tortoise_binaries, tortoise_hiddenimports = collect_all('tortoise')
 execjs_datas, execjs_binaries, execjs_hiddenimports = collect_all('execjs')
 fastapi_datas, fastapi_binaries, fastapi_hiddenimports = collect_all('fastapi')
+betterproto2_datas, betterproto2_binaries, betterproto2_hiddenimports = collect_all('betterproto2')
+pydantic_datas, pydantic_binaries, pydantic_hiddenimports = collect_all('pydantic')
 
 
 # --- Define data files ---
@@ -82,18 +84,22 @@ datas += bilibili_api_datas
 datas += tortoise_datas
 datas += execjs_datas
 datas += fastapi_datas
+datas += betterproto2_datas
+datas += pydantic_datas
 
 # --- Define hidden imports ---
 # This list contains modules that PyInstaller's static analysis might miss.
 hidden_packages = [
-    "webview", "uvloop", "uvicorn", "pydantic", "objc", "anyio", "appdirs",
-    "aiohttp", "betterproto2", "curl_cffi", "jinja2",
+    "webview", "uvloop", "uvicorn", "objc", "anyio", "appdirs",
+    "aiohttp", "curl_cffi", "jinja2",
     "pyperclip", "requests", "pkg_resources"
 ]
 hidden_packages += bilibili_api_hiddenimports
 hidden_packages += tortoise_hiddenimports
 hidden_packages += execjs_hiddenimports
 hidden_packages += fastapi_hiddenimports
+hidden_packages += betterproto2_hiddenimports
+hidden_packages += pydantic_hiddenimports
 
 # --- Define the Info.plist dictionary (from py2app options) ---
 info_plist = {
@@ -128,10 +134,11 @@ info_plist = {
 }
 
 # --- PyInstaller Analysis ---
+all_binaries = bilibili_api_binaries + tortoise_binaries + execjs_binaries + fastapi_binaries + betterproto2_binaries + pydantic_binaries
 a = Analysis(
     ['main.py'],
     pathex=[SPECPATH],
-    binaries=bilibili_api_binaries + tortoise_binaries + execjs_binaries + fastapi_binaries,
+    binaries=all_binaries,
     datas=datas,
     hiddenimports=hidden_packages,
     hookspath=[os.path.join(SPECPATH, 'hooks')],  # 使用绝对路径
@@ -154,6 +161,7 @@ exe = EXE(
     strip=False, # Changed from True to False
     upx=True,
     console=False,  # This is a GUI app, so no console window.
+    uac_admin=True,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
