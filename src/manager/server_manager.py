@@ -1,4 +1,3 @@
-import multiprocessing
 import subprocess
 import threading
 from src.utils import IPCManager, logger, async_worker
@@ -19,7 +18,6 @@ def vite_server():
 def start_http_server(token: str, ipc_manager: IPCManager):
     global server_process
     logger.info("------start HTTP server------")
-    # server_process = multiprocessing.Process(target=startup, args=(token, ipc_manager), name="FastApi")
     server_process = threading.Thread(target=startup, args=(token, ipc_manager), name="FastApi", daemon=True)
     server_process.start()
 
@@ -55,12 +53,6 @@ def stop_all_servers():
         logger.info("Vite thread stopped.")
         vite_thread = None
     if server_process:
-        # server_process.terminate()
         server_process.join(timeout=5)
-        # if server_process.is_alive():
-        #     logger.warning("Server process did not terminate in time, forcing kill.")
-        #     server_process.kill()
-        #     server_process.join()
-        # server_process.close()
         logger.info("FastApi server stopped.")
         server_process = None

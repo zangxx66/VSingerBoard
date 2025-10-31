@@ -11,6 +11,9 @@ from pathlib import Path
 from ._version import __version__ as CURRENT_VERSION
 from src.notifypy import Notify
 
+if sys.platform == "win32":
+    import winreg
+
 logger = logging.getLogger("danmaku")
 
 
@@ -135,6 +138,20 @@ def get_autostart_command():
         return [f'"{sys.executable}"', f'"{os.path.abspath(sys.argv[0])}"']
 
 
+def check_registry_exists(app_name):
+    if sys.platform != "win32":
+        return False
+    try:
+        # import winreg
+        key = winreg.HKEY_CURRENT_USER
+        key_path = r"Software\Microsoft\Windows\CurrentVersion\Run"
+        with winreg.OpenKey(key, key_path, 0, winreg.KEY_READ) as run_key:
+            winreg.QueryValueEx(run_key, app_name)
+            return True
+    except FileNotFoundError:
+        return False
+
+
 def setup_autostart(enable: bool):
     """
     设置应用程序的自启动功能
@@ -149,7 +166,7 @@ def setup_autostart(enable: bool):
     command = get_autostart_command()
     try:
         if sys.platform == "win32":
-            import winreg
+            # import winreg
             key = winreg.HKEY_CURRENT_USER
             key_path = r"Software\Microsoft\Windows\CurrentVersion\Run"
             with winreg.OpenKey(key, key_path, 0, winreg.KEY_SET_VALUE) as run_key:
@@ -158,8 +175,9 @@ def setup_autostart(enable: bool):
                     winreg.SetValueEx(run_key, APP_NAME, 0, winreg.REG_SZ, cmd)
                     logger.info(f"Windows autostart enabled: {command}")
                 else:
-                    winreg.DeleteValue(run_key, APP_NAME)
-                    logger.info("Windows autostart disabled.")
+                    if check_registry_exists(APP_NAME):
+                        winreg.DeleteValue(run_key, APP_NAME)
+                        logger.info("Windows autostart disabled.")
                 return True
         elif sys.platform.startswith("linux"):
             user = getpass.getuser()

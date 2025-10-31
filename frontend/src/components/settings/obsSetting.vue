@@ -115,7 +115,7 @@ onMounted(() => {
                 </el-form-item>
             </el-form>
             <el-alert title="在OBS新建一个浏览器源，在地址栏输入上面复制的地址，即可实现与观众同步点歌板信息，如需使用自定义css样式，请到下方编辑，然后复制到OBS浏览器源中" :closable="false" type="primary" />
-            <div class="obs-splitter">
+            <div class="obs-splitter" style="margin-top: 1rem;">
                 <el-splitter>
                     <el-splitter-panel :resizable="false">
                         <div class="css-editor">

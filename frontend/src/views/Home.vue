@@ -128,13 +128,13 @@ watch(danmakuList, async () => {
 })
 
 onMounted(() => {
-    const height = window.innerHeight - 60
+    const height = window.innerHeight * 0.9
     const dom = document.querySelector(".chat-main") as HTMLElement
     dom.style.height = `${height}px`
     dom.style.overflow = "hidden"
 
     const infiniteListDom = document.querySelector(".chat-infinite-list") as HTMLElement
-    const listHeight = height * 0.7
+    const listHeight = height * 0.8
     infiniteListDom.style.height = `${listHeight}px`
 
     getDanmaku()

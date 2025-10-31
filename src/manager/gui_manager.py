@@ -81,8 +81,8 @@ def create_window(DEBUG: bool, api):
     # 系统分辨率
     screens = webview.screens[0]
     # 程序窗口大小
-    initWidth = int(screens.width / 1.2)
-    initHeight = int(screens.height / 1.2)
+    initWidth = int(screens.width * 0.9)
+    initHeight = int(screens.height * 0.9)
 
     webview.settings["OPEN_DEVTOOLS_IN_DEBUG"] = False
     webview.settings['ALLOW_DOWNLOADS'] = True
@@ -96,7 +96,8 @@ def create_window(DEBUG: bool, api):
                                    width=initWidth,
                                    height=initHeight,
                                    resizable=False,
-                                   easy_drag=False,)
+                                   easy_drag=False,
+                                   maximized=True,)
     window.events.minimized += on_minimized
     return window
 

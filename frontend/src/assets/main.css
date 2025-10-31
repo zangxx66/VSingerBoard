@@ -295,6 +295,7 @@ body {
 
     background-size: var(--grid-size) var(--grid-size);
     overflow: hidden;
+    width: 100%;
 }
 
 .about-container {
