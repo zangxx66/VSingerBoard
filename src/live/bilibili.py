@@ -64,7 +64,11 @@ class Bili:
             logger.error(f"Bilibili task failed: {e}")
         finally:
             if self.live:
-                await self.live.disconnect()
+                if self.live.get_status() == 2:  # STATUS_ESTABLISHED
+                    try:
+                        await self.live.disconnect()
+                    except Exception as e:
+                        logger.error(f"Bilibili disconnect failed when trying to disconnect: {e}")
                 self.live.remove_event_listener("DANMU_MSG", self.on_msg)
                 self.live.remove_event_listener("SUPER_CHAT_MESSAGE", self.on_sc)
                 self.live = None

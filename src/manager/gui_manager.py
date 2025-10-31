@@ -96,8 +96,7 @@ def create_window(DEBUG: bool, api):
                                    width=initWidth,
                                    height=initHeight,
                                    resizable=False,
-                                   easy_drag=False,
-                                   maximized=True,)
+                                   easy_drag=False,)
     window.events.minimized += on_minimized
     return window
 
