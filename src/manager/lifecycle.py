@@ -1,6 +1,6 @@
 import signal
 import sys
-import webview
+# import webview
 from .server_manager import stop_all_servers
 from .ipc_handler import stop_ipc_task
 from . import gui_manager
@@ -19,10 +19,10 @@ def setup_signal_handlers():
 
 
 def on_closing():
-    window = webview.active_window()
-    if window:
-        window.destroy()
-        logger.info(f"Window:{window.uid} destroyed.")
+    # window = webview.active_window()
+    # if window:
+    #     window.destroy()
+    #     logger.info(f"Window:{window.uid} destroyed.")
     if gui_manager.icon:
         gui_manager.icon.stop()
         logger.info("Tray icon stopped.")

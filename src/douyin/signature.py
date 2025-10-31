@@ -1,4 +1,5 @@
 import os
+import sys
 import hashlib
 import random
 import string
@@ -36,6 +37,9 @@ def patched_popen_encoding(encoding='utf-8'):
 
     def new_popen_init(self, *args, **kwargs):
         kwargs['encoding'] = encoding
+        if sys.platform == 'win32':
+            # 隐藏命令行窗口
+            kwargs['creationflags'] = 0x08000000  # CREATE_NO_WINDOW
         original_popen_init(self, *args, **kwargs)
 
     with patch.object(subprocess.Popen, '__init__', new_popen_init):
@@ -44,7 +48,7 @@ def patched_popen_encoding(encoding='utf-8'):
 
 def generateSignature(wss, script_file='sign.js'):
     """
-    出现gbk编码问题则修改 python模块subprocess.py的源码中Popen类的__init__函数参数encoding值为 "utf-8"
+    为解决Windows下的编码问题，我们使用上下文管理器在执行JS时临时修补subprocess.Popen的编码。
     """
     params = ("live_id,aid,version_code,webcast_sdk_version,"
               "room_id,sub_room_id,sub_channel_id,did_rule,"
@@ -61,7 +65,8 @@ def generateSignature(wss, script_file='sign.js'):
     ctx = execute_js(script_file)
 
     try:
-        signature = ctx.call("get_sign", md5_param)
+        with patched_popen_encoding():
+            signature = ctx.call("get_sign", md5_param)
         return signature
     except Exception as e:
         logger.error(e)
