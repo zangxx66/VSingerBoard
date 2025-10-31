@@ -22,7 +22,7 @@ jobs:
           # macOS Builds
           - os: macos-15
             arch: arm64
-          - os: macos-15
+          - os: macos-15-intel
             arch: x64
           # Linux Build
           - os: ubuntu-latest

@@ -19,8 +19,8 @@ def setup_signal_handlers():
 
 
 def on_closing():
-    windows = webview.windows
-    for window in windows:
+    window = webview.active_window()
+    if window:
         window.destroy()
         logger.info(f"Window:{window.uid} destroyed.")
     if gui_manager.icon:

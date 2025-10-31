@@ -90,7 +90,7 @@ datas += pydantic_datas
 # --- Define hidden imports ---
 # This list contains modules that PyInstaller's static analysis might miss.
 hidden_packages = [
-    "webview", "uvloop", "uvicorn", "objc", "anyio", "appdirs",
+    "webview", "uvloop", "uvicorn", "objc", "anyio",
     "aiohttp", "curl_cffi", "jinja2",
     "pyperclip", "requests", "pkg_resources"
 ]

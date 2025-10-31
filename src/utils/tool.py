@@ -2,7 +2,6 @@ import os
 import sys
 import time
 import tomllib
-import appdirs
 import logging
 import getpass
 import requests
@@ -17,9 +16,19 @@ if sys.platform == "win32":
 logger = logging.getLogger("danmaku")
 
 
+def get_support_dir():
+    """获取当前操作系统的应用支持目录。"""
+    if sys.platform == 'darwin':
+        return os.path.join(os.path.expanduser('~/Library/Application Support'), 'VSingerBoard')
+    elif sys.platform == 'win32':
+        return os.path.join(os.environ['APPDATA'], 'VSingerBoard')
+    else:
+        return os.path.join(os.path.expanduser('~'), '.config', 'VSingerBoard')
+
+
 def get_path(*other, dir_name: str):
     """获取数据文件路径"""
-    app_data_dir = appdirs.user_data_dir("VSingerBoard")
+    app_data_dir = get_support_dir()
     dir_path = os.path.join(app_data_dir, dir_name)
     os.makedirs(dir_path, exist_ok=True)
     cfg_path = os.path.join(dir_path, *other)

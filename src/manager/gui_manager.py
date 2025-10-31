@@ -33,10 +33,6 @@ def setup_tray(window: Window):
         window.hide()
 
     def quit_app(i, item):
-        global window
-        items = webview.windows
-        for item in items:
-            item.destroy()
         icon.stop()
 
     menu = Menu(
