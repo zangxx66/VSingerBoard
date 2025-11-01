@@ -1,5 +1,6 @@
 import uvicorn
 import os
+import webview
 from pathlib import Path
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, Depends
@@ -10,13 +11,11 @@ from fastapi.exceptions import RequestValidationError, HTTPException
 from fastapi.responses import JSONResponse, HTMLResponse
 from fastapi.templating import Jinja2Templates
 from .router import router
-from src.database import Db
-from src.utils import logger, resource_path, IPCManager
-from . import ipc_instance
+from src.utils import logger, resource_path
 
 
 dist_path = resource_path("wwwroot", False)
-_token = ""
+_token = webview.token
 if not os.path.exists(dist_path):
     raise FileNotFoundError(f"文件夹 '{dist_path}' 不存在。")
 
@@ -30,13 +29,9 @@ def verify_token(request: Request):
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Database initialization will be handled by async_worker
-    await Db.init()
     logger.info("Database initialization completed.")
     yield
     # Database disconnection will be handled by async_worker
-    await Db.disconnect()
-    ipc_instance.ipc_manager.send_message("exit")
-    ipc_instance.ipc_manager.close()
     logger.info("Database disconnection completed.")
 
 app = FastAPI(
@@ -74,14 +69,11 @@ async def main(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
-def startup(token: str, ipc_manager: IPCManager):
+def startup():
     """
     启动FastAPI应用
     """
-    global _token
     try:
-        _token = token
-        ipc_instance.ipc_manager = ipc_manager
         log_config = uvicorn.config.LOGGING_CONFIG
         log_config["formatters"]["default"]["fmt"] = "[%(asctime)s][%(levelname)s][%(funcName)s] - %(message)s"
         uvicorn.run(app, host="127.0.0.1", port=8000, log_config=log_config, access_log=False)

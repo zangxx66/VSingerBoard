@@ -257,7 +257,7 @@ onMounted(() => {
         -->
         <el-tour v-model="navSideTour" @close="closeTour" @finish="finishTour" :target-area-clickable="false"
           :close-on-press-escape="false">
-          <el-tour-step title="提示" description="欢迎使用抖破点歌姬"></el-tour-step>
+          <el-tour-step title="提示" description="欢迎使用点歌姬"></el-tour-step>
           <el-tour-step title="提示" description="这里是点歌，可以查看抖和破站的点歌列表" placement="right"
             :target="homeRef?.$el"></el-tour-step>
           <el-tour-step title="提示" description="这里是设置，可以设置抖和破站的直播间监听" placement="right"

@@ -21,7 +21,15 @@ def on_start(window: Window):
 
 
 def setup_tray(window: Window):
+    """
+    设置系统托盘图标。
+
+    Args:
+        window (Window): 主窗口实例。
+    """
     global icon
+    if icon:
+        return
     logo_dir_path = resource_path("icons")
     logo_path = os.path.join(logo_dir_path, "logo.png")
     image = Image.open(logo_path)
@@ -33,6 +41,8 @@ def setup_tray(window: Window):
         window.hide()
 
     def quit_app(i, item):
+        if window:
+            window.destroy()
         icon.stop()
 
     menu = Menu(

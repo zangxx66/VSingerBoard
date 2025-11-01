@@ -3,7 +3,7 @@ import os
 import time
 import webview
 from src.utils import logger, async_worker
-from src.manager import gui_manager, ipc_handler, lifecycle, server_manager, version_manager
+from src.manager import gui_manager, lifecycle, server_manager, version_manager
 from src.jsBridge import Api
 
 
@@ -17,7 +17,7 @@ def main():
     async_worker.start()
 
     # 启动FastApi
-    server_manager.start_http_server(webview.token, ipc_handler.ipc_manager)
+    server_manager.start_http_server()
 
     DEBUG = not getattr(sys, "frozen", False)
     if DEBUG:
@@ -28,7 +28,6 @@ def main():
 
     # 启动websocket
     server_manager.start_websocket_server()
-    ipc_handler.start_ipc_task()
 
     api = Api()
     window = gui_manager.create_window(DEBUG, api)

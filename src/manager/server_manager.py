@@ -1,6 +1,6 @@
 import subprocess
 import threading
-from src.utils import IPCManager, logger, async_worker
+from src.utils import logger, async_worker
 from src.server import startup
 from src.live import bili_manager, douyin_manager, doubi_manager
 
@@ -15,10 +15,10 @@ def vite_server():
     dev_process.communicate()
 
 
-def start_http_server(token: str, ipc_manager: IPCManager):
+def start_http_server():
     global server_process
     logger.info("------start HTTP server------")
-    server_process = threading.Thread(target=startup, args=(token, ipc_manager), name="FastApi", daemon=True)
+    server_process = threading.Thread(target=startup, name="FastApi", daemon=True)
     server_process.start()
 
 

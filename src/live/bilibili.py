@@ -89,6 +89,11 @@ class Bili:
             logger.info("Bilibili main task stopped.")
         self._run_future = None
 
+    async def restart(self):
+        await self.stop()
+        await asyncio.sleep(1)
+        self.start()
+
     def get_status(self):
         if self.live:
             return self.live.get_status()
