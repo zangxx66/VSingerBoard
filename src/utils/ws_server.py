@@ -74,6 +74,10 @@ class WebSocketServer:
         """
         停止WebSocket服务器。
         """
+        # 显式关闭所有客户端连接
+        for ws in list(self._clients):
+            await ws.close(code=1001, message='Server shutdown')
+
         if self.site:
             await self.site.stop()
         if self.runner:

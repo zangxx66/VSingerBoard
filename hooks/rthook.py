@@ -79,19 +79,28 @@ def setup_node_runtime():
         print("在应用支持目录中已找到 Node.js。跳过解压。")
 
     if os.path.exists(final_node_dir):
-        node_bin_path = os.path.join(final_node_dir, 'bin')
+        # 根据操作系统确定 Node.js 的可执行文件路径
+        if sys.platform == 'win32':
+            # Windows 的 Node.js 发行版通常将可执行文件放在根目录
+            node_bin_path = final_node_dir
+        else:
+            # macOS 和 Linux 则在 'bin' 目录下
+            node_bin_path = os.path.join(final_node_dir, 'bin')
+
         if os.path.isdir(node_bin_path):
-            print(f"找到 Node.js bin 目录: {node_bin_path}")
+            print(f"找到 Node.js 执行文件目录: {node_bin_path}")
 
+            # 将 Node.js 路径添加到 PATH 环境变量
             os.environ['PATH'] = node_bin_path + os.pathsep + os.environ.get('PATH', '')
-            print(f"PATH 已设置为: {os.environ['PATH']}")
+            print(f"PATH 已更新为: {os.environ['PATH']}")
 
+            # 设置 PyExecJS 使用 Node.js 运行时
             os.environ["EXECJS_RUNTIME"] = "Node"
             print(f"EXECJS_RUNTIME 已设置为: {os.environ['EXECJS_RUNTIME']}")
         else:
-            print(f"警告: 在 {final_node_dir} 中未找到 bin 目录")
+            print(f"警告: 在 {final_node_dir} 中未找到预期的 Node.js 执行文件目录。")
     else:
-        print("错误: 尝试解压后 final_node_dir 路径不存在。")
+        print("错误: 解压后未找到 Node.js 目录。")
 
 
 def setup_notificator():

@@ -40,9 +40,11 @@ def start_websocket_server():
 
 def stop_all_servers():
     global dev_process, vite_thread, server_process
-    async_worker.submit(bili_manager.stop())
-    async_worker.submit(douyin_manager.stop())
-    async_worker.submit(doubi_manager.stop())
+    from concurrent.futures import wait
+    bili_future = async_worker.submit(bili_manager.stop())
+    douyin_future = async_worker.submit(douyin_manager.stop())
+    doubi_future = async_worker.submit(doubi_manager.stop())
+    wait([bili_future, douyin_future, doubi_future])
 
     if dev_process:
         dev_process.terminate()
