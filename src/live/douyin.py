@@ -92,7 +92,7 @@ class Douyin:
         fans_club_data = danmu.get("fans_club_data")
         medal_level = getattr(fans_club_data, "level", 0)
         medal_name = getattr(fans_club_data, "club_name", "")
-        guard_level = 0
+        guard_level = getattr(fans_club_data, "user_fans_club_status", 0)
         now = int(time.time())
 
         if not content.startswith(self.sing_prefix):

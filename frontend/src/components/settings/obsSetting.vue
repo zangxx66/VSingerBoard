@@ -7,8 +7,7 @@ import { copyToClipboard } from "@/utils"
 const formValue = reactive({
     url: `${window.location.origin}/danmaku`
 })
-const css = ref(`
-/* 弹幕列表CSS */
+const css = ref(`/* 弹幕列表CSS */
 .danmaku-container {
     height: 600px;
     width: 500px;
@@ -54,6 +53,11 @@ const css = ref(`
 .fans-club-img {
   margin-left: 10px;
 }
+
+.fans-club-member-img {
+  margin-left: 10px;
+}
+
 .fans-medal-container {
   margin-left: 10px;
 }
@@ -62,8 +66,7 @@ const css = ref(`
   width: 100px;
   margin: 0 auto;
 }
-/* 弹幕列表CSS END */
-`)
+/* 弹幕列表CSS END */`)
 const previewData = ref(Array<DanmakuModel>())
 
 const copy = () => {
@@ -73,14 +76,16 @@ const copy = () => {
 
 const pushTestData = () => {
     for (let i = 0; i < 10; i++) {
+        const source = i % 2 == 0 ? "bilibili" : "douyin"
+        const guard_level = source == "bilibili" ? 0 : i % 3 == 0 ? 1 : 2
         previewData.value.push({
             uid: i,
             msg: "点歌弹幕",
             uname: "username",
             medal_level: i,
             medal_name: "粉丝团",
-            guard_level: 0,
-            source: i % 2 == 0 ? "bilibili" : "douyin",
+            guard_level: guard_level,
+            source: source,
             send_time: Date.now()
         })
     }

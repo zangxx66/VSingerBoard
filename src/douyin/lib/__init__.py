@@ -545,6 +545,13 @@ class FansClubData(betterproto2.Message):
     level: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
 
     user_fans_club_status: "int" = betterproto2.field(3, betterproto2.TYPE_INT32)
+    """
+    不确定具体含义
+
+    1: 会员（包括年费）
+
+    2: 粉团
+    """
 
     badge: "UserBadge | None" = betterproto2.field(
         4, betterproto2.TYPE_MESSAGE, optional=True
