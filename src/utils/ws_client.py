@@ -10,16 +10,24 @@ class WebSocketClient:
 
     支持自动重连机制。
     """
-    url = ""
-    headers = {}
-    max_retries = 5
-    retry_delay = 5
-    session: Optional[aiohttp.ClientSession] = None
-    ws: Optional[aiohttp.ClientWebSocketResponse] = None
-    _is_running = False
-    _retry_count = 0
-    _reconnect_task: Optional[asyncio.Task] = None
-    status_code = 0  # 0:未连接, 1:已连接, 2:已断开, 3:连接失败
+
+    def __init__(self, ssl: bool = True):
+        """
+        初始化WebSocket客户端。
+
+        :param ssl: 是否启用SSL验证。
+        """
+        self.url = ""
+        self.headers = {}
+        self.max_retries = 5
+        self.retry_delay = 5
+        self.session: Optional[aiohttp.ClientSession] = None
+        self.ws: Optional[aiohttp.ClientWebSocketResponse] = None
+        self._is_running = False
+        self._retry_count = 0
+        self._reconnect_task: Optional[asyncio.Task] = None
+        self.status_code = 0  # 0:未连接, 1:已连接, 2:已断开, 3:连接失败
+        self._ssl = ssl
 
     @property
     def is_connected(self):
@@ -38,7 +46,7 @@ class WebSocketClient:
             self.session = aiohttp.ClientSession(headers=self.headers)
 
         try:
-            self.ws = await self.session.ws_connect(self.url)
+            self.ws = await self.session.ws_connect(self.url, ssl=self._ssl)
             logger.info(f"成功连接到 {self.url}")
             self._is_running = True
             self.status_code = 1  # 已连接

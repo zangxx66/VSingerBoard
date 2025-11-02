@@ -1,5 +1,6 @@
 import gzip
 import re
+import sys
 import urllib.parse
 import requests
 import asyncio
@@ -27,6 +28,10 @@ from src.utils import Decorator, logger, WebSocketClient
 
 class DouyinLiveWebFetcher(Decorator, WebSocketClient):
     def __init__(self, live_id: int, max_retries: int = 5, retry_delay: int = 5, abogus_file='a_bogus.js'):
+        # For macOS packaged app
+        ssl_verify = sys.platform != "darwin"
+        super().__init__(ssl=ssl_verify)
+
         self.abogus_file = abogus_file
         self.__ttwid = None
         self.__room_id = None
