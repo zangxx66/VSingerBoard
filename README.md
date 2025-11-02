@@ -33,6 +33,9 @@
 ![image](doc/3.png)
 ![image](doc/4.png)
 ![image](doc/5.png)
+![image](doc/6.png)
+![image](doc/7.png)
+![image](doc/8.png)
 
 ## 🚀 如何使用
 
@@ -40,7 +43,8 @@
 
 1.  前往 [**GitHub Releases**](https://github.com/zangxx66/VSingerBoard/releases/latest) 页面。
 2.  根据您的操作系统（Windows, macOS, 或 Linux），下载最新版本的压缩包。
-3.  解压后，直接运行主程序即可！
+3.  解压后，直接运行主程序即可！  
+4.  有不明白的地方可参考 [**文档**](doc/README.md)  
 
 ## 🛠️ 技术栈
 
