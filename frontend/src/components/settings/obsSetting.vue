@@ -10,7 +10,7 @@ const formValue = reactive({
 const css = ref(`/* 弹幕列表CSS */
 .danmaku-container {
     height: 600px;
-    width: 500px;
+    width: 800px;
     background: transparent;
     overflow: hidden;
 }
@@ -63,8 +63,35 @@ const css = ref(`/* 弹幕列表CSS */
 }
 
 .danmaku-fans {
-  width: 100px;
+  width: 200px;
   margin: 0 auto;
+}
+
+.fans-club-container {
+  width: 200px;
+  display: flex;
+  align-items: center;
+}
+
+.fans-club-name-container {
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  border-radius: 15px;
+  width: 30%;
+}
+
+.fans-club-name-bg {
+  display: block;
+  height: 20px;
+  width: 50%;
+}
+
+.fans-club-name {
+  color: #fff;
+  font-weight: 500;
+  width: 100%;
+  margin-left: -12%;
 }
 /* 弹幕列表CSS END */`)
 const previewData = ref(Array<DanmakuModel>())
