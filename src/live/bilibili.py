@@ -11,6 +11,7 @@ class Bili:
         self._run_future = None
         self.live = None
         self.danmus: list[DanmuInfo] = []
+        self.del_list = []
         self.sing_prefix = ""
         self.room_id = 0
         self.sing_cd = 0
@@ -107,6 +108,13 @@ class Bili:
         self.danmus.clear()
         return result
 
+    def get_del_list(self):
+        if len(self.del_list) == 0:
+            return []
+        result = self.del_list.copy()
+        self.del_list.clear()
+        return result
+
     async def on_msg(self, event):
         info = event["data"]["info"]
         msg = str(info[1])
@@ -123,6 +131,9 @@ class Bili:
             guard_level = user_info["medal"]["guard_level"]
 
         logger.debug(f"[{medal_name} {medal_level}]:{uname}:{msg}")
+        if msg.startswith("取消点歌"):
+            cancel_song = msg.replace("取消点歌", "", 1).strip()
+            self.del_list.append({"uid": uid, "uname": uname, "song_name": cancel_song})
         if not msg.startswith(self.sing_prefix):
             return
         if self.modal_level > 0 and medal_level < self.modal_level:

@@ -11,6 +11,7 @@ class Douyin:
         self._stop_event = asyncio.Event()
         self.live = None
         self.danmus: list[DanmuInfo] = []
+        self.del_list = []
         self.sing_prefix = ""
         self.room_id = 0
         self.sing_cd = 0
@@ -91,15 +92,26 @@ class Douyin:
         self.danmus.clear()
         return result
 
+    def get_del_list(self):
+        if len(self.del_list) == 0:
+            return []
+        result = self.del_list.copy()
+        self.del_list.clear()
+        return result
+
     async def add_dydanmu(self, danmu):
         content = danmu.get("content", "")
         uid = danmu.get("user_id")
+        uname = danmu.get("user_name")
         fans_club_data = danmu.get("fans_club_data")
         medal_level = getattr(fans_club_data, "level", 0)
         medal_name = getattr(fans_club_data, "club_name", "")
         guard_level = getattr(fans_club_data, "user_fans_club_status", 0)
         now = int(time.time())
 
+        if content.startswith("取消点歌"):
+            cancel_song = content.replace("取消点歌", "", 1).strip()
+            self.del_list.append({"uid": uid, "uname": uname, "song_name": cancel_song})
         if not content.startswith(self.sing_prefix):
             return
         if self.fans_level > 0 and medal_level < self.fans_level:
@@ -114,7 +126,7 @@ class Douyin:
 
         danmu_info: DanmuInfo = {
             "uid": uid,
-            "uname": danmu.get("user_name"),
+            "uname": uname,
             "msg": song_name,
             "send_time": now,
             "source": "douyin",

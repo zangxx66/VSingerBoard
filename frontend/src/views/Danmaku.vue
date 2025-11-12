@@ -16,15 +16,16 @@ const getDanmaku = () => {
             pongTimeout: 10000
         },
         onMessage: (ws: WebSocket, event: MessageEvent) => {
-            if (event.data.startsWith("Echo")) {
+            const data = JSON.parse(event.data) as WsModel
+            if (data.type == "echo") {
                 return
             }
-            else if (event.data == "clear danmaku") {
+            else if (data.type == "clear") {
                 list.value = []
             }
-            else if (event.data.startsWith("delete")) {
-                const data = JSON.parse(event.data.substring(6)) as DanmakuModel
-                const danmaku = list.value.find(item => item.uid == data.uid && item.send_time == data.send_time)
+            else if (data.type == "remove") {
+                const value = data.data as DanmakuModel
+                const danmaku = list.value.find(item => item.uid == value.uid && item.send_time == value.send_time)
                 if (danmaku) {
                     const index = list.value.indexOf(danmaku)
                     if (index > -1) {
@@ -32,8 +33,25 @@ const getDanmaku = () => {
                     }
                 }
             }
+            else if (data.type == "del") {
+                const delList = data.data as Array<DelListModel>
+                delList.forEach(item => {
+                    let danmaku
+                    if (item.song_name) {
+                        danmaku = list.value.find(pItem => pItem.uid == item.uid && pItem.uname == item.uname && pItem.msg == item.song_name)
+                    } else {
+                        danmaku = list.value.find(pItem => pItem.uid == item.uid && pItem.uname == item.uname)
+                    }
+                    if (danmaku) {
+                        const index = list.value.indexOf(danmaku)
+                        if (index > -1) {
+                            list.value.splice(index, 1)
+                        }
+                    }
+                })
+            }
             else {
-                const value = JSON.parse(event.data) as Array<DanmakuModel>
+                const value = data.data as Array<DanmakuModel>
                 const douyin = value.filter(item => item.source == "douyin")
                 const bilibili = value.filter(item => item.source == "bilibili")
                 list.value = [...list.value, ...processDanmaku(douyin, "douyin"), ...processDanmaku(bilibili, "bilibili")]

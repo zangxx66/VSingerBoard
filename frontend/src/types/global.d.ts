@@ -66,3 +66,14 @@ type LiveModel = {
     douyin_ws_status: number
     bilibili_ws_status: number
 }
+
+type WsModel = {
+    type: string
+    data?: any
+}
+
+type DelListModel = {
+    uid: number
+    uname: string
+    song_name: string
+}

@@ -89,9 +89,28 @@ const getDanmaku = () => {
             pongTimeout: 10000
         },
         onMessage: (ws: WebSocket, event: MessageEvent) => {
-            if(event.data.startsWith("Echo")){
+            const data = JSON.parse(event.data) as WsModel
+            if (data.type == "echo") {
                 return
-            }else{
+            }
+            else if (data.type == "del") {
+                const delList = data.data as Array<DelListModel>
+                delList.forEach(item => {
+                    let danmaku
+                    if (item.song_name) {
+                        danmaku = danmakuList.value.find(pItem => pItem.uid == item.uid && pItem.uname == item.uname)
+                    } else {
+                        danmaku = danmakuList.value.find(pItem => pItem.uid == item.uid && pItem.uname == item.uname && pItem.msg == item.song_name)
+                    }
+                    if (danmaku) {
+                        const index = danmakuList.value.indexOf(danmaku)
+                        if (index > -1) {
+                            danmakuList.value.splice(index, 1)
+                        }
+                    }
+                })
+            }
+            else {
                 const value = JSON.parse(event.data) as Array<DanmakuModel>
                 const douyin = value.filter(item => item.source == "douyin")
                 const bilibili = value.filter(item => item.source == "bilibili")

@@ -32,8 +32,16 @@ class DoubiWs:
             try:
                 douyin_list = douyin_manager.get_list()
                 bilibili_list = bili_manager.get_list()
-                result = douyin_list + bilibili_list
-                if len(result) > 0 and self._ws:
+                song_list = douyin_list + bilibili_list
+                if len(song_list) > 0 and self._ws:
+                    result = {"type": "add", "data": song_list}
+                    await self._ws.broadcast(json.dumps(result, ensure_ascii=False))
+
+                douyin_del_list = douyin_manager.get_del_list()
+                bilibili_del_list = bili_manager.get_del_list()
+                del_list = douyin_del_list + bilibili_del_list
+                if len(del_list) > 0 and self._ws:
+                    result = {"type": "del", "data": del_list}
                     await self._ws.broadcast(json.dumps(result, ensure_ascii=False))
 
                 # 等待一段时间, 避免CPU占用过高, 并让出控制权
@@ -81,11 +89,12 @@ class DoubiWs:
 
     async def _on_message(self, ws: web.WebSocketResponse, message: str):
         if message == "clear danmaku":
-            await self._ws.broadcast("clear danmaku")
+            await self._ws.broadcast(json.dumps({"type": "clear"}, ensure_ascii=False))
         elif message.startswith("delete"):
-            await self._ws.broadcast(message)
+            result = {"type": "remove", "data": [message[7:]]}
+            await self._ws.broadcast(json.dumps(result, ensure_ascii=False))
         else:
-            await ws.send_str(f"Echo: {message}")
+            await ws.send_str(json.dumps({"type": "echo", "data": message}, ensure_ascii=False))
 
     async def stop(self):
         """
