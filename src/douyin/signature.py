@@ -4,8 +4,8 @@ import hashlib
 import random
 import string
 import subprocess
-import execjs
 import urllib.parse
+from quickjs import Function
 from contextlib import contextmanager
 from unittest.mock import patch
 from src.utils import resource_path, logger
@@ -17,7 +17,7 @@ def get_real_path(filename):
     return js_path
 
 
-def execute_js(js_file: str):
+def execute_js(*args, js_file: str, func_name: str):
     """
     执行 JavaScript 文件
     :param js_file: JavaScript 文件路径
@@ -27,8 +27,8 @@ def execute_js(js_file: str):
     with open(js_path, 'r', encoding='utf-8') as file:
         js_code = file.read()
 
-    ctx = execjs.compile(js_code)
-    return ctx
+    ctx = Function(func_name, js_code)
+    return ctx(*args)
 
 
 @contextmanager
@@ -46,7 +46,7 @@ def patched_popen_encoding(encoding='utf-8'):
         yield
 
 
-def generateSignature(wss, script_file='sign.js'):
+def generateSignature(wss, script_file='sign_v1.js'):
     """
     为解决Windows下的编码问题，我们使用上下文管理器在执行JS时临时修补subprocess.Popen的编码。
     """
@@ -62,11 +62,10 @@ def generateSignature(wss, script_file='sign.js'):
     md5.update(param.encode())
     md5_param = md5.hexdigest()
 
-    ctx = execute_js(script_file)
+    # ctx = execute_js(script_file)
 
     try:
-        with patched_popen_encoding():
-            signature = ctx.call("get_sign", md5_param)
+        signature = execute_js(md5_param, js_file=script_file, func_name="get_sign")
         return signature
     except Exception as e:
         logger.error(e)

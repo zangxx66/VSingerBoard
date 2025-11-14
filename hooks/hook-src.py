@@ -38,23 +38,6 @@ binaries = []
 hiddenimports = []
 
 
-archive_path = get_archive_path()
-if archive_path:
-    # 创建一个临时目录来存放重命名后的归档文件
-    temp_dir = tempfile.mkdtemp()
-    # 注册一个退出处理函数，以便在脚本执行结束时清理临时目录
-    atexit.register(shutil.rmtree, temp_dir)
-
-    # 复制并重命名文件
-    renamed_archive_path = os.path.join(temp_dir, 'node.tar.gz')
-    shutil.copy(archive_path, renamed_archive_path)
-
-    # 将重命名后的归档文件添加到 datas 中，目标目录为根目录 ('.')
-    datas.append((renamed_archive_path, '.'))
-    print(f"Copied {archive_path} to temporary file {renamed_archive_path} and added to datas")
-else:
-    print("Warning: Node.js archive not found. Skipping Node.js packaging.")
-
 # --- Logic for packaging Notificator.app on macOS ---
 if platform.system() == 'Darwin':
     print("macOS detected. Packaging Notificator.app...")

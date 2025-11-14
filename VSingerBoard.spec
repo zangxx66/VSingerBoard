@@ -71,7 +71,6 @@ except Exception as e:
 # This is the most robust way to ensure a package is fully included.
 bilibili_api_datas, bilibili_api_binaries, bilibili_api_hiddenimports = collect_all('bilibili_api')
 tortoise_datas, tortoise_binaries, tortoise_hiddenimports = collect_all('tortoise')
-execjs_datas, execjs_binaries, execjs_hiddenimports = collect_all('execjs')
 fastapi_datas, fastapi_binaries, fastapi_hiddenimports = collect_all('fastapi')
 betterproto2_datas, betterproto2_binaries, betterproto2_hiddenimports = collect_all('betterproto2')
 pydantic_datas, pydantic_binaries, pydantic_hiddenimports = collect_all('pydantic')
@@ -82,7 +81,6 @@ pydantic_datas, pydantic_binaries, pydantic_hiddenimports = collect_all('pydanti
 datas = [('wwwroot', 'wwwroot'), ('resources/douyinjs', 'resources/douyinjs'), ('resources/icons', 'resources/icons')]
 datas += bilibili_api_datas
 datas += tortoise_datas
-datas += execjs_datas
 datas += fastapi_datas
 datas += betterproto2_datas
 datas += pydantic_datas
@@ -96,7 +94,6 @@ hidden_packages = [
 ]
 hidden_packages += bilibili_api_hiddenimports
 hidden_packages += tortoise_hiddenimports
-hidden_packages += execjs_hiddenimports
 hidden_packages += fastapi_hiddenimports
 hidden_packages += betterproto2_hiddenimports
 hidden_packages += pydantic_hiddenimports
@@ -134,7 +131,7 @@ info_plist = {
 }
 
 # --- PyInstaller Analysis ---
-all_binaries = bilibili_api_binaries + tortoise_binaries + execjs_binaries + fastapi_binaries + betterproto2_binaries + pydantic_binaries
+all_binaries = bilibili_api_binaries + tortoise_binaries + fastapi_binaries + betterproto2_binaries + pydantic_binaries
 a = Analysis(
     ['main.py'],
     pathex=[SPECPATH],

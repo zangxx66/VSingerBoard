@@ -1,6 +1,5 @@
 import os
 import sys
-import tarfile
 import shutil
 import datetime
 
@@ -43,66 +42,6 @@ def setup_logging():
         print(f"设置日志失败: {e}", file=original_stderr)
 
 
-def setup_node_runtime():
-    """在运行时将 Node.js 归档解压到应用支持目录，并设置环境变量。"""
-    if not getattr(sys, 'frozen', False):
-        return
-
-    app_support_dir = get_support_dir()
-    final_node_dir = os.path.join(app_support_dir, 'node')
-
-    if not os.path.exists(final_node_dir):
-        print(f"在 {app_support_dir} 中未找到 Node.js。开始首次解压。")
-        try:
-            base_path = sys._MEIPASS
-        except AttributeError:
-            base_path = os.path.dirname(os.path.abspath(sys.executable))
-
-        node_archive = os.path.join(base_path, 'node.tar.gz')
-
-        if not os.path.exists(node_archive):
-            print(f"致命错误: 在 {node_archive} 未找到 node.tar.gz")
-            return
-
-        print(f"正在解压 node.tar.gz 到 '{app_support_dir}'")
-        try:
-            os.makedirs(app_support_dir, exist_ok=True)
-            with tarfile.open(node_archive, 'r:gz') as tar:
-                tar.extractall(path=app_support_dir)
-            print("Node.js 解压到应用支持目录完成。")
-        except Exception as e:
-            print(f"致命错误: Node.js 解压过程中出错: {e}")
-            if os.path.exists(final_node_dir):
-                shutil.rmtree(final_node_dir)
-            return
-    else:
-        print("在应用支持目录中已找到 Node.js。跳过解压。")
-
-    if os.path.exists(final_node_dir):
-        # 根据操作系统确定 Node.js 的可执行文件路径
-        if sys.platform == 'win32':
-            # Windows 的 Node.js 发行版通常将可执行文件放在根目录
-            node_bin_path = final_node_dir
-        else:
-            # macOS 和 Linux 则在 'bin' 目录下
-            node_bin_path = os.path.join(final_node_dir, 'bin')
-
-        if os.path.isdir(node_bin_path):
-            print(f"找到 Node.js 执行文件目录: {node_bin_path}")
-
-            # 将 Node.js 路径添加到 PATH 环境变量
-            os.environ['PATH'] = node_bin_path + os.pathsep + os.environ.get('PATH', '')
-            print(f"PATH 已更新为: {os.environ['PATH']}")
-
-            # 设置 PyExecJS 使用 Node.js 运行时
-            os.environ["EXECJS_RUNTIME"] = "Node"
-            print(f"EXECJS_RUNTIME 已设置为: {os.environ['EXECJS_RUNTIME']}")
-        else:
-            print(f"警告: 在 {final_node_dir} 中未找到预期的 Node.js 执行文件目录。")
-    else:
-        print("错误: 解压后未找到 Node.js 目录。")
-
-
 def setup_notificator():
     """
     在 macOS 上，首次运行时将 Notificator.app 包解压到应用支持目录。
@@ -138,5 +77,4 @@ def setup_notificator():
 
 
 setup_logging()
-setup_node_runtime()
 setup_notificator()

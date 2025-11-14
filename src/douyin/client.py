@@ -168,8 +168,7 @@ class DouyinLiveWebFetcher(Decorator, WebSocketClient):
         获取 a_bogus
         """
         url = urllib.parse.urlencode(url_params)
-        ctx = execute_js(self.abogus_file)
-        _a_bogus = ctx.call("get_ab", url, self.user_agent)
+        _a_bogus = execute_js(url, self.user_agent, js_file=self.abogus_file, func_name="get_ab")
         return _a_bogus
 
     async def _sendHeartbeat(self):

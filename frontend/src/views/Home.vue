@@ -110,8 +110,8 @@ const getDanmaku = () => {
                     }
                 })
             }
-            else {
-                const value = JSON.parse(event.data) as Array<DanmakuModel>
+            else if (data.type == "add") {
+                const value = data.data as Array<DanmakuModel>
                 const douyin = value.filter(item => item.source == "douyin")
                 const bilibili = value.filter(item => item.source == "bilibili")
                 const result = [...danmakuList.value, ...processDanmaku(douyin, "douyin"), ...processDanmaku(bilibili, "bilibili")]

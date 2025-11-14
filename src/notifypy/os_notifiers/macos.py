@@ -2,9 +2,8 @@ import os
 import pathlib
 import subprocess
 import sys
-import appdirs
 
-from src.utils import logger, resource_path
+from src.utils import logger, resource_path, get_support_dir
 from ..exceptions import BinaryNotFound, InvalidMacOSNotificator
 from ._base import BaseNotifier
 
@@ -63,7 +62,7 @@ class MacOSNotifier(BaseNotifier):
         try:
             if getattr(sys, "frozen", False):
                 current_bundled = os.path.join(
-                    appdirs.user_data_dir("VSingerBoard"),
+                    get_support_dir(),
                     "Notificator.app",
                     "Contents",
                     "MacOS",
