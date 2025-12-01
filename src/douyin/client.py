@@ -7,21 +7,9 @@ import asyncio
 from .ac_signature import get__ac_signature
 from .signature import execute_js, generateSignature, generateMsToken
 from .lib import (
-    PushFrame,
-    Response,
-    ChatMessage,
-    GiftMessage,
-    LikeMessage,
-    MemberMessage,
-    SocialMessage,
-    RoomUserSeqMessage,
-    FansclubMessage,
-    EmojiChatMessage,
-    RoomMessage,
-    RoomStatsMessage,
-    RoomRankMessage,
-    ControlMessage,
-    RoomStreamAdaptationMessage
+    WebcastImPushFrame,
+    WebcastImResponse,
+    WebcastImChatMessage,
 )
 from src.utils import Decorator, logger, WebSocketClient
 
@@ -177,7 +165,7 @@ class DouyinLiveWebFetcher(Decorator, WebSocketClient):
         """
         while self._is_running:
             try:
-                heartbeat = PushFrame(payload_type='hb').SerializeToString()
+                heartbeat = WebcastImPushFrame(payload_type='hb').SerializeToString()
                 await self.ws.ping(heartbeat)
                 # print("【√】发送心跳包")
             except Exception as e:
@@ -188,130 +176,28 @@ class DouyinLiveWebFetcher(Decorator, WebSocketClient):
 
     async def on_message(self, message):
         # 根据proto结构体解析对象
-        package = PushFrame().parse(message)
-        response = Response().parse(gzip.decompress(package.payload))
+        package = WebcastImPushFrame().parse(message)
+        response = WebcastImResponse().parse(gzip.decompress(package.payload))
 
         # 返回直播间服务器链接存活确认消息，便于持续获取数据
         if response.need_ack:
-            ack = PushFrame(log_id=package.log_id,
-                            payload_type='ack',
-                            payload=response.internal_ext.encode('utf-8')
-                            ).SerializeToString()
+            ack = WebcastImPushFrame(log_id=package.log_id, payload_type='ack', payload=response.internal_ext.encode('utf-8')).SerializeToString()
             await self.send(ack)
 
-        for msg in response.messages_list:
+        for msg in response.messages:
             method = msg.method
             try:
                 {
                     'WebcastChatMessage': self._parseChatMsg,  # 聊天消息
-                    # 'WebcastGiftMessage': self._parseGiftMsg,  # 礼物消息
-                    # 'WebcastLikeMessage': self._parseLikeMsg,  # 点赞消息
-                    # 'WebcastMemberMessage': self._parseMemberMsg,  # 进入直播间消息
-                    # 'WebcastSocialMessage': self._parseSocialMsg,  # 关注消息
-                    # 'WebcastRoomUserSeqMessage': self._parseRoomUserSeqMsg,  # 直播间统计
-                    # 'WebcastFansclubMessage': self._parseFansclubMsg,  # 粉丝团消息
-                    'WebcastControlMessage': self._parseControlMsg,  # 直播间状态消息
-                    # 'WebcastEmojiChatMessage': self._parseEmojiChatMsg,  # 聊天表情包消息
-                    # 'WebcastRoomStatsMessage': self._parseRoomStatsMsg,  # 直播间统计信息
-                    'WebcastRoomMessage': self._parseRoomMsg,  # 直播间信息
-                    # 'WebcastRoomRankMessage': self._parseRankMsg,  # 直播间排行榜信息
-                    # 'WebcastRoomStreamAdaptationMessage': self._parseRoomStreamAdaptationMsg,  # 直播间流配置
                 }.get(method)(msg.payload)
             except Exception:
                 pass
 
     def _parseChatMsg(self, payload):
         """聊天消息"""
-        message = ChatMessage().parse(payload)
-        user_name = message.user.nick_name
+        message = WebcastImChatMessage().parse(payload)
+        user_name = message.user.nickname
         user_id = message.user.id
         content = message.content
         logger.debug(f"【聊天msg】[{user_id}]{user_name}: {content}")
         self.dispatch("danmu", {"user_name": user_name, "user_id": user_id, "content": content, "fans_club_data": message.user.fans_club.data})
-
-    def _parseGiftMsg(self, payload):
-        """礼物消息"""
-        message = GiftMessage().parse(payload)
-        user_name = message.user.nick_name
-        user_id = message.user.id
-        gift_name = message.gift.name
-        gift_cnt = message.combo_count
-        logger.debug(f"【礼物msg】{user_name} 送出了 {gift_name}x{gift_cnt}")
-        self.dispatch("gift", {"user_name": user_name, "user_id": user_id, "gift_name": gift_name, "gift_cnt": gift_cnt})
-
-    def _parseLikeMsg(self, payload):
-        '''点赞消息'''
-        message = LikeMessage().parse(payload)
-        user_name = message.user.nick_name
-        count = message.count
-        # print(f"【点赞msg】{user_name} 点了{count}个赞")
-        self.dispatch("like", {"user_name": user_name, "user_id": message.user.id, "count": count})
-
-    def _parseMemberMsg(self, payload):
-        '''进入直播间消息'''
-        message = MemberMessage().parse(payload)
-        user_name = message.user.nick_name
-        user_id = message.user.id
-        # gender = ["女", "男"][message.user.gender]
-        # print(f"【进场msg】[{user_id}][{gender}]{user_name} 进入了直播间")
-        self.dispatch("enter", {"user_name": user_name, "user_id": user_id})
-
-    def _parseSocialMsg(self, payload):
-        '''关注消息'''
-        message = SocialMessage().parse(payload)
-        user_name = message.user.nick_name
-        # user_id = message.user.id
-        # print(f"【关注msg】[{user_id}]{user_name} 关注了主播")
-        self.dispatch("follow", {"user_name": user_name, "user_id": message.user.id})
-
-    def _parseRoomUserSeqMsg(self, payload):
-        '''直播间统计'''
-        message = RoomUserSeqMessage().parse(payload)
-        current = message.total
-        total = message.total_pv_for_anchor
-        # print(f"【统计msg】当前观看人数: {current}, 累计观看人数: {total}")
-        self.dispatch("stats", {"current": current, "total": total})
-
-    def _parseFansclubMsg(self, payload):
-        '''粉丝团消息'''
-        message = FansclubMessage().parse(payload)
-        content = message.content
-        logger.debug(f"【粉丝团msg】 {content}")
-
-    def _parseEmojiChatMsg(self, payload):
-        '''聊天表情包消息'''
-        message = EmojiChatMessage().parse(payload)
-        emoji_id = message.emoji_id
-        user = message.user
-        logger.debug(f"【聊天表情包id】{user.nick_name}：{emoji_id}")
-
-    def _parseRoomMsg(self, payload):
-        message = RoomMessage().parse(payload)
-        common = message.common
-        room_id = common.room_id
-        logger.debug(f"【直播间msg】直播间id:{room_id}")
-
-    def _parseRoomStatsMsg(self, payload):
-        message = RoomStatsMessage().parse(payload)
-        display_long = message.display_long
-        logger.debug(f"【直播间统计msg】{display_long}")
-
-    def _parseRankMsg(self, payload):
-        message = RoomRankMessage().parse(payload)
-        ranks_list = message.ranks_list
-        result = [item.user.nick_name for item in ranks_list]
-        logger.debug(f"【直播间排行榜msg】{result}")
-
-    def _parseControlMsg(self, payload):
-        '''直播间状态消息'''
-        message = ControlMessage().parse(payload)
-
-        if message.status == 3:
-            logger.info("【直播间状态消息】直播已结束")
-        else:
-            logger.info(f"【直播间状态消息】未处理的直播间状态：{message.status}，method: {message.common.method}")
-
-    def _parseRoomStreamAdaptationMsg(self, payload):
-        message = RoomStreamAdaptationMessage().parse(payload)
-        adaptationType = message.adaptation_type
-        logger.debug(f'直播间adaptation: {adaptationType}')
