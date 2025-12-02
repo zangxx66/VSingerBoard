@@ -6,6 +6,7 @@ import logging
 import getpass
 import requests
 import re
+import socket
 from pathlib import Path
 from ._version import __version__ as CURRENT_VERSION
 from src.notifypy import Notify
@@ -365,3 +366,14 @@ def check_for_updates():
     except Exception as e:
         logger.exception(f"检查更新失败: {e}")
         return {"code": -1, "version": CURRENT_VERSION, "url": "", "body": "", "published_at": "", "msg": "检查更新失败"}
+
+
+def is_internet_available(host: str = "www.baidu.com", port: int = 80, timeout: int = 5):
+    try:
+        socket.setdefaulttimeout(timeout)
+        tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        tcp.connect((host, port))
+        tcp.close()
+        return True
+    except socket.error:
+        return False

@@ -21,7 +21,7 @@ const intervalStore = useIntervalStore()
 const infiniteList = ref<HTMLDivElement | null>(null)
 let wsSend: (data: string | ArrayBuffer | Blob, useBuffer?: boolean | undefined) => boolean
 
-const initConfig = async() => {
+const initConfig = async () => {
     const data = await window.pywebview.api.get_live_config()
     Object.assign(config, data)
 }
@@ -49,14 +49,14 @@ const clear = () => {
             type: "warning",
         }
     )
-    .then(() => {
-        danmakuStore.clearDanmakuList()
-        wsSend("clear danmaku")
-    })
-    .catch((error) => {
-        if ('string' == typeof error && 'cancel' == error) return
-        ElMessage.error(error)
-    })
+        .then(() => {
+            danmakuStore.clearDanmakuList()
+            wsSend("clear danmaku")
+        })
+        .catch((error) => {
+            if ('string' == typeof error && 'cancel' == error) return
+            ElMessage.error(error)
+        })
 }
 
 const exportFile = () => {
@@ -64,7 +64,7 @@ const exportFile = () => {
         { header: "日期", key: "date", width: 50 },
         { header: "昵称", key: "uname", width: 50 },
         { header: "歌名", key: "song", width: 50 },
-        { header: "平台", key: "source", width: 50}
+        { header: "平台", key: "source", width: 50 }
     ]
 
     const data = danmakuList.value.map(item => ({
@@ -122,7 +122,7 @@ const getDanmaku = () => {
     wsSend = send
 }
 
-const openDanmakuWindow = async() => {
+const openDanmakuWindow = async () => {
     const isBundle = await window.pywebview.api.is_bundle()
     const port = isBundle ? 8000 : 5173
     const a = document.createElement("a")
@@ -176,29 +176,27 @@ onMounted(() => {
                 <div class="chat-infinite-list" ref="infiniteList" v-infinite-scroll="load">
                     <template v-for="item in danmakuList">
                         <div class="chat-infinite-list-item">
-                            <img :src="`/assets/images/${item.source}.png`" class="source-img" :alt="item.source" width="24" />
-                            <el-tooltip placement="bottom">
-                                <template #content>
-                                    <span>点击复制歌名：{{ item.msg }}</span>
+                            <img :src="`/assets/images/${item.source}.png`" class="source-img" :alt="item.source"
+                                width="24" />
+                            <el-text tag="span" class="chat-tag">
+                                <template v-if="item.medal_level > 0">
+                                    <template v-if="item.source == 'bilibili'">
+                                        <fans-medal :medal_name="item.medal_name" :medal_level="item.medal_level"
+                                            :guard_level="item.guard_level" />
+                                    </template>
+                                    <template v-if="item.source == 'douyin'">
+                                        <fans-club :medal_name="item.medal_name" :medal_level="item.medal_level"
+                                            :guard_level="item.guard_level" />
+                                    </template>
                                 </template>
-                                <el-text tag="span" class="chat-tag" @click="copy(item.msg)">
-                                    <template v-if="item.medal_level > 0">
-                                        <template v-if="item.source == 'bilibili'">
-                                            <fans-medal :medal_name="item.medal_name" :medal_level="item.medal_level" :guard_level="item.guard_level" />
-                                        </template>
-                                        <template v-if="item.source == 'douyin'">
-                                            <fans-club :medal_name="item.medal_name" :medal_level="item.medal_level" :guard_level="item.guard_level" />
-                                        </template>
-                                    </template>
-                                    <template v-if="item.html != undefined && item.html.length > 0">
-                                        {{ item.uname }}；
-                                        <el-text v-html="item.html" style="display: flex;"></el-text>
-                                    </template>
-                                    <template v-else>
-                                        {{ item.uname }}： {{ item.msg }}
-                                    </template>
-                                </el-text>
-                            </el-tooltip>
+                                <template v-if="item.html != undefined && item.html.length > 0">
+                                    {{ item.uname }}；
+                                    <el-text v-html="item.html" :title="'点击复制'+item.msg" style="display: flex;cursor: pointer;width: 100%;" @click="copy(item.msg)"></el-text>
+                                </template>
+                                <template v-else>
+                                    {{ item.uname }}： <el-text :title="'点击复制'+item.msg" style="display: flex;cursor: pointer;width: 100%;" @click="copy(item.msg)">{{ item.msg }}</el-text>
+                                </template>
+                            </el-text>
 
                             <el-tooltip placement="bottom">
                                 <template #content>

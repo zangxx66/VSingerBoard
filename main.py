@@ -28,6 +28,7 @@ def main():
 
     # 启动websocket
     server_manager.start_websocket_server()
+    server_manager.start_network_check()
 
     api = Api()
     window = gui_manager.create_window(DEBUG, api)

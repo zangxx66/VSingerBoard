@@ -26,6 +26,7 @@ class WebSocketClient:
         self._is_running = False
         self._retry_count = 0
         self._reconnect_task: Optional[asyncio.Task] = None
+        self._listen_task: Optional[asyncio.Task] = None
         self.status_code = 0  # 0:未连接, 1:已连接, 2:已断开, 3:连接失败
         self._ssl = ssl
 
@@ -46,12 +47,14 @@ class WebSocketClient:
             self.session = aiohttp.ClientSession(headers=self.headers)
 
         try:
-            self.ws = await self.session.ws_connect(self.url, ssl=self._ssl)
+            self.ws = await self.session.ws_connect(self.url, ssl=self._ssl, autoclose=False, heartbeat=5)
             logger.info(f"成功连接到 {self.url}")
             self._is_running = True
             self.status_code = 1  # 已连接
             self._retry_count = 0  # 重置重连计数器
-            asyncio.create_task(self.listen())
+            if self._reconnect_task:
+                self._reconnect_task.cancel()
+            self._listen_task = asyncio.create_task(self.listen())
         except aiohttp.ClientError as e:
             logger.error(f"连接失败: {e}")
             await self._schedule_reconnect()
@@ -110,6 +113,7 @@ class WebSocketClient:
         """
         if self._is_running and self._retry_count < self.max_retries:
             self._retry_count += 1
+            self.status_code = 2
             logger.info(f"将在 {self.retry_delay} 秒后尝试重新连接 (第 {self._retry_count}/{self.max_retries} 次)")
             self._reconnect_task = asyncio.create_task(self._reconnect())
         else:
@@ -122,7 +126,11 @@ class WebSocketClient:
         """
         执行重连操作。
         """
-        self.status_code = 2
+        if self._listen_task:
+            self._listen_task.cancel()
+        if self.ws:
+            await self.ws.close()
+        self.ws = None
         await asyncio.sleep(self.retry_delay)
         await self.connect()
 

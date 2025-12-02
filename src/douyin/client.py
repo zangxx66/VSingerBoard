@@ -129,7 +129,10 @@ class DouyinLiveWebFetcher(Decorator, WebSocketClient):
     async def _reconnect(self):
         # 不确定抖子这边掉线频繁是否跟签名有关，先试试效果
         self.url = self._wss_url
+        if self.heartheat_task:
+            self.heartheat_task.cancel()
         await super()._reconnect()
+        self.heartheat_task = asyncio.create_task(self._sendHeartbeat())
 
     async def disconnect_async(self):
         if self.heartheat_task and not self.heartheat_task.done():
@@ -165,6 +168,10 @@ class DouyinLiveWebFetcher(Decorator, WebSocketClient):
         """
         while self._is_running:
             try:
+                if self.status_code != 1:
+                    logger.warning("ws_clinet 连接状态错误")
+                    break
+
                 heartbeat = WebcastImPushFrame(payload_type='hb').SerializeToString()
                 await self.ws.ping(heartbeat)
                 # print("【√】发送心跳包")

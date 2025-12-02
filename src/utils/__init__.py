@@ -33,4 +33,5 @@ __all__ = [
     "IPCManager",
     "MessageQueueEmpty",
     "WebSocketServer",
+    "is_internet_available",
 ]

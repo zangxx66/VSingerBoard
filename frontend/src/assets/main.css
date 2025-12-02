@@ -148,9 +148,10 @@ body {
 .fans-club-name-container {
   display: flex;
   align-items: center;
-  font-size: 10px;
+  font-size: 12px;
   border-radius: 15px;
-  width: 30%;
+  width: 40%;
+  margin-left: 10px;
 }
 
 .fans-club-name-bg {
@@ -392,7 +393,6 @@ body {
 .chat-tag {
     display: flex;
     width: 90%;
-    cursor: pointer;
     margin-left: 1%;
     align-items: center;
 }
