@@ -1,7 +1,6 @@
 import { ElMessage, ElNotification } from "element-plus"
 import { emojiList } from "./emoji"
 import { emoticons } from "./emoticons"
-import { useClipboard } from "@vueuse/core"
 
 const emojiexp = /\[[\u4E00-\u9FA5A-Za-z0-9_]+\]/g
 const { copy } = useClipboard()

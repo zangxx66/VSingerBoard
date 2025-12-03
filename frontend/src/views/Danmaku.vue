@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { processDanmaku } from "@/utils"
-import { useWebSocket } from "@vueuse/core"
 
 const list = ref(Array<DanmakuModel>())
 const infiniteList = ref<HTMLDivElement | null>(null)

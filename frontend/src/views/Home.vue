@@ -2,7 +2,6 @@
 import { ElMessage, ElMessageBox } from "element-plus"
 import { CloseBold, Download, Delete, EditPen } from "@element-plus/icons-vue"
 import { exportExcel, timespanToString, getNowTimespan, processDanmaku, copyToClipboard } from "@/utils"
-import { useWebSocket } from "@vueuse/core"
 import type { Column } from "exceljs"
 
 const singDialogRef = ref<null | InstanceType<typeof AddSingDialog>>()
