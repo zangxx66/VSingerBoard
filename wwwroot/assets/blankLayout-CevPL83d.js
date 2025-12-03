@@ -1,1 +1,0 @@
-import{R as s}from"./vendor-vue-BEIf0qVf.js";import{q as o,K as a,u as e,v as r}from"./vendor-libs-DUytVOgY.js";import"./vendor-exceljs-BzIpynsW.js";const t=o({__name:"blankLayout",setup:o=>(o,t)=>(r(),a(e(s)))});export{t as default};
