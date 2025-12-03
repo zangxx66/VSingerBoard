@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive } from "vue"
 import { ElMessage } from "element-plus"
-import { useDanmakuStore } from "@/stores"
 
 const isShow = ref(false)
 const danmakuStore = useDanmakuStore()

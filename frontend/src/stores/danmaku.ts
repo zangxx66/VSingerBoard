@@ -1,5 +1,4 @@
 import { defineStore } from "pinia"
-import { ref } from "vue"
 
 export const useDanmakuStore = defineStore("danmaku", () => {
     const danmakuList = ref(Array<DanmakuModel>())

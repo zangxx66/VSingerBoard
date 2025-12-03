@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import { ref, reactive, watchEffect, defineAsyncComponent } from "vue"
 import { ElMessage, type FormInstance } from "element-plus"
 import { Close, Check } from "@element-plus/icons-vue"
 import { request } from "@/api"
 import { toggleDark, checkUpdate } from "@/utils"
-import { useIntervalStore, useThemeStore } from "@/stores"
 
-const obsSetting = defineAsyncComponent(() => import("./obsSetting.vue"))
 const refForm = ref<FormInstance>()
 const btnLoading = ref(false)
 const loading = ref(false)

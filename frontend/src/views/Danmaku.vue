@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref, onMounted, nextTick, watch } from "vue"
 import { processDanmaku } from "@/utils"
 import { useWebSocket } from "@vueuse/core"
 

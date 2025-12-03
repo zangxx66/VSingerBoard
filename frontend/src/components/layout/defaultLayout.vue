@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, computed, nextTick } from "vue"
-import { RouterView } from "vue-router"
 import router from "@/router"
 import zhCn from "element-plus/es/locale/lang/zh-cn"
 import { HomeFilled, Tools, List, InfoFilled, Sunny, Moon } from "@element-plus/icons-vue"
@@ -8,7 +6,6 @@ import ContextMenu from '@imengyu/vue3-context-menu'
 import { ElMessage, type MenuItemInstance, type MainInstance } from "element-plus"
 import { request } from "@/api"
 import { toggleDark, checkUpdate, pasteToElement, copyToClipboard } from "@/utils"
-import { useIntervalStore, useThemeStore } from "@/stores"
 
 const intervalStore = useIntervalStore()
 const themeStore = useThemeStore()

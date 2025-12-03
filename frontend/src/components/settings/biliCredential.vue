@@ -1,5 +1,4 @@
 <script setup lang="tsx">
-import { ref, onMounted } from 'vue'
 import { ElMessage, ElMessageBox, ElText, ElButton, ElSwitch, type Column } from 'element-plus'
 import { Delete, Refresh } from '@element-plus/icons-vue'
 import { request } from '@/api'

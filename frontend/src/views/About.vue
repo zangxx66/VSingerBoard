@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue"
 import { checkUpdate } from "@/utils"
-import { useThemeStore } from "@/stores"
 
 const version = ref("")
 const themeStore = useThemeStore()

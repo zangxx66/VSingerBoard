@@ -1,10 +1,7 @@
 <script setup lang="tsx">
-import { ref, reactive, onMounted, defineAsyncComponent } from 'vue'
 import { ElMessage, ElButton, type FormInstance } from 'element-plus'
 import { request } from '@/api'
-import { useDanmakuStore } from "@/stores"
 
-const biliCredential = defineAsyncComponent(() => import("./biliCredential.vue"))
 const refForm = ref<FormInstance>()
 const loading = ref(false)
 const baseFormValue = reactive<BiliConfigModel>({

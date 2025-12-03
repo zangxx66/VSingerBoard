@@ -17,7 +17,8 @@ export default defineConfig({
     vueJsx(),
     vueDevTools(),
     AutoImport({
-      imports: ['vue'],
+      imports: ['vue', 'pinia', 'vue-router'],
+      dirs: ['./src/stores/**'],
       resolvers: [
         ElementPlusResolver(),
         IconsResolver({
@@ -26,6 +27,8 @@ export default defineConfig({
       ],
     }),
     Components({
+      extensions: ['vue', 'tsx'],
+      include: [/\.vue$/, /\.vue\?vue/, /\.tsx$/],
       resolvers: [
         IconsResolver({
           enabledCollections: ['ep'],

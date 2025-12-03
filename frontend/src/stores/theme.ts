@@ -1,5 +1,4 @@
 import { defineStore } from "pinia"
-import { reactive } from 'vue'
 
 export const useThemeStore = defineStore('theme', () => {
     const globalCfg = reactive({

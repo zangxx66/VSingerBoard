@@ -1,15 +1,11 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, defineAsyncComponent, nextTick, watch, computed } from "vue"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { CloseBold, Download, Delete, EditPen } from "@element-plus/icons-vue"
 import { exportExcel, timespanToString, getNowTimespan, processDanmaku, copyToClipboard } from "@/utils"
 import { useWebSocket } from "@vueuse/core"
 import type { Column } from "exceljs"
-import { useIntervalStore, useDanmakuStore } from "@/stores"
 
-const PlatformStatus = defineAsyncComponent(() => import("@/components/home/platformStatus.vue"))
-const addSingDialog = defineAsyncComponent(() => import("@/components/home/addSingDialog.vue"))
-const singDialogRef = ref<null | InstanceType<typeof addSingDialog>>()
+const singDialogRef = ref<null | InstanceType<typeof AddSingDialog>>()
 const config = reactive<LiveModel>({
     douyin_romm_id: 0,
     bilibili_room_id: 0,

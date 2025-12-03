@@ -1,16 +1,12 @@
 <script setup lang="ts">
-import { ref, defineAsyncComponent } from "vue"
 import type { TabsPaneContext } from "element-plus"
 
 const activeName = ref("1")
-const biliTab = defineAsyncComponent(() => import("@/components/settings/biliTab.vue"))
-const dyTab = defineAsyncComponent(() => import("@/components/settings/dyTab.vue"))
-const appSetting = defineAsyncComponent(() => import("@/components/settings/appSettingTab.vue"))
 
-const appSettingRef = ref<any>()
+const appSettingRef = ref<null | InstanceType<typeof AppSettingTab>>()
 const tabClickHandle = (pane: TabsPaneContext, ev: Event) => {
   if(pane.props.name == 3){
-    appSettingRef.value.initConfig()
+    appSettingRef.value?.initConfig()
   }
 }
 
@@ -26,7 +22,7 @@ const tabClickHandle = (pane: TabsPaneContext, ev: Event) => {
           <dy-tab></dy-tab>
         </el-tab-pane>
         <el-tab-pane label="应用设置" name="3">
-          <app-setting ref="appSettingRef"></app-setting>
+          <app-setting-tab ref="appSettingRef"></app-setting-tab>
         </el-tab-pane>
       </el-tabs>
     </el-main>
