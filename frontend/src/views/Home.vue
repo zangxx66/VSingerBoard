@@ -31,7 +31,7 @@ const copy = (txt: string) => {
 const remove = (danmaku: DanmakuModel) => {
     danmakuStore.removeDanmakuList(danmaku)
     const jsonStr = JSON.stringify(danmaku)
-    wsSend(`delete${jsonStr}`)
+    wsSend(`{type:'delete',data:${jsonStr}}`)
 }
 
 const clear = () => {
@@ -46,7 +46,7 @@ const clear = () => {
     )
         .then(() => {
             danmakuStore.clearDanmakuList()
-            wsSend("clear danmaku")
+            wsSend("{type:'clear',data:''}")
         })
         .catch((error) => {
             if ('string' == typeof error && 'cancel' == error) return
@@ -79,7 +79,7 @@ const getDanmaku = () => {
         autoReconnect: true,
         autoClose: true,
         heartbeat: {
-            message: "heartbeat",
+            message: `{"type":"echo","data":"heartbeat"}`,
             interval: 5000,
             pongTimeout: 10000
         },
@@ -90,20 +90,8 @@ const getDanmaku = () => {
             }
             else if (data.type == "del") {
                 const delList = data.data as Array<DelListModel>
-                delList.forEach(item => {
-                    let danmaku
-                    if (item.song_name) {
-                        danmaku = danmakuList.value.find(pItem => pItem.uid == item.uid && pItem.uname == item.uname)
-                    } else {
-                        danmaku = danmakuList.value.find(pItem => pItem.uid == item.uid && pItem.uname == item.uname && pItem.msg == item.song_name)
-                    }
-                    if (danmaku) {
-                        const index = danmakuList.value.indexOf(danmaku)
-                        if (index > -1) {
-                            danmakuList.value.splice(index, 1)
-                        }
-                    }
-                })
+                const result = danmakuList.value.filter(item => !delList.some(delItem => delItem.msg_id === item.msg_id))
+                danmakuStore.setDanmakuList(result)
             }
             else if (data.type == "add") {
                 const value = data.data as Array<DanmakuModel>
@@ -144,7 +132,6 @@ watch(danmakuList, async () => {
 onMounted(() => {
     const height = window.innerHeight * 0.9
     const dom = document.querySelector(".chat-main") as HTMLElement
-    // dom.style.height = `${height}px`
     dom.style.overflow = "hidden"
 
     const infiniteListDom = document.querySelector(".chat-infinite-list") as HTMLElement

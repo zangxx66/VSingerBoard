@@ -5,6 +5,7 @@ type ResponseModel = {
 }
 
 type DanmakuModel = {
+    msg_id: number
     uid: number
     uname: string
     msg: string
@@ -73,6 +74,7 @@ type WsModel = {
 }
 
 type DelListModel = {
+    msg_id: number
     uid: number
     uname: string
     song_name: string

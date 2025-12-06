@@ -59,7 +59,7 @@ const addOrUpdateConfig = () => {
         } else {
             ElMessage.success(resp.msg)
             baseFormValue.id = resp.data
-            danmakuStore.clearDanmakuList()
+            danmakuStore.clearDanmakuList("douyin")
         }
         btnLoading.value = false
     }).catch(error => {

@@ -9,7 +9,7 @@ const getDanmaku = () => {
         autoReconnect: true,
         autoClose: true,
         heartbeat: {
-            message: "heartbeat",
+            message: `{"type":"echo","data":"heartbeat"}`,
             interval: 5000,
             pongTimeout: 10000
         },
@@ -23,30 +23,11 @@ const getDanmaku = () => {
             }
             else if (data.type == "remove") {
                 const value = data.data as DanmakuModel
-                const danmaku = list.value.find(item => item.uid == value.uid && item.send_time == value.send_time)
-                if (danmaku) {
-                    const index = list.value.indexOf(danmaku)
-                    if (index > -1) {
-                        list.value.splice(index, 1)
-                    }
-                }
+                list.value = list.value.filter(item => item.msg_id != value.msg_id)
             }
             else if (data.type == "del") {
                 const delList = data.data as Array<DelListModel>
-                delList.forEach(item => {
-                    let danmaku
-                    if (item.song_name) {
-                        danmaku = list.value.find(pItem => pItem.uid == item.uid && pItem.uname == item.uname && pItem.msg == item.song_name)
-                    } else {
-                        danmaku = list.value.find(pItem => pItem.uid == item.uid && pItem.uname == item.uname)
-                    }
-                    if (danmaku) {
-                        const index = list.value.indexOf(danmaku)
-                        if (index > -1) {
-                            list.value.splice(index, 1)
-                        }
-                    }
-                })
+                list.value = list.value.filter(item => !delList.some(delItem => delItem.msg_id === item.msg_id))
             }
             else {
                 const value = data.data as Array<DanmakuModel>

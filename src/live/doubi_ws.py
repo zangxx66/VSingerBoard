@@ -1,7 +1,7 @@
 import asyncio
 import json
 from aiohttp import web
-from src.utils import WebSocketServer, logger, async_worker
+from src.utils import WebSocketServer, logger, async_worker, WebsocketDataItem
 from . import douyin_manager, bili_manager
 
 
@@ -88,13 +88,14 @@ class DoubiWs:
             logger.info("DoubiWs resources cleaned up.")
 
     async def _on_message(self, ws: web.WebSocketResponse, message: str):
-        if message == "clear danmaku":
+        recive_data = WebsocketDataItem(**json.loads(message))
+        if recive_data.type == "clear":
             await self._ws.broadcast(json.dumps({"type": "clear"}, ensure_ascii=False))
-        elif message.startswith("delete"):
-            result = {"type": "remove", "data": [message[7:]]}
+        elif recive_data.type == "delete":
+            result = {"type": "remove", "data": recive_data.data}
             await self._ws.broadcast(json.dumps(result, ensure_ascii=False))
         else:
-            await ws.send_str(json.dumps({"type": "echo", "data": message}, ensure_ascii=False))
+            await ws.send_str(json.dumps({"type": "echo", "data": recive_data.data}, ensure_ascii=False))
 
     async def stop(self):
         """

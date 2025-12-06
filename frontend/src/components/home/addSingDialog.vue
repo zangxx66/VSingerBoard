@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ElMessage } from "element-plus"
+import { getNowTimespan }  from "@/utils"
 
 const isShow = ref(false)
 const danmakuStore = useDanmakuStore()
 const formValue = reactive<DanmakuModel>({
+    msg_id: 0,
     uid: 0,
     uname: "",
     msg: "",
@@ -39,6 +41,9 @@ const submit = () => {
         ElMessage.error("点歌内容不能为空")
         return
     }
+
+    formValue.msg_id = getNowTimespan()
+    formValue.send_time = getNowTimespan()
 
     danmakuStore.pushDanmakuList([{...formValue}])
     isShow.value = false

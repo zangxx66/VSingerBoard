@@ -133,7 +133,10 @@ class Bili:
         logger.debug(f"[{medal_name} {medal_level}]:{uname}:{msg}")
         if msg.startswith("取消点歌"):
             cancel_song = msg.replace("取消点歌", "", 1).strip()
-            self.del_list.append({"uid": uid, "uname": uname, "song_name": cancel_song})
+            history = await Db.get_song_history(uid=uid, source="bilibili")
+            if history:
+                self.del_list.append({"msg_id": history.id, "uid": uid, "uname": uname, "song_name": cancel_song})
+            return
         if not msg.startswith(self.sing_prefix):
             return
         if self.modal_level > 0 and medal_level < self.modal_level:
@@ -148,7 +151,10 @@ class Bili:
         song_name = msg.replace(self.sing_prefix, "", 1).strip()
         logger.info(song_name)
 
+        history = await Db.add_song_history(uid=uid, song_name=song_name, source="bilibili", create_time=now)
+
         danmu_info: DanmuInfo = {
+            "msg_id": history.id,
             "uid": uid,
             "uname": uname,
             "msg": song_name,
@@ -159,8 +165,6 @@ class Bili:
             "source": "bilibili"
         }
         self.danmus.append(danmu_info)
-
-        await Db.add_song_history(uid=uid, song_name=song_name, source="bilibili", create_time=now)
 
         config = await Db.get_gloal_config()
         if not config or not config.notification:
@@ -198,7 +202,10 @@ class Bili:
         song_name = message.replace(self.sing_prefix, "", 1).strip()
         logger.info(song_name)
 
+        history = await Db.add_song_history(uid=uid, song_name=song_name, source="bilibili", create_time=now)
+
         sc_info: DanmuInfo = {
+            "msg_id": history.id,
             "uid": uid,
             "uname": uname,
             "msg": song_name,
@@ -210,8 +217,6 @@ class Bili:
             "source": "bilibili"
         }
         self.danmus.append(sc_info)
-
-        await Db.add_song_history(uid=uid, song_name=song_name, source="bilibili", create_time=now)
 
         config = await Db.get_gloal_config()
         if not config or not config.notification:

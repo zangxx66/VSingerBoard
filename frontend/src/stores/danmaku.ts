@@ -15,8 +15,8 @@ export const useDanmakuStore = defineStore("danmaku", () => {
         danmakuList.value.push(...list)
     }
 
-    const clearDanmakuList = () => {
-        danmakuList.value = []
+    const clearDanmakuList = (source?: string) => {
+        danmakuList.value = source && source.length > 0 ? danmakuList.value.filter(item => item.source != source) : []
     }
 
     const removeDanmakuList = (danmaku: DanmakuModel) => {

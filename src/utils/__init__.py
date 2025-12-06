@@ -34,4 +34,5 @@ __all__ = [
     "MessageQueueEmpty",
     "WebSocketServer",
     "is_internet_available",
+    "WebsocketDataItem",
 ]

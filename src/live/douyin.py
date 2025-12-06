@@ -111,7 +111,10 @@ class Douyin:
 
         if content.startswith("取消点歌"):
             cancel_song = content.replace("取消点歌", "", 1).strip()
-            self.del_list.append({"uid": uid, "uname": uname, "song_name": cancel_song})
+            history = await Db.get_song_history(uid=uid, source="douyin")
+            if history:
+                self.del_list.append({"msg_id": history.id, "uid": uid, "uname": uname, "song_name": cancel_song})
+            return
         if not content.startswith(self.sing_prefix):
             return
         if self.fans_level > 0 and medal_level < self.fans_level:
@@ -124,7 +127,10 @@ class Douyin:
         song_name = content.replace(self.sing_prefix, "", 1).strip()
         logger.info(song_name)
 
+        history = await Db.add_song_history(uid=uid, song_name=song_name, source="douyin", create_time=now)
+
         danmu_info: DanmuInfo = {
+            "msg_id": history.id,
             "uid": uid,
             "uname": uname,
             "msg": song_name,
@@ -135,8 +141,6 @@ class Douyin:
             "medal_name": medal_name,
         }
         self.danmus.append(danmu_info)
-
-        await Db.add_song_history(uid=uid, song_name=song_name, source="douyin", create_time=now)
 
         config = await Db.get_gloal_config()
         if not config or not config.notification:

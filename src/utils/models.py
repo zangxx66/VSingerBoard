@@ -3,6 +3,7 @@ from pydantic import BaseModel
 
 
 class DanmuInfo(TypedDict):
+    msg_id: int
     uid: int
     uname: str
     msg: str
@@ -51,3 +52,8 @@ class globalfigItem(BaseModel):
     notification: Optional[bool] = None
     navSideTour: Optional[bool] = None
     collapse: Optional[bool] = None
+
+
+class WebsocketDataItem(BaseModel):
+    type: str
+    data: str
