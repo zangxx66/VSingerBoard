@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ElMessage, ElMessageBox } from "element-plus"
-import { CloseBold, Download, Delete, EditPen } from "@element-plus/icons-vue"
+import { CloseBold, Download, Delete, EditPen, CopyDocument, DocumentChecked } from "@element-plus/icons-vue"
 import { exportExcel, timespanToString, getNowTimespan, processDanmaku, copyToClipboard } from "@/utils"
 import type { Column } from "exceljs"
 
@@ -23,15 +23,15 @@ const initConfig = async () => {
 
 const load = () => console.log("load")
 
-const copy = (txt: string) => {
+const copy = (msg_id: number, txt: string) => {
     copyToClipboard(txt)
+    danmakuStore.updateDanmakuStatus(msg_id, 1)
     ElMessage.success("拷贝成功")
 }
 
 const remove = (danmaku: DanmakuModel) => {
     danmakuStore.removeDanmakuList(danmaku)
-    const jsonStr = JSON.stringify(danmaku)
-    wsSend(`{type:'delete',data:${jsonStr}}`)
+    wsSend(`{"type":"delete","data":${danmaku.msg_id}}`)
 }
 
 const clear = () => {
@@ -46,7 +46,7 @@ const clear = () => {
     )
         .then(() => {
             danmakuStore.clearDanmakuList()
-            wsSend("{type:'clear',data:''}")
+            wsSend(`{"type":"clear","data":""}`)
         })
         .catch((error) => {
             if ('string' == typeof error && 'cancel' == error) return
@@ -141,6 +141,57 @@ onMounted(() => {
     getDanmaku()
 
     intervalStore.addInterval("get_live_config", initConfig, 1000)
+
+    if (import.meta.env.DEV) {
+        danmakuStore.pushDanmakuList([{
+            msg_id: 0,
+            uid: 0,
+            uname: "uname",
+            msg: "last love",
+            send_time: getNowTimespan(),
+            source: "bilibili",
+            medal_name: "雾了",
+            medal_level: 12,
+            guard_level: 0,
+            status: 0
+        },
+        {
+            msg_id: 1,
+            uid: 1,
+            uname: "uname",
+            msg: "last dance",
+            send_time: getNowTimespan(),
+            source: "douyin",
+            medal_name: "雾了",
+            medal_level: 10,
+            guard_level: 2,
+            status: 0
+        },
+        {
+            msg_id: 2,
+            uid: 2,
+            uname: "uname",
+            msg: "last dance",
+            send_time: getNowTimespan(),
+            source: "douyin",
+            medal_name: "雾了",
+            medal_level: 10,
+            guard_level: 1,
+            status: 0
+        },
+        {
+            msg_id: 3,
+            uid: 3,
+            uname: "uname",
+            msg: "last dance",
+            send_time: getNowTimespan(),
+            source: "douyin",
+            medal_name: "",
+            medal_level: 10,
+            guard_level: 1,
+            status: 0
+        }])
+    }
 })
 </script>
 <template>
@@ -173,22 +224,42 @@ onMounted(() => {
                                 </template>
                                 <template v-if="item.html != undefined && item.html.length > 0">
                                     {{ item.uname }}；
-                                    <el-text v-html="item.html" :title="'点击复制'+item.msg" style="display: flex;cursor: pointer;width: 100%;" @click="copy(item.msg)"></el-text>
+                                    <el-text v-html="item.html"></el-text>
                                 </template>
                                 <template v-else>
-                                    {{ item.uname }}： <el-text :title="'点击复制'+item.msg" style="display: flex;cursor: pointer;width: 100%;" @click="copy(item.msg)">{{ item.msg }}</el-text>
+                                    {{ item.uname }}： {{ item.msg }}
                                 </template>
                             </el-text>
 
+                            <el-tooltip v-if="item.status == 0" placement="bottom">
+                                <template #content>
+                                    <span>复制点歌</span>
+                                </template>
+                                <span class="chat-close" @click="copy(item.msg_id, item.msg)">
+                                    <el-icon>
+                                        <CopyDocument />
+                                    </el-icon>
+                                </span>
+                            </el-tooltip>
+                            <el-tooltip v-if="item.status == 1" placement="bottom">
+                                <template #content>
+                                    <span>已复制</span>
+                                </template>
+                                <span class="chat-close">
+                                    <el-icon>
+                                        <DocumentChecked />
+                                    </el-icon>
+                                </span>
+                            </el-tooltip>
                             <el-tooltip placement="bottom">
                                 <template #content>
-                                    <span>移除点歌：{{ item.msg }}</span>
+                                    <span>移除点歌</span>
                                 </template>
-                                <el-text tag="span" class="chat-close" @click="remove(item)">
+                                <span class="chat-close" @click="remove(item)">
                                     <el-icon>
                                         <CloseBold />
                                     </el-icon>
-                                </el-text>
+                                </span>
                             </el-tooltip>
                         </div>
                     </template>

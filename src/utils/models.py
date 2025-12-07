@@ -56,4 +56,4 @@ class globalfigItem(BaseModel):
 
 class WebsocketDataItem(BaseModel):
     type: str
-    data: str
+    data: Any

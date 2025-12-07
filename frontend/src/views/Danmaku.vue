@@ -22,8 +22,7 @@ const getDanmaku = () => {
                 list.value = []
             }
             else if (data.type == "remove") {
-                const value = data.data as DanmakuModel
-                list.value = list.value.filter(item => item.msg_id != value.msg_id)
+                list.value = list.value.filter(item => item.msg_id != data.data)
             }
             else if (data.type == "del") {
                 const delList = data.data as Array<DelListModel>

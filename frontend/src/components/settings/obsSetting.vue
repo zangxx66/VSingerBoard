@@ -49,6 +49,11 @@ const css = ref(`/* 弹幕列表CSS */
   margin-left: 1rem;
 }
 
+.danmaku-fans {
+  width: 200px;
+  margin: 0 auto;
+}
+
 .fans-club-img {
   margin-left: 10px;
 }
@@ -61,23 +66,20 @@ const css = ref(`/* 弹幕列表CSS */
   margin-left: 10px;
 }
 
-.danmaku-fans {
-  width: 200px;
-  margin: 0 auto;
-}
-
 .fans-club-container {
-  width: 200px;
+  width: fit-content;
   display: flex;
   align-items: center;
+  margin-right: 1%;
 }
 
 .fans-club-name-container {
   display: flex;
   align-items: center;
-  font-size: 10px;
+  font-size: 12px;
   border-radius: 15px;
-  width: 30%;
+  width: 60px;
+  margin-left: 10px;
 }
 
 .fans-club-name-bg {
@@ -105,6 +107,7 @@ const pushTestData = () => {
         const source = i % 2 == 0 ? "bilibili" : "douyin"
         const guard_level = source == "bilibili" ? 0 : i % 3 == 0 ? 1 : 2
         previewData.value.push({
+            msg_id: i,
             uid: i,
             msg: "点歌弹幕",
             uname: "username",

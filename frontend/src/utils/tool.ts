@@ -64,6 +64,7 @@ export const pasteToElement = async(activeEl: HTMLElement | null) => {
 
 export const processDanmaku = (list: DanmakuModel[], platform: "bilibili" | "douyin") => {
   list.forEach(item => {
+    item.status = 0
     let result = item.msg
     const matchList = item.msg.match(emojiexp)
     if(matchList) {

@@ -14,7 +14,8 @@ type DanmakuModel = {
     html?: string
     medal_name: string
     medal_level: number
-    guard_level: number
+    guard_level: number,
+    status?: number
 }
 
 type BiliConfigModel = {

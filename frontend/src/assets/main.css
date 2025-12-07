@@ -122,6 +122,11 @@ body {
   margin-left: 1rem;
 }
 
+.danmaku-fans {
+  width: 200px;
+  margin: 0 auto;
+}
+
 .fans-club-img {
   margin-left: 10px;
 }
@@ -134,15 +139,11 @@ body {
   margin-left: 10px;
 }
 
-.danmaku-fans {
-  width: 200px;
-  margin: 0 auto;
-}
-
 .fans-club-container {
-  width: 200px;
+  width: fit-content;
   display: flex;
   align-items: center;
+  margin-right: 1%;
 }
 
 .fans-club-name-container {
@@ -150,7 +151,7 @@ body {
   align-items: center;
   font-size: 12px;
   border-radius: 15px;
-  width: 40%;
+  width: 60px;
   margin-left: 10px;
 }
 
@@ -399,7 +400,7 @@ body {
 
 .chat-close {
     width: 1%;
-    margin-right: 1%;
+    margin-right: 3%;
     cursor: pointer;
 }
 

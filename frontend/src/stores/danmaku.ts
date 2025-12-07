@@ -26,6 +26,13 @@ export const useDanmakuStore = defineStore("danmaku", () => {
         }
     }
 
+    const updateDanmakuStatus = (msg_id: number, status: number) => {
+        const danmaku = danmakuList.value.find(item => item.msg_id == msg_id)
+        if(danmaku) {
+            danmaku.status = status
+        }
+    }
+
     return {
         danmakuList,
         getDanmakuList,
@@ -33,5 +40,6 @@ export const useDanmakuStore = defineStore("danmaku", () => {
         pushDanmakuList,
         clearDanmakuList,
         removeDanmakuList,
+        updateDanmakuStatus,
     }
 })
