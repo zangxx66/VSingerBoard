@@ -11,6 +11,10 @@ class DoubiWs:
         self._run_future = None
         self._ws = None
         self._broadcast_task = None  # 用于周期性广播的任务
+        self.bili_room_id = 0
+        self.douyin_room_id = 0
+        self.bili_status = -1
+        self.douyin_status = -1
 
     def start(self):
         """
@@ -43,6 +47,24 @@ class DoubiWs:
                 if len(del_list) > 0 and self._ws:
                     result = {"type": "del", "data": del_list}
                     await self._ws.broadcast(json.dumps(result, ensure_ascii=False))
+
+                bili_room_id = bili_manager.room_id
+                bili_status = bili_manager.get_status()
+                douyin_room_id = douyin_manager.room_id
+                douyin_status = douyin_manager.get_status()
+
+                if self.bili_room_id != bili_room_id:
+                    self.bili_room_id = bili_room_id
+                    await self._ws.broadcast(json.dumps({"type": "bili_room_change", "data": self.bili_room_id}, ensure_ascii=False))
+                if self.bili_status != bili_status:
+                    self.bili_status = bili_status
+                    await self._ws.broadcast(json.dumps({"type": "bili_status_change", "data": self.bili_status}, ensure_ascii=False))
+                if self.douyin_room_id != douyin_room_id:
+                    self.douyin_room_id = douyin_room_id
+                    await self._ws.broadcast(json.dumps({"type": "douyin_room_change", "data": self.douyin_room_id}, ensure_ascii=False))
+                if self.douyin_status != douyin_status:
+                    self.douyin_status = douyin_status
+                    await self._ws.broadcast(json.dumps({"type": "douyin_status_change", "data": self.douyin_status}, ensure_ascii=False))
 
                 # 等待一段时间, 避免CPU占用过高, 并让出控制权
                 await asyncio.sleep(interval_seconds)
@@ -94,8 +116,15 @@ class DoubiWs:
         elif recive_data.type == "delete":
             result = {"type": "remove", "data": recive_data.data}
             await self._ws.broadcast(json.dumps(result, ensure_ascii=False))
+        elif recive_data.type == "live_config":
+            self.bili_room_id = bili_manager.room_id
+            self.bili_status = bili_manager.get_status()
+            self.douyin_room_id = douyin_manager.room_id
+            self.douyin_status = douyin_manager.get_status()
+            result = {"type": "live_config", "data": {"bilibili_room_id": self.bili_room_id, "bilibili_ws_status": self.bili_status, "douyin_romm_id": self.douyin_room_id, "douyin_ws_status": self.douyin_status}}
+            await ws.send_json(result)
         else:
-            await ws.send_str(json.dumps({"type": "echo", "data": recive_data.data}, ensure_ascii=False))
+            await ws.send_json({"type": "echo", "data": recive_data.data})
 
     async def stop(self):
         """

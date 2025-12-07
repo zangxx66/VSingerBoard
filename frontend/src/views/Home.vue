@@ -12,14 +12,8 @@ const config = reactive<LiveModel>({
     bilibili_ws_status: -1
 })
 const danmakuStore = useDanmakuStore()
-const intervalStore = useIntervalStore()
 const infiniteList = ref<HTMLDivElement | null>(null)
 let wsSend: (data: string | ArrayBuffer | Blob, useBuffer?: boolean | undefined) => boolean
-
-const initConfig = async () => {
-    const data = await window.pywebview.api.get_live_config()
-    Object.assign(config, data)
-}
 
 const load = () => console.log("load")
 
@@ -100,9 +94,25 @@ const getDanmaku = () => {
                 const result = [...danmakuList.value, ...processDanmaku(douyin, "douyin"), ...processDanmaku(bilibili, "bilibili")]
                 danmakuStore.setDanmakuList(result)
             }
+            else if (data.type == "live_config") {
+                Object.assign(config, data.data)
+            }
+            else if (data.type == "bili_room_change") {
+                config.bilibili_room_id = data.data
+            }
+            else if (data.type == "bili_status_change") {
+                config.bilibili_ws_status = data.data
+            }
+            else if (data.type == "douyin_room_change") {
+                config.douyin_romm_id = data.data
+            }
+            else if (data.type == "douyin_status_change") {
+                config.douyin_ws_status = data.data
+            }
         }
     })
     wsSend = send
+    send(`{"type":"live_config","data":""}`)
 }
 
 const openDanmakuWindow = async () => {
@@ -139,8 +149,6 @@ onMounted(() => {
     infiniteListDom.style.height = `${listHeight}px`
 
     getDanmaku()
-
-    intervalStore.addInterval("get_live_config", initConfig, 1000)
 
     if (import.meta.env.DEV) {
         danmakuStore.pushDanmakuList([{

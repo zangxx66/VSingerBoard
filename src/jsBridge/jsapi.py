@@ -33,24 +33,6 @@ class Api:
         """
         return pyperclip.paste()
 
-    def get_bili_ws_status(self):
-        """
-        获取Bilibili WebSocket连接的状态。
-
-        Returns:
-            int: Bilibili WebSocket连接的状态。-1表示连接未配置，0表示连接未运行，1表示连接正在运行。
-        """
-        return bili_manager.get_status()
-
-    def get_dy_ws_status(self):
-        """
-        获取抖音WebSocket连接的状态。
-
-        Returns:
-            int: 抖音WebSocket连接的状态。-1表示连接未配置，0表示连接未运行，1表示连接正在运行。
-        """
-        return douyin_manager.get_status()
-
     def restart_bilibili_ws(self):
         """
         重新启动Bilibili WebSocket连接。
@@ -109,11 +91,3 @@ class Api:
             dict: VSingerBoard应用程序的最新版本信息。
         """
         return check_for_updates()
-
-    def get_live_config(self):
-        return {
-            "douyin_romm_id": douyin_manager.room_id,
-            "bilibili_room_id": bili_manager.room_id,
-            "douyin_ws_status": douyin_manager.get_status(),
-            "bilibili_ws_status": bili_manager.get_status(),
-        }

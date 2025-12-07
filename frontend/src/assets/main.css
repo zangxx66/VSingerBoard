@@ -273,7 +273,7 @@ body {
     align-items: center;
 }
 .source-img {
-    margin: 1px;
+    margin: 1px 1px 1px 10px;
     height: 24px;
 }
 
@@ -380,7 +380,6 @@ body {
 }
 
 .chat-infinite-list-item {
-    width: 95%;
     display: flex;
     margin: 10px;
     height: 50px;

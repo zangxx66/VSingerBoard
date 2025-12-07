@@ -6,10 +6,6 @@ declare interface Window {
             reload: () => void
             /** 检查更新 */
             update_verion: () => Promise<UpdateModel>
-            /** 获取bilibili websocket状态 */
-            get_bili_ws_status: () => Promise<number>
-            /** 获取抖音websocket状态 */
-            get_dy_ws_status: () => Promise<number>
             /** 获取当前版本 */
             get_version: () => Promise<string>
             /** 是否是bundle */
@@ -20,8 +16,6 @@ declare interface Window {
             restart_bilibili_ws: () => void
             /** 重新启动抖音 websocket */
             restart_douyin_ws: () => void
-            /** 获取直播配置 */
-            get_live_config: () => Promise<LiveModel>
         }
         token: string
     }

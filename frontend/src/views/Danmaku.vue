@@ -28,7 +28,7 @@ const getDanmaku = () => {
                 const delList = data.data as Array<DelListModel>
                 list.value = list.value.filter(item => !delList.some(delItem => delItem.msg_id === item.msg_id))
             }
-            else {
+            else if (data.type == "add") {
                 const value = data.data as Array<DanmakuModel>
                 const douyin = value.filter(item => item.source == "douyin")
                 const bilibili = value.filter(item => item.source == "bilibili")
