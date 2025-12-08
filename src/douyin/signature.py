@@ -1,13 +1,10 @@
 import os
-import sys
 import hashlib
 import random
 import string
-import subprocess
 import urllib.parse
 from quickjs import Function
-from contextlib import contextmanager
-from unittest.mock import patch
+from functools import cache
 from src.utils import resource_path, logger
 
 
@@ -17,6 +14,13 @@ def get_real_path(filename):
     return js_path
 
 
+@cache
+def open_file(file_path: str):
+    with open(file_path, 'r', encoding='utf-8') as f:
+        ctx = f.read()
+        return ctx
+
+
 def execute_js(*args, js_file: str, func_name: str):
     """
     执行 JavaScript 文件
@@ -24,26 +28,10 @@ def execute_js(*args, js_file: str, func_name: str):
     :return: 执行结果
     """
     js_path = get_real_path(js_file)
-    with open(js_path, 'r', encoding='utf-8') as file:
-        js_code = file.read()
+    js_code = open_file(js_path)
 
     ctx = Function(func_name, js_code)
     return ctx(*args)
-
-
-@contextmanager
-def patched_popen_encoding(encoding='utf-8'):
-    original_popen_init = subprocess.Popen.__init__
-
-    def new_popen_init(self, *args, **kwargs):
-        kwargs['encoding'] = encoding
-        if sys.platform == 'win32':
-            # 隐藏命令行窗口
-            kwargs['creationflags'] = 0x08000000  # CREATE_NO_WINDOW
-        original_popen_init(self, *args, **kwargs)
-
-    with patch.object(subprocess.Popen, '__init__', new_popen_init):
-        yield
 
 
 def generateSignature(wss, script_file='sign_v1.js'):
@@ -61,8 +49,6 @@ def generateSignature(wss, script_file='sign_v1.js'):
     md5 = hashlib.md5()
     md5.update(param.encode())
     md5_param = md5.hexdigest()
-
-    # ctx = execute_js(script_file)
 
     try:
         signature = execute_js(md5_param, js_file=script_file, func_name="get_sign")

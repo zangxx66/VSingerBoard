@@ -117,7 +117,7 @@
     - **前端:**
       ```bash
       cd frontend
-      npm install
+      pnpm install
       ```
 4.  **运行与开发:**
     启动开发环境：
