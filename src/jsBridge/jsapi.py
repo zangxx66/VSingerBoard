@@ -3,7 +3,7 @@ import threading
 import webview
 import pyperclip
 import sys
-from src.utils import check_for_updates, async_worker, __version__ as CURRENT_VERSION
+from src.utils import async_worker, __version__ as CURRENT_VERSION
 from src.live import bili_manager, douyin_manager
 
 
@@ -82,12 +82,3 @@ class Api:
             str: VSingerBoard应用程序的当前版本。
         """
         return CURRENT_VERSION
-
-    def update_verion(self):
-        """
-        检查VSingerBoard应用程序的最新版本信息。
-
-        Returns:
-            dict: VSingerBoard应用程序的最新版本信息。
-        """
-        return check_for_updates()

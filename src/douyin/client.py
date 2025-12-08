@@ -1,11 +1,9 @@
 import gzip
 import re
 import sys
-import urllib.parse
-import requests
+import aiohttp
 import asyncio
-from .ac_signature import get__ac_signature
-from .signature import execute_js, generateSignature, generateMsToken
+from .signature import generateSignature, generateMsToken
 from .lib import (
     WebcastImPushFrame,
     WebcastImResponse,
@@ -26,7 +24,7 @@ class DouyinLiveWebFetcher(Decorator, WebSocketClient):
         self.heartheat_task = None
         self.max_retries = max_retries
         self.retry_delay = retry_delay
-        self.http_session = requests.Session()
+        self.http_session = aiohttp.ClientSession()
         self.live_id = str(live_id)
         self.host = "https://www.douyin.com/"
         self.live_url = "https://live.douyin.com/"
@@ -44,8 +42,7 @@ class DouyinLiveWebFetcher(Decorator, WebSocketClient):
         """
         return self.status_code
 
-    @property
-    def ttwid(self):
+    async def ttwid(self):
         """
         产生请求头部cookie中的ttwid字段，访问抖音网页版直播间首页可以获取到响应cookie中的ttwid
 
@@ -57,16 +54,15 @@ class DouyinLiveWebFetcher(Decorator, WebSocketClient):
             "User-Agent": self.user_agent,
         }
         try:
-            response = self.http_session.get(self.live_url, headers=headers)
+            response = await self.http_session.get(self.live_url, headers=headers)
             response.raise_for_status()
         except Exception as err:
             logger.error("【X】Request the live url error: ", err)
         else:
-            self.__ttwid = response.cookies.get('ttwid')
+            self.__ttwid = response.cookies.get('ttwid').value
             return self.__ttwid
 
-    @property
-    def room_id(self):
+    async def room_id(self):
         """
         根据直播间的地址获取到真正的直播间roomId，有时会有错误，可以重试请求解决
 
@@ -75,17 +71,19 @@ class DouyinLiveWebFetcher(Decorator, WebSocketClient):
         if self.__room_id:
             return self.__room_id
         url = self.live_url + self.live_id
+        twid = await self.ttwid()
         headers = {
             "User-Agent": self.user_agent,
-            "cookie": f"ttwid={self.ttwid}&msToken={generateMsToken()}; __ac_nonce=0123407cc00a9e438deb4",
+            "cookie": f"ttwid={twid}&msToken={generateMsToken()}; __ac_nonce=0123407cc00a9e438deb4",
         }
         try:
-            response = self.http_session.get(url, headers=headers)
+            response = await self.http_session.get(url, headers=headers)
             response.raise_for_status()
         except Exception as err:
             logger.error("【X】Request the live room url error: ", err)
         else:
-            match = re.search(r'roomId\\":\\"(\d+)\\"', response.text)
+            response_text = await response.text(encoding="utf-8")
+            match = re.search(r'roomId\\":\\"(\d+)\\"', response_text)
             if match is None or len(match.groups()) < 1:
                 logger.warning("【X】No match found for roomId")
 
@@ -93,8 +91,8 @@ class DouyinLiveWebFetcher(Decorator, WebSocketClient):
 
             return self.__room_id
 
-    @property
-    def _wss_url(self):
+    async def _wss_url(self):
+        rid = await self.room_id()
         wss = ("wss://webcast100-ws-web-lq.douyin.com/webcast/im/push/v2/?app_name=douyin_web"
                "&version_code=180800&webcast_sdk_version=1.0.14-beta.0"
                "&update_version_code=1.0.14-beta.0&compress=gzip&device_platform=web&cookie_enabled=true"
@@ -104,12 +102,12 @@ class DouyinLiveWebFetcher(Decorator, WebSocketClient):
                "%20like%20Gecko)%20Chrome/126.0.0.0%20Safari/537.36"
                "&browser_online=true&tz_name=Asia/Shanghai"
                "&cursor=d-1_u-1_fh-7392091211001140287_t-1721106114633_r-1"
-               f"&internal_ext=internal_src:dim|wss_push_room_id:{self.room_id}|wss_push_did:7319483754668557238"
+               f"&internal_ext=internal_src:dim|wss_push_room_id:{rid}|wss_push_did:7319483754668557238"
                f"|first_req_ms:1721106114541|fetch_time:1721106114633|seq:1|wss_info:0-1721106114633-0-0|"
                f"wrds_v:7392094459690748497"
                f"&host=https://live.douyin.com&aid=6383&live_id=1&did_rule=3&endpoint=live_pc&support_wrds=1"
                f"&user_unique_id=7319483754668557238&im_path=/webcast/im/fetch/&identity=audience"
-               f"&need_persist_msg_count=15&insert_task_id=&live_reason=&room_id={self.room_id}&heartbeatDuration=0")
+               f"&need_persist_msg_count=15&insert_task_id=&live_reason=&room_id={rid}&heartbeatDuration=0")
 
         signature = generateSignature(wss)
         wss += f"&signature={signature}"
@@ -117,10 +115,10 @@ class DouyinLiveWebFetcher(Decorator, WebSocketClient):
         return wss
 
     async def connect_async(self):
-        self.url = self._wss_url
-
+        self.url = await self._wss_url()
+        ttwid = await self.ttwid()
         self.headers = {
-            "cookie": f"ttwid={self.ttwid}",
+            "cookie": f"ttwid={ttwid}",
             'user-agent': self.user_agent,
         }
         await self.start()
@@ -128,7 +126,7 @@ class DouyinLiveWebFetcher(Decorator, WebSocketClient):
 
     async def _reconnect(self):
         # 不确定抖子这边掉线频繁是否跟签名有关，先试试效果
-        self.url = self._wss_url
+        self.url = await self._wss_url()
         if self.heartheat_task:
             self.heartheat_task.cancel()
         await super()._reconnect()
@@ -138,29 +136,6 @@ class DouyinLiveWebFetcher(Decorator, WebSocketClient):
         if self.heartheat_task and not self.heartheat_task.done():
             self.heartheat_task.cancel()
         await self.close()
-
-    def get_ac_nonce(self):
-        """
-        获取 __ac_nonce
-        """
-        resp_cookies = self.http_session.get(self.host, headers=self.headers).cookies
-        return resp_cookies.get("__ac_nonce")
-
-    def get_ac_signature(self, __ac_nonce: str = None) -> str:
-        """
-        获取 __ac_signature
-        """
-        __ac_signature = get__ac_signature(self.host[8:], __ac_nonce, self.user_agent)
-        self.http_session.cookies.set("__ac_signature", __ac_signature)
-        return __ac_signature
-
-    def get_a_bogus(self, url_params: dict):
-        """
-        获取 a_bogus
-        """
-        url = urllib.parse.urlencode(url_params)
-        _a_bogus = execute_js(url, self.user_agent, js_file=self.abogus_file, func_name="get_ab")
-        return _a_bogus
 
     async def _sendHeartbeat(self):
         """

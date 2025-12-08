@@ -15,7 +15,6 @@ dependencies = [
     "pyobjc>=11.1; sys_platform == 'darwin'",
     "pyperclip>=1.9.0",
     "pywebview>=6.0",
-    "requests>=2.32.5",
     "setuptools==70.3.0",
     "tortoise-orm>=0.25.1",
     "uvicorn[standard]>=0.35.0",

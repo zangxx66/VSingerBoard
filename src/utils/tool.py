@@ -4,9 +4,9 @@ import time
 import tomllib
 import logging
 import getpass
-import requests
 import re
 import socket
+import aiohttp
 from pathlib import Path
 from ._version import __version__ as CURRENT_VERSION
 from src.notifypy import Notify
@@ -246,7 +246,7 @@ def setup_autostart(enable: bool):
         return False
 
 
-def check_for_updates():
+async def check_for_updates():
     """
     检查 VSingerBoard 的最新版本信息。
 
@@ -323,12 +323,12 @@ def check_for_updates():
                     if part1 < part2:
                         return -1
 
-            return 0
+        return 0
 
     try:
-        response = requests.get(repo_url)
-        response.raise_for_status()
-        latest_release = response.json()
+        async with aiohttp.ClientSession() as session:
+            response = await session.get(repo_url)
+        latest_release = await response.json()
 
         # 区分处理有release和没有release的场景
         if "tag_name" not in latest_release:
@@ -377,3 +377,76 @@ def is_internet_available(host: str = "www.baidu.com", port: int = 80, timeout: 
         return True
     except socket.error:
         return False
+
+
+def generate_ts_api():
+    """
+    自动解析 src/server/router.py 中的 FastAPI 路由定义，
+    并生成一个 TypeScript API 客户端，路径为 frontend/src/api/request.ts，
+    以匹配文件的原始风格。
+    """
+    project_root = Path(__file__).parent.parent.parent
+    router_file = project_root / "src" / "server" / "router.py"
+    output_file = project_root / "frontend" / "src" / "api" / "request.ts"
+
+    # 1. 从 router.py 解析 FastAPI 路由
+    api_endpoints = []
+    try:
+        with open(router_file, "r", encoding="utf-8") as f:
+            content = f.read()
+            # 简化版正则表达式，只捕获方法、路径和函数名
+            route_matches = re.finditer(
+                r'@router\.(get|post|put|delete)\(\s*"([^"]+)"[\s\S]+?'
+                r'async\s+def\s+(\w+)\(',
+                content
+            )
+            for match in route_matches:
+                method = match.group(1)
+                path = "/api" + match.group(2)  # 添加 /api 前缀
+                func_name = match.group(3)
+
+                api_endpoints.append({
+                    "method": method,
+                    "path": path,
+                    "func_name": func_name,
+                })
+    except Exception as e:
+        logger.debug(f"解析路由时出错: {e}")
+        return
+
+    # 2. 生成 TypeScript 代码
+    ts_code = []
+    ts_code.append('import { client } from "./client"')
+    ts_code.append('import type { AxiosResponse } from "axios"')
+    ts_code.append('')
+    ts_code.append("class Request {")
+
+    for endpoint in api_endpoints:
+        # 生成函数名 (snake_case to camelCase)
+        ts_func_name = re.sub(r"_([a-z])", lambda m: m.group(1).upper(), endpoint["func_name"])
+
+        # 添加 JSDoc 注释
+        ts_code.append("    /**")
+        ts_code.append(f"     * {endpoint['func_name']}.")
+        ts_code.append("     * @param {{Object}} params 传递给服务器的参数对象。")
+        ts_code.append("     * @returns {{Promise<AxiosResponse<any>>}} 操作的响应。")
+        ts_code.append("     */")
+        # 生成函数签名
+        ts_code.append(f"    async {ts_func_name}(params: {{}}): Promise<AxiosResponse<any>> {{")
+        # 生成函数体
+        ts_code.append(f'        return await client.{endpoint["method"]}("{endpoint["path"]}", params)')
+        ts_code.append("    }")
+        ts_code.append("")
+
+    ts_code.append("}")
+    ts_code.append("")
+    ts_code.append("export const request = new Request()")
+    ts_code.append("")
+
+    # 3. 写入文件
+    try:
+        with open(output_file, "w", encoding="utf-8") as f:
+            f.write("\n".join(ts_code))
+        logger.debug(f"成功生成 TypeScript API 客户端: {output_file}")
+    except Exception as e:
+        logger.debug(f"写入文件时出错: {e}")

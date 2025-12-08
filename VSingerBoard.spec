@@ -90,7 +90,7 @@ datas += pydantic_datas
 hidden_packages = [
     "webview", "uvloop", "uvicorn", "objc", "anyio",
     "aiohttp", "curl_cffi", "jinja2",
-    "pyperclip", "requests", "pkg_resources"
+    "pyperclip", "pkg_resources"
 ]
 hidden_packages += bilibili_api_hiddenimports
 hidden_packages += tortoise_hiddenimports

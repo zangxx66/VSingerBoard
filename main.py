@@ -2,7 +2,7 @@ import sys
 import os
 import time
 import webview
-from src.utils import logger, async_worker
+from src.utils import logger, async_worker, generate_ts_api
 from src.manager import gui_manager, lifecycle, server_manager, version_manager
 from src.jsBridge import Api
 
@@ -22,6 +22,7 @@ def main():
     DEBUG = not getattr(sys, "frozen", False)
     if DEBUG:
         version_manager.update_build()
+        generate_ts_api()
         # 启动Vite
         server_manager.start_vite_server()
         time.sleep(3)

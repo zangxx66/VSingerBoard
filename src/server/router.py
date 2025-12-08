@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from bilibili_api import Credential, user
 from bilibili_api.login_v2 import QrCodeLogin, QrCodeLoginChannel
 from src.database import Db
-from src.utils import setup_autostart, ResponseItem, bconfigItem, dyconfigItem, globalfigItem, async_worker
+from src.utils import setup_autostart, ResponseItem, bconfigItem, dyconfigItem, globalfigItem, async_worker, check_for_updates
 from src.live import bili_manager, douyin_manager
 
 router = APIRouter(tags=["api"])
@@ -166,3 +166,21 @@ async def add_or_update_global_config(data: globalfigItem = Body(..., embed=True
     code = 0 if result > 0 else -1
     msg = "设置成功" if result > 0 else "设置失败"
     return JSONResponse(status_code=200, content={"code": code, "msg": msg, "data": result})
+
+
+@router.get("/get_history_list")
+async def get_history_list(uname: str = Query(...),
+                           song_name: str = Query(...),
+                           source: str = Query(...),
+                           start_time: int = Query(...),
+                           end_time: int = Query(...),
+                           page: int = Query(1),
+                           size: int = Query(20)):
+    total, songs = await async_worker.run_db_operation(Db.get_song_history_page(uname, song_name, source, start_time, end_time, page, size))
+    return ResponseItem(code=0, msg=None, data={"total": total, "rows": songs})
+
+
+@router.get("/check_updates")
+async def check_update():
+    result = await check_for_updates()
+    return ResponseItem(code=0, msg=None, data=result)

@@ -145,3 +145,29 @@ class Db:
     async def add_song_history(cls, **kwargs):
         res = await SongHistory.create(**kwargs)
         return res
+
+    @classmethod
+    async def get_song_history_page(cls,
+                                    uname: str = None,
+                                    song_name: str = None,
+                                    source: str = None,
+                                    start_time: int = 0,
+                                    end_time: int = 0,
+                                    page: int = 1,
+                                    size: int = 20):
+        query = SongHistory.all()
+        if uname:
+            query = query.filter(uname__icontains=uname)
+        if song_name:
+            query = query.filter(song_name__icontains=song_name)
+        if source:
+            query = query.filter(source__icontains=source)
+        if start_time:
+            query = query.filter(create_time__gte=start_time)
+        if end_time:
+            query = query.filter(create_time__lte=end_time)
+
+        total = await query.count()
+        songs = await query.offset((page - 1) * size).limit(size).order_by("-create_time").all()
+
+        return total, songs

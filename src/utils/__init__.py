@@ -35,4 +35,5 @@ __all__ = [
     "WebSocketServer",
     "is_internet_available",
     "WebsocketDataItem",
+    "generate_ts_api",
 ]

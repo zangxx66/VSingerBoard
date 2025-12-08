@@ -89,6 +89,7 @@ class GloalConfig(BaseModel):
 class SongHistory(BaseModel):
     id = fields.BigIntField(primary_key=True, generated=True)
     uid = fields.BigIntField()
+    uname = fields.CharField(max_length=500)
     song_name = fields.CharField(max_length=500)
     source = fields.CharField(max_length=100)
     create_time = fields.BigIntField()
