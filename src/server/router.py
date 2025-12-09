@@ -176,8 +176,18 @@ async def get_history_list(uname: str = Query(...),
                            end_time: int = Query(...),
                            page: int = Query(1),
                            size: int = Query(20)):
+    if not uname:
+        uname = None
+    if not song_name:
+        song_name = None
+    if source == "all":
+        source = None
+    if start_time is None or start_time == 0:
+        start_time = None
+    if end_time is None or end_time == 0:
+        end_time = None
     total, songs = await async_worker.run_db_operation(Db.get_song_history_page(uname, song_name, source, start_time, end_time, page, size))
-    return ResponseItem(code=0, msg=None, data={"total": total, "rows": songs})
+    return ResponseItem(code=0, msg=None, data={"total": total, "rows": jsonable_encoder(songs)})
 
 
 @router.get("/check_updates")

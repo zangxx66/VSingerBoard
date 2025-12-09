@@ -42,7 +42,7 @@ const getTimespan = (date: string) => {
  * @param {string} date - UTC 时间字符串,格式为 "YYYY-MM-DD HH:mm:ss"
  * @returns {string} 本地时间字符串,格式为 "YYYY-MM-DD HH:mm:ss"
  */
-const utcToLocal = (date: string) => {
+const utcToLocal = (date: string): string => {
     return dayjs.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
 }
 
@@ -51,7 +51,7 @@ const utcToLocal = (date: string) => {
  * 获取当前时间的时间戳
  * @returns {number} 当前时间的时间戳
  */
-const getNowTimespan = () => {
+const getNowTimespan = (): number => {
     return dayjs().unix()
 }
 
@@ -59,8 +59,17 @@ const getNowTimespan = () => {
  * 获取当前日期的字符串表示
  * @returns {string} 当前日期的字符串表示，格式为 "YYYY-MM-DD"
  */
-const getNowDateString = () => {
+const getNowDateString = (): string => {
     return dayjs().format('YYYY-MM-DD')
+}
+
+/**
+ * 获取当天时间戳的 23:59:59
+ * @param tiemspan 秒级时间戳
+ * @returns {number} 转换后的 23:59:59 的时间戳
+ */
+const getEndOfDayTimespan = (tiemspan: number): number => {
+    return dayjs.unix(tiemspan).endOf("day").unix()
 }
 
 export {
@@ -69,5 +78,6 @@ export {
     getTimespan,
     utcToLocal,
     getNowTimespan,
-    getNowDateString
+    getNowDateString,
+    getEndOfDayTimespan,
 }

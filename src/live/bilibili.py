@@ -151,7 +151,7 @@ class Bili:
         song_name = msg.replace(self.sing_prefix, "", 1).strip()
         logger.info(song_name)
 
-        history = await Db.add_song_history(uid=uid, song_name=song_name, source="bilibili", create_time=now)
+        history = await Db.add_song_history(uid=uid, uname=uname, song_name=song_name, source="bilibili", create_time=now)
 
         danmu_info: DanmuInfo = {
             "msg_id": history.id,
@@ -202,7 +202,7 @@ class Bili:
         song_name = message.replace(self.sing_prefix, "", 1).strip()
         logger.info(song_name)
 
-        history = await Db.add_song_history(uid=uid, song_name=song_name, source="bilibili", create_time=now)
+        history = await Db.add_song_history(uid=uid, uname=uname, song_name=song_name, source="bilibili", create_time=now)
 
         sc_info: DanmuInfo = {
             "msg_id": history.id,

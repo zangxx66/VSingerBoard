@@ -4,8 +4,6 @@ declare interface Window {
         api: {
             /** 重新加载 */
             reload: () => void
-            /** 检查更新 */
-            update_verion: () => Promise<UpdateModel>
             /** 获取当前版本 */
             get_version: () => Promise<string>
             /** 是否是bundle */

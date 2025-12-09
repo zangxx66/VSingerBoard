@@ -413,6 +413,10 @@ body {
     display: flex;
 }
 
+.inline-form .el-select {
+  --el-select-width: 120px;
+}
+
 a,
 .green {
   text-decoration: none;

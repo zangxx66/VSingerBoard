@@ -264,65 +264,61 @@ async def check_for_updates():
     repo_url = "https://api.github.com/repos/zangxx66/VSingerBoard/releases/latest"
 
     def compare_versions(v1, v2):
+        """
+        比较两个遵循 SemVer 规范的版本字符串 (v1, v2)。
+
+        返回:
+        - 1 如果 v1 > v2
+        - -1 如果 v1 < v2
+        - 0 如果 v1 == v2
+        """
         v1_main_str, *v1_pre_list = v1.split('-', 1)
         v2_main_str, *v2_pre_list = v2.split('-', 1)
 
-        v1_main = [int(p) for p in v1_main_str.split('.')]
-        v2_main = [int(p) for p in v2_main_str.split('.')]
+        # 1. 比较主版本号 (例如, "1.2.3")
+        v1_main_parts = [int(p) for p in v1_main_str.split('.')]
+        v2_main_parts = [int(p) for p in v2_main_str.split('.')]
 
-        max_len = max(len(v1_main), len(v2_main))
-        v1_main.extend([0] * (max_len - len(v1_main)))
-        v2_main.extend([0] * (max_len - len(v2_main)))
+        # 填充以确保长度一致, e.g., 1.1 vs 1.1.0
+        max_len = max(len(v1_main_parts), len(v2_main_parts))
+        v1_main_parts.extend([0] * (max_len - len(v1_main_parts)))
+        v2_main_parts.extend([0] * (max_len - len(v2_main_parts)))
 
-        if v1_main > v2_main:
+        v1_main_tuple = tuple(v1_main_parts)
+        v2_main_tuple = tuple(v2_main_parts)
+
+        if v1_main_tuple > v2_main_tuple:
             return 1
-        if v1_main < v2_main:
+        if v1_main_tuple < v2_main_tuple:
             return -1
 
-        # 主线版本相同，检查pre-release标签
+        # 2. 主版本号相同, 比较预发布版本 (例如, "alpha.1")
         v1_pre = v1_pre_list[0] if v1_pre_list else None
         v2_pre = v2_pre_list[0] if v2_pre_list else None
 
-        if v1_pre and not v2_pre:
-            return -1
+        # 稳定版 (无预发布标签) > 预发布版
         if not v1_pre and v2_pre:
             return 1
+        if v1_pre and not v2_pre:
+            return -1
 
         if v1_pre and v2_pre:
-            p1_parts = v1_pre.split('.')
-            p2_parts = v2_pre.split('.')
+            # 3. 将预发布版本的各部分转换为可比较的元组
+            # 数字标识符优先级低于字母标识符 (e.g., 1.0.0-1 < 1.0.0-alpha)
+            def to_comparable(part):
+                if part.isdigit():
+                    return (0, int(part))
+                return (1, part)
 
-            max_len_pre = max(len(p1_parts), len(p2_parts))
+            v1_pre_tuple = tuple(to_comparable(p) for p in v1_pre.split('.'))
+            v2_pre_tuple = tuple(to_comparable(p) for p in v2_pre.split('.'))
 
-            for i in range(max_len_pre):
-                if i >= len(p1_parts):
-                    return -1
-                if i >= len(p2_parts):
-                    return 1
+            if v1_pre_tuple > v2_pre_tuple:
+                return 1
+            if v1_pre_tuple < v2_pre_tuple:
+                return -1
 
-                part1 = p1_parts[i]
-                part2 = p2_parts[i]
-
-                is_part1_digit = part1.isdigit()
-                is_part2_digit = part2.isdigit()
-
-                if is_part1_digit and is_part2_digit:
-                    num1 = int(part1)
-                    num2 = int(part2)
-                    if num1 > num2:
-                        return 1
-                    if num1 < num2:
-                        return -1
-                elif is_part1_digit:
-                    return -1
-                elif is_part2_digit:
-                    return 1
-                else:
-                    if part1 > part2:
-                        return 1
-                    if part1 < part2:
-                        return -1
-
+        # 版本完全相同
         return 0
 
     try:

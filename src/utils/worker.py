@@ -44,12 +44,21 @@ class AsyncWorker:
         self._loop.run_forever()  # 运行循环直到 stop() 被调用
 
         # 循环停止后的清理工作
-        tasks = asyncio.all_tasks(loop=self._loop)
-        for task in tasks:
-            task.cancel()
-        group = asyncio.gather(*tasks, return_exceptions=True)
-        self._loop.run_until_complete(group)
-        self._loop.close()
+        async def shutdown():
+            # 排除当前任务（即shutdown任务本身）
+            tasks_to_cancel = [
+                task for task in asyncio.all_tasks() if task is not asyncio.current_task()
+            ]
+            for task in tasks_to_cancel:
+                task.cancel()
+            # 等待所有任务完成取消
+            await asyncio.gather(*tasks_to_cancel, return_exceptions=True)
+
+        if not self._loop.is_closed():
+            try:
+                self._loop.run_until_complete(shutdown())
+            finally:
+                self._loop.close()
 
     def stop(self):
         """停止后台事件循环和线程。"""

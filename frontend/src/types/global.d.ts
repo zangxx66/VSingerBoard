@@ -80,3 +80,12 @@ type DelListModel = {
     uname: string
     song_name: string
 }
+
+type SongHistoryModel = {
+    id: number
+    uid: number
+    uname: string
+    song_name: string
+    source: string
+    create_time: number
+}

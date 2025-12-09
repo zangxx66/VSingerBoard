@@ -75,7 +75,7 @@ const credentialColumns: Column<any>[] = [
 ]
 
 const initCredential = () => {
-    request.getBiliCredntialList({}).then((response) => {
+    request.getBiliCredentialList({}).then((response) => {
         const resp = response.data as ResponseModel
         if (resp.code != 0) {
             ElMessage.warning(resp.msg)
@@ -89,7 +89,7 @@ const initCredential = () => {
 
 /** 更改状态 */
 const changeStatus = (val: string | number | boolean, id: number) => {
-    request.UpdateBiliCredential({ data: { id: id, enable: val } })
+    request.updateBiliCredential({ data: { id: id, enable: val } })
         .then(response => {
             const resp = response.data as ResponseModel
             if (resp.code != 0) {

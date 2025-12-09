@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import router from "@/router"
 import zhCn from "element-plus/es/locale/lang/zh-cn"
-import { HomeFilled, Tools, List, InfoFilled, Sunny, Moon } from "@element-plus/icons-vue"
+import { HomeFilled, Tools, List, InfoFilled, Sunny, Moon, Calendar } from "@element-plus/icons-vue"
 import ContextMenu from '@imengyu/vue3-context-menu'
 import { ElMessage, type MenuItemInstance, type MainInstance } from "element-plus"
 import { request } from "@/api"
-import { toggleDark, checkUpdate, pasteToElement, copyToClipboard } from "@/utils"
+import { toggleDark, pasteToElement, copyToClipboard, checkUpdate } from "@/utils"
 
 const intervalStore = useIntervalStore()
 const themeStore = useThemeStore()
@@ -37,6 +37,7 @@ const globalConfig = reactive<GlobalConfigModel>({
 })
 const navSideTour = ref(false)
 const homeRef = ref<MenuItemInstance>()
+const historyRef = ref<MenuItemInstance>()
 const settingsRef = ref<MenuItemInstance>()
 const themeRef = ref<MenuItemInstance>()
 const mainRef = ref<MainInstance>()
@@ -45,29 +46,29 @@ const finishTour = () => {
   updateGlobalConfig()
   navSideTour.value = false
 }
-const closeTour = async() => {
+const closeTour = async () => {
   // 等待dom更新
   await nextTick()
   // 如果finish已经关闭tour，什么也不做
-  if(globalConfig.navSideTour) return
+  if (globalConfig.navSideTour) return
   globalConfig.navSideTour = true
   updateGlobalConfig()
   navSideTour.value = false
 }
 const updateGlobalConfig = () => {
   request
-  .addOrUpdateGlobalConfig({data: globalConfig})
-  .then(response => {
-    const resp = response.data as ResponseModel
-    if(resp.code != 0){
-      ElMessage.warning(resp.msg || "保存失败")
-    }else{
-      globalConfig.id = resp.data
-    }
-  })
-  .catch(error => {
-    ElMessage.error(error)
-  })
+    .addOrUpdateGlobalConfig({ data: globalConfig })
+    .then(response => {
+      const resp = response.data as ResponseModel
+      if (resp.code != 0) {
+        ElMessage.warning(resp.msg || "保存失败")
+      } else {
+        globalConfig.id = resp.data
+      }
+    })
+    .catch(error => {
+      ElMessage.error(error)
+    })
 }
 
 /**
@@ -75,7 +76,7 @@ const updateGlobalConfig = () => {
  * @param {string} name 路由的name
  */
 const goto = (name: string) => {
-  if(router.currentRoute.value.name == name){
+  if (router.currentRoute.value.name == name) {
     globalConfig.collapse = !globalConfig.collapse
     updateGlobalConfig()
     return
@@ -96,7 +97,7 @@ const onContextMenu = async (e: MouseEvent) => {
 
   let hasClipboardText = false
   const clipboardItems = await window.pywebview.api.check_clipboard()
-  if(clipboardItems && clipboardItems.length > 0){
+  if (clipboardItems && clipboardItems.length > 0) {
     hasClipboardText = true
   }
 
@@ -109,11 +110,11 @@ const onContextMenu = async (e: MouseEvent) => {
         ElMessage.success("拷贝成功")
       }
     }
-  }, 
+  },
   {
     label: "粘贴",
     disabled: !isFocusInput || !hasClipboardText,
-    onClick: () => { 
+    onClick: () => {
       pasteToElement(activeElement)
     }
   }]
@@ -160,10 +161,10 @@ const initGlobalConfig = async (): Promise<void> => {
           checkUpdate()
           intervalStore.addInterval("check_update", checkUpdate, 1000 * 60 * 60 * 6)
         }
-        if(!model.navSideTour){
+        if (!model.navSideTour) {
           navSideTour.value = true
         }
-      }else{
+      } else {
         navSideTour.value = true
       }
     }
@@ -215,11 +216,11 @@ onMounted(() => {
           </el-icon>
           <template #title>点歌板</template>
         </el-menu-item>
-        <el-menu-item index="1" @click="goto('settings')" ref="settingsRef">
+        <el-menu-item index="1" @click="goto('history')" ref="historyRef">
           <el-icon>
-            <Tools />
+            <Calendar />
           </el-icon>
-          <template #title>设置</template>
+          <template #title>点歌记录</template>
         </el-menu-item>
         <el-menu-item index="2" @click="goto('changelog')">
           <el-icon>
@@ -227,15 +228,25 @@ onMounted(() => {
           </el-icon>
           <template #title>更新日志</template>
         </el-menu-item>
-        <el-menu-item index="3" @click="goto('about')">
+        <el-menu-item index="3" @click="goto('settings')" ref="settingsRef">
+          <el-icon>
+            <Tools />
+          </el-icon>
+          <template #title>设置</template>
+        </el-menu-item>
+        <el-menu-item index="4" @click="goto('about')">
           <el-icon>
             <InfoFilled />
           </el-icon>
           <template #title>关于</template>
         </el-menu-item>
-        <el-menu-item index="4" ref="themeRef">
-          <el-switch v-model="isDarktheme" :active-action-icon="Moon" :inactive-action-icon="Sunny"
-            style="--el-switch-on-color: var(--bg-color-mute)" @change="updateTheme" />
+        <el-menu-item ref="themeRef">
+          <el-icon v-if="!isDarktheme" @click="updateTheme">
+            <Sunny />
+          </el-icon>
+          <el-icon v-if="isDarktheme" @click="updateTheme">
+            <Moon />
+          </el-icon>
         </el-menu-item>
       </el-menu>
     </el-aside>
@@ -257,6 +268,8 @@ onMounted(() => {
           <el-tour-step title="提示" description="欢迎使用点歌姬"></el-tour-step>
           <el-tour-step title="提示" description="这里是点歌，可以查看抖和破站的点歌列表" placement="right"
             :target="homeRef?.$el"></el-tour-step>
+          <el-tour-step title="提示" description="这里是历史记录，可以查看历史点歌" placement="right"
+            :target="historyRef?.$el"></el-tour-step>
           <el-tour-step title="提示" description="这里是设置，可以设置抖和破站的直播间监听" placement="right"
             :target="settingsRef?.$el"></el-tour-step>
           <el-tour-step title="提示" description="这是主题开关，可以切换主题" placement="right" :target="themeRef?.$el"></el-tour-step>

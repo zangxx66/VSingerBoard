@@ -151,7 +151,7 @@ onMounted(() => {
     getDanmaku()
 
     if (import.meta.env.DEV) {
-        danmakuStore.pushDanmakuList([{
+        danmakuStore.setDanmakuList([{
             msg_id: 0,
             uid: 0,
             uname: "uname",

@@ -127,7 +127,7 @@ class Douyin:
         song_name = content.replace(self.sing_prefix, "", 1).strip()
         logger.info(song_name)
 
-        history = await Db.add_song_history(uid=uid, song_name=song_name, source="douyin", create_time=now)
+        history = await Db.add_song_history(uid=uid, uname=uname, song_name=song_name, source="douyin", create_time=now)
 
         danmu_info: DanmuInfo = {
             "msg_id": history.id,

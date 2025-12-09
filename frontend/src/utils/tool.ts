@@ -1,6 +1,7 @@
 import { ElMessage, ElNotification } from "element-plus"
 import { emojiList } from "./emoji"
 import { emoticons } from "./emoticons"
+import { request } from "@/api"
 
 const emojiexp = /\[[\u4E00-\u9FA5A-Za-z0-9_]+\]/g
 const { copy } = useClipboard()
@@ -16,24 +17,28 @@ const { copy } = useClipboard()
  *
  * 如果没有新版本，通知将显示警告消息。
  */
-export const checkUpdate = async() => {
-  const result = await window.pywebview.api.update_verion()
-  if (result.code == 0 && result.url != "") {
-        ElNotification({
-          title: "提示",
-          message: result.msg,
-          type: "primary",
-          position: "bottom-right",
-          onClick: () => {
-            const a = document.createElement("a")
-            a.href = result.url
-            a.target = "_blank"
-            a.click()
-          }
-        })
-      } else {
-        ElMessage.warning(result.msg)
+export const checkUpdate = () => {
+  request.checkUpdate({}).then(response => {
+    const resp = response.data as ResponseModel
+    if (resp.code != 0) {
+      ElMessage.warning("检查更新失败")
+      return
+    }
+    ElNotification({
+      title: "提示",
+      message: resp.data.msg,
+      type: "primary",
+      position: "top-right",
+      onClick: () => {
+        const a = document.createElement("a")
+        a.href = resp.data.url
+        a.target = "_blank"
+        a.click()
       }
+    })
+  }).catch(error => {
+    ElMessage.error("检查更新失败")
+  })
 }
 
 export const pasteToElement = async(activeEl: HTMLElement | null) => {

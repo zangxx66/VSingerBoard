@@ -5,6 +5,7 @@ import { utcToLocal } from "@/utils"
 import { Marked } from "marked"
 import { markedHighlight } from "marked-highlight"
 import hljs from "highlight.js"
+import { request } from "@/api"
 
 const model = reactive({
     version: "",
@@ -26,11 +27,12 @@ const marked = new Marked(
 const linkIconComponent = resolveComponent("link-icon")
 const initChagngelog = async () => {
     loading.value = true
-    const response = await window.pywebview.api.update_verion()
-    if (response.code == 0) {
-        model.version = response.version
-        model.publishedAt = utcToLocal(response.published_at)
-        const htmlString = await marked.parse(response.body)
+    const response = await request.checkUpdate({})
+    if (response.data.code == 0) {
+        const data = response.data.data
+        model.version = data.version
+        model.publishedAt = utcToLocal(data.published_at)
+        const htmlString = await marked.parse(data.body)
         const container = document.createElement("div")
         render(h(linkIconComponent), container)
         const svgIcon = container.innerHTML
