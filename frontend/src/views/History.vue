@@ -1,22 +1,23 @@
 <script setup lang="ts">
 import { request } from "@/api"
 import { ElMessage } from "element-plus"
-import { Search } from "@element-plus/icons-vue"
-import { timespanToString, getEndOfDayTimespan } from "@/utils"
+import { Search, Download } from "@element-plus/icons-vue"
+import { timespanToString, getEndOfDayTimespan, exportExcel, getNowTimespan } from "@/utils"
+import type { Column } from "exceljs"
 
 const loading = ref(false)
+const exportLoading = ref(false)
 const total = ref(0)
-const page = ref(1)
-const size = ref(20)
 const dateRange = ref<[number, number]>()
+const list = ref<Array<SongHistoryModel>>()
 const baseFormValue = reactive({
     uname: "",
     song_name: "",
     source: "all",
     start_time: 0,
     end_time: 0,
-    page: page.value,
-    size: size.value
+    page: 1,
+    size: 20
 })
 const platform = [
     {
@@ -34,7 +35,7 @@ const platform = [
 ]
 
 const dateChange = (val: [number, number]) => {
-    if(!val) {
+    if (!val) {
         baseFormValue.start_time = 0
         baseFormValue.end_time = 0
         return
@@ -43,7 +44,42 @@ const dateChange = (val: [number, number]) => {
     baseFormValue.end_time = getEndOfDayTimespan(val[1])
 }
 
-const list = ref<Array<SongHistoryModel>>()
+const exportFile = () => {
+    const columns: Partial<Column>[] = [
+        { header: "日期", key: "date", width: 50 },
+        { header: "昵称", key: "uname", width: 50 },
+        { header: "歌名", key: "song", width: 50 },
+        { header: "平台", key: "source", width: 50 }
+    ]
+
+    const args: any = {}
+    Object.assign(args, baseFormValue)
+    args.page = 1
+    args.size = total.value
+
+    exportLoading.value = true
+    request.getHistoryList(args).then(response => {
+        const resp = response.data as ResponseModel
+        if (resp.code != 0) {
+            ElMessage.warning(resp.msg)
+            exportLoading.value = false
+            return
+        }
+        const data = resp.data.rows as Array<SongHistoryModel>
+        const exportData = data.map(item => ({
+            date: timespanToString(item.create_time),
+            uname: item.uname,
+            song: item.song_name,
+            source: item.source == "bilibili" ? "B站" : "抖音"
+        }))
+        const filename = `点歌历史记录_${getNowTimespan()}`
+        exportExcel(columns, exportData, filename)
+        exportLoading.value = false
+    }).catch(error => {
+        ElMessage.error(error)
+        exportLoading.value = false
+    })
+}
 
 const load = () => {
     loading.value = true
@@ -64,7 +100,7 @@ const load = () => {
 }
 
 const search = () => {
-    page.value = 1
+    baseFormValue.page = 1
     load()
 }
 
@@ -139,8 +175,22 @@ onMounted(() => {
                     </div>
                 </template>
                 <template #footer>
-                    <el-pagination background layout="prev, pager, next" :total="total" v-model:page-size="size"
-                        v-model:current-page="page" @change="load" />
+                    <div style="display: flex;">
+                        <div style="width: 50%;">
+                            <el-pagination background layout="prev, pager, next" :total="total"
+                                v-model:page-size="baseFormValue.size" v-model:current-page="baseFormValue.page"
+                                @change="load" />
+                        </div>
+                        <div style="width: 50%;text-align: right;">
+                            <el-button type="success" :disabled="list?.length == 0" @click="exportFile"
+                                v-loading="exportLoading">
+                                导出历史记录
+                                <el-icon class="el-icon--right">
+                                    <Download />
+                                </el-icon>
+                            </el-button>
+                        </div>
+                    </div>
                 </template>
             </el-card>
         </el-main>

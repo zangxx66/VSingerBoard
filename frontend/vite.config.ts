@@ -63,10 +63,10 @@ export default defineConfig({
         manualChunks(id: string){
           if (id.includes('node_modules')){
             const pkgName = id.split('node_modules/')[1].split('/')[0]
-            if (['vue', 'vue-router', 'pinia'].includes(pkgName)){
+            if (['vue', 'vue-router', 'pinia', '@vueuse/core'].includes(pkgName)){
               return 'vendor-vue'
             }
-            if (pkgName === 'element-plus'){
+            if (['element-plus', '@element-plus/icons-vue'].includes(pkgName)){
               return 'vendor-element-plus'
             }
             if (['marked', 'marked-highlight', 'highlight.js'].includes(pkgName)){

@@ -424,8 +424,8 @@ def generate_ts_api():
         # 添加 JSDoc 注释
         ts_code.append("    /**")
         ts_code.append(f"     * {endpoint['func_name']}.")
-        ts_code.append("     * @param {{Object}} params 传递给服务器的参数对象。")
-        ts_code.append("     * @returns {{Promise<AxiosResponse<any>>}} 操作的响应。")
+        ts_code.append("     * @param {Object} params 传递给服务器的参数对象。")
+        ts_code.append("     * @returns {Promise<AxiosResponse<any>>} 操作的响应。")
         ts_code.append("     */")
         # 生成函数签名
         ts_code.append(f"    async {ts_func_name}(params: {{}}): Promise<AxiosResponse<any>> {{")

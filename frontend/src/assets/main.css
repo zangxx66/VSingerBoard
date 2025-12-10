@@ -61,6 +61,7 @@ body {
   transform-origin: 200px bottom;
   backdrop-filter: blur(10px);
   color: var(--menu-color);
+  opacity: 0.8;
 }
 
 .mx-context-menu-item {
