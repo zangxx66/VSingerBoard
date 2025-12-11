@@ -106,12 +106,12 @@ const search = () => {
 
 onMounted(() => {
     const height = window.innerHeight * 0.9
-    const dom = document.querySelector(".history-data-card") as HTMLElement
-    dom.style.overflow = "hidden"
+    const cardRef = useTemplateRef<HTMLElement>("history-data-card")
+    cardRef.value?.style.setProperty("overflow", "hidden")
 
     const listHeight = height * 0.6
-    const infiniteListDom = document.querySelector(".chat-infinite-list") as HTMLElement
-    infiniteListDom.style.height = `${listHeight}px`
+    const infiniteListRef = useTemplateRef<HTMLElement>(".chat-infinite-list")
+    infiniteListRef.value?.style.setProperty("height", `${listHeight}px`)
 
     load()
 })
@@ -154,9 +154,9 @@ onMounted(() => {
                 </el-form>
             </el-card>
             <el-divider />
-            <el-card class="history-data-card" v-loading="loading">
+            <el-card class="history-data-card" v-loading="loading" ref="history-data-card">
                 <template #default>
-                    <div class="chat-infinite-list">
+                    <div class="chat-infinite-list" ref="chat-infinite-list">
                         <template v-for="item in list">
                             <div class="chat-infinite-list-item">
                                 <img :src="`/assets/images/${item.source}.png`" class="source-img" :alt="item.source"

@@ -3,7 +3,7 @@ import router from "@/router"
 import zhCn from "element-plus/es/locale/lang/zh-cn"
 import { HomeFilled, Tools, List, InfoFilled, Sunny, Moon, Calendar } from "@element-plus/icons-vue"
 import ContextMenu from '@imengyu/vue3-context-menu'
-import { ElMessage, type MenuItemInstance, type MainInstance } from "element-plus"
+import { ElMessage } from "element-plus"
 import { request } from "@/api"
 import { toggleDark, pasteToElement, copyToClipboard, checkUpdate } from "@/utils"
 
@@ -36,11 +36,11 @@ const globalConfig = reactive<GlobalConfigModel>({
   collapse: false
 })
 const navSideTour = ref(false)
-const homeRef = ref<MenuItemInstance>()
-const historyRef = ref<MenuItemInstance>()
-const settingsRef = ref<MenuItemInstance>()
-const themeRef = ref<MenuItemInstance>()
-const mainRef = ref<MainInstance>()
+const homeRef = useTemplateRef("homeRef")
+const historyRef = useTemplateRef("historyRef")
+const settingsRef = useTemplateRef("settingsRef")
+const themeRef = useTemplateRef("themeRef")
+const mainRef = useTemplateRef("mainRef")
 const finishTour = () => {
   globalConfig.navSideTour = true
   updateGlobalConfig()
@@ -250,7 +250,6 @@ onMounted(() => {
         </el-menu-item>
       </el-menu>
     </el-aside>
-
     <el-main @contextmenu="onContextMenu" :style="mainStyle" ref="mainRef">
       <el-config-provider :locale="zhCn" :card="cardConfig" :dialog="dialogConfig" :message="messageConfig">
         <router-view v-slot="{ Component }">

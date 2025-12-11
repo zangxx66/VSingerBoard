@@ -12,7 +12,7 @@ const config = reactive<LiveModel>({
     bilibili_ws_status: -1
 })
 const danmakuStore = useDanmakuStore()
-const infiniteList = ref<HTMLDivElement | null>(null)
+const infiniteList = useTemplateRef("infiniteList")
 let wsSend: (data: string | ArrayBuffer | Blob, useBuffer?: boolean | undefined) => boolean
 
 const load = () => console.log("load")

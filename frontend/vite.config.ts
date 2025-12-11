@@ -60,31 +60,41 @@ export default defineConfig({
     rollupOptions: {
       output: {
         chunkFileNames: 'assets/[name]-[hash].js',
-        manualChunks(id: string){
-          if (id.includes('node_modules')){
-            const pkgName = id.split('node_modules/')[1].split('/')[0]
-            if (['vue', 'vue-router', 'pinia', '@vueuse/core'].includes(pkgName)){
-              return 'vendor-vue'
+        manualChunks(id: string) {
+          if (id.includes('node_modules/.pnpm/')) {
+            const matched = id.match(/node_modules\/\.pnpm\/([^/]+)\/node_modules\/([^/]+)/)
+
+            if (matched && matched.length > 2) {
+              const pkgName = matched[2]
+              if (['vue', 'vue-router', 'pinia', '@vueuse'].includes(pkgName)) {
+                return 'vendor-vue'
+              }
+              if (['element-plus', '@element-plus'].includes(pkgName)) {
+                return 'vendor-element-plus'
+              }
+              if (['marked', 'marked-highlight'].includes(pkgName)) {
+                return 'vendor-marked'
+              }
+              if (pkgName === 'highlight.js') {
+                return 'vendor-highlight-js'
+              }
+              if (pkgName === 'exceljs') {
+                return 'vendor-exceljs'
+              }
+              return 'vendor-libs'
             }
-            if (['element-plus', '@element-plus/icons-vue'].includes(pkgName)){
-              return 'vendor-element-plus'
-            }
-            if (['marked', 'marked-highlight', 'highlight.js'].includes(pkgName)){
-              return 'vendor-marked'
-            }
-            if (pkgName === 'exceljs'){
-              return 'vendor-exceljs'
-            }
+          }
+          if (id.includes('node_modules')) {
             return 'vendor-libs'
           }
-        }
+        },
       },
     },
     terserOptions: {
       compress: {
         drop_console: true,
-        drop_debugger: true
-      }
-    }
+        drop_debugger: true,
+      },
+    },
   },
 })
