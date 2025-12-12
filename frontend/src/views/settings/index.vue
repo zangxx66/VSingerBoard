@@ -3,7 +3,7 @@ import type { TabsPaneContext } from "element-plus"
 
 const activeName = ref("1")
 
-const appSettingRef = ref<null | InstanceType<typeof AppSettingTab>>()
+const appSettingRef = useTemplateRef("appSettingRef")
 const tabClickHandle = (pane: TabsPaneContext, ev: Event) => {
   if(pane.props.name == 3){
     appSettingRef.value?.initConfig()

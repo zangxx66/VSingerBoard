@@ -28,6 +28,7 @@ export default defineConfig({
     }),
     Components({
       extensions: ['vue', 'tsx'],
+      dirs: ['src/components', 'src/views'],
       include: [/\.vue$/, /\.vue\?vue/, /\.tsx$/],
       resolvers: [
         IconsResolver({

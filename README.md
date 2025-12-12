@@ -70,9 +70,7 @@
 │       ├── assets/ # 静态资源文件
 │       ├── components/ # Vue 组件
 │       │   ├── common/ # 通用组件
-│       │   ├── home/ # 首页相关组件
-│       │   ├── layout/ # 布局组件
-│       │   └── settings/ # 设置页面相关组件
+│       │   └── layout/ # 布局组件
 │       ├── router/ # Vue Router 配置
 │       ├── stores/ # Pinia 状态管理
 │       ├── types/ # TypeScript 类型定义

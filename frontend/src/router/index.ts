@@ -1,63 +1,68 @@
-import { createRouter, createWebHistory, isNavigationFailure } from 'vue-router'
-import { start, stop } from "@/utils"
-import { ElMessage } from "element-plus"
+import {
+  createRouter,
+  createWebHistory,
+  isNavigationFailure,
+  type RouteRecordRaw,
+} from 'vue-router'
+import { start, stop } from '@/utils'
+import { ElMessage } from 'element-plus'
+
+const pages = import.meta.glob('../views/**/index.vue', {
+  import: 'default',
+})
+
+const routesByLayout = Object.keys(pages).reduce<{
+  default: RouteRecordRaw[]
+  blank: RouteRecordRaw[]
+}>(
+  (acc, path) => {
+    const routePath = path.replace('../views', '').replace('/index.vue', '') || '/'
+    const name = routePath.split('/').filter(Boolean).join('-') || 'index'
+
+    if (name === 'danmaku') {
+      acc.blank.push({
+        path: '',
+        name,
+        component: () => import(path),
+      })
+    } else {
+      acc.default.push({
+        path: name === 'home' ? '' : name,
+        name,
+        component: () => import(path),
+      })
+    }
+    return acc
+  },
+  { default: [], blank: [] },
+)
+
+const routerList: RouteRecordRaw[] = [
+  {
+    path: '/',
+    component: () => import('../components/layout/defaultLayout.vue'),
+    children: routesByLayout.default,
+  },
+  {
+    path: '/danmaku',
+    component: () => import('../components/layout/blankLayout.vue'),
+    children: routesByLayout.blank,
+  },
+]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: "/",
-      component: () => import("../components/layout/defaultLayout.vue"),
-      children: [
-        {
-          path: "",
-          name: "home",
-          component: () => import("../views/Home.vue")
-        },
-        {
-          path: "/settings",
-          name: "settings",
-          component: () => import("../views/Settings.vue")
-        },
-        {
-          path: "/changelog",
-          name: "changelog",
-          component: () => import("../views/Changelog.vue")
-        },
-        {
-          path: "/about",
-          name: "about",
-          component: () => import("../views/About.vue")
-        },
-        {
-          path: "/history",
-          name: "history",
-          component: () => import("../views/History.vue")
-        },
-      ]
-    },
-    {
-      path: "/danmaku",
-      component: () => import("../components/layout/blankLayout.vue"),
-      children: [
-        {
-          path: "",
-          name: "danmaku",
-          component: () => import("../views/Danmaku.vue")
-        }
-      ]
-    }
-  ],
+  routes: routerList,
 })
 
 router.beforeEach(async (toString, from) => {
-    start()
-    return true
+  start()
+  return true
 })
 
 router.afterEach((to, from, failure) => {
   stop()
-  if(isNavigationFailure(failure) && to.name != from.name){
+  if (isNavigationFailure(failure) && to.name != from.name) {
     ElMessage.warning(`failled navigation:${failure}`)
   }
 })

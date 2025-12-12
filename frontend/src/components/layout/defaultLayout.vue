@@ -247,7 +247,7 @@ onMounted(() => {
     <el-main @contextmenu="onContextMenu" :style="mainStyle" ref="mainRef">
       <el-config-provider :locale="zhCn" :card="cardConfig" :dialog="dialogConfig" :message="messageConfig">
         <router-view v-slot="{ Component }">
-          <keep-alive :include="['Home']">
+          <keep-alive :include="['home']">
             <component :is="Component" />
           </keep-alive>
         </router-view>

@@ -1,10 +1,14 @@
+<script lang="ts">
+    export default {
+        name: "home"
+    }
+</script>
 <script setup lang="ts">
 import { ElMessage, ElMessageBox } from "element-plus"
 import { CloseBold, Download, Delete, EditPen, CopyDocument, DocumentChecked } from "@element-plus/icons-vue"
 import { exportExcel, timespanToString, getNowTimespan, processDanmaku, copyToClipboard } from "@/utils"
 import type { Column } from "exceljs"
 
-const singDialogRef = ref<null | InstanceType<typeof AddSingDialog>>()
 const config = reactive<LiveModel>({
     douyin_romm_id: 0,
     bilibili_room_id: 0,
@@ -14,6 +18,7 @@ const config = reactive<LiveModel>({
 const danmakuStore = useDanmakuStore()
 const infiniteListRef = useTemplateRef("infiniteList")
 const chatMainRef = useTemplateRef("chat-main")
+const singDialogRef = useTemplateRef("singDialogRef")
 let wsSend: (data: string | ArrayBuffer | Blob, useBuffer?: boolean | undefined) => boolean
 
 const load = () => console.log("load")
