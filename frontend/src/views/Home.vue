@@ -12,7 +12,8 @@ const config = reactive<LiveModel>({
     bilibili_ws_status: -1
 })
 const danmakuStore = useDanmakuStore()
-const infiniteList = useTemplateRef("infiniteList")
+const infiniteListRef = useTemplateRef("infiniteList")
+const chatMainRef = useTemplateRef("chat-main")
 let wsSend: (data: string | ArrayBuffer | Blob, useBuffer?: boolean | undefined) => boolean
 
 const load = () => console.log("load")
@@ -79,40 +80,43 @@ const getDanmaku = () => {
         },
         onMessage: (ws: WebSocket, event: MessageEvent) => {
             const data = JSON.parse(event.data) as WsModel
-            if (data.type == "echo") {
-                return
-            }
-            else if (data.type == "del") {
-                const delList = data.data as Array<DelListModel>
-                const result = danmakuList.value.filter(item => !delList.some(delItem => delItem.msg_id === item.msg_id))
-                danmakuStore.setDanmakuList(result)
-            }
-            else if (data.type == "add") {
-                const value = data.data as Array<DanmakuModel>
-                const douyin = value.filter(item => item.source == "douyin")
-                const bilibili = value.filter(item => item.source == "bilibili")
-                const result = [...danmakuList.value, ...processDanmaku(douyin, "douyin"), ...processDanmaku(bilibili, "bilibili")]
-                danmakuStore.setDanmakuList(result)
-            }
-            else if (data.type == "live_config") {
-                Object.assign(config, data.data)
-            }
-            else if (data.type == "bili_room_change") {
-                config.bilibili_room_id = data.data
-            }
-            else if (data.type == "bili_status_change") {
-                config.bilibili_ws_status = data.data
-            }
-            else if (data.type == "douyin_room_change") {
-                config.douyin_romm_id = data.data
-            }
-            else if (data.type == "douyin_status_change") {
-                config.douyin_ws_status = data.data
+            const handler = messageHandlers[data.type]
+            if (handler) {
+                handler(data.data)
             }
         }
     })
     wsSend = send
     send(`{"type":"live_config","data":""}`)
+}
+
+const messageHandlers: Record<string, (data: any) => void> = {
+    "echo": () => {
+        return
+    },
+    "del": (data: Array<DelListModel>) => {
+        const result = danmakuList.value.filter(item => !data.some(delItem => delItem.msg_id === item.msg_id))
+        danmakuStore.setDanmakuList(result)
+    },
+    "add": (data: Array<DanmakuModel>) => {
+        const result = [...danmakuList.value, ...processDanmaku(data)]
+        danmakuStore.setDanmakuList(result)
+    },
+    "live_config": (data: LiveModel) => {
+        Object.assign(config, data)
+    },
+    "bili_room_change": (data: number) => {
+        config.bilibili_room_id = data
+    },
+    "bili_status_change": (data: number) => {
+        config.bilibili_ws_status = data
+    },
+    "douyin_room_change": (data: number) => {
+        config.douyin_romm_id = data
+    },
+    "douyin_status_change": (data: number) => {
+        config.douyin_ws_status = data
+    }
 }
 
 const openDanmakuWindow = async () => {
@@ -136,75 +140,22 @@ const danmakuList = computed(() => {
 
 watch(danmakuList, async () => {
     await nextTick()
-    infiniteList.value && infiniteList.value.scrollTo({ behavior: "smooth", top: infiniteList.value.scrollHeight })
+    infiniteListRef.value && infiniteListRef.value.scrollTo({ behavior: "smooth", top: infiniteListRef.value.scrollHeight })
 })
 
 onMounted(() => {
     const height = window.innerHeight * 0.9
-    const dom = document.querySelector(".chat-main") as HTMLElement
-    dom.style.overflow = "hidden"
+    chatMainRef.value?.$el.style.setProperty("overflow", "hidden")
 
-    const infiniteListDom = document.querySelector(".chat-infinite-list") as HTMLElement
     const listHeight = height * 0.8
-    infiniteListDom.style.height = `${listHeight}px`
+    infiniteListRef.value?.style.setProperty("height", `${listHeight}px`)
 
     getDanmaku()
-
-    if (import.meta.env.DEV) {
-        danmakuStore.setDanmakuList([{
-            msg_id: 0,
-            uid: 0,
-            uname: "uname",
-            msg: "last love",
-            send_time: getNowTimespan(),
-            source: "bilibili",
-            medal_name: "雾了",
-            medal_level: 12,
-            guard_level: 0,
-            status: 0
-        },
-        {
-            msg_id: 1,
-            uid: 1,
-            uname: "uname",
-            msg: "last dance",
-            send_time: getNowTimespan(),
-            source: "douyin",
-            medal_name: "雾了",
-            medal_level: 10,
-            guard_level: 2,
-            status: 0
-        },
-        {
-            msg_id: 2,
-            uid: 2,
-            uname: "uname",
-            msg: "last dance",
-            send_time: getNowTimespan(),
-            source: "douyin",
-            medal_name: "雾了",
-            medal_level: 10,
-            guard_level: 1,
-            status: 0
-        },
-        {
-            msg_id: 3,
-            uid: 3,
-            uname: "uname",
-            msg: "last dance",
-            send_time: getNowTimespan(),
-            source: "douyin",
-            medal_name: "",
-            medal_level: 10,
-            guard_level: 1,
-            status: 0
-        }])
-    }
 })
 </script>
 <template>
     <el-container class="chat-container">
-        <el-main class="chat-main">
+        <el-main class="chat-main" ref="chat-main">
             <el-card class="chat-card">
                 <template #header>
                     <div class="card-header">
@@ -232,7 +183,7 @@ onMounted(() => {
                                 </template>
                                 <template v-if="item.html != undefined && item.html.length > 0">
                                     {{ item.uname }}；
-                                    <el-text v-html="item.html"></el-text>
+                                    <el-text style="display: flex;" v-html="item.html"></el-text>
                                 </template>
                                 <template v-else>
                                     {{ item.uname }}： {{ item.msg }}

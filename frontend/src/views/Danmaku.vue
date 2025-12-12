@@ -15,27 +15,30 @@ const getDanmaku = () => {
         },
         onMessage: (ws: WebSocket, event: MessageEvent) => {
             const data = JSON.parse(event.data) as WsModel
-            if (data.type == "echo") {
-                return
-            }
-            else if (data.type == "clear") {
-                list.value = []
-            }
-            else if (data.type == "remove") {
-                list.value = list.value.filter(item => item.msg_id != data.data)
-            }
-            else if (data.type == "del") {
-                const delList = data.data as Array<DelListModel>
-                list.value = list.value.filter(item => !delList.some(delItem => delItem.msg_id === item.msg_id))
-            }
-            else if (data.type == "add") {
-                const value = data.data as Array<DanmakuModel>
-                const douyin = value.filter(item => item.source == "douyin")
-                const bilibili = value.filter(item => item.source == "bilibili")
-                list.value = [...list.value, ...processDanmaku(douyin, "douyin"), ...processDanmaku(bilibili, "bilibili")]
+            const handler = messageHandlers[data.type]
+            if (handler){
+                handler(data.data)
             }
         }
     })
+}
+
+const messageHandlers: Record<string, (data: any) => void> = {
+    "echo": () => {
+        return
+    },
+    "clear": () => {
+        list.value = []
+    },
+    "remove": (data: number) => {
+        list.value = list.value.filter(item => item.msg_id != data)
+    },
+    "del": (data: Array<DelListModel>) => {
+        list.value = list.value.filter(item => !data.some(delItem => delItem.msg_id === item.msg_id))
+    },
+    "add": (data: Array<DanmakuModel>) => {
+        list.value = [...list.value, ...processDanmaku(data)]
+    }
 }
 
 watch(list, async () => {

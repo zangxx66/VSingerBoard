@@ -3,7 +3,7 @@ import os
 import time
 import webview
 from src.utils import logger, async_worker, generate_ts_api
-from src.manager import gui_manager, lifecycle, server_manager, version_manager
+from src.manager import gui_manager, lifecycle, server_manager, version_manager, subscribe_manager
 from src.jsBridge import Api
 
 
@@ -15,6 +15,8 @@ def main():
 
     # 启动异步任务
     async_worker.start()
+
+    async_worker.submit(subscribe_manager.start_subscribe())
 
     # 启动FastApi
     server_manager.start_http_server()
@@ -44,6 +46,7 @@ def run_app():
     except Exception as ex:
         logger.exception(ex)
     finally:
+        subscribe_manager.stop_subscribe()
         lifecycle.on_closing()
         async_worker.stop()
         os._exit(0)

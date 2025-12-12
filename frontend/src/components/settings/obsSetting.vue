@@ -78,14 +78,13 @@ const css = ref(`/* 弹幕列表CSS */
   align-items: center;
   font-size: 12px;
   border-radius: 15px;
-  width: 60px;
+  width: fit-content;
   margin-left: 10px;
 }
 
 .fans-club-name-bg {
   display: block;
   height: 20px;
-  width: 50%;
 }
 
 .fans-club-name {

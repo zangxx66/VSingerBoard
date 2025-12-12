@@ -181,5 +181,5 @@ class DouyinLiveWebFetcher(Decorator, WebSocketClient):
         user_name = message.user.nickname
         user_id = message.user.id
         content = message.content
-        logger.debug(f"【聊天msg】[{user_id}]{user_name}: {content}")
+        logger.debug(f"[{user_id}]{user_name}: {content}")
         self.dispatch("danmu", {"user_name": user_name, "user_id": user_id, "content": content, "fans_club_data": message.user.fans_club.data})

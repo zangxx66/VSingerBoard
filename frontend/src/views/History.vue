@@ -2,7 +2,7 @@
 import { request } from "@/api"
 import { ElMessage } from "element-plus"
 import { Search, Download } from "@element-plus/icons-vue"
-import { timespanToString, getEndOfDayTimespan, exportExcel, getNowTimespan } from "@/utils"
+import { timespanToString, getEndOfDayTimespan, exportExcel, getNowTimespan, processDanmaku } from "@/utils"
 import type { Column } from "exceljs"
 
 const loading = ref(false)
@@ -10,6 +10,8 @@ const exportLoading = ref(false)
 const total = ref(0)
 const dateRange = ref<[number, number]>()
 const list = ref<Array<SongHistoryModel>>()
+const cardRef = useTemplateRef("historyDataCard")
+const infiniteListRef = useTemplateRef("chatInfiniteList")
 const baseFormValue = reactive({
     uname: "",
     song_name: "",
@@ -91,7 +93,24 @@ const load = () => {
             return
         }
         total.value = resp.data.total
-        list.value = resp.data.rows
+        const rows = resp.data.rows as Array<SongHistoryModel>
+        const danmakus: DanmakuModel[] = rows.map(item => ({
+            msg_id: item.id,
+            uid: item.uid,
+            uname: item.uname,
+            msg: item.song_name,
+            send_time: item.create_time,
+            source: item.source,
+            medal_name: "",
+            medal_level: 0,
+            guard_level: 0
+        }));
+        const processedDanmakus = processDanmaku(danmakus);
+        list.value = rows.map((item, index) => ({
+            ...item,
+            song_name: processedDanmakus[index].html || item.song_name,
+            create_time_str: timespanToString(item.create_time)
+        }));
         loading.value = false
     }).catch(error => {
         ElMessage.error(error)
@@ -106,11 +125,9 @@ const search = () => {
 
 onMounted(() => {
     const height = window.innerHeight * 0.9
-    const cardRef = useTemplateRef<HTMLElement>("history-data-card")
-    cardRef.value?.style.setProperty("overflow", "hidden")
+    cardRef.value?.$el.style.setProperty("overflow", "hidden")
 
     const listHeight = height * 0.6
-    const infiniteListRef = useTemplateRef<HTMLElement>(".chat-infinite-list")
     infiniteListRef.value?.style.setProperty("height", `${listHeight}px`)
 
     load()
@@ -154,18 +171,18 @@ onMounted(() => {
                 </el-form>
             </el-card>
             <el-divider />
-            <el-card class="history-data-card" v-loading="loading" ref="history-data-card">
+            <el-card class="history-data-card" v-loading="loading" ref="historyDataCard">
                 <template #default>
-                    <div class="chat-infinite-list" ref="chat-infinite-list">
+                    <div class="chat-infinite-list" ref="chatInfiniteList">
                         <template v-for="item in list">
                             <div class="chat-infinite-list-item">
                                 <img :src="`/assets/images/${item.source}.png`" class="source-img" :alt="item.source"
                                     width="24" />
                                 <text tag="span" class="chat-tag">
-                                    {{ item.uname }}：{{ item.song_name }}
+                                    {{ item.uname }}：<el-text style="display: flex;" v-html="item.song_name"></el-text>
                                 </text>
                                 <span style="width: 15%;">
-                                    {{ timespanToString(item.create_time) }}
+                                    {{ item.create_time_str }}
                                 </span>
                             </div>
                         </template>

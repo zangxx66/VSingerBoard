@@ -88,4 +88,5 @@ type SongHistoryModel = {
     song_name: string
     source: string
     create_time: number
+    create_time_str?: string
 }

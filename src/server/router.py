@@ -5,6 +5,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from bilibili_api import Credential, user
 from bilibili_api.login_v2 import QrCodeLogin, QrCodeLoginChannel
+from src.manager import subscribe_manager
 from src.database import Db
 from src.utils import setup_autostart, ResponseItem, bconfigItem, dyconfigItem, globalfigItem, async_worker, check_for_updates
 from src.live import bili_manager, douyin_manager
@@ -157,14 +158,19 @@ async def get_global_config():
 
 
 @router.post("/add_or_update_global_config")
-async def add_or_update_global_config(data: globalfigItem = Body(..., embed=True)):
+async def add_or_update_global_config(background_tasks: BackgroundTasks, data: globalfigItem = Body(..., embed=True)):
     if data.startup is not None:
         startup_result = setup_autostart(data.startup)
         if not startup_result:
             return ResponseItem(code=-1, msg="开机启动更新失败", data=None)
     result = await async_worker.run_db_operation(Db.add_or_update_gloal_config(**data.__dict__))
-    code = 0 if result > 0 else -1
-    msg = "设置成功" if result > 0 else "设置失败"
+    if result > 0:
+        code = 0
+        msg = "设置成功"
+        background_tasks.add_task(subscribe_manager.start_subscribe) if data.check_update else background_tasks.add_task(subscribe_manager.cancel_subscribe, "check_updates")
+    else:
+        code = -1
+        msg = "设置失败"
     return JSONResponse(status_code=200, content={"code": code, "msg": msg, "data": result})
 
 

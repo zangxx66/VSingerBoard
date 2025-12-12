@@ -67,7 +67,7 @@ export const pasteToElement = async(activeEl: HTMLElement | null) => {
 }
 
 
-export const processDanmaku = (list: DanmakuModel[], platform: "bilibili" | "douyin") => {
+export const processDanmaku = (list: DanmakuModel[]) => {
   list.forEach(item => {
     item.status = 0
     let result = item.msg
@@ -75,7 +75,7 @@ export const processDanmaku = (list: DanmakuModel[], platform: "bilibili" | "dou
     if(matchList) {
       for(const value of matchList) {
         let emojiUrl: string | undefined
-        if(platform == "bilibili") {
+        if(item.source == "bilibili") {
           const emoji = emoticons.find((e) => value === e.emoji)
           if (emoji) emojiUrl = emoji.url
         }else {

@@ -5,9 +5,8 @@ import { HomeFilled, Tools, List, InfoFilled, Sunny, Moon, Calendar } from "@ele
 import ContextMenu from '@imengyu/vue3-context-menu'
 import { ElMessage } from "element-plus"
 import { request } from "@/api"
-import { toggleDark, pasteToElement, copyToClipboard, checkUpdate } from "@/utils"
+import { toggleDark, pasteToElement, copyToClipboard } from "@/utils"
 
-const intervalStore = useIntervalStore()
 const themeStore = useThemeStore()
 const cardConfig = {
   shadow: "always"
@@ -124,7 +123,6 @@ const onContextMenu = async (e: MouseEvent) => {
       label: "重新加载",
       disabled: false,
       onClick: () => {
-        intervalStore.clearAllIntervals()
         window.pywebview.api.reload()
       }
     })
@@ -157,10 +155,6 @@ const initGlobalConfig = async (): Promise<void> => {
         Object.assign(globalConfig, model)
         toggleDark(model.dark_mode)
         themeStore.setDarkTheme(model.dark_mode)
-        if (model.check_update) {
-          checkUpdate()
-          intervalStore.addInterval("check_update", checkUpdate, 1000 * 60 * 60 * 6)
-        }
         if (!model.navSideTour) {
           navSideTour.value = true
         }
