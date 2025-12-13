@@ -23,13 +23,13 @@ const routesByLayout = Object.keys(pages).reduce<{
       acc.blank.push({
         path: '',
         name,
-        component: () => import(path),
+        component: pages[path],
       })
     } else {
       acc.default.push({
         path: name === 'home' ? '' : name,
         name,
-        component: () => import(path),
+        component: pages[path],
       })
     }
     return acc
