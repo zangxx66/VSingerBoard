@@ -1,7 +1,12 @@
+import os
 from tortoise import Tortoise
 from tortoise.connection import connections
+from aerich import Command
 from .model import BiliConfig, BiliCredential, DyConfig, GloalConfig, SongHistory
-from src.utils import get_path, logger
+from .config import TORTISE_ORM
+from src.utils import get_path, logger, get_support_dir
+
+MIGRATIONS_LOCATION = os.path.join(get_support_dir(), "migrations")
 
 
 class Db:
@@ -22,7 +27,7 @@ class Db:
                 "connections": {"default": f"sqlite://{get_path('vsingerboard.sqlite3', dir_name='data')}"},
                 "apps": {
                     "1.0": {
-                        "models": ["src.database.model"],
+                        "models": ["src.database.model", "aerich.models"],
                         "default_connection": "default"
                     }
                 }
@@ -30,6 +35,8 @@ class Db:
 
             await Tortoise.init(config=config)
             await Tortoise.generate_schemas()
+            await cls.initialize_aerich(cls)
+            await cls.run_db_upgrade(cls)
             cls._initialized = True
             logger.info("Database initialized successfully.")
         except Exception as e:
@@ -46,6 +53,42 @@ class Db:
         await connections.close_all()
         cls._initialized = False
         logger.info("Database disconnected.")
+
+    async def initialize_aerich(cls):
+        """
+        initialize_aerich 的 Docstring
+
+        :param cls: 说明
+        """
+        conn = Tortoise.get_connection("default")
+        query = "select name from sqlite_master where type='table' and name='aerich';"
+        result = await conn.execute_query_dict(query)
+        if not result:
+            logger.info("Initializing aerich for the first time...")
+            command = Command(
+                tortoise_config=TORTISE_ORM,
+                app="models",
+                location=MIGRATIONS_LOCATION,
+            )
+            await command.init()
+            await command.init_db(safe=True)
+            logger.info("Aerich initialized.")
+
+    async def run_db_upgrade(cls):
+        """
+        run_db_upgrade 的 Docstring
+
+        :param cls: 说明
+        """
+        logger.info("Starting database schema upgrade...")
+        command = Command(
+            tortoise_config=TORTISE_ORM,
+            app="models",
+            location=MIGRATIONS_LOCATION,
+        )
+        await command.init()
+        await command.upgrade(run_in_transaction=True)
+        logger.info("Database schema upgrade finished.")
 
     @classmethod
     async def add_bcredential(cls, **kwargs):

@@ -36,4 +36,5 @@ __all__ = [
     "is_internet_available",
     "WebsocketDataItem",
     "generate_ts_api",
+    "get_support_dir",
 ]
