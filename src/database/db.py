@@ -1,8 +1,9 @@
 import os
 from tortoise import Tortoise
 from tortoise.connection import connections
+from tortoise.models import Q
 from aerich import Command
-from .model import BiliConfig, BiliCredential, DyConfig, GloalConfig, SongHistory
+from .model import BiliConfig, BiliCredential, DyConfig, GloalConfig, SongHistory, Playlist
 from .config import TORTISE_ORM
 from src.utils import get_path, logger, get_support_dir
 
@@ -56,9 +57,8 @@ class Db:
 
     async def initialize_aerich(cls):
         """
-        initialize_aerich 的 Docstring
+        初始化aerich
 
-        :param cls: 说明
         """
         conn = Tortoise.get_connection("default")
         query = "select name from sqlite_master where type='table' and name='aerich';"
@@ -76,9 +76,8 @@ class Db:
 
     async def run_db_upgrade(cls):
         """
-        run_db_upgrade 的 Docstring
+        upgrade database
 
-        :param cls: 说明
         """
         logger.info("Starting database schema upgrade...")
         command = Command(
@@ -214,3 +213,44 @@ class Db:
         songs = await query.offset((page - 1) * size).limit(size).order_by("-create_time").all()
 
         return total, songs
+
+    @classmethod
+    async def get_playlist_page(cls, keyword: str = None, page: int = 1, size: int = 20):
+        query = Playlist.all()
+        if keyword:
+            query = query.filter(Q(song_name__icontains=keyword, tag__icontains=keyword, singer__icontains=keyword, language__icontains=keyword, join_type="OR"))
+
+        total = await query.count()
+        rows = await query.offset((page - 1) * size).limit(size).order_by("song_name").all()
+
+        return total, rows
+
+    @classmethod
+    async def get_playlist(cls, id: int):
+        result = await Playlist.filter(id=id).first()
+        return result
+
+    @classmethod
+    async def delete_playlist(cls, ids: list[int]):
+        result = await Playlist.filter(id__in=ids).delete()
+        return result
+
+    @classmethod
+    async def add_or_update_playlist(cls, **kwargs):
+        id = kwargs.get("id")
+        del kwargs["id"]
+        playlist = await Playlist.get(id=id).first()
+        try:
+            if playlist:
+                await Playlist.get(id=id).update(**kwargs)
+                return playlist.id
+            else:
+                playlist = await Playlist.create(**kwargs)
+                return playlist.id
+        except Exception as e:
+            logger.error(f"add_or_update_playlist error: {e}")
+            return 0
+
+    @classmethod
+    async def bulk_add_playlist(cls, objects: list[Playlist]):
+        await Playlist.bulk_create(objects, on_conflict=["song_name", "singer"], update_fields=["is_sc", "sc_price", "language", "tag"], batch_size=500)

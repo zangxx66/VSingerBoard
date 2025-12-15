@@ -7,7 +7,16 @@ from bilibili_api import Credential, user
 from bilibili_api.login_v2 import QrCodeLogin, QrCodeLoginChannel
 from src.manager import subscribe_manager
 from src.database import Db
-from src.utils import setup_autostart, ResponseItem, bconfigItem, dyconfigItem, globalfigItem, async_worker, check_for_updates
+from src.utils import (
+    setup_autostart,
+    ResponseItem,
+    bconfigItem,
+    dyconfigItem,
+    globalfigItem,
+    async_worker,
+    check_for_updates,
+    PlaylistItem,
+    logger)
 from src.live import bili_manager, douyin_manager
 
 router = APIRouter(tags=["api"])
@@ -200,3 +209,47 @@ async def get_history_list(uname: str = Query(...),
 async def check_update():
     result = await check_for_updates()
     return ResponseItem(code=0, msg=None, data=result)
+
+
+@router.get("/get_playlist_list")
+async def get_playlist_list(keyword: str = Query(...),
+                            page: int = Query(1),
+                            size: int = Query(20)):
+    total, playlists = await async_worker.run_db_operation(Db.get_playlist_page(keyword, page, size))
+    return ResponseItem(code=0, msg=None, data={"total": total, "rows": jsonable_encoder(playlists)})
+
+
+@router.get("/get_playlist")
+async def get_playlist(id: int):
+    result = await async_worker.run_db_operation(Db.get_playlist(id))
+    return ResponseItem(code=0, msg=None, data={"data": jsonable_encoder(result)})
+
+
+@router.post("/add_or_update_playlist")
+async def add_or_update_playlist(data: PlaylistItem = Body(..., embed=True)):
+    result = await async_worker.run_db_operation(Db.add_or_update_playlist(**data.__dict__))
+    msg = "操作成功" if result > 0 else "操作失败"
+    code = 0 if result > 0 else -1
+    return JSONResponse(status_code=200, content={"code": code, "msg": msg, "data": result})
+
+
+@router.post("/delete_playlist")
+async def delete_playlist(data: list[int] = Body(..., embed=True)):
+    result = await async_worker.run_db_operation(Db.delete_playlist(data))
+    msg = "操作成功" if result > 0 else "操作失败"
+    code = 0 if result > 0 else -1
+    return ResponseItem(code=code, msg=msg, data=None)
+
+
+@router.post("/import_playlist")
+async def import_playlist(data: list[PlaylistItem] = Body(..., embed=True)):
+    code = 0
+    msg = "操作成功"
+    try:
+        await async_worker.run_db_operation(Db.bulk_add_playlist(data))
+    except Exception as ex:
+        logger.exception(f"bulk add playlist exception: {ex}")
+        code = -1
+        msg = "操作失败"
+    else:
+        return ResponseItem(code=code, msg=msg, data=None)

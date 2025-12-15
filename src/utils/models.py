@@ -57,3 +57,13 @@ class globalfigItem(BaseModel):
 class WebsocketDataItem(BaseModel):
     type: str
     data: Any
+
+
+class PlaylistItem(BaseModel):
+    id: int
+    song_name: str
+    singer: str
+    is_sc: bool
+    sc_price: int
+    language: str
+    tag: str
