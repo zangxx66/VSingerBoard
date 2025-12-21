@@ -57,19 +57,19 @@ const initConfig = () => {
 }
 
 const addOrUpdateConfig = () => {
-    if(typeof baseFormValue.room_id != "number" || baseFormValue.room_id < 1) {
+    if (typeof baseFormValue.room_id != "number" || baseFormValue.room_id < 1) {
         ElMessage.warning("请输入正确的房间号")
         return
     }
-    if(typeof baseFormValue.modal_level != "number" || baseFormValue.modal_level < 0) {
+    if (typeof baseFormValue.modal_level != "number" || baseFormValue.modal_level < 0) {
         ElMessage.warning("请输入正确的粉丝牌等级")
         return
     }
-    if(baseFormValue.sing_prefix.length == 0) {
+    if (baseFormValue.sing_prefix.length == 0) {
         ElMessage.warning("请输入正确的点歌指令")
         return
     }
-    if(typeof baseFormValue.sing_cd != "number" || baseFormValue.sing_cd < 0) {
+    if (typeof baseFormValue.sing_cd != "number" || baseFormValue.sing_cd < 0) {
         ElMessage.warning("请输入正确的点歌cd")
         return
     }
@@ -106,21 +106,24 @@ onMounted(() => {
                     <el-input-number v-model="baseFormValue.room_id" placeholder="B站直播间号" :min="1" :controls="false" />
                 </el-form-item>
                 <el-form-item label="粉丝牌等级" prop="modal_level">
-                <el-input-number v-model="baseFormValue.modal_level" placeholder="粉丝牌等级" :min="0" :controls="false" />
-            </el-form-item>
-            <el-form-item label="用户等级" prop="user_level">
-                <el-radio-group v-model="baseFormValue.user_level">
-                    <template v-for="item in dropdownMenu">
-                        <el-radio :value="item.value">{{ item.key }}</el-radio>
-                    </template>
-                </el-radio-group>
-            </el-form-item>
+                    <el-input-number v-model="baseFormValue.modal_level" placeholder="粉丝牌等级" :min="0"
+                        :controls="false" />
+                </el-form-item>
+                <el-form-item label="用户等级" prop="user_level">
+                    <el-radio-group v-model="baseFormValue.user_level">
+                        <template v-for="item in dropdownMenu">
+                            <el-radio :value="item.value">{{ item.key }}</el-radio>
+                        </template>
+                    </el-radio-group>
+                </el-form-item>
                 <el-form-item label="点歌指令" prop="sing_prefix">
-                    <el-input v-model="baseFormValue.sing_prefix" placeholder="点歌指令" type="text" style="width: 240px;" />
+                    <el-input v-model="baseFormValue.sing_prefix" placeholder="点歌指令" type="text"
+                        style="width: 240px;" />
                 </el-form-item>
                 <el-form-item label="点歌cd" prop="sing_cd">
-                <el-input-number v-model="baseFormValue.sing_cd" placeholder="点歌cd，单位：秒" :min="0" :controls="false" />
-            </el-form-item>
+                    <el-input-number v-model="baseFormValue.sing_cd" placeholder="点歌cd，单位：秒" :min="0"
+                        :controls="false" />
+                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="addOrUpdateConfig()">保存</el-button>
                 </el-form-item>

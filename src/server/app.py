@@ -2,7 +2,6 @@ import uvicorn
 import os
 import webview
 from pathlib import Path
-from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, Depends
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.middleware.cors import CORSMiddleware
@@ -26,14 +25,6 @@ def verify_token(request: Request):
         raise HTTPException(status_code=500, detail="Authentication error")
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Database initialization will be handled by async_worker
-    logger.info("Database initialization completed.")
-    yield
-    # Database disconnection will be handled by async_worker
-    logger.info("Database disconnection completed.")
-
 app = FastAPI(
     title="vsingerboard",
     description="Multi-platform Singerboard",
@@ -41,7 +32,6 @@ app = FastAPI(
     docs_url=None,
     redoc_url=None,
     openapi_url=None,
-    lifespan=lifespan,
     dependencies=[Depends(verify_token)],
 )
 

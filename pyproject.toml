@@ -25,7 +25,7 @@ dependencies = [
 ]
 
 [tool.aerich]
-tortoise_orm = "src.database.config.TORTISE_ORM"
+tortoise_orm = "src.database.db.TORTISE_ORM"
 
 [[tool.uv.index]]
 url="https://pypi.tuna.tsinghua.edu.cn/simple"

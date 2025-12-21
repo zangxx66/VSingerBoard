@@ -2,6 +2,7 @@ import time
 import asyncio
 from src.utils import logger, DanmuInfo, async_worker, send_notification
 from src.database import Db
+from src.manager import subscribe_manager
 from bilibili_api import live, Credential
 
 
@@ -12,11 +13,8 @@ class Bili:
         self.live = None
         self.danmus: list[DanmuInfo] = []
         self.del_list = []
-        self.sing_prefix = ""
-        self.room_id = 0
-        self.sing_cd = 0
-        self.user_level = 0
-        self.modal_level = 0
+        self.config = None
+        self.credential = None
 
     def start(self):
         if self._run_future and not self._run_future.done():
@@ -31,30 +29,26 @@ class Bili:
             config = await Db.get_bconfig()
             if not config or config.room_id == 0:
                 if config:
-                    self.room_id = config.room_id
+                    self.config = config
                 logger.info("Bilibili room_id not configured, skipping.")
                 return
 
-            self.sing_prefix = config.sing_prefix
-            self.room_id = config.room_id
-            self.sing_cd = config.sing_cd
-            self.user_level = config.user_level
-            self.modal_level = config.modal_level
-            bili_credential = await Db.get_bcredential(enable=True)
-            credential = None
-            if bili_credential:
+            self.config = config
+            self.credential = await Db.get_bcredential(enable=True)
+            if self.credential:
                 credential = Credential(
-                    sessdata=bili_credential.sessdata,
-                    bili_jct=bili_credential.bili_jct,
-                    buvid3=bili_credential.buvid3,
-                    buvid4=bili_credential.buvid4,
-                    dedeuserid=bili_credential.dedeuserid,
-                    ac_time_value=bili_credential.ac_time_value
+                    sessdata=self.credential.sessdata,
+                    bili_jct=self.credential.bili_jct,
+                    buvid3=self.credential.buvid3,
+                    buvid4=self.credential.buvid4,
+                    dedeuserid=self.credential.dedeuserid,
+                    ac_time_value=self.credential.ac_time_value
                 )
 
-            self.live = live.LiveDanmaku(room_display_id=self.room_id, credential=credential, max_retry=99)
+            self.live = live.LiveDanmaku(room_display_id=self.config.room_id, credential=credential, max_retry=99)
             self.live.on("DANMU_MSG")(self.on_msg)
             self.live.on("SUPER_CHAT_MESSAGE")(self.on_sc)
+            subscribe_manager.add_job("interval", minutes=30, id="refresh_credential", replace_existing=True)(self.refresh_credential)
 
             await self.live.connect()
             logger.info("Bilibili live client starting.")
@@ -76,6 +70,7 @@ class Bili:
             logger.info("Bilibili live client stopped.")
 
     async def stop(self):
+        subscribe_manager.cancel_subscribe("refresh_credential")
         if self._run_future and not self._run_future.done():
             logger.info("Stopping Bilibili main task.")
             self._stop_event.set()
@@ -137,18 +132,18 @@ class Bili:
             if history:
                 self.del_list.append({"msg_id": history.id, "uid": uid, "uname": uname, "song_name": cancel_song})
             return
-        if not msg.startswith(self.sing_prefix):
+        if not msg.startswith(self.config.sing_prefix):
             return
-        if self.modal_level > 0 and medal_level < self.modal_level:
+        if self.config.modal_level > 0 and medal_level < self.config.modal_level:
             return
-        if self.user_level > 0 and guard_level > self.user_level:
+        if self.config.user_level > 0 and guard_level > self.config.user_level:
             return
-        if self.sing_cd > 0:
+        if self.config.sing_cd > 0:
             history = await Db.get_song_history(uid=uid, source="bilibili")
-            if history and (now - history.create_time) / 1000 < self.sing_cd:
+            if history and (now - history.create_time) / 1000 < self.config.sing_cd:
                 return
 
-        song_name = msg.replace(self.sing_prefix, "", 1).strip()
+        song_name = msg.replace(self.config.sing_prefix, "", 1).strip()
         logger.info(song_name)
 
         history = await Db.add_song_history(uid=uid, uname=uname, song_name=song_name, source="bilibili", create_time=now)
@@ -188,19 +183,24 @@ class Bili:
             medal_name = sc_data["medal_info"]["medal_name"]
 
         logger.debug(f"[{medal_name} {medal_level}]:{uname}:{message}")
-        if not message.startswith(self.sing_prefix):
+        if not message.startswith(self.config.sing_prefix):
             return
-        if self.modal_level > 0 and medal_level < self.modal_level:
+        if self.config.modal_level > 0 and medal_level < self.config.modal_level:
             return
-        if self.user_level > 0 and guard_level > self.user_level:
+        if self.config.user_level > 0 and guard_level > self.config.user_level:
             return
-        if self.sing_cd > 0:
+        if self.config.sing_cd > 0:
             history = await Db.get_song_history(uid=uid, source="bilibili")
-            if history and (now - history.create_time) / 1000 < self.sing_cd:
+            if history and (now - history.create_time) / 1000 < self.config.sing_cd:
                 return
 
-        song_name = message.replace(self.sing_prefix, "", 1).strip()
+        song_name = message.replace(self.config.sing_prefix, "", 1).strip()
         logger.info(song_name)
+
+        song_info = await Db.get_playlist(song_name=song_name)
+        if song_info:
+            if song_info.is_sc and price < song_info.sc_price:
+                return
 
         history = await Db.add_song_history(uid=uid, uname=uname, song_name=song_name, source="bilibili", create_time=now)
 
@@ -223,6 +223,26 @@ class Bili:
             return
 
         send_notification("收到新的点歌", song_name)
+
+    async def refresh_credential(self):
+        if not self.credential:
+            return
+        credential = Credential(
+            sessdata=self.credential.sessdata,
+            bili_jct=self.credential.bili_jct,
+            buvid3=self.credential.buvid3,
+            buvid4=self.credential.buvid4,
+            dedeuserid=self.credential.dedeuserid,
+            ac_time_value=self.credential.ac_time_value
+        )
+        if await credential.check_valid():
+            if await credential.check_refresh():
+                await credential.refresh()
+                data_dic = self.credential.__dict__
+                new_dic = {k: v for k, v in data_dic.items() if v is not None and k != "id"}
+                await Db.update_bcredential(pk=self.credential.id, **new_dic)
+                logger.info("refresh credential!")
+        logger.info("exec refresh_credential job")
 
 
 bili_manager = Bili()

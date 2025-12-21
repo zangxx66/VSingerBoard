@@ -13,6 +13,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     About: typeof import('./src/views/about/index.vue')['default']
+    AddPlaylistDialog: typeof import('./src/views/playlist/addPlaylistDialog.vue')['default']
     AddSingDialog: typeof import('./src/views/home/addSingDialog.vue')['default']
     AppSettingTab: typeof import('./src/views/settings/appSettingTab.vue')['default']
     BiliCredential: typeof import('./src/views/settings/biliCredential.vue')['default']
@@ -57,6 +58,7 @@ declare module 'vue' {
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
     ElTour: typeof import('element-plus/es')['ElTour']
     ElTourStep: typeof import('element-plus/es')['ElTourStep']
+    ElUpload: typeof import('element-plus/es')['ElUpload']
     FansClub: typeof import('./src/components/common/fansClub.tsx')['default']
     FansMedal: typeof import('./src/components/common/fansMedal.tsx')['default']
     History: typeof import('./src/views/history/index.vue')['default']
@@ -65,6 +67,7 @@ declare module 'vue' {
     LinkIcon: typeof import('./src/components/common/linkIcon.tsx')['default']
     ObsSetting: typeof import('./src/views/settings/obsSetting.vue')['default']
     PlatformStatus: typeof import('./src/views/home/platformStatus.vue')['default']
+    Playlist: typeof import('./src/views/playlist/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Settings: typeof import('./src/views/settings/index.vue')['default']
@@ -78,6 +81,7 @@ declare module 'vue' {
 // For TSX support
 declare global {
   const About: typeof import('./src/views/about/index.vue')['default']
+  const AddPlaylistDialog: typeof import('./src/views/playlist/addPlaylistDialog.vue')['default']
   const AddSingDialog: typeof import('./src/views/home/addSingDialog.vue')['default']
   const AppSettingTab: typeof import('./src/views/settings/appSettingTab.vue')['default']
   const BiliCredential: typeof import('./src/views/settings/biliCredential.vue')['default']
@@ -122,6 +126,7 @@ declare global {
   const ElTooltip: typeof import('element-plus/es')['ElTooltip']
   const ElTour: typeof import('element-plus/es')['ElTour']
   const ElTourStep: typeof import('element-plus/es')['ElTourStep']
+  const ElUpload: typeof import('element-plus/es')['ElUpload']
   const FansClub: typeof import('./src/components/common/fansClub.tsx')['default']
   const FansMedal: typeof import('./src/components/common/fansMedal.tsx')['default']
   const History: typeof import('./src/views/history/index.vue')['default']
@@ -130,6 +135,7 @@ declare global {
   const LinkIcon: typeof import('./src/components/common/linkIcon.tsx')['default']
   const ObsSetting: typeof import('./src/views/settings/obsSetting.vue')['default']
   const PlatformStatus: typeof import('./src/views/home/platformStatus.vue')['default']
+  const Playlist: typeof import('./src/views/playlist/index.vue')['default']
   const RouterLink: typeof import('vue-router')['RouterLink']
   const RouterView: typeof import('vue-router')['RouterView']
   const Settings: typeof import('./src/views/settings/index.vue')['default']

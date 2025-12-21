@@ -1,13 +1,22 @@
 import os
+import uuid
 from tortoise import Tortoise
 from tortoise.connection import connections
 from tortoise.models import Q
 from aerich import Command
 from .model import BiliConfig, BiliCredential, DyConfig, GloalConfig, SongHistory, Playlist
-from .config import TORTISE_ORM
-from src.utils import get_path, logger, get_support_dir
+from src.utils import get_path, logger, get_support_dir, __version__ as CURRENT_VERSION
 
 MIGRATIONS_LOCATION = os.path.join(get_support_dir(), "migrations")
+TORTISE_ORM = {
+    "connections": {"default": f"sqlite://{get_path('vsingerboard.sqlite3', dir_name='data')}"},
+    "apps": {
+        CURRENT_VERSION: {
+            "models": ["src.database.model", "aerich.models"],
+            "default_connection": "default",
+        }
+    }
+}
 
 
 class Db:
@@ -24,20 +33,9 @@ class Db:
             return
 
         try:
-            config = {
-                "connections": {"default": f"sqlite://{get_path('vsingerboard.sqlite3', dir_name='data')}"},
-                "apps": {
-                    "1.0": {
-                        "models": ["src.database.model", "aerich.models"],
-                        "default_connection": "default"
-                    }
-                }
-            }
-
-            await Tortoise.init(config=config)
-            await Tortoise.generate_schemas()
-            await cls.initialize_aerich(cls)
             await cls.run_db_upgrade(cls)
+            await Tortoise.init(config=TORTISE_ORM)
+            await Tortoise.generate_schemas()
             cls._initialized = True
             logger.info("Database initialized successfully.")
         except Exception as e:
@@ -55,39 +53,27 @@ class Db:
         cls._initialized = False
         logger.info("Database disconnected.")
 
-    async def initialize_aerich(cls):
-        """
-        初始化aerich
-
-        """
-        conn = Tortoise.get_connection("default")
-        query = "select name from sqlite_master where type='table' and name='aerich';"
-        result = await conn.execute_query_dict(query)
-        if not result:
-            logger.info("Initializing aerich for the first time...")
-            command = Command(
-                tortoise_config=TORTISE_ORM,
-                app="models",
-                location=MIGRATIONS_LOCATION,
-            )
-            await command.init()
-            await command.init_db(safe=True)
-            logger.info("Aerich initialized.")
-
     async def run_db_upgrade(cls):
         """
-        upgrade database
+        更新database
 
         """
-        logger.info("Starting database schema upgrade...")
-        command = Command(
-            tortoise_config=TORTISE_ORM,
-            app="models",
-            location=MIGRATIONS_LOCATION,
-        )
-        await command.init()
-        await command.upgrade(run_in_transaction=True)
-        logger.info("Database schema upgrade finished.")
+        try:
+            async with Command(tortoise_config=TORTISE_ORM, app=CURRENT_VERSION, location=MIGRATIONS_LOCATION) as command:
+                await command.init()
+                conn = Tortoise.get_connection("default")
+                _, result = await conn.execute_query("select count(1) as count from sqlite_master where type='table' and name='aerich';")
+                if result[0]["count"] == 0:
+                    logger.info("Initializing aerich for the first time...")
+                    await command.init_db(safe=True)
+                    logger.info("Aerich initialized.")
+                logger.info("Starting database schema upgrade...")
+                # Use a unique name to avoid collisions
+                await command.migrate(f"auto_{uuid.uuid4().hex[:12]}")
+                await command.upgrade()
+                logger.info("Database schema upgrade finished.")
+        except Exception as ex:
+            raise logger.exception(ex)
 
     @classmethod
     async def add_bcredential(cls, **kwargs):
@@ -221,13 +207,13 @@ class Db:
             query = query.filter(Q(song_name__icontains=keyword, tag__icontains=keyword, singer__icontains=keyword, language__icontains=keyword, join_type="OR"))
 
         total = await query.count()
-        rows = await query.offset((page - 1) * size).limit(size).order_by("song_name").all()
+        rows = await query.offset((page - 1) * size).limit(size).order_by("-create_time").all()
 
         return total, rows
 
     @classmethod
-    async def get_playlist(cls, id: int):
-        result = await Playlist.filter(id=id).first()
+    async def get_playlist(cls, **kwargs):
+        result = await Playlist.filter(**kwargs).first()
         return result
 
     @classmethod
@@ -252,5 +238,9 @@ class Db:
             return 0
 
     @classmethod
-    async def bulk_add_playlist(cls, objects: list[Playlist]):
-        await Playlist.bulk_create(objects, on_conflict=["song_name", "singer"], update_fields=["is_sc", "sc_price", "language", "tag"], batch_size=500)
+    async def bulk_add_playlist(cls, params: list[dict[str, any]]):
+        objects: list[Playlist] = []
+        for item in params:
+            obj = Playlist(**item)
+            objects.append(obj)
+        await Playlist.bulk_create(objects, batch_size=500)

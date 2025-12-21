@@ -45,6 +45,7 @@ class AsyncWorker:
 
         # 循环停止后的清理工作
         async def shutdown():
+            await Db.disconnect()
             # 排除当前任务（即shutdown任务本身）
             tasks_to_cancel = [
                 task for task in asyncio.all_tasks() if task is not asyncio.current_task()

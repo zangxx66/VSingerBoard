@@ -67,3 +67,4 @@ class PlaylistItem(BaseModel):
     sc_price: int
     language: str
     tag: str
+    create_time: int

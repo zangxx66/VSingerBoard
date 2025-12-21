@@ -90,3 +90,25 @@ type SongHistoryModel = {
     create_time: number
     create_time_str?: string
 }
+
+type PlaylistModel = {
+    id: number
+    song_name: string
+    singer: string
+    is_sc: boolean
+    sc_price: number
+    language: string
+    tag: string
+    create_time: number
+    checked?: boolean
+}
+
+type DynamicObject = {
+    [key: string]: string | number | Array<any> | boolean | null | undefined
+}
+
+type ImportColumn = {
+    header: string
+    key: string
+    type: string
+}

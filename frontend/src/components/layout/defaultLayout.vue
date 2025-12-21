@@ -1,9 +1,9 @@
-<script setup lang="ts">
+<script setup lang="tsx">
 import router from "@/router"
 import zhCn from "element-plus/es/locale/lang/zh-cn"
-import { HomeFilled, Tools, List, InfoFilled, Sunny, Moon, Calendar } from "@element-plus/icons-vue"
+import { HomeFilled, Tools, List, InfoFilled, Sunny, Moon, Calendar, Collection } from "@element-plus/icons-vue"
 import ContextMenu from '@imengyu/vue3-context-menu'
-import { ElMessage } from "element-plus"
+import { ElMessage, type MenuItemInstance } from "element-plus"
 import { request } from "@/api"
 import { toggleDark, pasteToElement, copyToClipboard } from "@/utils"
 
@@ -24,6 +24,43 @@ const messageConfig = {
   plain: true
 }
 
+const menuItemList = [
+  {
+    title: "点歌板",
+    icon: <HomeFilled />,
+    routerName: "home",
+    ref: "homeRef"
+  },
+  {
+    title: "点歌记录",
+    icon: <Calendar />,
+    routerName: "history",
+    ref: "historyRef"
+  },
+  {
+    title: "歌单管理",
+    icon: <Collection />,
+    routerName: "playlist",
+    ref: "playlistRef"
+  },
+  {
+    title: "更新日志",
+    icon: <List />,
+    routerName: "changelog"
+  },
+  {
+    title: "设置",
+    icon: <Tools />,
+    routerName: "settings",
+    ref: "settingsRef"
+  },
+  {
+    title: "关于",
+    icon: <InfoFilled />,
+    routerName: "about"
+  }
+]
+
 // 新手教程
 const globalConfig = reactive<GlobalConfigModel>({
   id: 0,
@@ -35,10 +72,10 @@ const globalConfig = reactive<GlobalConfigModel>({
   collapse: false
 })
 const navSideTour = ref(false)
-const homeRef = useTemplateRef("homeRef")
-const historyRef = useTemplateRef("historyRef")
-const settingsRef = useTemplateRef("settingsRef")
-const themeRef = useTemplateRef("themeRef")
+const homeRef = ref<MenuItemInstance | null>()
+const historyRef = ref<MenuItemInstance | null>()
+const settingsRef = ref<MenuItemInstance | null>()
+const themeRef = ref<MenuItemInstance | null>()
 const mainRef = useTemplateRef("mainRef")
 const finishTour = () => {
   globalConfig.navSideTour = true
@@ -118,7 +155,7 @@ const onContextMenu = async (e: MouseEvent) => {
     }
   }]
 
-  if (!isBundle) {
+  if (import.meta.env.DEV) {
     items.push({
       label: "重新加载",
       disabled: false,
@@ -204,41 +241,19 @@ onMounted(() => {
   <el-container class="layout-container-demo">
     <el-aside :style="asideStyle">
       <el-menu default-active="0" :collapse="globalConfig.collapse" class="layout-aside-menu">
-        <el-menu-item index="0" @click="goto('home')" ref="homeRef">
-          <el-icon>
-            <HomeFilled />
-          </el-icon>
-          <template #title>点歌板</template>
-        </el-menu-item>
-        <el-menu-item index="1" @click="goto('history')" ref="historyRef">
-          <el-icon>
-            <Calendar />
-          </el-icon>
-          <template #title>点歌记录</template>
-        </el-menu-item>
-        <el-menu-item index="2" @click="goto('changelog')">
-          <el-icon>
-            <List />
-          </el-icon>
-          <template #title>更新日志</template>
-        </el-menu-item>
-        <el-menu-item index="3" @click="goto('settings')" ref="settingsRef">
-          <el-icon>
-            <Tools />
-          </el-icon>
-          <template #title>设置</template>
-        </el-menu-item>
-        <el-menu-item index="4" @click="goto('about')">
-          <el-icon>
-            <InfoFilled />
-          </el-icon>
-          <template #title>关于</template>
-        </el-menu-item>
-        <el-menu-item ref="themeRef">
-          <el-icon v-if="!isDarktheme" @click="updateTheme">
+        <template v-for="item, index in menuItemList">
+          <el-menu-item :index="`${index}`" @click="goto(item.routerName)" :ref="item.ref || undefined">
+            <el-icon>
+              <component :is="item.icon" />
+            </el-icon>
+            <template #title>{{ item.title }}</template>
+          </el-menu-item>
+        </template>
+        <el-menu-item ref="themeRef" @click="updateTheme">
+          <el-icon v-if="!isDarktheme">
             <Sunny />
           </el-icon>
-          <el-icon v-if="isDarktheme" @click="updateTheme">
+          <el-icon v-if="isDarktheme">
             <Moon />
           </el-icon>
         </el-menu-item>

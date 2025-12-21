@@ -246,7 +246,12 @@ async def import_playlist(data: list[PlaylistItem] = Body(..., embed=True)):
     code = 0
     msg = "操作成功"
     try:
-        await async_worker.run_db_operation(Db.bulk_add_playlist(data))
+        objects: dict[str, any] = []
+        model_fields = ["song_name", "singer", "is_sc", "sc_price", "language", "tag", "create_time"]
+        for item in data:
+            model_dic = {k: v for k, v in item.__dict__.items() if v is not None and k in model_fields}
+            objects.append(model_dic)
+        await async_worker.run_db_operation(Db.bulk_add_playlist(objects))
     except Exception as ex:
         logger.exception(f"bulk add playlist exception: {ex}")
         code = -1

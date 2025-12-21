@@ -128,6 +128,51 @@ class Request {
         return await client.get("/api/check_updates", params)
     }
 
+    /**
+     * get_playlist_list.
+     * @param {Object} params 传递给服务器的参数对象。
+     * @returns {Promise<AxiosResponse<any>>} 操作的响应。
+     */
+    async getPlaylistList(params: {}): Promise<AxiosResponse<any>> {
+        return await client.get("/api/get_playlist_list", params)
+    }
+
+    /**
+     * get_playlist.
+     * @param {Object} params 传递给服务器的参数对象。
+     * @returns {Promise<AxiosResponse<any>>} 操作的响应。
+     */
+    async getPlaylist(params: {}): Promise<AxiosResponse<any>> {
+        return await client.get("/api/get_playlist", params)
+    }
+
+    /**
+     * add_or_update_playlist.
+     * @param {Object} params 传递给服务器的参数对象。
+     * @returns {Promise<AxiosResponse<any>>} 操作的响应。
+     */
+    async addOrUpdatePlaylist(params: {}): Promise<AxiosResponse<any>> {
+        return await client.post("/api/add_or_update_playlist", params)
+    }
+
+    /**
+     * delete_playlist.
+     * @param {Object} params 传递给服务器的参数对象。
+     * @returns {Promise<AxiosResponse<any>>} 操作的响应。
+     */
+    async deletePlaylist(params: {}): Promise<AxiosResponse<any>> {
+        return await client.post("/api/delete_playlist", params)
+    }
+
+    /**
+     * import_playlist.
+     * @param {Object} params 传递给服务器的参数对象。
+     * @returns {Promise<AxiosResponse<any>>} 操作的响应。
+     */
+    async importPlaylist(params: {}): Promise<AxiosResponse<any>> {
+        return await client.post("/api/import_playlist", params)
+    }
+
 }
 
 export const request = new Request()

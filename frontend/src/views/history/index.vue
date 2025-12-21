@@ -200,7 +200,7 @@ onMounted(() => {
                         </div>
                         <div style="width: 50%;text-align: right;">
                             <el-button type="success" :disabled="list?.length == 0" @click="exportFile"
-                                v-loading="exportLoading">
+                                :loading="exportLoading">
                                 导出历史记录
                                 <el-icon class="el-icon--right">
                                     <Download />

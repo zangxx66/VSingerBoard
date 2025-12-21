@@ -48,7 +48,7 @@ class DoubiWs:
                     result = {"type": "del", "data": del_list}
                     await self._ws.broadcast(json.dumps(result, ensure_ascii=False))
 
-                bili_room_id = bili_manager.room_id
+                bili_room_id = bili_manager.config.room_id
                 bili_status = bili_manager.get_status()
                 douyin_room_id = douyin_manager.room_id
                 douyin_status = douyin_manager.get_status()
@@ -117,7 +117,7 @@ class DoubiWs:
             result = {"type": "remove", "data": recive_data.data}
             await self._ws.broadcast(json.dumps(result, ensure_ascii=False))
         elif recive_data.type == "live_config":
-            self.bili_room_id = bili_manager.room_id
+            self.bili_room_id = bili_manager.config.room_id
             self.bili_status = bili_manager.get_status()
             self.douyin_room_id = douyin_manager.room_id
             self.douyin_status = douyin_manager.get_status()

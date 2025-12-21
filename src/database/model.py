@@ -89,11 +89,12 @@ class GloalConfig(BaseModel):
 class Playlist(BaseModel):
     id = fields.BigIntField(primary_key=True, generated=True)
     song_name = fields.CharField(max_length=500)
-    singer = fields.CharField(max_leghth=500)
+    singer = fields.CharField(max_length=500)
     is_sc = fields.BooleanField()
     sc_price = fields.IntField()
     language = fields.CharField(max_length=100)
     tag = fields.CharField(max_length=500)
+    create_time = fields.BigIntField()
 
 
 class SongHistory(BaseModel):
