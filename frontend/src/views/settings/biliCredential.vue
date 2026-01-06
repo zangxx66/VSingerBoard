@@ -128,7 +128,7 @@ const addSub = () => {
                 return
             }
             qrCode.value = resp.data.data
-            timer.value = setInterval(checkQrCode, 1000)
+            timer.value = setInterval(checkQrCode, 3000)
             isShow.value = true
         })
         .catch((error) => ElMessage.error(error))
@@ -200,6 +200,14 @@ const checkQrCode = () => {
                             break
                         case 'timeout':
                             qrCodeText.value = '二维码已过期'
+                            break
+                        case 'done':
+                            clearInterval(timer.value)
+                            timer.value = 0
+                            qrCodeText.value = ''
+                            ElMessage.success('登录成功')
+                            initCredential()
+                            isShow.value = false
                             break
                         default:
                             qrCodeText.value = ''

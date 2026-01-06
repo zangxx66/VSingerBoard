@@ -6,8 +6,6 @@ declare interface Window {
             reload: () => void
             /** 获取当前版本 */
             get_version: () => Promise<string>
-            /** 是否是bundle */
-            is_bundle: () => Promise<boolean>
             /** 检查剪贴板 */
             check_clipboard: () => Promise<string>
             /** 重新启动bilibili websocket */

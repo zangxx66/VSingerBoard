@@ -44,6 +44,8 @@ class Bili:
                     dedeuserid=self.credential.dedeuserid,
                     ac_time_value=self.credential.ac_time_value
                 )
+            else:
+                credential = None
 
             self.live = live.LiveDanmaku(room_display_id=self.config.room_id, credential=credential, max_retry=99)
             self.live.on("DANMU_MSG")(self.on_msg)
@@ -59,14 +61,14 @@ class Bili:
             logger.error(f"Bilibili task failed: {e}")
         finally:
             if self.live:
-                if self.live.get_status() == 2:  # STATUS_ESTABLISHED
-                    try:
-                        await self.live.disconnect()
-                    except Exception as e:
-                        logger.error(f"Bilibili disconnect failed when trying to disconnect: {e}")
+                try:
+                    await self.live.disconnect()
+                except Exception as e:
+                    logger.error(f"Bilibili disconnect failed when trying to disconnect: {e}")
                 self.live.remove_event_listener("DANMU_MSG", self.on_msg)
                 self.live.remove_event_listener("SUPER_CHAT_MESSAGE", self.on_sc)
                 self.live = None
+                self.credential = None
             logger.info("Bilibili live client stopped.")
 
     async def stop(self):
@@ -238,8 +240,9 @@ class Bili:
         if await credential.check_valid():
             if await credential.check_refresh():
                 await credential.refresh()
-                data_dic = self.credential.__dict__
-                new_dic = {k: v for k, v in data_dic.items() if v is not None and k != "id"}
+                data_dic = credential.__dict__
+                model_fileds = ['ac_time_value', 'bili_jct', 'buvid3', 'buvid4', 'dedeuserid', 'sessdata']
+                new_dic = {k: v for k, v in data_dic.items() if v is not None and k in model_fileds}
                 await Db.update_bcredential(pk=self.credential.id, **new_dic)
                 logger.info("refresh credential!")
         logger.info("exec refresh_credential job")

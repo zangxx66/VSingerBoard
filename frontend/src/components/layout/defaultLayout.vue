@@ -129,7 +129,6 @@ const onContextMenu = async (e: MouseEvent) => {
   const selectTxt = window.getSelection()?.toString()
   const activeElement = document.activeElement as HTMLElement
   const isFocusInput = activeElement instanceof HTMLInputElement || activeElement instanceof HTMLTextAreaElement
-  const isBundle = await window.pywebview.api.is_bundle()
 
   let hasClipboardText = false
   const clipboardItems = await window.pywebview.api.check_clipboard()

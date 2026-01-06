@@ -125,8 +125,7 @@ const messageHandlers: Record<string, (data: any) => void> = {
 }
 
 const openDanmakuWindow = async () => {
-    const isBundle = await window.pywebview.api.is_bundle()
-    const port = isBundle ? 8000 : 5173
+    const port = import.meta.env.DEV ? 8000 : 5173
     const a = document.createElement("a")
     a.href = `http://127.0.0.1:${port}/danmaku`
     a.target = "_blank"

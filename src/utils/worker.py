@@ -95,7 +95,7 @@ class AsyncWorker:
 
         return future
 
-    async def run_db_operation(self, coro: Coroutine) -> Any:
+    async def run_db_operation(self, coro: Union[Coroutine[Any, Any, T], AsyncioFuture, ConcurrentFuture]) -> T:
         """
         在工作者循环中运行一个协程并等待其结果。
         此方法主要用于从外部异步上下文（如FastAPI）桥接到工作循环。

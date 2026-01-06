@@ -85,17 +85,19 @@ async def refresh_bili_credential(id: int = Query(...)):
     if await cred.check_valid():
         if await cred.check_refresh():
             await cred.refresh()
-            data_dic = result.__dict__
-            new_dic = {k: v for k, v in data_dic.items() if v is not None and k != "id"}
+            data_dic = cred.__dict__
+            model_fileds = ['ac_time_value', 'bili_jct', 'buvid3', 'buvid4', 'dedeuserid', 'sessdata']
+            new_dic = {k: v for k, v in data_dic.items() if v is not None and k in model_fileds}
             await async_worker.run_db_operation(Db.update_bcredential(pk=result.id, **new_dic))
         return ResponseItem(code=0, msg="刷新成功", data=None)
     return ResponseItem(code=-1, msg="fail", data=None)
 
 
 @router.post("/delete_bili_credential", response_model=ResponseItem)
-async def delete_bili_credential(id: int = Body(..., embed=True)):
+async def delete_bili_credential(background_tasks: BackgroundTasks, id: int = Body(..., embed=True)):
     result = await async_worker.run_db_operation(Db.delete_bcredential(pk=id))
     if result:
+        background_tasks.add_task(bili_manager.restart)
         return ResponseItem(code=0, msg="删除成功", data=None)
     else:
         return ResponseItem(code=-1, msg="删除失败", data=None)
@@ -124,9 +126,12 @@ async def get_bili_credential_code():
 @router.get("/check_qr_code")
 async def check_qr_code():
     global qr_code_login
-    qr_state = await qr_code_login.check_state()
+    if not qr_code_login:
+        return ResponseItem(code=-1, msg="qrcode fail", data=None)
     if qr_code_login.has_done():
         bili_cred = qr_code_login.get_credential()
+        logger.debug(f"bili_cred.ac_time_value is {bili_cred.ac_time_value}")
+        qr_code_login = None
         new_dic = bili_cred.__dict__
         model_fileds = ['ac_time_value', 'bili_jct', 'buvid3', 'buvid4', 'dedeuserid', 'enable', 'id', 'sessdata', 'uid']
         model_dic = {k: v for k, v in new_dic.items() if v is not None and k in model_fileds}
@@ -139,8 +144,8 @@ async def check_qr_code():
         else:
             new_dic["enable"] = cred.enable
             await async_worker.run_db_operation(Db.update_bcredential(pk=cred.id, **model_dic))
-        qr_code_login = None
         return ResponseItem(code=0, msg="success", data=None)
+    qr_state = await qr_code_login.check_state()
     return ResponseItem(code=0, msg="qr_state", data={"data": qr_state.value})
 
 

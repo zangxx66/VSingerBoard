@@ -2,7 +2,6 @@ import asyncio
 import threading
 import webview
 import pyperclip
-import sys
 from src.utils import async_worker, __version__ as CURRENT_VERSION
 from src.live import bili_manager, douyin_manager
 
@@ -61,18 +60,6 @@ class Api:
         window = webview.active_window()
         if window:
             window.load_url(window.get_current_url())
-
-    def is_bundle(self):
-        """
-        检查当前Python环境是否是bundle环境。
-
-        在bundle环境中，sys.frozen将被设置为True。
-
-        Returns:
-            bool: 当前Python环境是否是bundle环境。
-        """
-        is_bundle = getattr(sys, "frozen", False)
-        return is_bundle
 
     def get_version(self):
         """
