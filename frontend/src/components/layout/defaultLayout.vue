@@ -168,7 +168,7 @@ const onContextMenu = async (e: MouseEvent) => {
     x: e.x,
     y: e.y,
     theme: isDarktheme.value ? "mac dark" : "mac",
-    zIndex: 100,
+    zIndex: 9999,
     minWidth: 230,
     items: items
   })
