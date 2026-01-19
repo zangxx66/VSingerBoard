@@ -11,7 +11,7 @@ class WebSocketClient:
     支持自动重连机制。
     """
 
-    def __init__(self, ssl: bool = True):
+    def __init__(self):
         """
         初始化WebSocket客户端。
 
@@ -28,7 +28,6 @@ class WebSocketClient:
         self._reconnect_task: Optional[asyncio.Task] = None
         self._listen_task: Optional[asyncio.Task] = None
         self.status_code = 0  # 0:未连接, 1:已连接, 2:已断开, 3:连接失败
-        self._ssl = ssl
 
     @property
     def is_connected(self):
@@ -47,7 +46,7 @@ class WebSocketClient:
             self.session = aiohttp.ClientSession(headers=self.headers)
 
         try:
-            self.ws = await self.session.ws_connect(self.url, ssl=self._ssl, autoclose=False, heartbeat=5)
+            self.ws = await self.session.ws_connect(self.url, ssl=False, autoclose=False, heartbeat=5)
             logger.info(f"成功连接到 {self.url}")
             self._is_running = True
             self.status_code = 1  # 已连接
@@ -144,6 +143,8 @@ class WebSocketClient:
 
         if self._reconnect_task and not self._reconnect_task.done():
             self._reconnect_task.cancel()
+        if self._listen_task and not self._listen_task.done():
+            self._listen_task.cancel()
         if self.ws and not self.ws.closed:
             await self.ws.close()
             logger.info("WebSocket连接已成功关闭")
@@ -153,7 +154,7 @@ class WebSocketClient:
         self.ws = None
         self.session = None
 
-    async def start(self):
+    async def _start(self):
         """
         启动客户端并开始连接。
         """

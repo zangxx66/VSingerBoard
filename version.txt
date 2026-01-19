@@ -6,8 +6,8 @@ VSVersionInfo(
   ffi=FixedFileInfo(
 # filevers and prodvers should be always a tuple with four items: (1, 2, 3, 4)
 # Set not needed items to zero 0.
-filevers=(1, 0, 2, 0),
-prodvers=(1, 0, 2, 0),
+filevers=(1, 1, 0, 0),
+prodvers=(1, 1, 0, 0),
 # Contains a bitmask that specifies the valid bits 'flags'r
 mask=0x3f,
 # Contains a bitmask that specifies the Boolean attributes of the file.
@@ -29,13 +29,13 @@ StringFileInfo(
     u'040904B0',
     [StringStruct(u'CompanyName', u'想象力有限公司'), 
     StringStruct(u'FileDescription', u'多平台点歌板'),
-    StringStruct(u'FileVersion', u'1.0.2'),
+    StringStruct(u'FileVersion', u'1.1.0'),
     StringStruct(u'InternalName', u'VSingerBoard'),
     StringStruct(u'LegalCopyright', u'Copyright (c) 2025 Ricardo All rights reserved.'),
     StringStruct(u'OriginalFilename', u'VSingerBoard.exe'),
     StringStruct(u'ProductName', u'点歌姬'),
-    StringStruct(u'ProductVersion', u'1.0.2'),
-    StringStruct(u'Build', u'1738')])
+    StringStruct(u'ProductVersion', u'1.1.0'),
+    StringStruct(u'Build', u'1877')])
   ]),
 VarFileInfo([VarStruct(u'Translation', [2052, 1200])])
   ]

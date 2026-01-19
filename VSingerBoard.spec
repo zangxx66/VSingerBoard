@@ -74,6 +74,7 @@ tortoise_datas, tortoise_binaries, tortoise_hiddenimports = collect_all('tortois
 fastapi_datas, fastapi_binaries, fastapi_hiddenimports = collect_all('fastapi')
 betterproto2_datas, betterproto2_binaries, betterproto2_hiddenimports = collect_all('betterproto2')
 pydantic_datas, pydantic_binaries, pydantic_hiddenimports = collect_all('pydantic')
+aerich_datas, aerich_binaries, aerich_hiddenimports = collect_all('aerich')
 
 
 # --- Define data files ---
@@ -84,6 +85,7 @@ datas += tortoise_datas
 datas += fastapi_datas
 datas += betterproto2_datas
 datas += pydantic_datas
+datas += aerich_datas
 
 # --- Define hidden imports ---
 # This list contains modules that PyInstaller's static analysis might miss.
@@ -97,6 +99,7 @@ hidden_packages += tortoise_hiddenimports
 hidden_packages += fastapi_hiddenimports
 hidden_packages += betterproto2_hiddenimports
 hidden_packages += pydantic_hiddenimports
+hidden_packages += aerich_hiddenimports
 
 # --- Define the Info.plist dictionary (from py2app options) ---
 info_plist = {
@@ -131,7 +134,7 @@ info_plist = {
 }
 
 # --- PyInstaller Analysis ---
-all_binaries = bilibili_api_binaries + tortoise_binaries + fastapi_binaries + betterproto2_binaries + pydantic_binaries
+all_binaries = bilibili_api_binaries + tortoise_binaries + fastapi_binaries + betterproto2_binaries + pydantic_binaries + aerich_binaries
 a = Analysis(
     ['main.py'],
     pathex=[SPECPATH],

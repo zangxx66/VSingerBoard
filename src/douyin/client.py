@@ -1,6 +1,5 @@
 import gzip
 import re
-import sys
 import aiohttp
 import asyncio
 from .signature import generateSignature, generateMsToken
@@ -14,17 +13,14 @@ from src.utils import Decorator, logger, WebSocketClient
 
 class DouyinLiveWebFetcher(Decorator, WebSocketClient):
     def __init__(self, live_id: int, max_retries: int = 5, retry_delay: int = 5, abogus_file='a_bogus.js'):
-        # For macOS packaged app
-        ssl_verify = sys.platform != "darwin"
-        super().__init__(ssl=ssl_verify)
-
+        super().__init__()
         self.abogus_file = abogus_file
         self.__ttwid = None
         self.__room_id = None
         self.heartheat_task = None
         self.max_retries = max_retries
         self.retry_delay = retry_delay
-        self.http_session = aiohttp.ClientSession()
+        self.http_session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=False))
         self.live_id = str(live_id)
         self.host = "https://www.douyin.com/"
         self.live_url = "https://live.douyin.com/"
@@ -121,7 +117,7 @@ class DouyinLiveWebFetcher(Decorator, WebSocketClient):
             "cookie": f"ttwid={ttwid}",
             'user-agent': self.user_agent,
         }
-        await self.start()
+        await self._start()
         self.heartheat_task = asyncio.create_task(self._sendHeartbeat())
 
     async def _reconnect(self):
@@ -148,7 +144,7 @@ class DouyinLiveWebFetcher(Decorator, WebSocketClient):
                     break
 
                 heartbeat = WebcastImPushFrame(payload_type='hb').SerializeToString()
-                await self.ws.ping(heartbeat)
+                await self.send(heartbeat)
                 # print("【√】发送心跳包")
             except Exception as e:
                 logger.error("【X】心跳包检测错误: ", e)
