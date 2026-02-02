@@ -105,7 +105,7 @@ export default defineComponent({
 
     const medalColor = ref<{ start: string; end: string }>({ start: '', end: '' })
     medalColor.value = getMedalColorByLevel(props.medal_level)
-    const guardImg = `${window.location.origin}/assets/images/guard-${props.guard_level}-0.png`
+    const guardImg = `${window.location.origin}/images/guard-${props.guard_level}-0.png`
 
     const dynamicGuardStyle = {
         borderColor: props.guard_level === 0 ? medalColor.value.start : medalBorderColor[props.guard_level]

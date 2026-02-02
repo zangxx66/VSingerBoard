@@ -1,14 +1,15 @@
 <script setup lang="tsx">
-import router from "@/router"
 import zhCn from "element-plus/es/locale/lang/zh-cn"
 import { HomeFilled, Tools, List, InfoFilled, Sunny, Moon, Calendar, Collection } from "@element-plus/icons-vue"
 import ContextMenu from '@imengyu/vue3-context-menu'
-import { ElMessage, type MenuItemInstance } from "element-plus"
+import { ElMessage, type MenuItemInstance, type CardConfigContext } from "element-plus"
 import { request } from "@/api"
 import { toggleDark, pasteToElement, copyToClipboard } from "@/utils"
 
 const themeStore = useThemeStore()
-const cardConfig = {
+const route = useRoute()
+const router = useRouter()
+const cardConfig: CardConfigContext = {
   shadow: "always"
 }
 
@@ -112,7 +113,7 @@ const updateGlobalConfig = () => {
  * @param {string} name 路由的name
  */
 const goto = (name: string) => {
-  if (router.currentRoute.value.name == name) {
+  if (route.name?.toString() == name) {
     globalConfig.collapse = !globalConfig.collapse
     updateGlobalConfig()
     return

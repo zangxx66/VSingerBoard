@@ -12,9 +12,9 @@ export default defineComponent({
         }
     },
     setup(props) {
-        const clubImg = `${window.location.origin}/assets/images/fansclub_new_advanced_badge_${props.medal_level}_xmp.png`
-        const memberImg = `${window.location.origin}/assets/images/subscribe_new_v3.png`
-        const medalNameBg = `${window.location.origin}/assets/images/star_guard_advanced_badge_${props.medal_level}_xmp.png`
+        const clubImg = `${window.location.origin}/images/fansclub_new_advanced_badge_${props.medal_level}_xmp.png`
+        const memberImg = `${window.location.origin}/images/subscribe_new_v3.png`
+        const medalNameBg = `${window.location.origin}/images/star_guard_advanced_badge_${props.medal_level}_xmp.png`
         const bgColor = props.medal_level && props.medal_level <= 10 ? "#fab80c" : "#ff6c19"
 
         return () => (

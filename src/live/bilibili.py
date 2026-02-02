@@ -185,8 +185,6 @@ class Bili:
             medal_name = sc_data["medal_info"]["medal_name"]
 
         logger.debug(f"[{medal_name} {medal_level}]:{uname}:{message}")
-        if not message.startswith(self.config.sing_prefix):
-            return
         if self.config.modal_level > 0 and medal_level < self.config.modal_level:
             return
         if self.config.user_level > 0 and guard_level > self.config.user_level:

@@ -52,7 +52,7 @@ const wsState = computed(() => {
 </script>
 <template>
     <div class="platform-status-container">
-        <img :src="`/assets/images/${platform}.png`" class="source-img" :alt="platform" width="24" />：{{ roomId }}
+        <img :src="`/images/${platform}.png`" class="source-img" :alt="platform" width="24" />：{{ roomId }}
         &nbsp;
         <el-tooltip placement="top">
             <template #content>

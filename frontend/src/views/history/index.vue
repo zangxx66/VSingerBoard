@@ -176,7 +176,7 @@ onMounted(() => {
                     <div class="chat-infinite-list" ref="chatInfiniteList">
                         <template v-for="item in list">
                             <div class="chat-infinite-list-item">
-                                <img :src="`/assets/images/${item.source}.png`" class="source-img" :alt="item.source"
+                                <img :src="`/images/${item.source}.png`" class="source-img" :alt="item.source"
                                     width="24" />
                                 <text tag="span" class="chat-tag">
                                     {{ item.uname }}：<el-text style="display: flex;" v-html="item.song_name"></el-text>

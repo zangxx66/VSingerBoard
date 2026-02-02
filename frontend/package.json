@@ -17,11 +17,11 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
-    "@imengyu/vue3-context-menu": "^1.5.2",
-    "@vueuse/core": "^14.1.0",
-    "axios": "^1.13.2",
+    "@imengyu/vue3-context-menu": "^1.5.3",
+    "@vueuse/core": "^14.2.0",
+    "axios": "^1.13.4",
     "dayjs": "^1.11.19",
-    "element-plus": "^2.13.1",
+    "element-plus": "^2.13.2",
     "exceljs": "^4.4.0",
     "highlight.js": "^11.11.1",
     "marked": "^17.0.1",
@@ -29,7 +29,7 @@
     "nprogress": "^0.2.0",
     "pinia": "^3.0.4",
     "vue": "^3.5.25",
-    "vue-router": "^4.6.3"
+    "vue-router": "^5.0.2"
   },
   "devDependencies": {
     "@tsconfig/node22": "^22.0.2",
@@ -46,13 +46,13 @@
     "jiti": "^2.6.1",
     "npm-run-all2": "^8.0.4",
     "prettier": "3.7.4",
-    "terser": "^5.44.1",
-    "typescript": "~5.8.0",
-    "unplugin-auto-import": "^20.3.0",
-    "unplugin-icons": "^22.5.0",
-    "unplugin-vue-components": "^30.0.0",
-    "vite": "^7.2.7",
+    "terser": "^5.46.0",
+    "typescript": "~5.8.3",
+    "unplugin-auto-import": "^21.0.0",
+    "unplugin-icons": "^23.0.1",
+    "unplugin-vue-components": "^31.0.0",
+    "vite": "^7.3.1",
     "vite-plugin-vue-devtools": "^8.0.5",
-    "vue-tsc": "^3.1.7"
+    "vue-tsc": "^3.2.4"
   }
 }

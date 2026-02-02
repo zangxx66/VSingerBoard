@@ -50,10 +50,10 @@ onMounted(() => {
         </template>
         <div class="about-container">
             <template v-if="isDarktheme">
-                <img src="/assets/images/logo_night.png" alt="logo" class="about-logo" width="70" />
+                <img src="/images/logo_night.png" alt="logo" class="about-logo" width="70" />
             </template>
             <template v-else>
-                <img src="/assets/images/logo.png" alt="logo" class="about-logo" width="70" />
+                <img src="/images/logo.png" alt="logo" class="about-logo" width="70" />
             </template>
             <div class="about-title">点歌姬</div>
             <div class="about-version">

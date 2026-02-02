@@ -172,7 +172,7 @@ onMounted(() => {
                 <div class="chat-infinite-list" ref="infiniteList" v-infinite-scroll="load">
                     <template v-for="item in danmakuList">
                         <div class="chat-infinite-list-item">
-                            <img :src="`/assets/images/${item.source}.png`" class="source-img" :alt="item.source"
+                            <img :src="`/images/${item.source}.png`" class="source-img" :alt="item.source"
                                 width="24" />
                             <el-text tag="span" class="chat-tag">
                                 <template v-if="item.medal_level > 0">

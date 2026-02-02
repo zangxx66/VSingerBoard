@@ -60,7 +60,21 @@ export default defineConfig({
     reportCompressedSize: false,
     rollupOptions: {
       output: {
-        chunkFileNames: 'assets/[name]-[hash].js',
+        chunkFileNames: 'js/[name]-[hash].js',
+        entryFileNames: 'js/[name]-[hash].js',
+        assetFileNames: (assetInfo) => {
+          const assetsName = assetInfo.names[0]
+          if (assetsName.endsWith('.css')){
+            return 'css/[name]-[hash].css'
+          }
+
+          const imgExts = ['.png', '.jpeg', '.jpg', '.gif', '.svg', '.webp']
+          if (imgExts.some(ext => assetsName.endsWith(ext))){
+            return 'images/[name].[ext]'
+          }
+          
+          return 'assets/[name]-[hash].[ext]'
+        },
         manualChunks(id: string) {
           if (id.includes('node_modules/.pnpm/')) {
             const matched = id.match(/node_modules\/\.pnpm\/([^/]+)\/node_modules\/([^/]+)/)
