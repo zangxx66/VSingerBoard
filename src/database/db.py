@@ -63,9 +63,13 @@ class Db:
                 await command.init()
                 conn = Tortoise.get_connection("default")
                 _, has_aerich = await conn.execute_query("select count(1) as count from sqlite_master where type='table' and name='aerich';")
-                _, has_migrate = await conn.execute_query(f"select exists(select 1 from aerich where app='{CURRENT_VERSION}') as result;")
-                if has_aerich[0]["count"] == 0 or has_migrate[0]["result"] == 0:
+                if has_aerich[0]["count"] == 0:
                     logger.info("Initializing aerich for the first time...")
+                    await command.init_db(safe=True)
+                    logger.info("Aerich initialized.")
+                _, has_migrate = await conn.execute_query(f"select exists(select 1 from aerich where app='{CURRENT_VERSION}') as result;")
+                if has_migrate[0]["result"] == 0:
+                    logger.info("update database table...")
                     await command.init_db(safe=True)
                     logger.info("Aerich initialized.")
                 logger.info("Starting database schema upgrade...")
