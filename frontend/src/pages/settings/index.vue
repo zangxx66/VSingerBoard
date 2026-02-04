@@ -1,3 +1,8 @@
+<script lang="ts">
+export default {
+    name: "settings"
+}
+</script>
 <script setup lang="ts">
 import type { TabsPaneContext } from "element-plus"
 

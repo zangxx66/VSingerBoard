@@ -1,12 +1,17 @@
+<script lang="ts">
+export default {
+    name: "about"
+}
+</script>
 <script setup lang="ts">
 import { checkUpdate } from "@/utils"
 
 const version = ref("")
 const themeStore = useThemeStore()
 
-const getVersion = async() =>{
+const getVersion = async () => {
     version.value = await window.pywebview.api.get_version()
-} 
+}
 
 const openGithub = () => {
     const a = document.createElement("a")
@@ -33,7 +38,7 @@ const openIssues = () => {
 }
 
 const isDarktheme = computed(() => {
-  return themeStore.getDarkTheme()
+    return themeStore.getDarkTheme()
 })
 
 onMounted(() => {
@@ -42,7 +47,7 @@ onMounted(() => {
 
 </script>
 <template>
-        <el-card>
+    <el-card>
         <template #header>
             <div class="card-header">
                 <span>关于</span>

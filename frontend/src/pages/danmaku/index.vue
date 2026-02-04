@@ -1,3 +1,8 @@
+<script lang="ts">
+export default {
+    name: "danmaku"
+}
+</script>
 <script setup lang="ts">
 import { processDanmaku } from "@/utils"
 

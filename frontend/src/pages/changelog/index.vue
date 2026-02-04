@@ -1,3 +1,8 @@
+<script lang="ts">
+export default {
+    name: "changelog"
+}
+</script>
 <script setup lang="ts">
 import { render } from "vue"
 import { ElMessage } from "element-plus"

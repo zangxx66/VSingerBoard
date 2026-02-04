@@ -1,3 +1,8 @@
+<script lang="ts">
+export default {
+    name: "history"
+}
+</script>
 <script setup lang="ts">
 import { request } from "@/api"
 import { ElMessage } from "element-plus"

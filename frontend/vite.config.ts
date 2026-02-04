@@ -9,6 +9,7 @@ import Components from 'unplugin-vue-components/vite'
 import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import VueRouter from 'vue-router/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -26,9 +27,12 @@ export default defineConfig({
         }),
       ],
     }),
+    VueRouter({
+      dts: 'src/route-map.d.ts'
+    }),
     Components({
       extensions: ['vue', 'tsx'],
-      dirs: ['src/components', 'src/views'],
+      dirs: ['src/components', 'src/pages'],
       include: [/\.vue$/, /\.vue\?vue/, /\.tsx$/],
       resolvers: [
         IconsResolver({
