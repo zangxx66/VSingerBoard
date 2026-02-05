@@ -9,7 +9,7 @@ echo "Starting build process for VSingerBoard..."
 echo "[1/2] Building frontend assets..."
 rm -rf wwwroot
 
-if npm run -C frontend/ build; then
+if pnpm run -C frontend/ build; then
     echo "Frontend build successful."
 else
     echo "Error: Frontend build failed."
