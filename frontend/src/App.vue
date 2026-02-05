@@ -96,11 +96,10 @@ const updateGlobalConfig = () => {
   request
     .addOrUpdateGlobalConfig({ data: globalConfig })
     .then(response => {
-      const resp = response.data as ResponseModel
-      if (resp.code != 0) {
-        ElMessage.warning(resp.msg || "保存失败")
+      if (response.code != 0) {
+        ElMessage.warning(response.msg || "保存失败")
       } else {
-        globalConfig.id = resp.data
+        globalConfig.id = response.data
       }
     })
     .catch(error => {
@@ -183,11 +182,10 @@ const onContextMenu = async (e: MouseEvent) => {
  */
 const initGlobalConfig = async (): Promise<void> => {
   request.getGlobalConfig({}).then(response => {
-    const resp = response.data as ResponseModel
-    if (resp.code != 0) {
-      ElMessage.warning(resp.msg)
+    if (response.code != 0) {
+      ElMessage.warning(response.msg)
     } else {
-      const model = resp.data.data
+      const model = response.data.data
       if (model) {
         Object.assign(globalConfig, model)
         toggleDark(model.dark_mode)

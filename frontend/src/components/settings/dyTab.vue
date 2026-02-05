@@ -18,14 +18,14 @@ const initConfig = () => {
     loading.value = true
     request.getDyConfig({}).then(response => {
         const resp = response.data as ResponseModel
-        if (resp.code != 0) {
-            ElMessage.warning(resp.msg)
+        if (response.code != 0) {
+            ElMessage.warning(response.msg)
         } else {
-            if (!resp.data.data) {
+            if (!response.data.data) {
                 loading.value = false
                 return
             }
-            Object.assign(baseFormValue, resp.data.data)
+            Object.assign(baseFormValue, response.data.data)
         }
         loading.value = false
     }).catch(error => {
@@ -53,12 +53,11 @@ const addOrUpdateConfig = () => {
     }
     btnLoading.value = true
     request.addOrUpdateDyConfig({ data: baseFormValue }).then(response => {
-        const resp = response.data as ResponseModel
-        if (resp.code != 0) {
-            ElMessage.warning(resp.msg)
+        if (response.code != 0) {
+            ElMessage.warning(response.msg)
         } else {
-            ElMessage.success(resp.msg)
-            baseFormValue.id = resp.data
+            ElMessage.success(response.msg)
+            baseFormValue.id = response.data
             danmakuStore.clearDanmakuList("douyin")
         }
         btnLoading.value = false

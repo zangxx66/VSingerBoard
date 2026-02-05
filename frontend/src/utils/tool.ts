@@ -19,19 +19,18 @@ const { copy } = useClipboard()
  */
 export const checkUpdate = () => {
   request.checkUpdate({}).then(response => {
-    const resp = response.data as ResponseModel
-    if (resp.code != 0) {
+    if (response.code != 0) {
       ElMessage.warning("检查更新失败")
       return
     }
     ElNotification({
       title: "提示",
-      message: resp.data.msg,
+      message: response.data.msg,
       type: "primary",
       position: "top-right",
       onClick: () => {
         const a = document.createElement("a")
-        a.href = resp.data.url
+        a.href = response.data.url
         a.target = "_blank"
         a.click()
       }

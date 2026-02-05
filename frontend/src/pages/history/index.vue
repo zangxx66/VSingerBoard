@@ -66,13 +66,12 @@ const exportFile = () => {
 
     exportLoading.value = true
     request.getHistoryList(args).then(response => {
-        const resp = response.data as ResponseModel
-        if (resp.code != 0) {
-            ElMessage.warning(resp.msg)
+        if (response.code != 0) {
+            ElMessage.warning(response.msg)
             exportLoading.value = false
             return
         }
-        const data = resp.data.rows as Array<SongHistoryModel>
+        const data = response.data.rows as Array<SongHistoryModel>
         const exportData = data.map(item => ({
             date: timespanToString(item.create_time),
             uname: item.uname,
@@ -91,14 +90,13 @@ const exportFile = () => {
 const load = () => {
     loading.value = true
     request.getHistoryList(baseFormValue).then(response => {
-        const resp = response.data as ResponseModel
-        if (resp.code != 0) {
-            ElMessage.warning(resp.msg)
+        if (response.code != 0) {
+            ElMessage.warning(response.msg)
             loading.value = false
             return
         }
-        total.value = resp.data.total
-        const rows = resp.data.rows as Array<SongHistoryModel>
+        total.value = response.data.total
+        const rows = response.data.rows as Array<SongHistoryModel>
         const danmakus: DanmakuModel[] = rows.map(item => ({
             msg_id: item.id,
             uid: item.uid,

@@ -150,12 +150,11 @@ const deletePlaylist = (ids: number[]) => {
     })
         .then(() => request.deletePlaylist({ data: ids }))
         .then(response => {
-            const resp = response.data as ResponseModel
-            if (resp.code != 0) {
-                ElMessage.warning(resp.msg)
+            if (response.code != 0) {
+                ElMessage.warning(response.msg)
                 return
             }
-            ElMessage.success(resp.msg)
+            ElMessage.success(response.msg)
             const indicesSet = new Set(ids)
             list.value = list.value.filter(item => !indicesSet.has(item.id))
         })
@@ -198,11 +197,10 @@ const importFile = async (uploadFile: UploadFile, uploadFiles: UploadFiles) => {
         item.create_time = getNowTimespan()
     })
     request.importPlaylist({ data: result }).then(response => {
-        const resp = response.data as ResponseModel
-        if (resp.code != 0) {
-            ElMessage.warning(resp.msg)
+        if (response.code != 0) {
+            ElMessage.warning(response.msg)
         } else {
-            ElMessage.success(resp.msg)
+            ElMessage.success(response.msg)
         }
         importLoading.value = false
         search()
@@ -221,13 +219,12 @@ const exportFile = () => {
 
     exportLoading.value = true
     request.getPlaylistList(args).then(response => {
-        const resp = response.data as ResponseModel
-        if (resp.code != 0) {
-            ElMessage.warning(resp.msg)
+        if (response.code != 0) {
+            ElMessage.warning(response.msg)
             exportLoading.value = false
             return
         }
-        const data = resp.data.rows as Array<PlaylistModel>
+        const data = response.data.rows as Array<PlaylistModel>
         const exportData = data.map(item => ({
             song_name: item.song_name,
             singer: item.singer,
@@ -249,14 +246,13 @@ const exportFile = () => {
 const load = () => {
     loading.value = true
     request.getPlaylistList(baseFormValue).then(response => {
-        const resp = response.data as ResponseModel
-        if (resp.code != 0) {
-            ElMessage.warning(resp.msg)
+        if (response.code != 0) {
+            ElMessage.warning(response.msg)
             loading.value = false
             return
         }
-        total.value = resp.data.total
-        const result = resp.data.rows as Array<PlaylistModel>
+        total.value = response.data.total
+        const result = response.data.rows as Array<PlaylistModel>
         result.forEach(item => item.checked = false)
         list.value = result
         loading.value = false

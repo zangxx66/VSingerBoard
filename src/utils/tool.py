@@ -413,7 +413,6 @@ def generate_ts_api():
     # 2. 生成 TypeScript 代码
     ts_code = []
     ts_code.append('import { client } from "./client"')
-    ts_code.append('import type { AxiosResponse } from "axios"')
     ts_code.append('')
     ts_code.append("class Request {")
 
@@ -425,10 +424,10 @@ def generate_ts_api():
         ts_code.append("    /**")
         ts_code.append(f"     * {endpoint['func_name']}.")
         ts_code.append("     * @param {Object} params 传递给服务器的参数对象。")
-        ts_code.append("     * @returns {Promise<AxiosResponse<any>>} 操作的响应。")
+        ts_code.append("     * @returns {Promise<ResponseModel>} 操作的响应。")
         ts_code.append("     */")
         # 生成函数签名
-        ts_code.append(f"    async {ts_func_name}(params: {{}}): Promise<AxiosResponse<any>> {{")
+        ts_code.append(f"    async {ts_func_name}(params: {{}}): Promise<ResponseModel> {{")
         # 生成函数体
         ts_code.append(f'        return await client.{endpoint["method"]}("{endpoint["path"]}", params)')
         ts_code.append("    }")

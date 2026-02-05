@@ -18,11 +18,11 @@ instance.interceptors.request.use(
 
 class httpClient {
     async get(url: string, params: {}){
-        return await instance.get(url, { params: params })
+        return (await instance.get(url, { params: params })).data
     }
 
     async post(url: string, params: {}){
-        return await instance.post(url, params )
+        return (await instance.post(url, params )).data
     }
 }
 

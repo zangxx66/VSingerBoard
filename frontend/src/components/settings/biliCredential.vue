@@ -76,11 +76,10 @@ const credentialColumns: Column<any>[] = [
 
 const initCredential = () => {
     request.getBiliCredentialList({}).then((response) => {
-        const resp = response.data as ResponseModel
-        if (resp.code != 0) {
-            ElMessage.warning(resp.msg)
+        if (response.code != 0) {
+            ElMessage.warning(response.msg)
         } else {
-            credentialList.value = resp.data.rows
+            credentialList.value = response.data.rows
         }
     }).catch(error => {
         ElMessage.error(error)
@@ -91,13 +90,12 @@ const initCredential = () => {
 const changeStatus = (val: string | number | boolean, id: number) => {
     request.updateBiliCredential({ data: { id: id, enable: val } })
         .then(response => {
-            const resp = response.data as ResponseModel
-            if (resp.code != 0) {
-                ElMessage.warning(resp.msg || "设置失败")
+            if (response.code != 0) {
+                ElMessage.warning(response.msg || "设置失败")
                 revertLocalValue(id, !val)
                 return
             }
-            ElMessage.success(resp.msg || "设置成功")
+            ElMessage.success(response.msg || "设置成功")
             credentialList.value.forEach((value, index, array) => {
                 if (value.id == id) return
                 value.enable = !val
@@ -122,12 +120,11 @@ const addSub = () => {
     request
         .getBiliCredentialCode({})
         .then((response) => {
-            const resp = response.data as ResponseModel
-            if (resp.code != 0) {
-                ElMessage.warning(resp.msg)
+            if (response.code != 0) {
+                ElMessage.warning(response.msg)
                 return
             }
-            qrCode.value = resp.data.data
+            qrCode.value = response.data.data
             timer.value = setInterval(checkQrCode, 3000)
             isShow.value = true
         })
@@ -143,11 +140,10 @@ const removeSub = (id: number) => {
     })
         .then(() => request.deleteBiliCredential({ id: id }))
         .then((response) => {
-            const resp = response.data as ResponseModel
-            if (resp.code != 0) {
-                ElMessage.warning(resp.msg)
+            if (response.code != 0) {
+                ElMessage.warning(response.msg)
             } else {
-                ElMessage.success(resp.msg)
+                ElMessage.success(response.msg)
                 const list = credentialList.value.filter((item) => item.id != id)
                 credentialList.value = list
             }
@@ -164,9 +160,8 @@ const refreshSub = (id: number) => {
     request
         .refreshBiliCredential({ id: id })
         .then((response) => {
-            const resp = response.data as ResponseModel
-            if (resp.code != 0) {
-                ElMessage.warning(resp.msg)
+            if (response.code != 0) {
+                ElMessage.warning(response.msg)
             } else {
                 ElMessage.success('success')
             }
@@ -183,9 +178,8 @@ const checkQrCode = () => {
     request
         .checkQrCode({})
         .then((response) => {
-            const resp = response.data as ResponseModel
-            if (resp.code == 0) {
-                if (resp.msg == 'success') {
+            if (response.code == 0) {
+                if (response.msg == 'success') {
                     clearInterval(timer.value)
                     timer.value = 0
                     qrCodeText.value = ''
@@ -193,8 +187,8 @@ const checkQrCode = () => {
                     initCredential()
                     isShow.value = false
                 }
-                if (resp.msg == 'qr_state') {
-                    switch (resp.data.data) {
+                if (response.msg == 'qr_state') {
+                    switch (response.data.data) {
                         case 'confirm':
                             qrCodeText.value = '已扫码'
                             break
@@ -215,7 +209,7 @@ const checkQrCode = () => {
                     }
                 }
             } else {
-                ElMessage.warning(resp.msg || '二维码状态请求错误')
+                ElMessage.warning(response.msg || '二维码状态请求错误')
             }
         })
         .catch((error) => ElMessage.error(error))

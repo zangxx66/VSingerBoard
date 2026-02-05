@@ -33,8 +33,8 @@ const linkIconComponent = resolveComponent("link-icon")
 const initChagngelog = async () => {
     loading.value = true
     const response = await request.checkUpdate({})
-    if (response.data.code == 0) {
-        const data = response.data.data
+    if (response.code == 0) {
+        const data = response.data
         model.version = data.version
         model.publishedAt = utcToLocal(data.published_at)
         const htmlString = await marked.parse(data.body)

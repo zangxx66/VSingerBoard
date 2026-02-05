@@ -23,11 +23,10 @@ const initConfig = () => {
     request
     .getGlobalConfig({})
     .then(response => {
-        const resp = response.data as ResponseModel
-        if (resp.code != 0){
-            ElMessage.warning(resp.msg || "获取失败")
+        if (response.code != 0){
+            ElMessage.warning(response.msg || "获取失败")
         }else{
-            const data = resp.data.data
+            const data = response.data.data
             if(data){
                 Object.assign(baseFormValue, data)
             }
@@ -46,12 +45,11 @@ const addOrUpdateConfig = () => {
     request
     .addOrUpdateGlobalConfig({ data: baseFormValue })
     .then(response => {
-        const resp = response.data as ResponseModel
-        if(resp.code != 0){
-            ElMessage.warning(resp.msg || "保存失败")
+        if(response.code != 0){
+            ElMessage.warning(response.msg || "保存失败")
         }else{
-            baseFormValue.id = resp.data
-            ElMessage.success(resp.msg || "保存成功")
+            baseFormValue.id = response.data
+            ElMessage.success(response.msg || "保存成功")
             toggleDark(baseFormValue.dark_mode)
             themeStore.setDarkTheme(baseFormValue.dark_mode)
         }

@@ -38,11 +38,10 @@ const initConfig = () => {
     request
         .getBiliConfig({})
         .then((response) => {
-            const resp = response.data as ResponseModel
-            if (resp.code != 0) {
-                ElMessage.warning(resp.msg)
+            if (response.code != 0) {
+                ElMessage.warning(response.msg)
             } else {
-                const data = resp.data.data
+                const data = response.data.data
                 if (data) {
                     Object.assign(baseFormValue, data)
                 }
@@ -76,12 +75,11 @@ const addOrUpdateConfig = () => {
     request
         .addOrUpdateBiliConfig({ data: baseFormValue })
         .then((response) => {
-            const resp = response.data as ResponseModel
-            if (resp.code != 0) {
-                ElMessage.warning(resp.msg)
+            if (response.code != 0) {
+                ElMessage.warning(response.msg)
             } else {
-                ElMessage.success(resp.msg)
-                baseFormValue.id = resp.data
+                ElMessage.success(response.msg)
+                baseFormValue.id = response.data
                 danmakuStore.clearDanmakuList("bilibili")
             }
         })

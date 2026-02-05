@@ -53,14 +53,13 @@ const onSubmit = () => {
     loading.value = true
     baseFormValue.create_time = getNowTimespan()
     request.addOrUpdatePlaylist({ data: baseFormValue }).then(response => {
-        const resp = response.data as ResponseModel
-        if (resp.code != 0) {
-            ElMessage.warning(resp.msg)
+        if (response.code != 0) {
+            ElMessage.warning(response.msg)
             loading.value = false
             return
         }
-        ElMessage.success(resp.msg)
-        baseFormValue.id = resp.data
+        ElMessage.success(response.msg)
+        baseFormValue.id = response.data
         const result: PlaylistModel = {
             id: baseFormValue.id,
             song_name: baseFormValue.song_name,
