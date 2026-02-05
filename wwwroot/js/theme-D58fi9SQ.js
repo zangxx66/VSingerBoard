@@ -1,1 +1,0 @@
-import{A as e}from"./vendor-vue-lxJqvpcP.js";import{a1 as r}from"./vendor-libs-DGcKXZQv.js";const o=e("theme",()=>{const e=r({id:0,dark_mode:!1});return{globalCfg:e,getDarkTheme:()=>e.dark_mode,setDarkTheme:r=>{e.dark_mode=r}}});export{o as u};
