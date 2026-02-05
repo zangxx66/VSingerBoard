@@ -63,24 +63,21 @@
 ├── doc/ # 项目文档和截图
 ├── frontend/ # 前端项目源代码
 │   ├── public/ # 静态文件
-│   │   └── assets/
-│   │       └── images/ # 图片资源
+│   │   └── images/ # 图片资源
 │   └── src/ # 前端核心代码
 │       ├── api/ # API 服务定义
 │       ├── assets/ # 静态资源文件
 │       ├── components/ # Vue 组件
-│       │   ├── common/ # 通用组件
-│       │   └── layout/ # 布局组件
+│       ├── pages/ # Vue 页面组件
 │       ├── router/ # Vue Router 配置
 │       ├── stores/ # Pinia 状态管理
 │       ├── types/ # TypeScript 类型定义
-│       ├── utils/ # 前端工具函数
-│       └── views/ # Vue 页面组件
+│       └── utils/ # 前端工具函数
 ├── hooks/ # PyInstaller 钩子文件
 ├── resources/ # 应用程序运行时资源文件
 │   ├── douyinjs/ # 抖音直播相关 JavaScript 文件
 │   ├── icons/ # 应用程序图标
-│   └── Notificator.app/ # macOS 通知应用
+│   └── Notificator.app/ # macOS 应用程序包
 ├── src/ # 后端 Python 源代码
 │   ├── database/ # 数据库模型和操作
 │   ├── douyin/ # 抖音直播相关逻辑
