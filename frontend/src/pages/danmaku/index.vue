@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { processDanmaku } from "@/utils"
+import type { ScrollbarInstance } from "element-plus"
 
 defineOptions({
     name: "danmaku"
 })
 
 const list = ref(Array<DanmakuModel>())
-const infiniteList = ref<HTMLDivElement | null>(null)
-const load = () => console.log("load")
+const infiniteList = ref<ScrollbarInstance>()
 const getDanmaku = () => {
     const { status, open } = useWebSocket("ws://127.0.0.1:8080", {
         autoReconnect: true,
@@ -20,7 +20,7 @@ const getDanmaku = () => {
         onMessage: (ws: WebSocket, event: MessageEvent) => {
             const data = JSON.parse(event.data) as WsModel
             const handler = messageHandlers[data.type]
-            if (handler){
+            if (handler) {
                 handler(data.data)
             }
         }
@@ -47,7 +47,7 @@ const messageHandlers: Record<string, (data: any) => void> = {
 
 watch(list, async () => {
     await nextTick()
-    infiniteList.value && infiniteList.value.scrollTo({ behavior: "smooth", top: infiniteList.value.scrollHeight })
+    infiniteList.value && infiniteList.value.scrollTo({ behavior: "smooth", top: infiniteList.value.$el.scrollHeight })
 })
 
 onMounted(() => {
@@ -57,36 +57,41 @@ onMounted(() => {
 </script>
 <template>
     <el-container class="danmaku-container">
-        <el-main>
-            <div class="danmaku-list" ref="infiniteList" v-infinite-scroll="load">
-                <template v-for="item in list">
-                    <div class="danmaku-list-item">
-                        <div class="danmaku-sing">
-                            <template v-if="item.html != undefined && item.html.length > 0">
-                                <el-text v-html="item.html" style="display: flex;"></el-text>
-                            </template>
-                            <template v-else>
-                                {{ item.msg }}
-                            </template>
-                        </div>
-                        <div class="danmaku-uname">
-                            {{ item.uname }}
-                        </div>
-                        <div class="danmaku-fans">
-                            <template v-if="item.medal_level > 0">
-                                <template v-if="item.source == 'bilibili'">
-                                    <fans-medal :medal_name="item.medal_name" :medal_level="item.medal_level"
-                                        :guard_level="item.guard_level" />
-                                </template>
-                                <template v-if="item.source == 'douyin'">
-                                    <fans-club :medal_name="item.medal_name" :medal_level="item.medal_level"
-                                        :guard_level="item.guard_level" />
-                                </template>
-                            </template>
-                        </div>
+        <el-scrollbar class="danmaku-list" ref="infiniteList">
+            <template v-for="item in list">
+                <div class="danmaku-list-item">
+                    <div class="danmaku-sing">
+                        <template v-if="item.html != undefined && item.html.length > 0">
+                            <el-text v-html="item.html" style="display: flex;"></el-text>
+                        </template>
+                        <template v-else>
+                            {{ item.msg }}
+                        </template>
                     </div>
-                </template>
-            </div>
-        </el-main>
+                    <div class="danmaku-uname">
+                        {{ item.uname }}
+                    </div>
+                    <div class="danmaku-fans">
+                        <template v-if="item.medal_level > 0">
+                            <template v-if="item.source == 'bilibili'">
+                                <fans-medal :medal_name="item.medal_name" :medal_level="item.medal_level"
+                                    :guard_level="item.guard_level" />
+                            </template>
+                            <template v-if="item.source == 'douyin'">
+                                <fans-club :medal_name="item.medal_name" :medal_level="item.medal_level"
+                                    :guard_level="item.guard_level" />
+                            </template>
+                        </template>
+                    </div>
+                </div>
+            </template>
+        </el-scrollbar>
     </el-container>
 </template>
+<route lang="json">
+{
+    "meta": {
+        "layout": "blank"
+    }
+}
+</route>

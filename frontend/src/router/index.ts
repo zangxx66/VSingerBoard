@@ -15,15 +15,24 @@ type CreateMutable<Type> = {
 
 type routeRecordType = CreateMutable<RouteRecordRaw>
 const routeRecord: routeRecordType[] = [...routes]
+let routeList: routeRecordType[] = []
+routeRecord.forEach(v => {
+  routeList.push(v?.meta?.layout != false ? setupLayouts([v])[0] : v)  
+})
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: setupLayouts(routeRecord),
+  routes: routeList,
 })
 
-router.beforeEach((toString, from) => {
+router.beforeEach(async (toString, from) => {
   start()
-  return true
+  if (navigator.userAgent != "pywebview" && toString.path != "/danmaku") {
+    return false
+  }
+  else {
+    return true
+  }
 })
 
 router.afterEach((to, from, failure) => {

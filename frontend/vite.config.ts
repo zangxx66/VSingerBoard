@@ -12,17 +12,15 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import VueRouter from 'vue-router/vite'
 import { VueRouterAutoImports } from 'unplugin-vue-router'
 import Layouts from 'vite-plugin-vue-layouts'
-import Pages from 'vite-plugin-pages'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
     vueJsx(),
-    Pages(),
     Layouts({
+      layoutsDirs: 'src/layouts',
       defaultLayout: 'default',
-      exclude: ['src/danmaku/**'],
       importMode: (_name) => 'async'
     }),
     vueDevTools(),
@@ -41,7 +39,7 @@ export default defineConfig({
     }),
     Components({
       extensions: ['vue', 'tsx'],
-      dirs: ['src/components', 'src/pages'],
+      dirs: ['src/components'],
       include: [/\.vue$/, /\.vue\?vue/, /\.tsx$/],
       resolvers: [
         IconsResolver({

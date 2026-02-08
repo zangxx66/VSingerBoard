@@ -52,7 +52,7 @@ const submit = () => {
 defineExpose({ openDialog })
 </script>
 <template>
-    <el-dialog v-model="isShow" title="手动点歌" width="720" @close="closeDialog">
+    <el-dialog v-model="isShow" title="手动点歌" width="480" @close="closeDialog">
         <el-form :model="formValue" label-width="auto">
             <el-form-item label="用户昵称" prop="uname">
                 <el-input v-model="formValue.uname" placeholder="用户昵称" type="text" />

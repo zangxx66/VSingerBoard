@@ -21,8 +21,8 @@ if not os.path.exists(dist_path):
 
 def verify_token(request: Request):
     x_token = request.headers.get("x-token")
-    if x_token != _token and request.url.path != "/danamu":
-        raise HTTPException(status_code=500, detail="Authentication error")
+    if x_token != _token:
+        return JSONResponse(status_code=200, content={"code": -1, "msg": "Authentication error", "data": None})
 
 
 app = FastAPI(

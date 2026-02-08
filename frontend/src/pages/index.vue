@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElMessage, ElMessageBox } from "element-plus"
+import { ElMessage, ElMessageBox, type ScrollbarInstance } from "element-plus"
 import { CloseBold, Download, Delete, EditPen, CopyDocument, DocumentChecked } from "@element-plus/icons-vue"
 import { exportExcel, timespanToString, getNowTimespan, processDanmaku, copyToClipboard } from "@/utils"
 import type { Column } from "exceljs"
@@ -15,12 +15,11 @@ const config = reactive<LiveModel>({
     bilibili_ws_status: -1
 })
 const danmakuStore = useDanmakuStore()
-const infiniteListRef = useTemplateRef("infiniteList")
+const infiniteListRef = ref<ScrollbarInstance>()
 const chatMainRef = useTemplateRef("chat-main")
 const singDialogRef = useTemplateRef("singDialogRef")
+const infiniteHeight = ref("0px")
 let wsSend: (data: string | ArrayBuffer | Blob, useBuffer?: boolean | undefined) => boolean
-
-const load = () => console.log("load")
 
 const copy = (msg_id: number, txt: string) => {
     copyToClipboard(txt)
@@ -143,7 +142,7 @@ const danmakuList = computed(() => {
 
 watch(danmakuList, async () => {
     await nextTick()
-    infiniteListRef.value && infiniteListRef.value.scrollTo({ behavior: "smooth", top: infiniteListRef.value.scrollHeight })
+    infiniteListRef.value && infiniteListRef.value.scrollTo({ behavior: "smooth", top: infiniteListRef.value.$el.scrollHeight })
 })
 
 onMounted(() => {
@@ -151,7 +150,7 @@ onMounted(() => {
     chatMainRef.value?.$el.style.setProperty("overflow", "hidden")
 
     const listHeight = height * 0.8
-    infiniteListRef.value?.style.setProperty("height", `${listHeight}px`)
+    infiniteHeight.value = `${listHeight}px`
 
     getDanmaku()
 })
@@ -168,7 +167,7 @@ onMounted(() => {
                         </span>
                     </div>
                 </template>
-                <div class="chat-infinite-list" ref="infiniteList" v-infinite-scroll="load">
+                <el-scrollbar class="chat-infinite-list" :height="infiniteHeight" ref="infiniteList">
                     <template v-for="item in danmakuList">
                         <div class="chat-infinite-list-item">
                             <img :src="`/images/${item.source}.png`" class="source-img" :alt="item.source" width="24" />
@@ -224,7 +223,7 @@ onMounted(() => {
                             </el-tooltip>
                         </div>
                     </template>
-                </div>
+                </el-scrollbar>
                 <template #footer>
                     <div class="chat-card-footer">
                         <el-button type="primary" @click="openSingDialog">

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { request } from "@/api"
-import { ElMessage } from "element-plus"
+import { ElMessage, type ScrollbarInstance } from "element-plus"
 import { Search, Download } from "@element-plus/icons-vue"
 import { timespanToString, getEndOfDayTimespan, exportExcel, getNowTimespan, processDanmaku } from "@/utils"
 import type { Column } from "exceljs"
@@ -15,7 +15,8 @@ const total = ref(0)
 const dateRange = ref<[number, number]>()
 const list = ref<Array<SongHistoryModel>>()
 const cardRef = useTemplateRef("historyDataCard")
-const infiniteListRef = useTemplateRef("chatInfiniteList")
+const chatInfiniteList = ref<ScrollbarInstance>()
+const infiniteHeight = ref("0px")
 const baseFormValue = reactive({
     uname: "",
     song_name: "",
@@ -130,7 +131,7 @@ onMounted(() => {
     cardRef.value?.$el.style.setProperty("overflow", "hidden")
 
     const listHeight = height * 0.6
-    infiniteListRef.value?.style.setProperty("height", `${listHeight}px`)
+    infiniteHeight.value = `${listHeight}px`
 
     load()
 })
@@ -175,7 +176,7 @@ onMounted(() => {
             <el-divider />
             <el-card class="history-data-card" v-loading="loading" ref="historyDataCard">
                 <template #default>
-                    <div class="chat-infinite-list" ref="chatInfiniteList">
+                    <el-scrollbar class="chat-infinite-list" :height="infiniteHeight" ref="chatInfiniteList">
                         <template v-for="item in list">
                             <div class="chat-infinite-list-item">
                                 <img :src="`/images/${item.source}.png`" class="source-img" :alt="item.source"
@@ -191,7 +192,7 @@ onMounted(() => {
                         <template v-if="list?.length == 0">
                             <el-empty description="没有数据" />
                         </template>
-                    </div>
+                    </el-scrollbar>
                 </template>
                 <template #footer>
                     <div style="display: flex;">

@@ -1,7 +1,17 @@
 <script setup lang="tsx">
 import { request } from "@/api"
 import type { FunctionalComponent } from "vue"
-import { ElMessage, ElMessageBox, ElButton, ElCheckbox, useLocale, type Column as elColumn, type CheckboxValueType, type UploadFile, type UploadFiles } from "element-plus"
+import {
+    ElMessage,
+    ElMessageBox,
+    ElButton,
+    ElCheckbox,
+    useLocale,
+    type Column as elColumn,
+    type CheckboxValueType,
+    type UploadFile,
+    type UploadFiles,
+} from "element-plus"
 import { Search, Download, Upload, Delete, EditPen } from "@element-plus/icons-vue"
 import { getNowTimespan, exportExcel, importExcel } from "@/utils"
 import type { Column as execlCoumn } from "exceljs"
@@ -36,7 +46,7 @@ const importLoading = ref(false)
 const total = ref(0)
 const list = ref(Array<PlaylistModel>())
 const cardRef = useTemplateRef("playlistDataCard")
-const infiniteListRef = useTemplateRef("playlistInfiniteList")
+const playlistInfiniteList = useTemplateRef("playlistInfiniteList")
 const addPlaylistDialogRef = useTemplateRef("addPlaylistDialogRef")
 const baseFormValue = reactive({
     keyword: "",
@@ -280,7 +290,7 @@ onMounted(() => {
     cardRef.value?.$el.style.setProperty("overflow", "hidden")
 
     const listHeight = height * 0.6
-    infiniteListRef.value?.style.setProperty("height", `${listHeight}px`)
+    playlistInfiniteList.value?.style.setProperty("height", `${listHeight}px`)
 
     load()
 })
