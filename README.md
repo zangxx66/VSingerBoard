@@ -7,7 +7,7 @@
 
 # VSingerBoard - 您的专属虚拟主播点歌台
 
-![Release Status](https://github.com/zangxx66/VSingerBoard/actions/workflows/release.yml/badge.svg) ![Push Status](https://github.com/zangxx66/VSingerBoard/actions/workflows/push.yml/badge.svg) ![Python Version](https://img.shields.io/badge/python-3.12-blue.svg) ![Node.js Version](https://img.shields.io/badge/node.js-24.0-blue.svg) ![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)
+![Release Status](https://github.com/zangxx66/VSingerBoard/actions/workflows/release.yml/badge.svg) ![Push Status](https://github.com/zangxx66/VSingerBoard/actions/workflows/ci.yml/badge.svg) ![Python Version](https://img.shields.io/badge/python-3.12-blue.svg) ![Node.js Version](https://img.shields.io/badge/node.js-24.0-blue.svg) ![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)
 
 </div>
 
@@ -58,38 +58,38 @@
 
 ```
 .
-├── .github/ # GitHub Actions 配置文件
-│   └── workflows/ # 自动化工作流定义
-├── doc/ # 项目文档和截图
-├── frontend/ # 前端项目源代码
-│   ├── public/ # 静态文件
-│   │   └── images/ # 图片资源
-│   └── src/ # 前端核心代码
-│       ├── api/ # API 服务定义
-│       ├── assets/ # 静态资源文件
-│       ├── components/ # Vue 组件
-│       ├── pages/ # Vue 页面组件
-│       ├── router/ # Vue Router 配置
-│       ├── stores/ # Pinia 状态管理
-│       ├── types/ # TypeScript 类型定义
-│       └── utils/ # 前端工具函数
-├── hooks/ # PyInstaller 钩子文件
-├── resources/ # 应用程序运行时资源文件
-│   ├── douyinjs/ # 抖音直播相关 JavaScript 文件
-│   ├── icons/ # 应用程序图标
-│   └── Notificator.app/ # macOS 应用程序包
-├── src/ # 后端 Python 源代码
-│   ├── database/ # 数据库模型和操作
-│   ├── douyin/ # 抖音直播相关逻辑
-│   │   └── lib/ # 抖音库文件
-│   ├── jsBridge/ # Python 与 JavaScript 桥接逻辑
-│   ├── live/ # 直播平台实现
-│   ├── manager/ # 核心管理器模块
-│   ├── notifypy/ # 通知功能库
-│   │   └── os_notifiers/ # 操作系统特定的通知实现
-│   ├── server/ # FastAPI 后端服务
-│   └── utils/ # 后端通用工具函数和模块
-└── tests/ # 单元测试
+├── .github/                  # GitHub Actions CI/CD 工作流
+│   └── workflows/            # 自动化工作流定义
+├── doc/                      # 项目文档和图片
+├── frontend/                 # 前端Vue应用源码
+│   ├── public/               # 前端静态资源
+│   └── src/                  # 前端核心代码
+│       ├── api/              # API 服务定义
+│       ├── assets/           # 静态资源(如CSS,图片)
+│       ├── components/       # Vue 公共组件
+│       ├── layouts/          # 布局组件
+│       ├── pages/            # 页面组件
+│       ├── router/           # Vue Router 配置
+│       ├── stores/           # Pinia 状态管理
+│       ├── types/            # TypeScript 类型定义
+│       └── utils/            # 前端工具函数
+├── hooks/                    # PyInstaller打包钩子
+├── resources/                # 应用打包所需资源
+│   ├── douyinjs/             # 抖音签名相关JS文件
+│   ├── icons/                # 应用图标
+│   └── Notificator.app/      # macOS通知程序
+├── src/                      # Python后端应用源码
+│   ├── database/             # 数据库模型和操作
+│   ├── douyin/               # 抖音直播相关逻辑
+│   │   └── lib/              # Protobuf编译库
+│   ├── jsBridge/             # Python与JavaScript桥接
+│   ├── live/                 # 各直播平台实现
+│   ├── manager/              # 核心管理器模块
+│   ├── notifypy/             # 跨平台桌面通知库
+│   │   └── os_notifiers/     # 特定操作系统的通知实现
+│   ├── server/               # FastAPI后端服务
+│   └── utils/                # 后端通用工具函数
+└── tests/                    # 测试代码
 ```
 
 ## 🤝 如何贡献

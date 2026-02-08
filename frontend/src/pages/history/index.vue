@@ -1,14 +1,13 @@
-<script lang="ts">
-export default {
-    name: "history"
-}
-</script>
 <script setup lang="ts">
 import { request } from "@/api"
 import { ElMessage } from "element-plus"
 import { Search, Download } from "@element-plus/icons-vue"
 import { timespanToString, getEndOfDayTimespan, exportExcel, getNowTimespan, processDanmaku } from "@/utils"
 import type { Column } from "exceljs"
+
+defineOptions({
+    name: "history"
+})
 
 const loading = ref(false)
 const exportLoading = ref(false)

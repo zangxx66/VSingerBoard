@@ -1,8 +1,3 @@
-<script lang="ts">
-export default {
-    name: "changelog"
-}
-</script>
 <script setup lang="ts">
 import { render } from "vue"
 import { ElMessage } from "element-plus"
@@ -11,6 +6,10 @@ import { Marked } from "marked"
 import { markedHighlight } from "marked-highlight"
 import hljs from "highlight.js"
 import { request } from "@/api"
+
+defineOptions({
+    name: "changelog"
+})
 
 const model = reactive({
     version: "",

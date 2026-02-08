@@ -1,10 +1,9 @@
-<script lang="ts">
-export default {
-    name: "danmaku"
-}
-</script>
 <script setup lang="ts">
 import { processDanmaku } from "@/utils"
+
+defineOptions({
+    name: "danmaku"
+})
 
 const list = ref(Array<DanmakuModel>())
 const infiniteList = ref<HTMLDivElement | null>(null)

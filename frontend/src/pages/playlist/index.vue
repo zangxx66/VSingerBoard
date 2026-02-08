@@ -6,6 +6,10 @@ import { Search, Download, Upload, Delete, EditPen } from "@element-plus/icons-v
 import { getNowTimespan, exportExcel, importExcel } from "@/utils"
 import type { Column as execlCoumn } from "exceljs"
 
+defineOptions({
+    name: "playlist"
+})
+
 type SelectionCellProps = {
     value: boolean
     intermediate?: boolean
@@ -33,7 +37,7 @@ const total = ref(0)
 const list = ref(Array<PlaylistModel>())
 const cardRef = useTemplateRef("playlistDataCard")
 const infiniteListRef = useTemplateRef("playlistInfiniteList")
-const addPlaylistDialog = useTemplateRef("addPlaylistDialogRef")
+const addPlaylistDialogRef = useTemplateRef("addPlaylistDialogRef")
 const baseFormValue = reactive({
     keyword: "",
     page: 1,
@@ -133,7 +137,7 @@ const dataColumns: elColumn<any>[] = [
 /** 新增/编辑弹窗 */
 const addOrEditPlaylist = (rowData?: any) => {
     if (rowData) rowData = rowData as PlaylistModel
-    addPlaylistDialog.value && addPlaylistDialog.value.openDialog(rowData)
+    addPlaylistDialogRef.value && addPlaylistDialogRef.value.openDialog(rowData)
 }
 
 const allDeletePlaylist = () => {
@@ -349,7 +353,7 @@ onMounted(() => {
                     </div>
                 </template>
             </el-card>
-            <AddPlaylistDialog @submit="emitSubmit" ref="addPlaylistDialogRef" />
+            <add-playlist-dialog @submit="emitSubmit" ref="addPlaylistDialogRef" />
         </el-main>
     </el-container>
 </template>

@@ -10,15 +10,24 @@ import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import VueRouter from 'vue-router/vite'
+import { VueRouterAutoImports } from 'unplugin-vue-router'
+import Layouts from 'vite-plugin-vue-layouts'
+import Pages from 'vite-plugin-pages'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
     vueJsx(),
+    Pages(),
+    Layouts({
+      defaultLayout: 'default',
+      exclude: ['src/danmaku/**'],
+      importMode: (_name) => 'async'
+    }),
     vueDevTools(),
     AutoImport({
-      imports: ['vue', 'pinia', 'vue-router', '@vueuse/core'],
+      imports: ['vue', 'pinia', VueRouterAutoImports, '@vueuse/core'],
       dirs: ['./src/stores/**'],
       resolvers: [
         ElementPlusResolver(),

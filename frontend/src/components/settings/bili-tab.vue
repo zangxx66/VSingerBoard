@@ -128,6 +128,6 @@ onMounted(() => {
             </el-form>
         </el-card>
         <el-divider />
-        <bili-credential></bili-credential>
+        <bili-credential />
     </div>
 </template>

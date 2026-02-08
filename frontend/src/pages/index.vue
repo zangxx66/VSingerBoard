@@ -1,13 +1,12 @@
-<script lang="ts">
-export default {
-    name: "home"
-}
-</script>
 <script setup lang="ts">
 import { ElMessage, ElMessageBox } from "element-plus"
 import { CloseBold, Download, Delete, EditPen, CopyDocument, DocumentChecked } from "@element-plus/icons-vue"
 import { exportExcel, timespanToString, getNowTimespan, processDanmaku, copyToClipboard } from "@/utils"
 import type { Column } from "exceljs"
+
+defineOptions({
+    name: "home"
+})
 
 const config = reactive<LiveModel>({
     douyin_romm_id: 0,
@@ -247,15 +246,15 @@ onMounted(() => {
                             </el-icon>
                         </el-button>
                         <div class="card-footer-right">
-                            <PlatformStatus platform="douyin" v-if="config.douyin_romm_id > 0"
+                            <platform-status platform="douyin" v-if="config.douyin_romm_id > 0"
                                 :roomId="config.douyin_romm_id" :wsStatus="config.douyin_ws_status" />
-                            <PlatformStatus platform="bilibili" v-if="config.bilibili_room_id > 0"
+                            <platform-status platform="bilibili" v-if="config.bilibili_room_id > 0"
                                 :roomId="config.bilibili_room_id" :wsStatus="config.bilibili_ws_status" />
                         </div>
                     </div>
                 </template>
             </el-card>
-            <addSingDialog ref="singDialogRef"></addSingDialog>
+            <add-sing-dialog ref="singDialogRef" />
         </el-main>
     </el-container>
 </template>

@@ -2,22 +2,28 @@ import {
   createRouter,
   createWebHistory,
   isNavigationFailure,
+  type RouteRecordRaw,
 } from 'vue-router'
 import { routes } from 'vue-router/auto-routes'
 import { start, stop } from '@/utils'
 import { ElMessage } from 'element-plus'
+import { setupLayouts } from 'virtual:generated-layouts'
+
+type CreateMutable<Type> = {
+  -readonly [Property in keyof Type]: Type[Property]
+}
+
+type routeRecordType = CreateMutable<RouteRecordRaw>
+const routeRecord: routeRecordType[] = [...routes]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes
+  routes: setupLayouts(routeRecord),
 })
 
-router.beforeEach((toString, from, next) => {
+router.beforeEach((toString, from) => {
   start()
-  if (toString.path == "/"){
-    next({ name: "/home/" })
-  }
-  next()
+  return true
 })
 
 router.afterEach((to, from, failure) => {

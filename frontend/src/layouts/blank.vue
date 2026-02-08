@@ -1,8 +1,8 @@
 <script setup lang="ts">
 defineOptions({
-  name: "app"
+    name: "blankLayout"
 })
 </script>
 <template>
-  <router-view />
+    <router-view />
 </template>

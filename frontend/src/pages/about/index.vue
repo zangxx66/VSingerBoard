@@ -1,10 +1,9 @@
-<script lang="ts">
-export default {
-    name: "about"
-}
-</script>
 <script setup lang="ts">
 import { checkUpdate } from "@/utils"
+
+defineOptions({
+    name: "about"
+})
 
 const version = ref("")
 const themeStore = useThemeStore()
