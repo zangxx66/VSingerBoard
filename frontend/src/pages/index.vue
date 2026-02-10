@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ElMessage, ElMessageBox, type ScrollbarInstance } from "element-plus"
 import { CloseBold, Download, Delete, EditPen, CopyDocument, DocumentChecked } from "@element-plus/icons-vue"
-import { exportExcel, timespanToString, getNowTimespan, processDanmaku, copyToClipboard } from "@/utils"
 import type { Column } from "exceljs"
 
 defineOptions({

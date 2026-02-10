@@ -10,6 +10,7 @@ declare global {
   const acceptHMRUpdate: typeof import('pinia').acceptHMRUpdate
   const asyncComputed: typeof import('@vueuse/core').asyncComputed
   const autoResetRef: typeof import('@vueuse/core').autoResetRef
+  const checkUpdate: typeof import('./src/utils/tool').checkUpdate
   const computed: typeof import('vue').computed
   const computedAsync: typeof import('@vueuse/core').computedAsync
   const computedEager: typeof import('@vueuse/core').computedEager
@@ -17,6 +18,7 @@ declare global {
   const computedWithControl: typeof import('@vueuse/core').computedWithControl
   const controlledComputed: typeof import('@vueuse/core').controlledComputed
   const controlledRef: typeof import('@vueuse/core').controlledRef
+  const copyToClipboard: typeof import('./src/utils/tool').copyToClipboard
   const createApp: typeof import('vue').createApp
   const createEventHook: typeof import('@vueuse/core').createEventHook
   const createGlobalState: typeof import('@vueuse/core').createGlobalState
@@ -36,15 +38,25 @@ declare global {
   const defineStore: typeof import('pinia').defineStore
   const eagerComputed: typeof import('@vueuse/core').eagerComputed
   const effectScope: typeof import('vue').effectScope
+  const emojiList: typeof import('./src/utils/emoji').emojiList
+  const emoticons: typeof import('./src/utils/emoticons').emoticons
+  const exportExcel: typeof import('./src/utils/excel').exportExcel
   const extendRef: typeof import('@vueuse/core').extendRef
   const getActivePinia: typeof import('pinia').getActivePinia
   const getCurrentInstance: typeof import('vue').getCurrentInstance
   const getCurrentScope: typeof import('vue').getCurrentScope
   const getCurrentWatcher: typeof import('vue').getCurrentWatcher
+  const getEndOfDayTimespan: typeof import('./src/utils/times').getEndOfDayTimespan
+  const getNowDateString: typeof import('./src/utils/times').getNowDateString
+  const getNowTimespan: typeof import('./src/utils/times').getNowTimespan
+  const getRelativeTime: typeof import('./src/utils/times').getRelativeTime
+  const getTimespan: typeof import('./src/utils/times').getTimespan
   const h: typeof import('vue').h
   const ignorableWatch: typeof import('@vueuse/core').ignorableWatch
+  const importExcel: typeof import('./src/utils/excel').importExcel
   const inject: typeof import('vue').inject
   const injectLocal: typeof import('@vueuse/core').injectLocal
+  const isDark: typeof import('./src/utils/dark').isDark
   const isDefined: typeof import('@vueuse/core').isDefined
   const isProxy: typeof import('vue').isProxy
   const isReactive: typeof import('vue').isReactive
@@ -80,7 +92,9 @@ declare global {
   const onUnmounted: typeof import('vue').onUnmounted
   const onUpdated: typeof import('vue').onUpdated
   const onWatcherCleanup: typeof import('vue').onWatcherCleanup
+  const pasteToElement: typeof import('./src/utils/tool').pasteToElement
   const pausableWatch: typeof import('@vueuse/core').pausableWatch
+  const processDanmaku: typeof import('./src/utils/tool').processDanmaku
   const provide: typeof import('vue').provide
   const provideLocal: typeof import('@vueuse/core').provideLocal
   const reactify: typeof import('@vueuse/core').reactify
@@ -104,17 +118,21 @@ declare global {
   const shallowReactive: typeof import('vue').shallowReactive
   const shallowReadonly: typeof import('vue').shallowReadonly
   const shallowRef: typeof import('vue').shallowRef
+  const startProgress: typeof import('./src/utils/nprogress').startProgress
+  const stopProgress: typeof import('./src/utils/nprogress').stopProgress
   const storeToRefs: typeof import('pinia').storeToRefs
   const syncRef: typeof import('@vueuse/core').syncRef
   const syncRefs: typeof import('@vueuse/core').syncRefs
   const templateRef: typeof import('@vueuse/core').templateRef
   const throttledRef: typeof import('@vueuse/core').throttledRef
   const throttledWatch: typeof import('@vueuse/core').throttledWatch
+  const timespanToString: typeof import('./src/utils/times').timespanToString
   const toRaw: typeof import('vue').toRaw
   const toReactive: typeof import('@vueuse/core').toReactive
   const toRef: typeof import('vue').toRef
   const toRefs: typeof import('vue').toRefs
   const toValue: typeof import('vue').toValue
+  const toggleDark: typeof import('./src/utils/dark').toggleDark
   const triggerRef: typeof import('vue').triggerRef
   const tryOnBeforeMount: typeof import('@vueuse/core').tryOnBeforeMount
   const tryOnBeforeUnmount: typeof import('@vueuse/core').tryOnBeforeUnmount
@@ -194,9 +212,16 @@ declare global {
   const useFullscreen: typeof import('@vueuse/core').useFullscreen
   const useGamepad: typeof import('@vueuse/core').useGamepad
   const useGeolocation: typeof import('@vueuse/core').useGeolocation
+  const useGetBilibiliConfig: typeof import('./src/services/use-bilibili-config').useGetBilibiliConfig
+  const useGetBilibiliCredential: typeof import('./src/services/use-bilibili-cred').useGetBilibiliCredential
+  const useGetDouyinConfig: typeof import('./src/services/use-douyin-config').useGetDouyinConfig
+  const useGetGlobalConfig: typeof import('./src/services/use-global-config').useGetGlobalConfig
+  const useGetHistoryInfinite: typeof import('./src/services/use-history').useGetHistoryInfinite
   const useId: typeof import('vue').useId
   const useIdle: typeof import('@vueuse/core').useIdle
   const useImage: typeof import('@vueuse/core').useImage
+  const useInfiniteQuery: typeof import('@tanstack/vue-query').useInfiniteQuery
+  const useInfiniteQueryUnrefs: typeof import('./src/utils/tool').useInfiniteQueryUnrefs
   const useInfiniteScroll: typeof import('@vueuse/core').useInfiniteScroll
   const useIntersectionObserver: typeof import('@vueuse/core').useIntersectionObserver
   const useInterval: typeof import('@vueuse/core').useInterval
@@ -216,6 +241,7 @@ declare global {
   const useMouse: typeof import('@vueuse/core').useMouse
   const useMouseInElement: typeof import('@vueuse/core').useMouseInElement
   const useMousePressed: typeof import('@vueuse/core').useMousePressed
+  const useMutation: typeof import('@tanstack/vue-query').useMutation
   const useMutationObserver: typeof import('@vueuse/core').useMutationObserver
   const useNavigatorLanguage: typeof import('@vueuse/core').useNavigatorLanguage
   const useNetwork: typeof import('@vueuse/core').useNetwork
@@ -228,6 +254,7 @@ declare global {
   const useParentElement: typeof import('@vueuse/core').useParentElement
   const usePerformanceObserver: typeof import('@vueuse/core').usePerformanceObserver
   const usePermission: typeof import('@vueuse/core').usePermission
+  const usePlaylistInInfinite: typeof import('./src/services/use-playlist').usePlaylistInInfinite
   const usePointer: typeof import('@vueuse/core').usePointer
   const usePointerLock: typeof import('@vueuse/core').usePointerLock
   const usePointerSwipe: typeof import('@vueuse/core').usePointerSwipe
@@ -238,6 +265,8 @@ declare global {
   const usePreferredReducedMotion: typeof import('@vueuse/core').usePreferredReducedMotion
   const usePreferredReducedTransparency: typeof import('@vueuse/core').usePreferredReducedTransparency
   const usePrevious: typeof import('@vueuse/core').usePrevious
+  const useQuery: typeof import('@tanstack/vue-query').useQuery
+  const useQueryClient: typeof import('@tanstack/vue-query').useQueryClient
   const useRafFn: typeof import('@vueuse/core').useRafFn
   const useRefHistory: typeof import('@vueuse/core').useRefHistory
   const useResizeObserver: typeof import('@vueuse/core').useResizeObserver
@@ -295,6 +324,7 @@ declare global {
   const useWindowFocus: typeof import('@vueuse/core').useWindowFocus
   const useWindowScroll: typeof import('@vueuse/core').useWindowScroll
   const useWindowSize: typeof import('@vueuse/core').useWindowSize
+  const utcToLocal: typeof import('./src/utils/times').utcToLocal
   const watch: typeof import('vue').watch
   const watchArray: typeof import('@vueuse/core').watchArray
   const watchAtMost: typeof import('@vueuse/core').watchAtMost

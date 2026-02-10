@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { checkUpdate } from "@/utils"
 
 defineOptions({
     name: "about"

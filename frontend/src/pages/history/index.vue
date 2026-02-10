@@ -1,29 +1,24 @@
 <script setup lang="ts">
-import { request } from "@/api"
-import { ElMessage, type ScrollbarInstance } from "element-plus"
+import type { ScrollbarInstance, ScrollbarDirection } from "element-plus"
 import { Search, Download } from "@element-plus/icons-vue"
-import { timespanToString, getEndOfDayTimespan, exportExcel, getNowTimespan, processDanmaku } from "@/utils"
 import type { Column } from "exceljs"
 
 defineOptions({
     name: "history"
 })
 
-const loading = ref(false)
 const exportLoading = ref(false)
 const total = ref(0)
 const dateRange = ref<[number, number]>()
-const list = ref<Array<SongHistoryModel>>()
 const cardRef = useTemplateRef("historyDataCard")
 const chatInfiniteList = ref<ScrollbarInstance>()
 const infiniteHeight = ref("0px")
-const baseFormValue = reactive({
+const baseFormValue = reactive<RequestHistory>({
     uname: "",
     song_name: "",
     source: "all",
     start_time: 0,
     end_time: 0,
-    page: 1,
     size: 20
 })
 const platform = [
@@ -51,6 +46,31 @@ const dateChange = (val: [number, number]) => {
     baseFormValue.end_time = getEndOfDayTimespan(val[1])
 }
 
+const { data: response, refetch, fetchNextPage, isFetching } = useGetHistoryInfinite(baseFormValue)
+const resultList = computed(() => response.value?.pages.flatMap(item => {
+    total.value = item.total
+    return item.rows
+}).map(item => {
+    const danmakus: DanmakuModel = {
+        msg_id: item.id,
+        uid: item.uid,
+        uname: item.uname,
+        msg: item.song_name,
+        send_time: item.create_time,
+        source: item.source,
+        medal_name: "",
+        medal_level: 0,
+        guard_level: 0
+    }
+    const processDanmakus = processDanmaku([danmakus])
+    const result: ResponseHistory = {
+        ...item,
+        song_name: processDanmakus[0].html || item.song_name,
+        create_time_str: timespanToString(item.create_time)
+    }
+    return result
+}).filter(Boolean))
+
 const exportFile = () => {
     const columns: Partial<Column>[] = [
         { header: "日期", key: "date", width: 50 },
@@ -59,71 +79,24 @@ const exportFile = () => {
         { header: "平台", key: "source", width: 50 }
     ]
 
-    const args: any = {}
-    Object.assign(args, baseFormValue)
-    args.page = 1
-    args.size = total.value
-
     exportLoading.value = true
-    request.getHistoryList(args).then(response => {
-        if (response.code != 0) {
-            ElMessage.warning(response.msg)
-            exportLoading.value = false
-            return
-        }
-        const data = response.data.rows as Array<SongHistoryModel>
-        const exportData = data.map(item => ({
-            date: timespanToString(item.create_time),
-            uname: item.uname,
-            song: item.song_name,
-            source: item.source == "bilibili" ? "B站" : "抖音"
-        }))
-        const filename = `点歌历史记录_${getNowTimespan()}`
-        exportExcel(columns, exportData, filename)
-        exportLoading.value = false
-    }).catch(error => {
-        ElMessage.error(error)
-        exportLoading.value = false
-    })
+    const exportData = resultList.value?.map(item => ({
+        date: timespanToString(item.create_time),
+        uname: item.uname,
+        song: item.song_name,
+        source: item.source == "bilibili" ? "B站" : "抖音"
+    }))
+    const filename = `点歌历史记录_${getNowTimespan()}`
+    const data = exportData as any[]
+    exportExcel(columns, data, filename)
+
+    exportLoading.value = false
 }
 
-const load = () => {
-    loading.value = true
-    request.getHistoryList(baseFormValue).then(response => {
-        if (response.code != 0) {
-            ElMessage.warning(response.msg)
-            loading.value = false
-            return
-        }
-        total.value = response.data.total
-        const rows = response.data.rows as Array<SongHistoryModel>
-        const danmakus: DanmakuModel[] = rows.map(item => ({
-            msg_id: item.id,
-            uid: item.uid,
-            uname: item.uname,
-            msg: item.song_name,
-            send_time: item.create_time,
-            source: item.source,
-            medal_name: "",
-            medal_level: 0,
-            guard_level: 0
-        }));
-        const processedDanmakus = processDanmaku(danmakus);
-        list.value = rows.map((item, index) => ({
-            ...item,
-            song_name: processedDanmakus[index].html || item.song_name,
-            create_time_str: timespanToString(item.create_time)
-        }));
-        loading.value = false
-    }).catch(error => {
-        ElMessage.error(error)
-        loading.value = false
-    })
-}
-
-const search = () => {
-    baseFormValue.page = 1
-    load()
+const nextPage = (direction: ScrollbarDirection) => {
+    if (direction === "bottom" && (resultList.value && resultList.value.length < total.value)) {
+        fetchNextPage()
+    }
 }
 
 onMounted(() => {
@@ -132,8 +105,6 @@ onMounted(() => {
 
     const listHeight = height * 0.6
     infiniteHeight.value = `${listHeight}px`
-
-    load()
 })
 </script>
 <template>
@@ -164,7 +135,7 @@ onMounted(() => {
                             @change="dateChange" />
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="search">
+                        <el-button type="primary" @click="refetch()">
                             <el-icon class="el-icon--left">
                                 <Search />
                             </el-icon>
@@ -174,10 +145,11 @@ onMounted(() => {
                 </el-form>
             </el-card>
             <el-divider />
-            <el-card class="history-data-card" v-loading="loading" ref="historyDataCard">
+            <el-card class="history-data-card" v-loading="isFetching" ref="historyDataCard">
                 <template #default>
-                    <el-scrollbar class="chat-infinite-list" :height="infiniteHeight" ref="chatInfiniteList">
-                        <template v-for="item in list">
+                    <el-scrollbar class="chat-infinite-list" noresize :height="infiniteHeight" @end-reached="nextPage"
+                        ref="chatInfiniteList">
+                        <template v-for="item in resultList">
                             <div class="chat-infinite-list-item">
                                 <img :src="`/images/${item.source}.png`" class="source-img" :alt="item.source"
                                     width="24" />
@@ -189,27 +161,20 @@ onMounted(() => {
                                 </span>
                             </div>
                         </template>
-                        <template v-if="list?.length == 0">
+                        <template v-if="resultList?.length == 0">
                             <el-empty description="没有数据" />
                         </template>
                     </el-scrollbar>
                 </template>
                 <template #footer>
-                    <div style="display: flex;">
-                        <div style="width: 50%;">
-                            <el-pagination background layout="prev, pager, next" :total="total"
-                                v-model:page-size="baseFormValue.size" v-model:current-page="baseFormValue.page"
-                                @change="load" />
-                        </div>
-                        <div style="width: 50%;text-align: right;">
-                            <el-button type="success" :disabled="list?.length == 0" @click="exportFile"
-                                :loading="exportLoading">
-                                导出历史记录
-                                <el-icon class="el-icon--right">
-                                    <Download />
-                                </el-icon>
-                            </el-button>
-                        </div>
+                    <div style="display: flex;text-align: right;">
+                        <el-button type="success" :disabled="resultList?.length == 0" @click="exportFile"
+                            :loading="exportLoading">
+                            导出历史记录
+                            <el-icon class="el-icon--right">
+                                <Download />
+                            </el-icon>
+                        </el-button>
                     </div>
                 </template>
             </el-card>

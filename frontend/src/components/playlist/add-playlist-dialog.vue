@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { request } from "@/api"
-import { getNowTimespan } from "@/utils"
 import { ElMessage } from "element-plus"
 
 const emit = defineEmits<{
@@ -37,6 +36,28 @@ const closeDialog = () => {
     baseFormValue.tag = ""
 }
 
+const submitMutation = useMutation({
+    mutationFn: async (params: PlaylistModel) => await request.addOrUpdatePlaylist({ data: params }),
+    onSuccess: (data) => {
+        loading.value = false
+        if (data.code != 0) {
+            ElMessage.warning(data.msg)
+        } else {
+            const result: PlaylistModel = {
+                id: data.data,
+                song_name: baseFormValue.song_name,
+                singer: baseFormValue.singer,
+                is_sc: baseFormValue.is_sc,
+                sc_price: baseFormValue.sc_price,
+                language: baseFormValue.language,
+                tag: baseFormValue.tag,
+                create_time: baseFormValue.create_time
+            }
+            onEmit(result)
+        }
+    }
+})
+
 const onSubmit = () => {
     if (!baseFormValue.song_name) {
         ElMessage.warning("请输入歌名")
@@ -52,31 +73,12 @@ const onSubmit = () => {
     }
     loading.value = true
     baseFormValue.create_time = getNowTimespan()
-    request.addOrUpdatePlaylist({ data: baseFormValue }).then(response => {
-        if (response.code != 0) {
-            ElMessage.warning(response.msg)
-            loading.value = false
-            return
-        }
-        ElMessage.success(response.msg)
-        baseFormValue.id = response.data
-        const result: PlaylistModel = {
-            id: baseFormValue.id,
-            song_name: baseFormValue.song_name,
-            singer: baseFormValue.singer,
-            is_sc: baseFormValue.is_sc,
-            sc_price: baseFormValue.sc_price,
-            language: baseFormValue.language,
-            tag: baseFormValue.tag,
-            create_time: baseFormValue.create_time
-        }
-        emit("submit", result)
-        loading.value = false
-        closeDialog()
-    }).catch(error => {
-        ElMessage.error(error)
-        loading.value = false
-    })
+    submitMutation.mutate(baseFormValue)
+}
+
+const onEmit = (param: PlaylistModel) => {
+    emit("submit", param)
+    closeDialog()
 }
 
 defineExpose({ openDialog })

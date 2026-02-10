@@ -112,3 +112,29 @@ type ImportColumn = {
     key: string
     type: string
 }
+
+type RequestHistory = {
+    uname: string
+    song_name: string
+    source: string
+    start_time: number
+    end_time: number
+    page?: number
+    size: number
+}
+
+type ResponseHistory = {
+    id: number
+    uid: number
+    uname: string
+    song_name: string
+    source: string
+    create_time: number
+    create_time_str?: string
+}
+
+type RequestPlaylist = {
+    keyword: string
+    page?: number
+    size: number
+}

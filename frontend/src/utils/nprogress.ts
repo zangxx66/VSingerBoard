@@ -9,10 +9,10 @@ NProgress.configure({
     parent: "body"
 })
 
-export const start = () => {
+export const startProgress = () => {
     NProgress.start()
 }
 
-export const stop = () => {
+export const stopProgress = () => {
     NProgress.done()
 }

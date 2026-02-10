@@ -1,58 +1,39 @@
 <script setup lang="tsx">
 import { request } from "@/api"
-import type { FunctionalComponent } from "vue"
 import {
     ElMessage,
     ElMessageBox,
     ElButton,
-    ElCheckbox,
-    useLocale,
     type Column as elColumn,
-    type CheckboxValueType,
     type UploadFile,
     type UploadFiles,
 } from "element-plus"
 import { Search, Download, Upload, Delete, EditPen } from "@element-plus/icons-vue"
-import { getNowTimespan, exportExcel, importExcel } from "@/utils"
 import type { Column as execlCoumn } from "exceljs"
 
 defineOptions({
     name: "playlist"
 })
 
-type SelectionCellProps = {
-    value: boolean
-    intermediate?: boolean
-    ariaLabel?: string
-    onChange: (value: CheckboxValueType) => void
-}
+const queryClient = useQueryClient()
 
-const { t } = useLocale()
-
-const SelectionCell: FunctionalComponent<SelectionCellProps> = ({
-    value,
-    intermediate = false,
-    ariaLabel,
-    onChange,
-}) => {
-    return (
-        <ElCheckbox onChange={onChange} modelValue={value} ariaLabel={ariaLabel} indeterminate={intermediate} />
-    )
-}
-
-const loading = ref(false)
 const exportLoading = ref(false)
 const importLoading = ref(false)
 const total = ref(0)
-const list = ref(Array<PlaylistModel>())
 const cardRef = useTemplateRef("playlistDataCard")
 const playlistInfiniteList = useTemplateRef("playlistInfiniteList")
 const addPlaylistDialogRef = useTemplateRef("addPlaylistDialogRef")
-const baseFormValue = reactive({
+const baseFormValue = reactive<RequestPlaylist>({
     keyword: "",
-    page: 1,
     size: 20
 })
+
+const { data: response, refetch, fetchNextPage, isFetching } = usePlaylistInInfinite(baseFormValue)
+const list = computed(() => response.value?.pages.flatMap(item => {
+    total.value = item.total
+    return item.rows
+}).filter(Boolean))
+
 const exportColumns: Partial<execlCoumn>[] = [
     { header: "歌曲名", key: "song_name", width: 50 },
     { header: "歌手", key: "singer", width: 50 },
@@ -70,33 +51,6 @@ const importColumns: Partial<ImportColumn>[] = [
     { header: "SC曲目价格", key: "sc_price", type: "number" },
 ]
 const dataColumns: elColumn<any>[] = [
-    {
-        key: "selection",
-        width: 50,
-        cellRenderer: ({ rowData }) => {
-            const onChange = (value: CheckboxValueType) => (rowData.checked = value)
-            return (
-                <>
-                    <SelectionCell value={rowData.checked} ariaLabel={t('el.table.selectRowLabel')} onChange={onChange} />
-                </>
-            )
-        },
-        headerCellRenderer: () => {
-            const _data = unref(list)
-            const onChange = (value: CheckboxValueType) => (list.value = _data.map(row => {
-                row.checked = Boolean(value)
-                return row
-            }))
-            const allSelected = _data.every(row => row.checked)
-            const containsChecked = _data.some(row => row.checked)
-
-            return (
-                <>
-                    <SelectionCell value={allSelected} intermediate={containsChecked && !allSelected} ariaLabel={t('el.table.selectAllLabel')} onChange={onChange} />
-                </>
-            )
-        }
-    },
     {
         key: "song_name",
         dataKey: "song_name",
@@ -144,6 +98,44 @@ const dataColumns: elColumn<any>[] = [
     }
 ]
 
+// 删除
+const deleteMutation = useMutation({
+    mutationFn: async (params: number[]) => await request.deletePlaylist({ data: params }),
+    onSuccess: (data, variables) => {
+        if (data.code != 0) {
+            ElMessage.warning(data.msg)
+        } else {
+            const indicesSet = new Set(variables)
+            const newList = response.value?.pages.flatMap(item => item.rows).filter(item => !indicesSet.has(item.id)) ?? []
+            queryClient.setQueryData(
+                [request.getPlaylistList.name],
+                () => ({
+                    pages: [{ total: total.value - variables.length, rows: newList }]
+                })
+            )
+        }
+    },
+    onError: (error) => {
+        ElMessage.error(error.message)
+    }
+})
+
+// 导入
+const importMutation = useMutation({
+    mutationFn: async (params: PlaylistModel[]) => await request.importPlaylist({ data: params }),
+    onSuccess: (data) => {
+        if (data.code != 0) {
+            ElMessage.warning(data.msg)
+        } else {
+            refetch()
+        }
+        importLoading.value = false
+    },
+    onError: (error) => {
+        ElMessage.error(error.message)
+    }
+})
+
 /** 新增/编辑弹窗 */
 const addOrEditPlaylist = (rowData?: any) => {
     if (rowData) rowData = rowData as PlaylistModel
@@ -151,8 +143,8 @@ const addOrEditPlaylist = (rowData?: any) => {
 }
 
 const allDeletePlaylist = () => {
-    const checkedIds = list.value.filter(item => item.checked).map(item => item.id)
-    deletePlaylist(checkedIds)
+    const checkedIds = list.value?.filter(item => item.checked).map(item => item.id)
+    if (checkedIds) deletePlaylist(checkedIds)
 }
 
 /** 删除 */
@@ -162,15 +154,8 @@ const deletePlaylist = (ids: number[]) => {
         cancelButtonText: '取消',
         type: 'warning',
     })
-        .then(() => request.deletePlaylist({ data: ids }))
-        .then(response => {
-            if (response.code != 0) {
-                ElMessage.warning(response.msg)
-                return
-            }
-            ElMessage.success(response.msg)
-            const indicesSet = new Set(ids)
-            list.value = list.value.filter(item => !indicesSet.has(item.id))
+        .then(() => {
+            deleteMutation.mutate(ids)
         })
         .catch(error => {
             if ('string' == typeof error && 'cancel' == error) return
@@ -180,12 +165,7 @@ const deletePlaylist = (ids: number[]) => {
 
 /** 新增/编辑歌曲的回调 */
 const emitSubmit = (result: PlaylistModel) => {
-    const model = list.value.find(item => item.id == result.id)
-    if (model) {
-        Object.assign(model, result)
-        return
-    }
-    list.value.unshift(result)
+    refetch()
 }
 
 /** 导入excel */
@@ -210,18 +190,7 @@ const importFile = async (uploadFile: UploadFile, uploadFiles: UploadFiles) => {
         item.id = 0
         item.create_time = getNowTimespan()
     })
-    request.importPlaylist({ data: result }).then(response => {
-        if (response.code != 0) {
-            ElMessage.warning(response.msg)
-        } else {
-            ElMessage.success(response.msg)
-        }
-        importLoading.value = false
-        search()
-    }).catch(error => {
-        ElMessage.error(error)
-        importLoading.value = false
-    })
+    importMutation.mutate(result)
 }
 
 /** 导出excel */
@@ -256,34 +225,15 @@ const exportFile = () => {
     })
 }
 
-/** 加载table数据 */
-const load = () => {
-    loading.value = true
-    request.getPlaylistList(baseFormValue).then(response => {
-        if (response.code != 0) {
-            ElMessage.warning(response.msg)
-            loading.value = false
-            return
-        }
-        total.value = response.data.total
-        const result = response.data.rows as Array<PlaylistModel>
-        result.forEach(item => item.checked = false)
-        list.value = result
-        loading.value = false
-    }).catch(error => {
-        ElMessage.error(error)
-        loading.value = false
-    })
-}
-
 const search = () => {
-    baseFormValue.page = 1
-    load()
+    refetch()
 }
 
-const isChecked = computed(() => {
-    return list.value.filter(item => item.checked).length > 0 ? true : false
-})
+const nextPage = (remainDistance: number) => {
+    if (list.value && list.value.length < total.value) {
+        fetchNextPage()
+    }
+}
 
 onMounted(() => {
     const height = window.innerHeight * 0.9
@@ -291,8 +241,6 @@ onMounted(() => {
 
     const listHeight = height * 0.6
     playlistInfiniteList.value?.style.setProperty("height", `${listHeight}px`)
-
-    load()
 })
 </script>
 <template>
@@ -321,27 +269,22 @@ onMounted(() => {
             <el-divider />
             <div style="height: 40px;display: flex;">
                 <el-button type="primary" @click="addOrEditPlaylist()">新增歌曲</el-button>
-                <el-button type="danger" @click="allDeletePlaylist()" :disabled="!isChecked">全部删除</el-button>
+                <el-button type="danger" @click="allDeletePlaylist()" :disabled="list?.length == 0">全部删除</el-button>
             </div>
-            <el-card class="playlist-data-card" v-loading="loading" ref="playlistDataCard">
+            <el-card class="playlist-data-card" v-loading="isFetching" ref="playlistDataCard">
                 <template #default>
                     <div class="chat-infinite-list" ref="playlistInfiniteList">
                         <el-auto-resizer>
                             <template #default="{ width, height }">
-                                <el-table-v2 :columns="dataColumns" :data="list" :width="width" :height="height"
-                                    fixed></el-table-v2>
+                                <el-table-v2 :columns="dataColumns" :data="list || []" :width="width" :height="height"
+                                    @end-reached="nextPage" fixed></el-table-v2>
                             </template>
                         </el-auto-resizer>
                     </div>
                 </template>
                 <template #footer>
                     <div style="display: flex;">
-                        <div style="width: 50%">
-                            <el-pagination background layout="prev, pager, next" :total="total"
-                                v-model:page-size="baseFormValue.size" v-model:current-page="baseFormValue.page"
-                                @change="load" />
-                        </div>
-                        <div style="width: 50%;flex-direction: row-reverse;display: flex;gap: 10px;">
+                        <div style="width: 100%;flex-direction: row-reverse;display: flex;gap: 10px;">
                             <el-upload action="#" :auto-upload="false" :show-file-list="false" :on-change="importFile"
                                 accept=".xlsx">
                                 <template #trigger>

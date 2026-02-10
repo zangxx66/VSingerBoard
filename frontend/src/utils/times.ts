@@ -13,7 +13,7 @@ dayjs.locale('zh-cn')
  * @param timespan 时间戳
  * @returns 字符串,格式为 "YYYY-MM-DD HH:mm:ss"
  */
-const timespanToString = (timespan: number) => {
+export const timespanToString = (timespan: number) => {
     return dayjs.unix(timespan).format("YYYY-MM-DD HH:mm:ss")
 }
 
@@ -24,7 +24,7 @@ const timespanToString = (timespan: number) => {
  *  @param {string} format - 日期的格式
  *  @returns {string} 相对时间
  */
-const getRelativeTime = (date: string | number, format: string): string => {
+export const getRelativeTime = (date: string | number, format: string): string => {
     return dayjs(date, format).fromNow()
 }
 
@@ -33,7 +33,7 @@ const getRelativeTime = (date: string | number, format: string): string => {
  * @param date 字符串,格式为 "YYYY-MM-DD HH:mm:ss"
  * @returns 时间戳
  */
-const getTimespan = (date: string) => {
+export const getTimespan = (date: string) => {
     return dayjs(date).unix()
 }
 
@@ -42,7 +42,7 @@ const getTimespan = (date: string) => {
  * @param {string} date - UTC 时间字符串,格式为 "YYYY-MM-DD HH:mm:ss"
  * @returns {string} 本地时间字符串,格式为 "YYYY-MM-DD HH:mm:ss"
  */
-const utcToLocal = (date: string): string => {
+export const utcToLocal = (date: string): string => {
     return dayjs.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
 }
 
@@ -51,7 +51,7 @@ const utcToLocal = (date: string): string => {
  * 获取当前时间的时间戳
  * @returns {number} 当前时间的时间戳
  */
-const getNowTimespan = (): number => {
+export const getNowTimespan = (): number => {
     return dayjs().unix()
 }
 
@@ -59,7 +59,7 @@ const getNowTimespan = (): number => {
  * 获取当前日期的字符串表示
  * @returns {string} 当前日期的字符串表示，格式为 "YYYY-MM-DD"
  */
-const getNowDateString = (): string => {
+export const getNowDateString = (): string => {
     return dayjs().format('YYYY-MM-DD')
 }
 
@@ -68,16 +68,6 @@ const getNowDateString = (): string => {
  * @param tiemspan 秒级时间戳
  * @returns {number} 转换后的 23:59:59 的时间戳
  */
-const getEndOfDayTimespan = (tiemspan: number): number => {
+export const getEndOfDayTimespan = (tiemspan: number): number => {
     return dayjs.unix(tiemspan).endOf("day").unix()
-}
-
-export {
-    timespanToString,
-    getRelativeTime,
-    getTimespan,
-    utcToLocal,
-    getNowTimespan,
-    getNowDateString,
-    getEndOfDayTimespan,
 }

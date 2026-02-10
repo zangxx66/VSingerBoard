@@ -4,7 +4,6 @@ import { request } from "@/api"
 
 const refForm = ref<FormInstance>()
 const btnLoading = ref(false)
-const loading = ref(false)
 const baseFormValue = reactive<DyConfigModel>({
     id: 0,
     room_id: 0,
@@ -14,25 +13,24 @@ const baseFormValue = reactive<DyConfigModel>({
 })
 const danmakuStore = useDanmakuStore()
 
-const initConfig = () => {
-    loading.value = true
-    request.getDyConfig({}).then(response => {
-        const resp = response.data as ResponseModel
+const { data: dyConfigData, refetch, isFetching } = useGetDouyinConfig()
+
+const configMutation = useMutation({
+    mutationFn: async (params: DyConfigModel) => await request.addOrUpdateDyConfig({ data: params }),
+    onSuccess: (response) => {
         if (response.code != 0) {
-            ElMessage.warning(response.msg)
+            ElMessage.warning(response.msg || "请求失败")
         } else {
-            if (!response.data.data) {
-                loading.value = false
-                return
-            }
-            Object.assign(baseFormValue, response.data.data)
+            ElMessage.success("操作成功")
+            refetch()
+            danmakuStore.clearDanmakuList("douyin")
+            btnLoading.value = false
         }
-        loading.value = false
-    }).catch(error => {
-        ElMessage.error(error)
-        loading.value = false
-    })
-}
+    },
+    onError: (error) => {
+        ElMessage.error(error.message)
+    }
+})
 
 const addOrUpdateConfig = () => {
     if (typeof baseFormValue.room_id != "number" || baseFormValue.room_id < 1) {
@@ -52,24 +50,18 @@ const addOrUpdateConfig = () => {
         return
     }
     btnLoading.value = true
-    request.addOrUpdateDyConfig({ data: baseFormValue }).then(response => {
-        if (response.code != 0) {
-            ElMessage.warning(response.msg)
-        } else {
-            ElMessage.success(response.msg)
-            baseFormValue.id = response.data
-            danmakuStore.clearDanmakuList("douyin")
-        }
-        btnLoading.value = false
-    }).catch(error => {
-        ElMessage.error(error)
-        btnLoading.value = false
-    })
+    configMutation.mutate(baseFormValue)
 }
 
 
-onMounted(() => {
-    initConfig()
+watch(isFetching, () => {
+    if(dyConfigData && dyConfigData.value) {
+        baseFormValue.id = dyConfigData.value.id
+        baseFormValue.room_id = dyConfigData.value.room_id
+        baseFormValue.sing_prefix = dyConfigData.value.sing_prefix
+        baseFormValue.sing_cd = dyConfigData.value.sing_cd
+        baseFormValue.fans_level = dyConfigData.value.fans_level
+    }
 })
 </script>
 <template>
@@ -79,7 +71,7 @@ onMounted(() => {
                 <span>抖音设置</span>
             </div>
         </template>
-        <el-form :mode="baseFormValue" ref="refForm" label-width="auto" v-loading="loading">
+        <el-form :mode="baseFormValue" ref="refForm" label-width="auto" v-loading="isFetching">
             <el-form-item label="房间号" prop="room_id">
                 <el-input-number v-model="baseFormValue.room_id" :min="1" :controls="false" />
             </el-form-item>

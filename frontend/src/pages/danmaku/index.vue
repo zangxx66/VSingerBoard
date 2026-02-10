@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { processDanmaku } from "@/utils"
 import type { ScrollbarInstance } from "element-plus"
 
 defineOptions({

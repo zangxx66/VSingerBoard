@@ -2,6 +2,12 @@ import { ElMessage, ElNotification } from "element-plus"
 import { emojiList } from "./emoji"
 import { emoticons } from "./emoticons"
 import { request } from "@/api"
+import type { DefaultError, InfiniteData, QueryClient, QueryKey } from '@tanstack/query-core'
+import type {
+  UseInfiniteQueryOptions,
+  UseInfiniteQueryReturnType,
+} from '@tanstack/vue-query'
+import type { UnwrapNestedRefs } from 'vue'
 
 const emojiexp = /\[[\u4E00-\u9FA5A-Za-z0-9_]+\]/g
 const { copy } = useClipboard()
@@ -97,4 +103,22 @@ export const processDanmaku = (list: DanmakuModel[]) => {
 
 export const copyToClipboard = (text: string) => {
   copy(text)
+}
+
+export const useInfiniteQueryUnrefs = <
+  TQueryFnData,
+  TError = DefaultError,
+  TData = InfiniteData<TQueryFnData>,
+  TQueryKey extends QueryKey = QueryKey,
+  TPageParam = unknown,
+>(
+  options: UseInfiniteQueryOptions<TQueryFnData, TError, TData, TQueryKey, TPageParam>,
+  queryClient?: QueryClient,
+) => {
+  const queryResult = useInfiniteQuery(
+    options,
+    queryClient as any,
+  )
+
+  return reactive(queryResult) as UnwrapNestedRefs<UseInfiniteQueryReturnType<TData, TError>>
 }

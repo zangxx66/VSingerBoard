@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ElMessage } from "element-plus"
-import { getNowTimespan }  from "@/utils"
 
 const isShow = ref(false)
 const danmakuStore = useDanmakuStore()

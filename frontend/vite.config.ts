@@ -21,12 +21,19 @@ export default defineConfig({
     Layouts({
       layoutsDirs: 'src/layouts',
       defaultLayout: 'default',
-      importMode: (_name) => 'async'
+      importMode: (_name) => 'async',
     }),
     vueDevTools(),
     AutoImport({
-      imports: ['vue', 'pinia', VueRouterAutoImports, '@vueuse/core'],
-      dirs: ['./src/stores/**'],
+      imports: [
+        'vue',
+        'pinia',
+        VueRouterAutoImports,
+        '@vueuse/core',
+        { '@tanstack/vue-query': ['useMutation', 'useQuery', 'useInfiniteQuery', 'useQueryClient'] },
+      ],
+      dirs: ['./src/stores/**', './src/services/**', './src/utils/**'],
+      eslintrc: { enabled: true },
       resolvers: [
         ElementPlusResolver(),
         IconsResolver({
@@ -35,7 +42,7 @@ export default defineConfig({
       ],
     }),
     VueRouter({
-      dts: 'src/route-map.d.ts'
+      dts: 'src/route-map.d.ts',
     }),
     Components({
       extensions: ['vue', 'tsx'],
@@ -75,15 +82,15 @@ export default defineConfig({
         entryFileNames: 'js/[name]-[hash].js',
         assetFileNames: (assetInfo) => {
           const assetsName = assetInfo.names[0]
-          if (assetsName.endsWith('.css')){
+          if (assetsName.endsWith('.css')) {
             return 'css/[name]-[hash].css'
           }
 
           const imgExts = ['.png', '.jpeg', '.jpg', '.gif', '.svg', '.webp']
-          if (imgExts.some(ext => assetsName.endsWith(ext))){
+          if (imgExts.some((ext) => assetsName.endsWith(ext))) {
             return 'images/[name].[ext]'
           }
-          
+
           return 'assets/[name]-[hash].[ext]'
         },
         manualChunks(id: string) {

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { CopyDocument } from "@element-plus/icons-vue"
 import { ElMessage } from "element-plus"
-import { copyToClipboard } from "@/utils"
 
 const formValue = reactive({
     url: `${window.location.origin}/danmaku`

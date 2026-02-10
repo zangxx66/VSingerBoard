@@ -5,7 +5,6 @@ import {
   type RouteRecordRaw,
 } from 'vue-router'
 import { routes } from 'vue-router/auto-routes'
-import { start, stop } from '@/utils'
 import { ElMessage } from 'element-plus'
 import { setupLayouts } from 'virtual:generated-layouts'
 
@@ -26,7 +25,7 @@ const router = createRouter({
 })
 
 router.beforeEach(async (toString, from) => {
-  start()
+  startProgress()
   if (navigator.userAgent != "pywebview" && toString.path != "/danmaku") {
     return false
   }
@@ -36,7 +35,7 @@ router.beforeEach(async (toString, from) => {
 })
 
 router.afterEach((to, from, failure) => {
-  stop()
+  stopProgress()
   if (isNavigationFailure(failure) && to.name != from.name) {
     ElMessage.warning(`failled navigation:${failure}`)
   }

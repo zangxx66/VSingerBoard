@@ -4,10 +4,9 @@ import { HomeFilled, Tools, List, InfoFilled, Sunny, Moon, Calendar, Collection 
 import ContextMenu from '@imengyu/vue3-context-menu'
 import { ElMessage, type MenuItemInstance, type CardConfigContext } from "element-plus"
 import { request } from "@/api"
-import { toggleDark, pasteToElement, copyToClipboard } from "@/utils"
 
 defineOptions({
-    name: "defaultLayout"
+  name: "defaultLayout"
 })
 
 const themeStore = useThemeStore()
@@ -76,39 +75,62 @@ const globalConfig = reactive<GlobalConfigModel>({
   navSideTour: false,
   collapse: false
 })
+
+const { data: globalConfigData, isFetching } = useGetGlobalConfig()
+
+/**
+ * 初始化全局配置
+ * 从服务器获取全局配置，并将其保存到应用程序中
+ * 如果获取失败，将显示错误信息
+ */
+const initGlobalConfig = () => {
+  const model = globalConfigData.value
+  if (model) {
+    Object.assign(globalConfig, model)
+    toggleDark(model.dark_mode)
+    themeStore.setDarkTheme(model.dark_mode)
+    if (!model.navSideTour) {
+      navSideTour.value = true
+    }
+  } else {
+    navSideTour.value = true
+  }
+}
+
+const globalConfigMutation = useMutation({
+  mutationFn: async (params: GlobalConfigModel) => await request.addOrUpdateGlobalConfig({ data: params }),
+  onSuccess: (data) => {
+    if (data.code != 0) {
+      ElMessage.warning(data.msg || "请求异常")
+    } else {
+      globalConfig.id = data.data
+    }
+  },
+  onError: (error) => {
+    ElMessage.error(error.message)
+  }
+})
 const navSideTour = ref(false)
 const homeRef = ref<MenuItemInstance | null>()
 const historyRef = ref<MenuItemInstance | null>()
 const settingsRef = ref<MenuItemInstance | null>()
 const themeRef = ref<MenuItemInstance | null>()
 const mainRef = useTemplateRef("mainRef")
+
 const finishTour = () => {
   globalConfig.navSideTour = true
-  updateGlobalConfig()
+  globalConfigMutation.mutate(globalConfig)
   navSideTour.value = false
 }
+
 const closeTour = async () => {
   // 等待dom更新
   await nextTick()
   // 如果finish已经关闭tour，什么也不做
   if (globalConfig.navSideTour) return
   globalConfig.navSideTour = true
-  updateGlobalConfig()
+  globalConfigMutation.mutate(globalConfig)
   navSideTour.value = false
-}
-const updateGlobalConfig = () => {
-  request
-    .addOrUpdateGlobalConfig({ data: globalConfig })
-    .then(response => {
-      if (response.code != 0) {
-        ElMessage.warning(response.msg || "保存失败")
-      } else {
-        globalConfig.id = response.data
-      }
-    })
-    .catch(error => {
-      ElMessage.error(error)
-    })
 }
 
 /**
@@ -118,7 +140,7 @@ const updateGlobalConfig = () => {
 const goto = (name: string) => {
   if (route.path == name) {
     globalConfig.collapse = !globalConfig.collapse
-    updateGlobalConfig()
+    globalConfigMutation.mutate(globalConfig)
     return
   }
 
@@ -179,39 +201,9 @@ const onContextMenu = async (e: MouseEvent) => {
   })
 }
 
-/**
- * 初始化全局配置
- * 从服务器获取全局配置，并将其保存到应用程序中
- * 如果获取失败，将显示错误信息
- * @returns {Promise<void>} 无返回值 Promise
- */
-const initGlobalConfig = async (): Promise<void> => {
-  request.getGlobalConfig({}).then(response => {
-    if (response.code != 0) {
-      ElMessage.warning(response.msg)
-    } else {
-      const model = response.data.data
-      if (model) {
-        Object.assign(globalConfig, model)
-        toggleDark(model.dark_mode)
-        themeStore.setDarkTheme(model.dark_mode)
-        if (!model.navSideTour) {
-          navSideTour.value = true
-        }
-      } else {
-        navSideTour.value = true
-      }
-    }
-  })
-    .catch(error => {
-      ElMessage.error(error)
-      console.error("获取全局配置失败", error)
-    })
-}
-
 const updateTheme = () => {
   globalConfig.dark_mode = !globalConfig.dark_mode
-  updateGlobalConfig()
+  globalConfigMutation.mutate(globalConfig)
   toggleDark(globalConfig.dark_mode)
   themeStore.setDarkTheme(globalConfig.dark_mode)
 }
@@ -232,12 +224,9 @@ const isDarktheme = computed(() => {
   return themeStore.getDarkTheme()
 })
 
-onMounted(() => {
-  setTimeout(() => {
-    initGlobalConfig()
-  }, 1000)
-})
-
+watch(isFetching, () => {
+  if(globalConfigData.value) initGlobalConfig()
+}, { once: true })
 </script>
 
 <template>
@@ -269,7 +258,6 @@ onMounted(() => {
             <component :is="Component" />
           </keep-alive>
         </router-view>
-        <el-backtop :right="100" :bottom="100" />
         <!-- 
         el-tour组件finish和close事件的的使用示例
         https://github.com/element-plus/element-plus/issues/22419 

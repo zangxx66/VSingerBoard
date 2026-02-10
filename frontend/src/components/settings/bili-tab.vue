@@ -3,7 +3,6 @@ import { ElMessage, ElButton, type FormInstance } from 'element-plus'
 import { request } from '@/api'
 
 const refForm = ref<FormInstance>()
-const loading = ref(false)
 const baseFormValue = reactive<BiliConfigModel>({
     id: 0,
     room_id: 0,
@@ -33,27 +32,23 @@ const dropdownMenu = [
     },
 ]
 
-const initConfig = () => {
-    loading.value = true
-    request
-        .getBiliConfig({})
-        .then((response) => {
-            if (response.code != 0) {
-                ElMessage.warning(response.msg)
-            } else {
-                const data = response.data.data
-                if (data) {
-                    Object.assign(baseFormValue, data)
-                }
-            }
-            loading.value = false
-        })
-        .catch((error) => {
-            ElMessage.error(error)
-            console.error("getBiliConfig", error)
-            loading.value = false
-        })
-}
+const { data: biliConfigData, refetch, isFetching } = useGetBilibiliConfig()
+
+const configMutation = useMutation({
+    mutationFn: async (params: BiliConfigModel) => await request.addOrUpdateBiliConfig({ data: params }),
+    onSuccess: (response) => {
+        if (response.code != 0) {
+            ElMessage.warning(response.msg || "请求失败")
+        } else {
+            ElMessage.success("操作成功")
+            refetch()
+            danmakuStore.clearDanmakuList("bilibili")
+        }
+    },
+    onError: (error) => {
+        ElMessage.error(error.message)
+    }
+})
 
 const addOrUpdateConfig = () => {
     if (typeof baseFormValue.room_id != "number" || baseFormValue.room_id < 1) {
@@ -72,62 +67,53 @@ const addOrUpdateConfig = () => {
         ElMessage.warning("请输入正确的点歌cd")
         return
     }
-    request
-        .addOrUpdateBiliConfig({ data: baseFormValue })
-        .then((response) => {
-            if (response.code != 0) {
-                ElMessage.warning(response.msg)
-            } else {
-                ElMessage.success(response.msg)
-                baseFormValue.id = response.data
-                danmakuStore.clearDanmakuList("bilibili")
-            }
-        })
-        .catch((error) => ElMessage.error(error))
+    configMutation.mutate(baseFormValue)
 
 }
 
-onMounted(() => {
-    initConfig()
+watch(isFetching, () => {
+    if (biliConfigData && biliConfigData.value) {
+        baseFormValue.id = biliConfigData.value.id
+        baseFormValue.room_id = biliConfigData.value.room_id
+        baseFormValue.modal_level = biliConfigData.value.modal_level
+        baseFormValue.user_level = biliConfigData.value.user_level
+        baseFormValue.sing_prefix = biliConfigData.value.sing_prefix
+        baseFormValue.sing_cd = biliConfigData.value.sing_cd
+    }
 })
 </script>
 <template>
-    <div v-loading="loading">
-        <el-card>
-            <template #header>
-                <div class="card-header">
-                    <span>基础设置</span>
-                </div>
-            </template>
-            <el-form :model="baseFormValue" ref="refForm" label-width="auto">
-                <el-form-item label="房间号" prop="room_id">
-                    <el-input-number v-model="baseFormValue.room_id" placeholder="B站直播间号" :min="1" :controls="false" />
-                </el-form-item>
-                <el-form-item label="粉丝牌等级" prop="modal_level">
-                    <el-input-number v-model="baseFormValue.modal_level" placeholder="粉丝牌等级" :min="0"
-                        :controls="false" />
-                </el-form-item>
-                <el-form-item label="用户等级" prop="user_level">
-                    <el-radio-group v-model="baseFormValue.user_level">
-                        <template v-for="item in dropdownMenu">
-                            <el-radio :value="item.value">{{ item.key }}</el-radio>
-                        </template>
-                    </el-radio-group>
-                </el-form-item>
-                <el-form-item label="点歌指令" prop="sing_prefix">
-                    <el-input v-model="baseFormValue.sing_prefix" placeholder="点歌指令" type="text"
-                        style="width: 240px;" />
-                </el-form-item>
-                <el-form-item label="点歌cd" prop="sing_cd">
-                    <el-input-number v-model="baseFormValue.sing_cd" placeholder="点歌cd，单位：秒" :min="0"
-                        :controls="false" />
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="addOrUpdateConfig()">保存</el-button>
-                </el-form-item>
-            </el-form>
-        </el-card>
-        <el-divider />
-        <bili-credential />
-    </div>
+    <el-card>
+        <template #header>
+            <div class="card-header">
+                <span>基础设置</span>
+            </div>
+        </template>
+        <el-form :model="baseFormValue" ref="refForm" label-width="auto" v-loading="isFetching">
+            <el-form-item label="房间号" prop="room_id">
+                <el-input-number v-model="baseFormValue.room_id" placeholder="B站直播间号" :min="1" :controls="false" />
+            </el-form-item>
+            <el-form-item label="粉丝牌等级" prop="modal_level">
+                <el-input-number v-model="baseFormValue.modal_level" placeholder="粉丝牌等级" :min="0" :controls="false" />
+            </el-form-item>
+            <el-form-item label="用户等级" prop="user_level">
+                <el-radio-group v-model="baseFormValue.user_level">
+                    <template v-for="item in dropdownMenu">
+                        <el-radio :value="item.value">{{ item.key }}</el-radio>
+                    </template>
+                </el-radio-group>
+            </el-form-item>
+            <el-form-item label="点歌指令" prop="sing_prefix">
+                <el-input v-model="baseFormValue.sing_prefix" placeholder="点歌指令" type="text" style="width: 240px;" />
+            </el-form-item>
+            <el-form-item label="点歌cd" prop="sing_cd">
+                <el-input-number v-model="baseFormValue.sing_cd" placeholder="点歌cd，单位：秒" :min="0" :controls="false" />
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="addOrUpdateConfig()">保存</el-button>
+            </el-form-item>
+        </el-form>
+    </el-card>
+    <el-divider />
+    <bili-credential />
 </template>

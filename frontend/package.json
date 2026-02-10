@@ -18,6 +18,8 @@
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
     "@imengyu/vue3-context-menu": "^1.5.3",
+    "@tanstack/query-core": "^5.90.20",
+    "@tanstack/vue-query": "^5.92.9",
     "@vueuse/core": "^14.2.0",
     "axios": "^1.13.4",
     "dayjs": "^1.11.19",

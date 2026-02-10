@@ -38,8 +38,7 @@ const credentialColumns: Column<any>[] = [
                 activeText="启用"
                 inactiveText="禁用"
                 onChange={(val: string | number | boolean) => {
-                    rowData.enable = val
-                    changeStatus(val, rowData.id)
+                    statusMutation.mutate({ id: rowData.id, enable: val })
                 }}
             >
                 {' '}
@@ -74,62 +73,108 @@ const credentialColumns: Column<any>[] = [
     },
 ]
 
-const initCredential = () => {
-    request.getBiliCredentialList({}).then((response) => {
+const { data: list, refetch, isFetching } = useGetBilibiliCredential()
+
+const statusMutation = useMutation({
+    mutationFn: async (params: object) => await request.updateBiliCredential({ data: params }),
+    onSuccess: (response) => {
         if (response.code != 0) {
-            ElMessage.warning(response.msg)
+            ElMessage.warning(response.msg || "设置失败")
         } else {
-            credentialList.value = response.data.rows
+            refetch()
         }
-    }).catch(error => {
-        ElMessage.error(error)
-    })
-}
-
-/** 更改状态 */
-const changeStatus = (val: string | number | boolean, id: number) => {
-    request.updateBiliCredential({ data: { id: id, enable: val } })
-        .then(response => {
-            if (response.code != 0) {
-                ElMessage.warning(response.msg || "设置失败")
-                revertLocalValue(id, !val)
-                return
-            }
-            ElMessage.success(response.msg || "设置成功")
-            credentialList.value.forEach((value, index, array) => {
-                if (value.id == id) return
-                value.enable = !val
-            })
-        })
-        .catch(error => {
-            ElMessage.error(error)
-            revertLocalValue(id, !val)
-        })
-}
-
-/** 修改状态失败时恢复原样 */
-const revertLocalValue = (id: number, value: boolean | string | number) => {
-    const index = credentialList.value.findIndex(item => item.id === id)
-    if (index !== -1) {
-        (credentialList.value[index] as any)["enable"] = value
+    },
+    onError: (error) => {
+        ElMessage.error(error.message)
     }
-}
+})
 
-/** 打开登录二维码弹窗 */
-const addSub = () => {
-    request
-        .getBiliCredentialCode({})
-        .then((response) => {
-            if (response.code != 0) {
-                ElMessage.warning(response.msg)
-                return
+const checkQrCodeMutation = useMutation({
+    mutationFn: async () => await request.checkQrCode({}),
+    onSuccess: (response) => {
+        if (response.code != 0) {
+            ElMessage.warning(response.msg || "请求失败")
+        } else {
+            if (response.msg == 'success') {
+                clearInterval(timer.value)
+                timer.value = 0
+                qrCodeText.value = ''
+                ElMessage.success('登录成功')
+                refetch()
+                isShow.value = false
             }
+            if (response.msg == 'qr_state') {
+                switch (response.data.data) {
+                    case 'confirm':
+                        qrCodeText.value = '已扫码'
+                        break
+                    case 'timeout':
+                        qrCodeText.value = '二维码已过期'
+                        break
+                    case 'done':
+                        clearInterval(timer.value)
+                        timer.value = 0
+                        qrCodeText.value = ''
+                        ElMessage.success('登录成功')
+                        refetch()
+                        isShow.value = false
+                        break
+                    default:
+                        qrCodeText.value = ''
+                        break
+                }
+            }
+        }
+    },
+    onError: (error) => {
+        ElMessage.error(error.message)
+    }
+})
+
+const qrCodeMutation = useMutation({
+    mutationFn: async () => await request.getBiliCredentialCode({}),
+    onSuccess: (response) => {
+        if (response.code != 0) {
+            ElMessage.warning(response.msg || "获取失败")
+        } else {
             qrCode.value = response.data.data
-            timer.value = setInterval(checkQrCode, 3000)
+            timer.value = setInterval(checkQrCodeMutation.mutate, 3000)
             isShow.value = true
-        })
-        .catch((error) => ElMessage.error(error))
-}
+        }
+    },
+    onError: (error) => {
+        ElMessage.error(error.message)
+    }
+})
+
+const deleteMutation = useMutation({
+    mutationFn: async (params: number) => await request.deleteBiliCredential({ id: params }),
+    onSuccess: (response) => {
+        if (response.code != 0) {
+            ElMessage.warning(response.msg || "请求失败")
+        } else {
+            refetch()
+        }
+    },
+    onError: (error) => {
+        ElMessage.error(error.message)
+    }
+})
+
+const refreshMutation = useMutation({
+    mutationFn: async (params: number) => await request.refreshBiliCredential({ id: params }),
+    onSuccess: (response) => {
+        if (response.code != 0) {
+            ElMessage.warning(response.msg || "请求失败")
+        } else {
+            ElMessage.success("刷新完成")
+        }
+        btnLoading.value = false
+    },
+    onError: (error) => {
+        ElMessage.error(error.message)
+    }
+})
 
 /** 删除凭证 */
 const removeSub = (id: number) => {
@@ -138,16 +183,7 @@ const removeSub = (id: number) => {
         cancelButtonText: '取消',
         type: 'warning',
     })
-        .then(() => request.deleteBiliCredential({ id: id }))
-        .then((response) => {
-            if (response.code != 0) {
-                ElMessage.warning(response.msg)
-            } else {
-                ElMessage.success(response.msg)
-                const list = credentialList.value.filter((item) => item.id != id)
-                credentialList.value = list
-            }
-        })
+        .then(() => deleteMutation.mutate(id))
         .catch((error) => {
             if ('string' == typeof error && 'cancel' == error) return
             ElMessage.error(error)
@@ -157,62 +193,7 @@ const removeSub = (id: number) => {
 /** 刷新凭证 */
 const refreshSub = (id: number) => {
     btnLoading.value = true
-    request
-        .refreshBiliCredential({ id: id })
-        .then((response) => {
-            if (response.code != 0) {
-                ElMessage.warning(response.msg)
-            } else {
-                ElMessage.success('success')
-            }
-            btnLoading.value = false
-        })
-        .catch((error) => {
-            ElMessage.error(error)
-            btnLoading.value = false
-        })
-}
-
-/** 轮询二维码状态 */
-const checkQrCode = () => {
-    request
-        .checkQrCode({})
-        .then((response) => {
-            if (response.code == 0) {
-                if (response.msg == 'success') {
-                    clearInterval(timer.value)
-                    timer.value = 0
-                    qrCodeText.value = ''
-                    ElMessage.success('登录成功')
-                    initCredential()
-                    isShow.value = false
-                }
-                if (response.msg == 'qr_state') {
-                    switch (response.data.data) {
-                        case 'confirm':
-                            qrCodeText.value = '已扫码'
-                            break
-                        case 'timeout':
-                            qrCodeText.value = '二维码已过期'
-                            break
-                        case 'done':
-                            clearInterval(timer.value)
-                            timer.value = 0
-                            qrCodeText.value = ''
-                            ElMessage.success('登录成功')
-                            initCredential()
-                            isShow.value = false
-                            break
-                        default:
-                            qrCodeText.value = ''
-                            break
-                    }
-                }
-            } else {
-                ElMessage.warning(response.msg || '二维码状态请求错误')
-            }
-        })
-        .catch((error) => ElMessage.error(error))
+    refreshMutation.mutate(id)
 }
 
 const closeDialog = () => {
@@ -220,8 +201,10 @@ const closeDialog = () => {
     timer.value = 0
 }
 
-onMounted(() => {
-    initCredential()
+watch(isFetching, () => {
+    if (list.value) {
+        credentialList.value = list.value
+    }
 })
 </script>
 <template>
@@ -229,13 +212,14 @@ onMounted(() => {
         <template #header>
             <div class="b-credential-card-header">
                 <span>账号设置</span>
-                <el-alert title="未登录账号无法获取到弹幕用户昵称等信息，如有需要可添加一个小号" type="warning" :closable="false" style="margin-top: 1rem;" />
+                <el-alert title="未登录账号无法获取到弹幕用户昵称等信息，如有需要可添加一个小号" type="warning" :closable="false"
+                    style="margin-top: 1rem;" />
             </div>
         </template>
         <div class="mb-4 flex items-center">
-            <el-button type="primary" @click="addSub">新增</el-button>
+            <el-button type="primary" @click="qrCodeMutation.mutate()">新增</el-button>
         </div>
-        <div style="height: 300px;padding-top: 1rem;">
+        <div style="height: 300px;padding-top: 1rem;" v-loading="isFetching">
             <el-auto-resizer>
                 <template #default="{ width, height }">
                     <el-table-v2 :columns="credentialColumns" :data="credentialList" :width="width" :height="height"
