@@ -121,6 +121,9 @@ export default defineConfig({
           if (id.includes('node_modules')) {
             return 'vendor-libs'
           }
+          if (id.includes('src/api')) {
+            return 'api'
+          }
         },
       },
     },

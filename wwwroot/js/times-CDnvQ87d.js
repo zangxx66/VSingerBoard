@@ -1,0 +1,1 @@
+import{ad as a,bf as s,bg as n,bh as e}from"./vendor-libs-Kq5ll9xE.js";a.extend(s),a.extend(n),a.extend(e),a.locale("zh-cn");const t=s=>a.unix(s).format("YYYY-MM-DD HH:mm:ss"),o=s=>a.utc(s).local().format("YYYY-MM-DD HH:mm:ss"),m=()=>a().unix(),x=s=>a.unix(s).endOf("day").unix();export{x as a,m as g,t,o as u};
