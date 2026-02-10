@@ -40,6 +40,7 @@ export default defineConfig({
           prefix: 'Icon',
         }),
       ],
+      vueTemplate: true
     }),
     VueRouter({
       dts: 'src/route-map.d.ts',
