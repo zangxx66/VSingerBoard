@@ -71,3 +71,8 @@ onMounted(() => {
         </div>
     </el-card>
 </template>
+<route lang="json">
+    {
+        "name": "about"
+    }
+</route>

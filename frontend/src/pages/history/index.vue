@@ -181,3 +181,8 @@ onMounted(() => {
         </el-main>
     </el-container>
 </template>
+<route lang="json">
+    {
+        "name": "history"
+    }
+</route>

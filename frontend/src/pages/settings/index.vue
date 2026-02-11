@@ -2,7 +2,7 @@
 import type { TabsPaneContext } from "element-plus"
 
 defineOptions({
-  name: "settings"
+    name: "settings"
 })
 
 const activeName = ref("1")
@@ -30,3 +30,8 @@ const tabClickHandle = (pane: TabsPaneContext, ev: Event) => {
     </el-main>
   </el-container>
 </template>
+<route lang="json">
+    {
+        "name": "settings"
+    }
+</route>

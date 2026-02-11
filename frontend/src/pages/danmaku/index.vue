@@ -89,6 +89,7 @@ onMounted(() => {
 </template>
 <route lang="json">
 {
+    "name": "danmaku",
     "meta": {
         "layout": "blank"
     }

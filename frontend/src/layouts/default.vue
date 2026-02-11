@@ -2,7 +2,7 @@
 import zhCn from "element-plus/es/locale/lang/zh-cn"
 import { HomeFilled, Tools, List, InfoFilled, Sunny, Moon, Calendar, Collection } from "@element-plus/icons-vue"
 import ContextMenu from '@imengyu/vue3-context-menu'
-import { ElMessage, type MenuItemInstance, type CardConfigContext } from "element-plus"
+import { ElMessage, type MenuItemInstance, type CardConfigContext, type TabPaneName } from "element-plus"
 import { request } from "@/api"
 
 defineOptions({
@@ -10,8 +10,8 @@ defineOptions({
 })
 
 const themeStore = useThemeStore()
-const route = useRoute()
-const router = useRouter()
+const route = useRoute() // 当前路由实例
+const router = useRouter() // 路由器实例
 const cardConfig: CardConfigContext = {
   shadow: "always"
 }
@@ -27,6 +27,14 @@ const messageConfig = {
   offset: 70,
   plain: true
 }
+
+const activeTabName = ref("/")
+const activeMenu = ref("0")
+const openTabs = ref<TabItem[]>([])
+// 缓存已打开的tab
+const components = computed(() => {
+  return openTabs.value.map(item => item.componentName).filter(Boolean)
+})
 
 const menuItemList = [
   {
@@ -133,6 +141,11 @@ const closeTour = async () => {
   navSideTour.value = false
 }
 
+const updateActiveMenu = (routeName: string) => {
+  const menuItemIndex = menuItemList.findIndex(item => item.routerName == routeName)
+  activeMenu.value = menuItemIndex.toString()
+}
+
 /**
  * 跳转到指定页面
  * @param {string} name 路由的name
@@ -144,7 +157,62 @@ const goto = (name: string) => {
     return
   }
 
-  router.push({ path: name })
+  changeTab(name as TabPaneName)
+}
+
+/**
+ * 切换标签页
+ * @param name 
+ */
+const changeTab = (name: TabPaneName) => {
+  const tabName = name.toString()
+
+  const currentRouteTitle = menuItemList.find(item => item.routerName == tabName)?.title || route.path
+  let tab = openTabs.value.find(tab => tab.name === tabName)
+
+  if (!tab) {
+    tab = {
+      name: tabName,
+      title: currentRouteTitle,
+      path: tabName,
+      closable: tabName !== "/", 
+      componentName: tabName == "/" ? "home" : tabName.replaceAll('/', '')
+    }
+    openTabs.value.push(tab)
+  }
+
+  activeTabName.value = tabName
+  router.push({ path: tabName })
+  updateActiveMenu(tabName)
+} 
+
+/**
+ * 移除标签页
+ * @param {TabPaneName} targetTabName 要移除的标签页的name
+ */
+const removeTab = (targetTabName: TabPaneName) => {
+  const tabs = openTabs.value
+  const tabName = targetTabName.toString()
+  let newActiveTabName = activeTabName.value
+
+  if (newActiveTabName === tabName) {
+    tabs.forEach((tab, index) => {
+      if (tab.name === tabName) {
+        const nextTab = tabs[index + 1] || tabs[index - 1]
+        if (nextTab) {
+          newActiveTabName = nextTab.name
+        } else {
+          // 如果没有其他标签页，则回到首页
+          newActiveTabName = "/"
+        }
+      }
+    })
+  }
+
+  openTabs.value = tabs.filter(tab => tab.name !== tabName)
+  activeTabName.value = newActiveTabName
+  router.push({ path: newActiveTabName })
+  updateActiveMenu(newActiveTabName)
 }
 
 /**
@@ -225,23 +293,35 @@ const isDarktheme = computed(() => {
 })
 
 watch(isFetching, () => {
-  if(globalConfigData.value) initGlobalConfig()
+  if (globalConfigData.value) initGlobalConfig()
 }, { once: true })
+
+onMounted(() => {
+  const currentRouteTitle = menuItemList.find(item => item.routerName == route.path)?.title || route.name
+  openTabs.value.push({
+    name: route.path,
+    title: currentRouteTitle,
+    path: route.path,
+    closable: route.path !== "/",
+    componentName: route.name as string
+  })
+  activeTabName.value = route.path
+})
 </script>
 
 <template>
   <el-container class="layout-container-demo">
     <el-aside :style="asideStyle">
-      <el-menu default-active="0" :collapse="globalConfig.collapse" class="layout-aside-menu">
+      <el-menu :default-active="activeMenu" :collapse="globalConfig.collapse" class="layout-aside-menu">
         <template v-for="item, index in menuItemList" :key="index">
-          <el-menu-item :index="`${index}`" @click="goto(item.routerName)" :ref="item.ref || undefined">
+          <el-menu-item :index="index.toString()" @click="goto(item.routerName)" :ref="item.ref || undefined">
             <el-icon>
               <component :is="item.icon" />
             </el-icon>
             <template #title>{{ item.title }}</template>
           </el-menu-item>
         </template>
-        <el-menu-item ref="themeRef" @click="updateTheme">
+        <el-menu-item :index="(menuItemList.length + 1).toString()" ref="themeRef" @click="updateTheme">
           <el-icon v-if="!isDarktheme">
             <Sunny />
           </el-icon>
@@ -253,11 +333,16 @@ watch(isFetching, () => {
     </el-aside>
     <el-main @contextmenu="onContextMenu" :style="mainStyle" ref="mainRef">
       <el-config-provider :locale="zhCn" :card="cardConfig" :dialog="dialogConfig" :message="messageConfig">
-        <router-view v-slot="{ Component }">
-          <keep-alive :include="['home']">
-            <component :is="Component" />
-          </keep-alive>
-        </router-view>
+        <el-tabs v-model="activeTabName" type="card" closable @tab-remove="removeTab" @tab-change="changeTab">
+          <el-tab-pane v-for="item in openTabs" :key="item.name" :label="item.title" :name="item.name"
+            :closable="item.closable">
+            <router-view v-slot="{ Component }">
+              <keep-alive :include="components">
+                <component :is="Component" />
+              </keep-alive>
+            </router-view>
+          </el-tab-pane>
+        </el-tabs>
         <!-- 
         el-tour组件finish和close事件的的使用示例
         https://github.com/element-plus/element-plus/issues/22419 

@@ -236,7 +236,7 @@ const nextPage = (remainDistance: number) => {
 }
 
 onMounted(() => {
-    const height = window.innerHeight * 0.9
+    const height = window.innerHeight * 0.9 - 60
     cardRef.value?.$el.style.setProperty("overflow", "hidden")
 
     const listHeight = height * 0.6
@@ -310,3 +310,8 @@ onMounted(() => {
         </el-main>
     </el-container>
 </template>
+<route lang="json">
+    {
+        "name": "playlist"
+    }
+</route>

@@ -145,7 +145,7 @@ watch(danmakuList, async () => {
 })
 
 onMounted(() => {
-    const height = window.innerHeight * 0.9
+    const height = window.innerHeight * 0.9 - 40
     chatMainRef.value?.$el.style.setProperty("overflow", "hidden")
 
     const listHeight = height * 0.8
@@ -256,3 +256,8 @@ onMounted(() => {
         </el-main>
     </el-container>
 </template>
+<route lang="json">
+    {
+        "name": "home"
+    }
+</route>

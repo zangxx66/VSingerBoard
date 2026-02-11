@@ -66,3 +66,8 @@ onMounted(() => {
         </div>
     </el-card>
 </template>
+<route lang="json">
+    {
+        "name": "changelog"
+    }
+</route>

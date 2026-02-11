@@ -138,3 +138,10 @@ type RequestPlaylist = {
     page?: number
     size: number
 }
+type TabItem = {
+  name: string
+  title: string
+  path: string
+  closable: boolean
+  componentName: string
+}
