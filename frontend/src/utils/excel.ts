@@ -6,10 +6,11 @@ const ConvertCellValue = (cell: any, cellType: string) => {
   switch (cellType) {
     case 'string':
       return String(cell)
-    case 'number':
+    case 'number': {
       const num = Number(cell)
       return isNaN(num) ? cell : num
-    case 'boolean':
+    }
+    case 'boolean': {
       if ('boolean' === typeof cell) return cell
       const lowerString = String(cell).toLowerCase()
       if (lowerString === 'true' || lowerString === '1' || lowerString === '是') {
@@ -19,6 +20,7 @@ const ConvertCellValue = (cell: any, cellType: string) => {
         return false
       }
       return Boolean(cell)
+    }
     default:
       return cell
   }
@@ -56,7 +58,10 @@ export const exportExcel = async (columns: Partial<Column>[], data: any[], filen
  * @param buffer 用户上传文件的ArrayBuffer对象
  * @returns Array<T>
  */
-export const importExcel = async <T>(columns: Partial<ImportColumn>[], buffer?: ArrayBuffer): Promise<Array<T>> => {
+export const importExcel = async <T>(
+  columns: Partial<ImportColumn>[],
+  buffer?: ArrayBuffer,
+): Promise<Array<T>> => {
   if (!buffer) {
     return []
   }

@@ -61,7 +61,7 @@ defineExpose({ openDialog })
             </el-form-item>
             <el-form-item label="点歌平台" prop="source">
                 <el-select v-model="formValue.source" placeholder="请选择点歌平台">
-                    <template v-for="item in platform">
+                    <template v-for="(item, index) in platform" :key="index">
                         <el-option :label="item.key" :value="item.value" />
                     </template>
                 </el-select>

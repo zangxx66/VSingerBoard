@@ -1,142 +1,142 @@
 type ResponseModel = {
-    code: number
-    msg: string
-    data: any
+  code: number
+  msg: string
+  data: any
 }
 
 type DanmakuModel = {
-    msg_id: number
-    uid: number
-    uname: string
-    msg: string
-    send_time: number
-    source: string
-    html?: string
-    medal_name: string
-    medal_level: number
-    guard_level: number,
-    status?: number
+  msg_id: number
+  uid: number
+  uname: string
+  msg: string
+  send_time: number
+  source: string
+  html?: string
+  medal_name: string
+  medal_level: number
+  guard_level: number
+  status?: number
 }
 
 type BiliConfigModel = {
-    id: number
-    room_id: number
-    modal_level: number
-    user_level: number
-    sing_prefix: string
-    sing_cd: number
+  id: number
+  room_id: number
+  modal_level: number
+  user_level: number
+  sing_prefix: string
+  sing_cd: number
 }
 
 type BiliCredentialModel = {
-    id: number
-    uname: string
-    avatar: string
-    uid: number
-    enable: boolean
+  id: number
+  uname: string
+  avatar: string
+  uid: number
+  enable: boolean
 }
 
 type DyConfigModel = {
-    id: number
-    room_id: number
-    sing_prefix: string
-    sing_cd: number
-    fans_level: number
+  id: number
+  room_id: number
+  sing_prefix: string
+  sing_cd: number
+  fans_level: number
 }
 
 type GlobalConfigModel = {
-    id: number
-    dark_mode: boolean
-    check_update: boolean
-    startup: boolean
-    notification: boolean
-    navSideTour: boolean
-    collapse: boolean
+  id: number
+  dark_mode: boolean
+  check_update: boolean
+  startup: boolean
+  notification: boolean
+  navSideTour: boolean
+  collapse: boolean
 }
 
 type UpdateModel = {
-    code: number
-    msg: string
-    version: string
-    url: string
-    body: string
-    published_at: string
+  code: number
+  msg: string
+  version: string
+  url: string
+  body: string
+  published_at: string
 }
 
 type LiveModel = {
-    douyin_romm_id: number
-    bilibili_room_id: number
-    douyin_ws_status: number
-    bilibili_ws_status: number
+  douyin_romm_id: number
+  bilibili_room_id: number
+  douyin_ws_status: number
+  bilibili_ws_status: number
 }
 
 type WsModel = {
-    type: string
-    data?: any
+  type: string
+  data?: any
 }
 
 type DelListModel = {
-    msg_id: number
-    uid: number
-    uname: string
-    song_name: string
+  msg_id: number
+  uid: number
+  uname: string
+  song_name: string
 }
 
 type SongHistoryModel = {
-    id: number
-    uid: number
-    uname: string
-    song_name: string
-    source: string
-    create_time: number
-    create_time_str?: string
+  id: number
+  uid: number
+  uname: string
+  song_name: string
+  source: string
+  create_time: number
+  create_time_str?: string
 }
 
 type PlaylistModel = {
-    id: number
-    song_name: string
-    singer: string
-    is_sc: boolean
-    sc_price: number
-    language: string
-    tag: string
-    create_time: number
-    checked?: boolean
+  id: number
+  song_name: string
+  singer: string
+  is_sc: boolean
+  sc_price: number
+  language: string
+  tag: string
+  create_time: number
+  checked?: boolean
 }
 
 type DynamicObject = {
-    [key: string]: string | number | Array<any> | boolean | null | undefined
+  [key: string]: string | number | Array<any> | boolean | null | undefined
 }
 
 type ImportColumn = {
-    header: string
-    key: string
-    type: string
+  header: string
+  key: string
+  type: string
 }
 
 type RequestHistory = {
-    uname: string
-    song_name: string
-    source: string
-    start_time: number
-    end_time: number
-    page?: number
-    size: number
+  uname: string
+  song_name: string
+  source: string
+  start_time: number
+  end_time: number
+  page?: number
+  size: number
 }
 
 type ResponseHistory = {
-    id: number
-    uid: number
-    uname: string
-    song_name: string
-    source: string
-    create_time: number
-    create_time_str?: string
+  id: number
+  uid: number
+  uname: string
+  song_name: string
+  source: string
+  create_time: number
+  create_time_str?: string
 }
 
 type RequestPlaylist = {
-    keyword: string
-    page?: number
-    size: number
+  keyword: string
+  page?: number
+  size: number
 }
 type TabItem = {
   name: string
@@ -144,4 +144,31 @@ type TabItem = {
   path: string
   closable: boolean
   componentName: string
+}
+
+type WsStatus = {
+  color: string
+  icon: DefineComponent<
+    {},
+    void,
+    {},
+    {},
+    {},
+    ComponentOptionsMixin,
+    ComponentOptionsMixin,
+    {},
+    string,
+    PublicProps,
+    Readonly<{}>,
+    {},
+    {},
+    {},
+    {},
+    string,
+    ComponentProvideOptions,
+    true,
+    {},
+    any
+  >
+  message: string
 }

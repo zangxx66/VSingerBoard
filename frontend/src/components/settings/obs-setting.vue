@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { CopyDocument } from "@element-plus/icons-vue"
-import { ElMessage } from "element-plus"
+import { CopyDocument } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 
 const formValue = reactive({
-    url: `${window.location.origin}/danmaku`
+  url: `${window.location.origin}/danmaku`,
 })
 const css = ref(`/* 弹幕列表CSS */
 .danmaku-container {
@@ -96,106 +96,114 @@ const css = ref(`/* 弹幕列表CSS */
 const previewData = ref(Array<DanmakuModel>())
 
 const copy = () => {
-    copyToClipboard(formValue.url)
-    ElMessage.success("拷贝成功")
+  copyToClipboard(formValue.url)
+  ElMessage.success('拷贝成功')
 }
 
 const pushTestData = () => {
-    for (let i = 0; i < 10; i++) {
-        const source = i % 2 == 0 ? "bilibili" : "douyin"
-        const guard_level = source == "bilibili" ? 0 : i % 3 == 0 ? 1 : 2
-        previewData.value.push({
-            msg_id: i,
-            uid: i,
-            msg: "点歌弹幕",
-            uname: "username",
-            medal_level: i,
-            medal_name: "粉丝团",
-            guard_level: guard_level,
-            source: source,
-            send_time: Date.now()
-        })
-    }
+  for (let i = 0; i < 10; i++) {
+    const source = i % 2 == 0 ? 'bilibili' : 'douyin'
+    const guard_level = source == 'bilibili' ? 0 : i % 3 == 0 ? 1 : 2
+    previewData.value.push({
+      msg_id: i,
+      uid: i,
+      msg: '点歌弹幕',
+      uname: 'username',
+      medal_level: i,
+      medal_name: '粉丝团',
+      guard_level: guard_level,
+      source: source,
+      send_time: Date.now(),
+    })
+  }
 }
 
 onMounted(() => {
-    pushTestData()
+  pushTestData()
 })
 </script>
 <template>
-    <el-card>
-        <template #header>
-            <span>OBS设置</span>
-        </template>
-        <div class="obs-container">
-            <el-form :model="formValue" label-width="auto">
-                <el-form-item label="OBS地址" prop="url">
-                    <el-input v-model="formValue.url" type="text" disabled>
-                        <template #append>
-                            <el-button type="primary" @click="copy">
-                                <el-icon>
-                                    <CopyDocument />
-                                </el-icon>
-                            </el-button>
-                        </template>
-                    </el-input>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="copy">
-                        复制地址
-                    </el-button>
-                </el-form-item>
-            </el-form>
-            <el-alert title="在OBS新建一个浏览器源，在地址栏输入上面复制的地址，即可实现与观众同步点歌板信息，如需使用自定义css样式，请到下方编辑，然后复制到OBS浏览器源中" :closable="false" type="primary" />
-            <div class="obs-splitter" style="margin-top: 1rem;">
-                <el-splitter>
-                    <el-splitter-panel :resizable="false">
-                        <div class="css-editor">
-                            <line-header title="样式编辑器"></line-header>
-                            <el-input v-model="css" :rows="20" type="textarea" placeholder="css样式在这里编辑" />
-                        </div>
-                    </el-splitter-panel>
-                    <el-splitter-panel :resizable="false">
-                        <div class="css-editor-preview">
-                            <line-header title="样式预览"></line-header>
-                            <div class="danmaku-container">
-                                <div class="danmaku-list">
-                                    <template v-for="item in previewData">
-                                        <div class="danmaku-list-item">
-                                            <div class="danmaku-sing">
-                                                <template v-if="item.html != undefined && item.html.length > 0">
-                                                    <el-text v-html="item.html" style="display: flex;"></el-text>
-                                                </template>
-                                                <template v-else>
-                                                    {{ item.msg }}
-                                                </template>
-                                            </div>
-                                            <div class="danmaku-uname">
-                                                {{ item.uname }}
-                                            </div>
-                                            <div class="danmaku-fans">
-                                                <template v-if="item.medal_level > 0">
-                                                    <template v-if="item.source == 'bilibili'">
-                                                        <fans-medal :medal_name="item.medal_name"
-                                                            :medal_level="item.medal_level"
-                                                            :guard_level="item.guard_level" />
-                                                    </template>
-                                                    <template v-if="item.source == 'douyin'">
-                                                        <fans-club :medal_name="item.medal_name"
-                                                            :medal_level="item.medal_level"
-                                                            :guard_level="item.guard_level" />
-                                                    </template>
-                                                </template>
-                                            </div>
-                                        </div>
-                                    </template>
-                                </div>
-                            </div>
-                        </div>
-                    </el-splitter-panel>
-                </el-splitter>
+  <el-card>
+    <template #header>
+      <span>OBS设置</span>
+    </template>
+    <div class="obs-container">
+      <el-form :model="formValue" label-width="auto">
+        <el-form-item label="OBS地址" prop="url">
+          <el-input v-model="formValue.url" type="text" disabled>
+            <template #append>
+              <el-button type="primary" @click="copy">
+                <el-icon>
+                  <CopyDocument />
+                </el-icon>
+              </el-button>
+            </template>
+          </el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="copy"> 复制地址 </el-button>
+        </el-form-item>
+      </el-form>
+      <el-alert
+        title="在OBS新建一个浏览器源，在地址栏输入上面复制的地址，即可实现与观众同步点歌板信息，如需使用自定义css样式，请到下方编辑，然后复制到OBS浏览器源中"
+        :closable="false"
+        type="primary"
+      />
+      <div class="obs-splitter" style="margin-top: 1rem">
+        <el-splitter>
+          <el-splitter-panel :resizable="false">
+            <div class="css-editor">
+              <line-header title="样式编辑器"></line-header>
+              <el-input v-model="css" :rows="20" type="textarea" placeholder="css样式在这里编辑" />
             </div>
-        </div>
-    </el-card>
-    <component :is="'style'">{{ css }}</component>
+          </el-splitter-panel>
+          <el-splitter-panel :resizable="false">
+            <div class="css-editor-preview">
+              <line-header title="样式预览"></line-header>
+              <div class="danmaku-container">
+                <div class="danmaku-list">
+                  <template v-for="(item, index) in previewData" :key="index">
+                    <div class="danmaku-list-item">
+                      <div class="danmaku-sing">
+                        <template v-if="item.html != undefined && item.html.length > 0">
+                          <el-text style="display: flex">
+                            <span v-html="item.html"></span>
+                          </el-text>
+                        </template>
+                        <template v-else>
+                          {{ item.msg }}
+                        </template>
+                      </div>
+                      <div class="danmaku-uname">
+                        {{ item.uname }}
+                      </div>
+                      <div class="danmaku-fans">
+                        <template v-if="item.medal_level > 0">
+                          <template v-if="item.source == 'bilibili'">
+                            <fans-medal
+                              :medal-name="item.medal_name"
+                              :medal-level="item.medal_level"
+                              :guard-level="item.guard_level"
+                            />
+                          </template>
+                          <template v-if="item.source == 'douyin'">
+                            <fans-club
+                              :medal-name="item.medal_name"
+                              :medal-level="item.medal_level"
+                              :guard-level="item.guard_level"
+                            />
+                          </template>
+                        </template>
+                      </div>
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </div>
+          </el-splitter-panel>
+        </el-splitter>
+      </div>
+    </div>
+  </el-card>
+  <component :is="'style'">{{ css }}</component>
 </template>

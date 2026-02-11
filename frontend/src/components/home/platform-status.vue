@@ -18,8 +18,12 @@ const refreshStatus = () => {
             window.pywebview.api.restart_douyin_ws()
         }
         ElMessage.success("刷新成功，请等待操作完成")
-    } catch (error: any) {
-        ElMessage.error(error)
+    } catch (error) {
+        if (typeof error == "string") {
+            ElMessage.error(error)
+        } else if (error instanceof Error) {
+            ElMessage.error(error.message)
+        }
     } finally {
         setTimeout(() => {
             loading.value = false
@@ -28,7 +32,7 @@ const refreshStatus = () => {
 }
 
 const wsStatusMap = {
-    bilibili: new Map<number, any>([
+    bilibili: new Map<number, WsStatus>([
         [-1, { color: '#F56C6C', icon: CircleCloseFilled, message: "未配置或出现错误" }],
         [0, { color: '#E6A23C', icon: WarnTriangleFilled, message: "初始化" }],
         [1, { color: '#E6A23C', icon: WarnTriangleFilled, message: "连接建立中" }],
@@ -37,7 +41,7 @@ const wsStatusMap = {
         [4, { color: '#F56C6C', icon: CircleCloseFilled, message: "已断开" }],
         [5, { color: '#F56C6C', icon: CircleCloseFilled, message: "出现错误" }]
     ]),
-    douyin: new Map<number, any>([
+    douyin: new Map<number, WsStatus>([
         [-1, { color: '#F56C6C', icon: CircleCloseFilled, message: "未配置或出现错误" }],
         [0, { color: '#E6A23C', icon: WarnTriangleFilled, message: "未连接" }],
         [1,  { color: '#67C23A', icon: CircleCheckFilled, message: "已连接" }],
@@ -47,7 +51,7 @@ const wsStatusMap = {
 }
 
 const wsState = computed(() => {
-    return wsStatusMap[props.platform].get(props.wsStatus)
+    return wsStatusMap[props.platform].get(props.wsStatus) || { color: '#F56C6C', icon: CircleCloseFilled, message: "未配置或出现错误" }
 })
 </script>
 <template>
@@ -58,7 +62,7 @@ const wsState = computed(() => {
             <template #content>
                 <span>当前状态：{{ wsState.message }}，如有异常点击重新连接</span>
             </template>
-            <el-button text @click="refreshStatus" v-loading="loading">
+            <el-button v-loading="loading" text @click="refreshStatus">
                 <el-icon :color="wsState.color" class="status-img">
                     <component :is="wsState.icon" />
                 </el-icon>

@@ -1,5 +1,5 @@
 export default defineComponent({
-    name: "lineHeader",
+    name: "LineHeader",
     props: {
         title: {
             type: String,

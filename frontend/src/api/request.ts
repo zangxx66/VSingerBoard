@@ -6,7 +6,7 @@ class Request {
      * @param {Object} params 传递给服务器的参数对象。
      * @returns {Promise<ResponseModel>} 操作的响应。
      */
-    async getBiliConfig(params: {}): Promise<ResponseModel> {
+    async getBiliConfig(params: object): Promise<ResponseModel> {
         return await client.get("/api/get_bili_config", params)
     }
 
@@ -15,7 +15,7 @@ class Request {
      * @param {Object} params 传递给服务器的参数对象。
      * @returns {Promise<ResponseModel>} 操作的响应。
      */
-    async addOrUpdateBiliConfig(params: {}): Promise<ResponseModel> {
+    async addOrUpdateBiliConfig(params: object): Promise<ResponseModel> {
         return await client.post("/api/add_or_update_bili_config", params)
     }
 
@@ -24,7 +24,7 @@ class Request {
      * @param {Object} params 传递给服务器的参数对象。
      * @returns {Promise<ResponseModel>} 操作的响应。
      */
-    async getBiliCredentialList(params: {}): Promise<ResponseModel> {
+    async getBiliCredentialList(params: object): Promise<ResponseModel> {
         return await client.get("/api/get_bili_credential_list", params)
     }
 
@@ -33,7 +33,7 @@ class Request {
      * @param {Object} params 传递给服务器的参数对象。
      * @returns {Promise<ResponseModel>} 操作的响应。
      */
-    async refreshBiliCredential(params: {}): Promise<ResponseModel> {
+    async refreshBiliCredential(params: object): Promise<ResponseModel> {
         return await client.get("/api/refresh_bili_credential", params)
     }
 
@@ -42,7 +42,7 @@ class Request {
      * @param {Object} params 传递给服务器的参数对象。
      * @returns {Promise<ResponseModel>} 操作的响应。
      */
-    async deleteBiliCredential(params: {}): Promise<ResponseModel> {
+    async deleteBiliCredential(params: object): Promise<ResponseModel> {
         return await client.post("/api/delete_bili_credential", params)
     }
 
@@ -51,7 +51,7 @@ class Request {
      * @param {Object} params 传递给服务器的参数对象。
      * @returns {Promise<ResponseModel>} 操作的响应。
      */
-    async updateBiliCredential(params: {}): Promise<ResponseModel> {
+    async updateBiliCredential(params: object): Promise<ResponseModel> {
         return await client.post("/api/update_bili_credential", params)
     }
 
@@ -60,7 +60,7 @@ class Request {
      * @param {Object} params 传递给服务器的参数对象。
      * @returns {Promise<ResponseModel>} 操作的响应。
      */
-    async getBiliCredentialCode(params: {}): Promise<ResponseModel> {
+    async getBiliCredentialCode(params: object): Promise<ResponseModel> {
         return await client.get("/api/get_bili_credential_code", params)
     }
 
@@ -69,7 +69,7 @@ class Request {
      * @param {Object} params 传递给服务器的参数对象。
      * @returns {Promise<ResponseModel>} 操作的响应。
      */
-    async checkQrCode(params: {}): Promise<ResponseModel> {
+    async checkQrCode(params: object): Promise<ResponseModel> {
         return await client.get("/api/check_qr_code", params)
     }
 
@@ -78,7 +78,7 @@ class Request {
      * @param {Object} params 传递给服务器的参数对象。
      * @returns {Promise<ResponseModel>} 操作的响应。
      */
-    async getDyConfig(params: {}): Promise<ResponseModel> {
+    async getDyConfig(params: object): Promise<ResponseModel> {
         return await client.get("/api/get_dy_config", params)
     }
 
@@ -87,7 +87,7 @@ class Request {
      * @param {Object} params 传递给服务器的参数对象。
      * @returns {Promise<ResponseModel>} 操作的响应。
      */
-    async addOrUpdateDyConfig(params: {}): Promise<ResponseModel> {
+    async addOrUpdateDyConfig(params: object): Promise<ResponseModel> {
         return await client.post("/api/add_or_update_dy_config", params)
     }
 
@@ -96,7 +96,7 @@ class Request {
      * @param {Object} params 传递给服务器的参数对象。
      * @returns {Promise<ResponseModel>} 操作的响应。
      */
-    async getGlobalConfig(params: {}): Promise<ResponseModel> {
+    async getGlobalConfig(params: object): Promise<ResponseModel> {
         return await client.get("/api/get_global_config", params)
     }
 
@@ -105,7 +105,7 @@ class Request {
      * @param {Object} params 传递给服务器的参数对象。
      * @returns {Promise<ResponseModel>} 操作的响应。
      */
-    async addOrUpdateGlobalConfig(params: {}): Promise<ResponseModel> {
+    async addOrUpdateGlobalConfig(params: object): Promise<ResponseModel> {
         return await client.post("/api/add_or_update_global_config", params)
     }
 
@@ -114,7 +114,7 @@ class Request {
      * @param {Object} params 传递给服务器的参数对象。
      * @returns {Promise<ResponseModel>} 操作的响应。
      */
-    async getHistoryList(params: {}): Promise<ResponseModel> {
+    async getHistoryList(params: object): Promise<ResponseModel> {
         return await client.get("/api/get_history_list", params)
     }
 
@@ -123,7 +123,7 @@ class Request {
      * @param {Object} params 传递给服务器的参数对象。
      * @returns {Promise<ResponseModel>} 操作的响应。
      */
-    async checkUpdate(params: {}): Promise<ResponseModel> {
+    async checkUpdate(params: object): Promise<ResponseModel> {
         return await client.get("/api/check_updates", params)
     }
 
@@ -132,7 +132,7 @@ class Request {
      * @param {Object} params 传递给服务器的参数对象。
      * @returns {Promise<ResponseModel>} 操作的响应。
      */
-    async getPlaylistList(params: {}): Promise<ResponseModel> {
+    async getPlaylistList(params: object): Promise<ResponseModel> {
         return await client.get("/api/get_playlist_list", params)
     }
 
@@ -141,7 +141,7 @@ class Request {
      * @param {Object} params 传递给服务器的参数对象。
      * @returns {Promise<ResponseModel>} 操作的响应。
      */
-    async getPlaylist(params: {}): Promise<ResponseModel> {
+    async getPlaylist(params: object): Promise<ResponseModel> {
         return await client.get("/api/get_playlist", params)
     }
 
@@ -150,7 +150,7 @@ class Request {
      * @param {Object} params 传递给服务器的参数对象。
      * @returns {Promise<ResponseModel>} 操作的响应。
      */
-    async addOrUpdatePlaylist(params: {}): Promise<ResponseModel> {
+    async addOrUpdatePlaylist(params: object): Promise<ResponseModel> {
         return await client.post("/api/add_or_update_playlist", params)
     }
 
@@ -159,7 +159,7 @@ class Request {
      * @param {Object} params 传递给服务器的参数对象。
      * @returns {Promise<ResponseModel>} 操作的响应。
      */
-    async deletePlaylist(params: {}): Promise<ResponseModel> {
+    async deletePlaylist(params: object): Promise<ResponseModel> {
         return await client.post("/api/delete_playlist", params)
     }
 
@@ -168,7 +168,7 @@ class Request {
      * @param {Object} params 传递给服务器的参数对象。
      * @returns {Promise<ResponseModel>} 操作的响应。
      */
-    async importPlaylist(params: {}): Promise<ResponseModel> {
+    async importPlaylist(params: object): Promise<ResponseModel> {
         return await client.post("/api/import_playlist", params)
     }
 

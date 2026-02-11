@@ -71,7 +71,7 @@ watch(isFetching, () => {
                 <span>抖音设置</span>
             </div>
         </template>
-        <el-form :mode="baseFormValue" ref="refForm" label-width="auto" v-loading="isFetching">
+        <el-form ref="refForm" v-loading="isFetching" :mode="baseFormValue" label-width="auto">
             <el-form-item label="房间号" prop="room_id">
                 <el-input-number v-model="baseFormValue.room_id" :min="1" :controls="false" />
             </el-form-item>
@@ -85,7 +85,7 @@ watch(isFetching, () => {
                 <el-input-number v-model="baseFormValue.fans_level" :min="0" :controls="false" />
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="addOrUpdateConfig" v-loading="btnLoading">保存</el-button>
+                <el-button v-loading="btnLoading" type="primary" @click="addOrUpdateConfig">保存</el-button>
             </el-form-item>
         </el-form>
     </el-card>

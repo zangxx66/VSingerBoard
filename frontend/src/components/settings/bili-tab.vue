@@ -89,7 +89,7 @@ watch(isFetching, () => {
                 <span>基础设置</span>
             </div>
         </template>
-        <el-form :model="baseFormValue" ref="refForm" label-width="auto" v-loading="isFetching">
+        <el-form ref="refForm" v-loading="isFetching" :model="baseFormValue" label-width="auto">
             <el-form-item label="房间号" prop="room_id">
                 <el-input-number v-model="baseFormValue.room_id" placeholder="B站直播间号" :min="1" :controls="false" />
             </el-form-item>
@@ -98,7 +98,7 @@ watch(isFetching, () => {
             </el-form-item>
             <el-form-item label="用户等级" prop="user_level">
                 <el-radio-group v-model="baseFormValue.user_level">
-                    <template v-for="item in dropdownMenu">
+                    <template v-for="(item, index) in dropdownMenu" :key="index">
                         <el-radio :value="item.value">{{ item.key }}</el-radio>
                     </template>
                 </el-radio-group>

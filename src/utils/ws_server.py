@@ -28,6 +28,7 @@ class WebSocketServer:
         ws = web.WebSocketResponse()
         await ws.prepare(request)
         self._clients.add(ws)
+        logger.debug(f"new ws connect:{request.host}")
 
         try:
             async for msg in ws:

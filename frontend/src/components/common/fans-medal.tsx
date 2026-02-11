@@ -1,114 +1,50 @@
 export default defineComponent({
-  name: 'fansMedal',
+  name: 'FansMedal',
   props: {
-    medal_name: {
+    medalName: {
       type: String,
       required: true,
     },
-    medal_level: {
+    medalLevel: {
       type: Number,
       required: true,
     },
-    guard_level: {
+    guardLevel: {
       type: Number,
       required: true,
     },
   },
   setup(props) {
     const fansMedalColorMap = [
-      [
-        (level: number) => level < 1,
-        () => ({
-          start: '#ffffff',
-          end: '#ffffff',
-        }),
-      ],
-      [
-        (level: number) => level >= 1 && level < 5,
-        () => ({
-          start: '#5c968e',
-          end: '#5c968e',
-        }),
-      ],
-      [
-        (level: number) => level >= 5 && level < 9,
-        () => ({
-          start: '#5d7b9e',
-          end: '#5d7b9e',
-        }),
-      ],
-      [
-        (level: number) => level >= 9 && level < 13,
-        () => ({
-          start: '#8d7ca6',
-          end: '#8d7ca6',
-        }),
-      ],
-      [
-        (level: number) => level >= 13 && level < 17,
-        () => ({
-          start: '#be6686',
-          end: '#be6686',
-        }),
-      ],
-      [
-        (level: number) => level >= 17 && level < 21,
-        () => ({
-          start: '#c79d24',
-          end: '#c79d24',
-        }),
-      ],
-      [
-        (level: number) => level >= 21 && level < 25,
-        () => ({
-          start: '#1a544b',
-          end: '#529d92',
-        }),
-      ],
-      [
-        (level: number) => level >= 25 && level < 29,
-        () => ({
-          start: '#06154c',
-          end: '#6888f1',
-        }),
-      ],
-      [
-        (level: number) => level >= 29 && level < 33,
-        () => ({
-          start: '#2d0855',
-          end: '#9d9bff',
-        }),
-      ],
-      [
-        (level: number) => level >= 33 && level < 37,
-        () => ({
-          start: '#7a0423',
-          end: '#e986bb',
-        }),
-      ],
-      [
-        (level: number) => level >= 37,
-        () => ({
-          start: '#ff610b',
-          end: '#ffd084',
-        }),
-      ],
+      { minLevel: 0, maxLevel: 0, start: '#ffffff', end: '#ffffff' }, // level < 1 means level 0
+      { minLevel: 1, maxLevel: 4, start: '#5c968e', end: '#5c968e' },
+      { minLevel: 5, maxLevel: 8, start: '#5d7b9e', end: '#5d7b9e' },
+      { minLevel: 9, maxLevel: 12, start: '#8d7ca6', end: '#8d7ca6' },
+      { minLevel: 13, maxLevel: 16, start: '#be6686', end: '#be6686' },
+      { minLevel: 17, maxLevel: 20, start: '#c79d24', end: '#c79d24' },
+      { minLevel: 21, maxLevel: 24, start: '#1a544b', end: '#529d92' },
+      { minLevel: 25, maxLevel: 28, start: '#06154c', end: '#6888f1' },
+      { minLevel: 29, maxLevel: 32, start: '#2d0855', end: '#9d9bff' },
+      { minLevel: 33, maxLevel: 36, start: '#7a0423', end: '#e986bb' },
+      { minLevel: 37, maxLevel: Infinity, start: '#ff610b', end: '#ffd084' },
     ]
 
     const getMedalColorByLevel = (level: number): { start: string; end: string } => {
-      const result = fansMedalColorMap.find((n) => n[0](level)) as any
-
-      return result[1]()
+      const result = fansMedalColorMap.find((item) => level >= item.minLevel && level <= item.maxLevel)
+      if (result) {
+        return { start: result.start, end: result.end }
+      }
+      return { start: '#ffffff', end: '#ffffff' } // Default color if no match
     }
 
     const medalBorderColor = ['', '#ffe854', '#ffe854', '#67e8ff']
 
     const medalColor = ref<{ start: string; end: string }>({ start: '', end: '' })
-    medalColor.value = getMedalColorByLevel(props.medal_level)
-    const guardImg = `${window.location.origin}/images/guard-${props.guard_level}-0.png`
+    medalColor.value = getMedalColorByLevel(props.medalLevel)
+    const guardImg = `${window.location.origin}/images/guard-${props.guardLevel}-0.png`
 
     const dynamicGuardStyle = {
-        borderColor: props.guard_level === 0 ? medalColor.value.start : medalBorderColor[props.guard_level]
+        borderColor: props.guardLevel === 0 ? medalColor.value.start : medalBorderColor[props.guardLevel]
     }
     const dynamicBgStyle = {
         backgroundImage: `linear-gradient(45deg,${medalColor.value.start},${medalColor.value.end})`
@@ -116,7 +52,7 @@ export default defineComponent({
     const dynamicLevelStyle = {
         color: medalColor.value.start
     }
-    const dynamicLevelBg = props.guard_level === 0 ? '' : `${guardImg}`
+    const dynamicLevelBg = props.guardLevel === 0 ? '' : `${guardImg}`
 
     return () => (
       <>
@@ -129,17 +65,17 @@ export default defineComponent({
               class="fans-medal-bg"
               style={dynamicBgStyle}
             >
-              <i v-show={props.guard_level !== 0} class="fans-medal-guard-img">
+              <i v-show={props.guardLevel !== 0} class="fans-medal-guard-img">
                 <img
                   style="width: 100%;height: 100%;"
                   src={dynamicLevelBg}
                   alt=""
                 />
               </i>
-              <span style="display: block;">{props.medal_name}</span>
+              <span style="display: block;">{props.medalName}</span>
             </div>
             <div class="fans-medal-level" style={dynamicLevelStyle}>
-              {props.medal_level}
+              {props.medalLevel}
             </div>
           </div>
         </div>

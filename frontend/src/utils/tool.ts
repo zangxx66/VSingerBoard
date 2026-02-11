@@ -8,9 +8,16 @@ import type {
   UseInfiniteQueryReturnType,
 } from '@tanstack/vue-query'
 import type { UnwrapNestedRefs } from 'vue'
+import DOMPurify from 'dompurify'
 
 const emojiexp = /\[[\u4E00-\u9FA5A-Za-z0-9_]+\]/g
 const { copy } = useClipboard()
+
+const purifyConfig = {
+  USE_PROFILES: { html: true },
+  FORBID_TAGS: ['style', 'script', 'iframe'],
+  ADD_ATTR: ['src', 'alt', 'class', 'width', 'height', 'style', 'referrerpolicy', 'target', 'href']
+}
 
 /**
  * 检查VSingerBoard应用程序是否有新版本。
@@ -41,7 +48,7 @@ export const checkUpdate = () => {
         a.click()
       }
     })
-  }).catch(error => {
+  }).catch(_error => {
     ElMessage.error("检查更新失败")
   })
 }
@@ -72,6 +79,11 @@ export const pasteToElement = async(activeEl: HTMLElement | null) => {
 }
 
 
+export const processHTML = (html: string) => {
+  return DOMPurify.sanitize(html, purifyConfig)
+}
+
+
 export const processDanmaku = (list: DanmakuModel[]) => {
   list.forEach(item => {
     item.status = 0
@@ -94,7 +106,7 @@ export const processDanmaku = (list: DanmakuModel[]) => {
           )
         }
       }
-      item.html = result
+      item.html = processHTML(result)
     }
   })
   return list

@@ -57,14 +57,14 @@ const credentialColumns: Column<any>[] = [
                     type="success"
                     icon={Refresh}
                     loading={btnLoading.value}
-                    onClick={(evt: MouseEvent) => refreshSub(rowData.id)}
+                    onClick={(_evt: MouseEvent) => refreshSub(rowData.id)}
                 >
                     刷新凭证
                 </ElButton>
                 <ElButton
                     type="danger"
                     icon={Delete}
-                    onClick={(evt: MouseEvent) => removeSub(rowData.id)}
+                    onClick={(_evt: MouseEvent) => removeSub(rowData.id)}
                 >
                     删除
                 </ElButton>
@@ -212,26 +212,28 @@ watch(isFetching, () => {
         <template #header>
             <div class="b-credential-card-header">
                 <span>账号设置</span>
-                <el-alert title="未登录账号无法获取到弹幕用户昵称等信息，如有需要可添加一个小号" type="warning" :closable="false"
+                <el-alert
+title="未登录账号无法获取到弹幕用户昵称等信息，如有需要可添加一个小号" type="warning" :closable="false"
                     style="margin-top: 1rem;" />
             </div>
         </template>
         <div class="mb-4 flex items-center">
             <el-button type="primary" @click="qrCodeMutation.mutate()">新增</el-button>
         </div>
-        <div style="height: 300px;padding-top: 1rem;" v-loading="isFetching">
+        <div v-loading="isFetching" style="height: 300px;padding-top: 1rem;">
             <el-auto-resizer>
                 <template #default="{ width, height }">
-                    <el-table-v2 :columns="credentialColumns" :data="credentialList" :width="width" :height="height"
+                    <el-table-v2
+:columns="credentialColumns" :data="credentialList" :width="width" :height="height"
                         fixed></el-table-v2>
                 </template>
             </el-auto-resizer>
         </div>
     </el-card>
-    <el-dialog v-model="isShow" title="新增" width="720" @close="closeDialog" destroy-on-close>
+    <el-dialog v-model="isShow" title="新增" width="720" destroy-on-close @close="closeDialog">
         <div class="qcode-image-container">
             <img :src="qrCode" alt="qrcode" class="qcode" referrerpolicy="no-referrer" />
-            <div class="qcode-bage" v-if="qrCodeText.length > 0">{{ qrCodeText }}</div>
+            <div v-if="qrCodeText.length > 0" class="qcode-bage">{{ qrCodeText }}</div>
         </div>
     </el-dialog>
 </template>

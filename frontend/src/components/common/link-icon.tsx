@@ -1,5 +1,5 @@
 export default defineComponent({
-  name: 'linkIcon',
+  name: 'LinkIcon',
   setup() {
     return () => (
       <svg

@@ -1,6 +1,6 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "auto-imports.d.ts", "components.d.ts"],
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "src/**/*.tsx", "auto-imports.d.ts", "components.d.ts"],
   "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
@@ -10,6 +10,8 @@
     },
     "lib":["ESNext", "DOM", "DOM.Iterable"],
     "types": ["vite-plugin-vue-layouts/client"],
+    "jsx": "preserve",
+    "jsxImportSource": "vue",
   },
   "vueCompilerOptions": {
     "plugins": [

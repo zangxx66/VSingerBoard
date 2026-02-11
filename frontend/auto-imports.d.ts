@@ -95,6 +95,7 @@ declare global {
   const pasteToElement: typeof import('./src/utils/tool').pasteToElement
   const pausableWatch: typeof import('@vueuse/core').pausableWatch
   const processDanmaku: typeof import('./src/utils/tool').processDanmaku
+  const processHTML: typeof import('./src/utils/tool').processHTML
   const provide: typeof import('vue').provide
   const provideLocal: typeof import('@vueuse/core').provideLocal
   const reactify: typeof import('@vueuse/core').reactify
@@ -217,6 +218,7 @@ declare global {
   const useGetDouyinConfig: typeof import('./src/services/use-douyin-config').useGetDouyinConfig
   const useGetGlobalConfig: typeof import('./src/services/use-global-config').useGetGlobalConfig
   const useGetHistoryInfinite: typeof import('./src/services/use-history').useGetHistoryInfinite
+  const useGetUpdate: typeof import('./src/services/use-changelog').useGetUpdate
   const useId: typeof import('vue').useId
   const useIdle: typeof import('@vueuse/core').useIdle
   const useImage: typeof import('@vueuse/core').useImage
@@ -443,6 +445,7 @@ declare module 'vue' {
     readonly pasteToElement: UnwrapRef<typeof import('./src/utils/tool')['pasteToElement']>
     readonly pausableWatch: UnwrapRef<typeof import('@vueuse/core')['pausableWatch']>
     readonly processDanmaku: UnwrapRef<typeof import('./src/utils/tool')['processDanmaku']>
+    readonly processHTML: UnwrapRef<typeof import('./src/utils/tool')['processHTML']>
     readonly provide: UnwrapRef<typeof import('vue')['provide']>
     readonly provideLocal: UnwrapRef<typeof import('@vueuse/core')['provideLocal']>
     readonly reactify: UnwrapRef<typeof import('@vueuse/core')['reactify']>
@@ -565,6 +568,7 @@ declare module 'vue' {
     readonly useGetDouyinConfig: UnwrapRef<typeof import('./src/services/use-douyin-config')['useGetDouyinConfig']>
     readonly useGetGlobalConfig: UnwrapRef<typeof import('./src/services/use-global-config')['useGetGlobalConfig']>
     readonly useGetHistoryInfinite: UnwrapRef<typeof import('./src/services/use-history')['useGetHistoryInfinite']>
+    readonly useGetUpdate: UnwrapRef<typeof import('./src/services/use-changelog')['useGetUpdate']>
     readonly useId: UnwrapRef<typeof import('vue')['useId']>
     readonly useIdle: UnwrapRef<typeof import('@vueuse/core')['useIdle']>
     readonly useImage: UnwrapRef<typeof import('@vueuse/core')['useImage']>

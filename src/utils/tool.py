@@ -427,7 +427,7 @@ def generate_ts_api():
         ts_code.append("     * @returns {Promise<ResponseModel>} 操作的响应。")
         ts_code.append("     */")
         # 生成函数签名
-        ts_code.append(f"    async {ts_func_name}(params: {{}}): Promise<ResponseModel> {{")
+        ts_code.append(f"    async {ts_func_name}(params: object): Promise<ResponseModel> {{")
         # 生成函数体
         ts_code.append(f'        return await client.{endpoint["method"]}("{endpoint["path"]}", params)')
         ts_code.append("    }")

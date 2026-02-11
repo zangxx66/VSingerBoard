@@ -6,7 +6,7 @@ import { ElMessage, type MenuItemInstance, type CardConfigContext, type TabPaneN
 import { request } from "@/api"
 
 defineOptions({
-  name: "defaultLayout"
+  name: "DefaultLayout"
 })
 
 const themeStore = useThemeStore()
@@ -314,14 +314,14 @@ onMounted(() => {
     <el-aside :style="asideStyle">
       <el-menu :default-active="activeMenu" :collapse="globalConfig.collapse" class="layout-aside-menu">
         <template v-for="item, index in menuItemList" :key="index">
-          <el-menu-item :index="index.toString()" @click="goto(item.routerName)" :ref="item.ref || undefined">
+          <el-menu-item :ref="item.ref || undefined" :index="index.toString()" @click="goto(item.routerName)">
             <el-icon>
               <component :is="item.icon" />
             </el-icon>
             <template #title>{{ item.title }}</template>
           </el-menu-item>
         </template>
-        <el-menu-item :index="(menuItemList.length + 1).toString()" ref="themeRef" @click="updateTheme">
+        <el-menu-item ref="themeRef" :index="(menuItemList.length + 1).toString()" @click="updateTheme">
           <el-icon v-if="!isDarktheme">
             <Sunny />
           </el-icon>
@@ -331,30 +331,34 @@ onMounted(() => {
         </el-menu-item>
       </el-menu>
     </el-aside>
-    <el-main @contextmenu="onContextMenu" :style="mainStyle" ref="mainRef">
+    <el-main ref="mainRef" :style="mainStyle" @contextmenu="onContextMenu">
       <el-config-provider :locale="zhCn" :card="cardConfig" :dialog="dialogConfig" :message="messageConfig">
         <el-tabs v-model="activeTabName" type="card" closable @tab-remove="removeTab" @tab-change="changeTab">
-          <el-tab-pane v-for="item in openTabs" :key="item.name" :label="item.title" :name="item.name"
-            :closable="item.closable">
-            <router-view v-slot="{ Component }">
-              <keep-alive :include="components">
-                <component :is="Component" />
-              </keep-alive>
-            </router-view>
-          </el-tab-pane>
+          <el-tab-pane
+          v-for="item in openTabs" :key="item.name" :label="item.title" :name="item.name"
+            :closable="item.closable"></el-tab-pane>
         </el-tabs>
+        <router-view v-slot="{ Component }">
+          <keep-alive :include="components">
+            <component :is="Component" />
+          </keep-alive>
+        </router-view>
         <!-- 
         el-tour组件finish和close事件的的使用示例
         https://github.com/element-plus/element-plus/issues/22419 
         -->
-        <el-tour v-model="navSideTour" @close="closeTour" @finish="finishTour" :target-area-clickable="false"
-          :close-on-press-escape="false">
+        <el-tour
+        v-model="navSideTour" :target-area-clickable="false" :close-on-press-escape="false" @close="closeTour"
+          @finish="finishTour">
           <el-tour-step title="提示" description="欢迎使用点歌姬"></el-tour-step>
-          <el-tour-step title="提示" description="这里是点歌，可以查看抖和破站的点歌列表" placement="right"
+          <el-tour-step
+          title="提示" description="这里是点歌，可以查看抖和破站的点歌列表" placement="right"
             :target="homeRef?.$el"></el-tour-step>
-          <el-tour-step title="提示" description="这里是历史记录，可以查看历史点歌" placement="right"
+          <el-tour-step
+          title="提示" description="这里是历史记录，可以查看历史点歌" placement="right"
             :target="historyRef?.$el"></el-tour-step>
-          <el-tour-step title="提示" description="这里是设置，可以设置抖和破站的直播间监听" placement="right"
+          <el-tour-step
+          title="提示" description="这里是设置，可以设置抖和破站的直播间监听" placement="right"
             :target="settingsRef?.$el"></el-tour-step>
           <el-tour-step title="提示" description="这是主题开关，可以切换主题" placement="right" :target="themeRef?.$el"></el-tour-step>
           <el-tour-step title="提示" description="这里是主界面" placement="left" :target="mainRef?.$el"></el-tour-step>
