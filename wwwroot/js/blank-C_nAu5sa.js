@@ -1,0 +1,1 @@
+import{n as a,q as e,am as s,t}from"./vendor-libs-DLrArELd.js";import"./vendor-exceljs-C-8i3j8b.js";const n=a({name:"blankLayout",__name:"blank",setup:a=>(a,n)=>{const o=s("router-view");return t(),e(o)}});export{n as default};
