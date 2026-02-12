@@ -71,6 +71,7 @@ class DouyinLiveWebFetcher(Decorator, WebSocketClient):
         headers = {
             "User-Agent": self.user_agent,
             "cookie": f"ttwid={twid}&msToken={generateMsToken()}; __ac_nonce=0123407cc00a9e438deb4",
+            "Accept-Encoding": "gzip, deflate",
         }
         try:
             response = await self.http_session.get(url, headers=headers)
