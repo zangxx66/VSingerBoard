@@ -3,10 +3,9 @@ import zhCn from "element-plus/es/locale/lang/zh-cn"
 import { HomeFilled, Tools, List, InfoFilled, Sunny, Moon, Calendar, Collection } from "@element-plus/icons-vue"
 import ContextMenu from '@imengyu/vue3-context-menu'
 import { ElMessage, type MenuItemInstance, type CardConfigContext, type TabPaneName } from "element-plus"
-import { request } from "@/api"
 
 defineOptions({
-  name: "DefaultLayout"
+  name: "defaultLayout"
 })
 
 const themeStore = useThemeStore()
@@ -106,7 +105,7 @@ const initGlobalConfig = () => {
 }
 
 const globalConfigMutation = useMutation({
-  mutationFn: async (params: GlobalConfigModel) => await request.addOrUpdateGlobalConfig({ data: params }),
+  mutationFn: async (params: GlobalConfigModel) => await addOrUpdateGlobalConfig({ data: params }),
   onSuccess: (data) => {
     if (data.code != 0) {
       ElMessage.warning(data.msg || "请求异常")

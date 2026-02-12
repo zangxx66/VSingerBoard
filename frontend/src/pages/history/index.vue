@@ -2,10 +2,9 @@
 import { type ScrollbarInstance, type ScrollbarDirection, ElMessage } from 'element-plus'
 import { Search, Download } from '@element-plus/icons-vue'
 import type { Column } from 'exceljs'
-import { request } from '@/api'
 
 defineOptions({
-  name: 'History',
+  name: 'history',
 })
 
 const exportLoading = ref(false)
@@ -94,7 +93,7 @@ const exportFile = () => {
 }
 
 const exportMutation = useMutation({
-  mutationFn: async (params: RequestHistory) => await request.getHistoryList(params),
+  mutationFn: async (params: RequestHistory) => await getHistoryList(params),
   onSuccess: (data) => {
     if (data.code != 0) {
       ElMessage.warning(data.msg || '请求失败')

@@ -1,11 +1,10 @@
-import { request } from '@/api'
 import { ElMessage } from 'element-plus'
 
 export const useGetGlobalConfig = () => {
   return useQuery({
-    queryKey: [request.getGlobalConfig.name],
+    queryKey: [getGlobalConfig.name],
     queryFn: async () => {
-      const response = await request.getGlobalConfig({})
+      const response = await getGlobalConfig({})
       if (response.code != 0) {
         ElMessage.warning(response.msg || '获取配置失败')
         return {

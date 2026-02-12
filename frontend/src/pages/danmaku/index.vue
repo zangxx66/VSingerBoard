@@ -2,7 +2,7 @@
 import type { ScrollbarInstance } from 'element-plus'
 
 defineOptions({
-  name: 'Danmaku',
+  name: 'danmaku',
 })
 
 document.title = '点歌列表'

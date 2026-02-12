@@ -1,11 +1,10 @@
-import { request } from '@/api'
 import { ElMessage } from 'element-plus'
 
 export const useGetDouyinConfig = () => {
   return useQuery({
-    queryKey: [request.getDyConfig.name],
+    queryKey: [getDyConfig.name],
     queryFn: async () => {
-      const response = await request.getDyConfig({})
+      const response = await getDyConfig({})
       if (response.code != 0) {
         ElMessage.warning(response.msg || '请求失败')
         return {

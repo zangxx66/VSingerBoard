@@ -1,5 +1,4 @@
 <script setup lang="tsx">
-import { request } from '@/api'
 import {
   ElMessage,
   ElMessageBox,
@@ -12,7 +11,7 @@ import { Search, Download, Upload, Delete, EditPen } from '@element-plus/icons-v
 import type { Column as execlCoumn } from 'exceljs'
 
 defineOptions({
-  name: 'Playlist',
+  name: 'playlist',
 })
 
 const exportLoading = ref(false)
@@ -99,7 +98,7 @@ const dataColumns: elColumn<any>[] = [
         <ElButton
           type="default"
           icon={Delete}
-          onClick={(_evt: MouseEvent) => deletePlaylist([rowData.id])}
+          onClick={(_evt: MouseEvent) => onDeletePlaylist([rowData.id])}
         >
           删除
         </ElButton>
@@ -110,8 +109,8 @@ const dataColumns: elColumn<any>[] = [
 
 // 删除
 const deleteMutation = useMutation({
-  mutationKey: [request.deletePlaylist.name],
-  mutationFn: async (params: number[]) => await request.deletePlaylist({ data: params }),
+  mutationKey: [deletePlaylist.name],
+  mutationFn: async (params: number[]) => await deletePlaylist({ data: params }),
   onSuccess: (data) => {
     if (data.code != 0) {
       ElMessage.warning(data.msg)
@@ -126,7 +125,7 @@ const deleteMutation = useMutation({
 
 // 导入
 const importMutation = useMutation({
-  mutationFn: async (params: PlaylistModel[]) => await request.importPlaylist({ data: params }),
+  mutationFn: async (params: PlaylistModel[]) => await importPlaylist({ data: params }),
   onSuccess: (data) => {
     if (data.code != 0) {
       ElMessage.warning(data.msg)
@@ -142,7 +141,7 @@ const importMutation = useMutation({
 
 // 导出
 const exportMutation = useMutation({
-  mutationFn: async (params: RequestPlaylist) => await request.getPlaylistList(params),
+  mutationFn: async (params: RequestPlaylist) => await getPlaylistList(params),
   onSuccess: (data) => {
     if (data.code != 0) {
       ElMessage.warning(data.msg || '请求失败')
@@ -174,12 +173,12 @@ const addOrEditPlaylist = (rowData?: any) => {
 }
 
 const allDeletePlaylist = () => {
-  const checkedIds = list.value?.filter((item) => item.checked).map((item) => item.id)
-  if (checkedIds) deletePlaylist(checkedIds)
+  const checkedIds = list.value?.map((item) => item.id)
+  if (checkedIds) onDeletePlaylist(checkedIds)
 }
 
 /** 删除 */
-const deletePlaylist = (ids: number[]) => {
+const onDeletePlaylist = (ids: number[]) => {
   ElMessageBox.confirm('是否删除？', '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',

@@ -11,7 +11,7 @@ import {
 import type { Column } from 'exceljs'
 
 defineOptions({
-  name: 'Home',
+  name: 'home',
 })
 
 const config = reactive<LiveModel>({

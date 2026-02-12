@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { request } from "@/api"
 import { ElMessage } from "element-plus"
 
 const emit = defineEmits<{
@@ -37,7 +36,7 @@ const closeDialog = () => {
 }
 
 const submitMutation = useMutation({
-    mutationFn: async (params: PlaylistModel) => await request.addOrUpdatePlaylist({ data: params }),
+    mutationFn: async (params: PlaylistModel) => await addOrUpdatePlaylist({ data: params }),
     onSuccess: (data) => {
         loading.value = false
         if (data.code != 0) {

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ElMessage, type FormInstance } from "element-plus"
-import { request } from "@/api"
 
 const refForm = ref<FormInstance>()
 const btnLoading = ref(false)
@@ -16,7 +15,7 @@ const danmakuStore = useDanmakuStore()
 const { data: dyConfigData, refetch, isFetching } = useGetDouyinConfig()
 
 const configMutation = useMutation({
-    mutationFn: async (params: DyConfigModel) => await request.addOrUpdateDyConfig({ data: params }),
+    mutationFn: async (params: DyConfigModel) => await addOrUpdateDyConfig({ data: params }),
     onSuccess: (response) => {
         if (response.code != 0) {
             ElMessage.warning(response.msg || "请求失败")

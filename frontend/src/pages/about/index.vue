@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 defineOptions({
-    name: "About"
+    name: "about"
 })
 
 const version = ref("")
@@ -61,7 +61,7 @@ onMounted(() => {
             <div class="about-title">点歌姬</div>
             <div class="about-version">
                 v{{ version }}
-                <el-button type="primary" plain @click="checkUpdate">检查更新</el-button>
+                <el-button type="primary" plain @click="checkLatestUpdate">检查更新</el-button>
             </div>
             <div class="about-author-container">
                 <el-button color="#909399" plain @click="openGithub">GitHub仓库</el-button>

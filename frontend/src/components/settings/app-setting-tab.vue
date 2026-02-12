@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ElMessage, type FormInstance } from "element-plus"
 import { Close, Check } from "@element-plus/icons-vue"
-import { request } from "@/api"
 
 const refForm = ref<FormInstance>()
 const btnLoading = ref(false)
@@ -20,7 +19,7 @@ const { data: globalConfigData, isFetching } = useGetGlobalConfig()
 
 
 const globalConfigMutation = useMutation({
-    mutationFn: async (params: GlobalConfigModel) => await request.addOrUpdateGlobalConfig({ data: params }),
+    mutationFn: async (params: GlobalConfigModel) => await addOrUpdateGlobalConfig({ data: params }),
     onSuccess: (response) => {
         if (response.code != 0) {
             ElMessage.warning(response.msg || "请求失败")
@@ -69,23 +68,19 @@ watch(isFetching, () => {
         </template>
         <el-form ref="refForm" :model="baseFormValue" label-width="auto" inline>
             <el-form-item label="黑暗模式" prop="dark_mode">
-                <el-switch
-v-model="baseFormValue.dark_mode" inline-prompt style="--el-switch-off-color: #ff4949"
+                <el-switch v-model="baseFormValue.dark_mode" inline-prompt style="--el-switch-off-color: #ff4949"
                     :active-icon="Check" :inactive-icon="Close"></el-switch>
             </el-form-item>
             <el-form-item label="桌面通知" prop="notification">
-                <el-switch
-v-model="baseFormValue.notification" inline-prompt style="--el-switch-off-color: #ff4949"
+                <el-switch v-model="baseFormValue.notification" inline-prompt style="--el-switch-off-color: #ff4949"
                     :active-icon="Check" :inactive-icon="Close"></el-switch>
             </el-form-item>
             <el-form-item label="自动检查更新" prop="check_update">
-                <el-switch
-v-model="baseFormValue.check_update" inline-prompt style="--el-switch-off-color: #ff4949"
+                <el-switch v-model="baseFormValue.check_update" inline-prompt style="--el-switch-off-color: #ff4949"
                     :active-icon="Check" :inactive-icon="Close"></el-switch>
             </el-form-item>
             <el-form-item label="开机启动" prop="startup">
-                <el-switch
-v-model="baseFormValue.startup" inline-prompt style="--el-switch-off-color: #ff4949"
+                <el-switch v-model="baseFormValue.startup" inline-prompt style="--el-switch-off-color: #ff4949"
                     :active-icon="Check" :inactive-icon="Close"></el-switch>
             </el-form-item>
             <el-form-item>

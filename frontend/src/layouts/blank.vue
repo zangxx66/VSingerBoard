@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineOptions({
-    name: "BlankLayout"
+    name: "blankLayout"
 })
 </script>
 <template>

@@ -8,9 +8,15 @@ export {}
 declare global {
   const EffectScope: typeof import('vue').EffectScope
   const acceptHMRUpdate: typeof import('pinia').acceptHMRUpdate
+  const addOrUpdateBiliConfig: typeof import('./src/api/request').addOrUpdateBiliConfig
+  const addOrUpdateDyConfig: typeof import('./src/api/request').addOrUpdateDyConfig
+  const addOrUpdateGlobalConfig: typeof import('./src/api/request').addOrUpdateGlobalConfig
+  const addOrUpdatePlaylist: typeof import('./src/api/request').addOrUpdatePlaylist
   const asyncComputed: typeof import('@vueuse/core').asyncComputed
   const autoResetRef: typeof import('@vueuse/core').autoResetRef
-  const checkUpdate: typeof import('./src/utils/tool').checkUpdate
+  const checkLatestUpdate: typeof import('./src/utils/tool').checkLatestUpdate
+  const checkQrCode: typeof import('./src/api/request').checkQrCode
+  const checkUpdate: typeof import('./src/api/request').checkUpdate
   const computed: typeof import('vue').computed
   const computedAsync: typeof import('@vueuse/core').computedAsync
   const computedEager: typeof import('@vueuse/core').computedEager
@@ -36,6 +42,8 @@ declare global {
   const defineAsyncComponent: typeof import('vue').defineAsyncComponent
   const defineComponent: typeof import('vue').defineComponent
   const defineStore: typeof import('pinia').defineStore
+  const deleteBiliCredential: typeof import('./src/api/request').deleteBiliCredential
+  const deletePlaylist: typeof import('./src/api/request').deletePlaylist
   const eagerComputed: typeof import('@vueuse/core').eagerComputed
   const effectScope: typeof import('vue').effectScope
   const emojiList: typeof import('./src/utils/emoji').emojiList
@@ -43,17 +51,26 @@ declare global {
   const exportExcel: typeof import('./src/utils/excel').exportExcel
   const extendRef: typeof import('@vueuse/core').extendRef
   const getActivePinia: typeof import('pinia').getActivePinia
+  const getBiliConfig: typeof import('./src/api/request').getBiliConfig
+  const getBiliCredentialCode: typeof import('./src/api/request').getBiliCredentialCode
+  const getBiliCredentialList: typeof import('./src/api/request').getBiliCredentialList
   const getCurrentInstance: typeof import('vue').getCurrentInstance
   const getCurrentScope: typeof import('vue').getCurrentScope
   const getCurrentWatcher: typeof import('vue').getCurrentWatcher
+  const getDyConfig: typeof import('./src/api/request').getDyConfig
   const getEndOfDayTimespan: typeof import('./src/utils/times').getEndOfDayTimespan
+  const getGlobalConfig: typeof import('./src/api/request').getGlobalConfig
+  const getHistoryList: typeof import('./src/api/request').getHistoryList
   const getNowDateString: typeof import('./src/utils/times').getNowDateString
   const getNowTimespan: typeof import('./src/utils/times').getNowTimespan
+  const getPlaylist: typeof import('./src/api/request').getPlaylist
+  const getPlaylistList: typeof import('./src/api/request').getPlaylistList
   const getRelativeTime: typeof import('./src/utils/times').getRelativeTime
   const getTimespan: typeof import('./src/utils/times').getTimespan
   const h: typeof import('vue').h
   const ignorableWatch: typeof import('@vueuse/core').ignorableWatch
   const importExcel: typeof import('./src/utils/excel').importExcel
+  const importPlaylist: typeof import('./src/api/request').importPlaylist
   const inject: typeof import('vue').inject
   const injectLocal: typeof import('@vueuse/core').injectLocal
   const isDark: typeof import('./src/utils/dark').isDark
@@ -112,6 +129,7 @@ declare global {
   const refManualReset: typeof import('@vueuse/core').refManualReset
   const refThrottled: typeof import('@vueuse/core').refThrottled
   const refWithControl: typeof import('@vueuse/core').refWithControl
+  const refreshBiliCredential: typeof import('./src/api/request').refreshBiliCredential
   const resolveComponent: typeof import('vue').resolveComponent
   const resolveRef: typeof import('@vueuse/core').resolveRef
   const setActivePinia: typeof import('pinia').setActivePinia
@@ -143,6 +161,7 @@ declare global {
   const unref: typeof import('vue').unref
   const unrefElement: typeof import('@vueuse/core').unrefElement
   const until: typeof import('@vueuse/core').until
+  const updateBiliCredential: typeof import('./src/api/request').updateBiliCredential
   const useActiveElement: typeof import('@vueuse/core').useActiveElement
   const useAnimate: typeof import('@vueuse/core').useAnimate
   const useArrayDifference: typeof import('@vueuse/core').useArrayDifference
@@ -358,9 +377,15 @@ declare module 'vue' {
   interface ComponentCustomProperties {
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>
+    readonly addOrUpdateBiliConfig: UnwrapRef<typeof import('./src/api/request')['addOrUpdateBiliConfig']>
+    readonly addOrUpdateDyConfig: UnwrapRef<typeof import('./src/api/request')['addOrUpdateDyConfig']>
+    readonly addOrUpdateGlobalConfig: UnwrapRef<typeof import('./src/api/request')['addOrUpdateGlobalConfig']>
+    readonly addOrUpdatePlaylist: UnwrapRef<typeof import('./src/api/request')['addOrUpdatePlaylist']>
     readonly asyncComputed: UnwrapRef<typeof import('@vueuse/core')['asyncComputed']>
     readonly autoResetRef: UnwrapRef<typeof import('@vueuse/core')['autoResetRef']>
-    readonly checkUpdate: UnwrapRef<typeof import('./src/utils/tool')['checkUpdate']>
+    readonly checkLatestUpdate: UnwrapRef<typeof import('./src/utils/tool')['checkLatestUpdate']>
+    readonly checkQrCode: UnwrapRef<typeof import('./src/api/request')['checkQrCode']>
+    readonly checkUpdate: UnwrapRef<typeof import('./src/api/request')['checkUpdate']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly computedAsync: UnwrapRef<typeof import('@vueuse/core')['computedAsync']>
     readonly computedEager: UnwrapRef<typeof import('@vueuse/core')['computedEager']>
@@ -386,6 +411,8 @@ declare module 'vue' {
     readonly defineAsyncComponent: UnwrapRef<typeof import('vue')['defineAsyncComponent']>
     readonly defineComponent: UnwrapRef<typeof import('vue')['defineComponent']>
     readonly defineStore: UnwrapRef<typeof import('pinia')['defineStore']>
+    readonly deleteBiliCredential: UnwrapRef<typeof import('./src/api/request')['deleteBiliCredential']>
+    readonly deletePlaylist: UnwrapRef<typeof import('./src/api/request')['deletePlaylist']>
     readonly eagerComputed: UnwrapRef<typeof import('@vueuse/core')['eagerComputed']>
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
     readonly emojiList: UnwrapRef<typeof import('./src/utils/emoji')['emojiList']>
@@ -393,17 +420,26 @@ declare module 'vue' {
     readonly exportExcel: UnwrapRef<typeof import('./src/utils/excel')['exportExcel']>
     readonly extendRef: UnwrapRef<typeof import('@vueuse/core')['extendRef']>
     readonly getActivePinia: UnwrapRef<typeof import('pinia')['getActivePinia']>
+    readonly getBiliConfig: UnwrapRef<typeof import('./src/api/request')['getBiliConfig']>
+    readonly getBiliCredentialCode: UnwrapRef<typeof import('./src/api/request')['getBiliCredentialCode']>
+    readonly getBiliCredentialList: UnwrapRef<typeof import('./src/api/request')['getBiliCredentialList']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
     readonly getCurrentWatcher: UnwrapRef<typeof import('vue')['getCurrentWatcher']>
+    readonly getDyConfig: UnwrapRef<typeof import('./src/api/request')['getDyConfig']>
     readonly getEndOfDayTimespan: UnwrapRef<typeof import('./src/utils/times')['getEndOfDayTimespan']>
+    readonly getGlobalConfig: UnwrapRef<typeof import('./src/api/request')['getGlobalConfig']>
+    readonly getHistoryList: UnwrapRef<typeof import('./src/api/request')['getHistoryList']>
     readonly getNowDateString: UnwrapRef<typeof import('./src/utils/times')['getNowDateString']>
     readonly getNowTimespan: UnwrapRef<typeof import('./src/utils/times')['getNowTimespan']>
+    readonly getPlaylist: UnwrapRef<typeof import('./src/api/request')['getPlaylist']>
+    readonly getPlaylistList: UnwrapRef<typeof import('./src/api/request')['getPlaylistList']>
     readonly getRelativeTime: UnwrapRef<typeof import('./src/utils/times')['getRelativeTime']>
     readonly getTimespan: UnwrapRef<typeof import('./src/utils/times')['getTimespan']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
     readonly ignorableWatch: UnwrapRef<typeof import('@vueuse/core')['ignorableWatch']>
     readonly importExcel: UnwrapRef<typeof import('./src/utils/excel')['importExcel']>
+    readonly importPlaylist: UnwrapRef<typeof import('./src/api/request')['importPlaylist']>
     readonly inject: UnwrapRef<typeof import('vue')['inject']>
     readonly injectLocal: UnwrapRef<typeof import('@vueuse/core')['injectLocal']>
     readonly isDark: UnwrapRef<typeof import('./src/utils/dark')['isDark']>
@@ -462,6 +498,7 @@ declare module 'vue' {
     readonly refManualReset: UnwrapRef<typeof import('@vueuse/core')['refManualReset']>
     readonly refThrottled: UnwrapRef<typeof import('@vueuse/core')['refThrottled']>
     readonly refWithControl: UnwrapRef<typeof import('@vueuse/core')['refWithControl']>
+    readonly refreshBiliCredential: UnwrapRef<typeof import('./src/api/request')['refreshBiliCredential']>
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
     readonly resolveRef: UnwrapRef<typeof import('@vueuse/core')['resolveRef']>
     readonly setActivePinia: UnwrapRef<typeof import('pinia')['setActivePinia']>
@@ -493,6 +530,7 @@ declare module 'vue' {
     readonly unref: UnwrapRef<typeof import('vue')['unref']>
     readonly unrefElement: UnwrapRef<typeof import('@vueuse/core')['unrefElement']>
     readonly until: UnwrapRef<typeof import('@vueuse/core')['until']>
+    readonly updateBiliCredential: UnwrapRef<typeof import('./src/api/request')['updateBiliCredential']>
     readonly useActiveElement: UnwrapRef<typeof import('@vueuse/core')['useActiveElement']>
     readonly useAnimate: UnwrapRef<typeof import('@vueuse/core')['useAnimate']>
     readonly useArrayDifference: UnwrapRef<typeof import('@vueuse/core')['useArrayDifference']>

@@ -414,29 +414,23 @@ def generate_ts_api():
     ts_code = []
     ts_code.append('import { client } from "./client"')
     ts_code.append('')
-    ts_code.append("class Request {")
 
     for endpoint in api_endpoints:
         # 生成函数名 (snake_case to camelCase)
         ts_func_name = re.sub(r"_([a-z])", lambda m: m.group(1).upper(), endpoint["func_name"])
 
         # 添加 JSDoc 注释
-        ts_code.append("    /**")
-        ts_code.append(f"     * {endpoint['func_name']}.")
-        ts_code.append("     * @param {Object} params 传递给服务器的参数对象。")
-        ts_code.append("     * @returns {Promise<ResponseModel>} 操作的响应。")
-        ts_code.append("     */")
+        ts_code.append("/**")
+        ts_code.append(f" * {endpoint['func_name']}.")
+        ts_code.append(" * @param {Object} params 传递给服务器的参数对象。")
+        ts_code.append(" * @returns {Promise<ResponseModel>} 操作的响应。")
+        ts_code.append(" */")
         # 生成函数签名
-        ts_code.append(f"    async {ts_func_name}(params: object): Promise<ResponseModel> {{")
+        ts_code.append(f'export const {ts_func_name} = async (params: object): Promise<ResponseModel> => {{')
         # 生成函数体
-        ts_code.append(f'        return await client.{endpoint["method"]}("{endpoint["path"]}", params)')
-        ts_code.append("    }")
+        ts_code.append(f'  return await client.{endpoint["method"]}("{endpoint["path"]}", params)')
+        ts_code.append("}")
         ts_code.append("")
-
-    ts_code.append("}")
-    ts_code.append("")
-    ts_code.append("export const request = new Request()")
-    ts_code.append("")
 
     # 3. 写入文件
     try:

@@ -1,6 +1,5 @@
 <script setup lang="tsx">
 import { ElMessage, ElButton, type FormInstance } from 'element-plus'
-import { request } from '@/api'
 
 const refForm = ref<FormInstance>()
 const baseFormValue = reactive<BiliConfigModel>({
@@ -35,7 +34,7 @@ const dropdownMenu = [
 const { data: biliConfigData, refetch, isFetching } = useGetBilibiliConfig()
 
 const configMutation = useMutation({
-    mutationFn: async (params: BiliConfigModel) => await request.addOrUpdateBiliConfig({ data: params }),
+    mutationFn: async (params: BiliConfigModel) => await addOrUpdateBiliConfig({ data: params }),
     onSuccess: (response) => {
         if (response.code != 0) {
             ElMessage.warning(response.msg || "请求失败")

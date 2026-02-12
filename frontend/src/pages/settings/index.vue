@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 defineOptions({
-    name: "Settings"
+    name: "settings"
 })
 
 const activeName = ref("1")

@@ -5,7 +5,7 @@ import { markedHighlight } from 'marked-highlight'
 import hljs from 'highlight.js'
 
 defineOptions({
-  name: 'Changelog',
+  name: 'changelog',
 })
 
 const marked = new Marked(

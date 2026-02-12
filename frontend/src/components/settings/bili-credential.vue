@@ -1,7 +1,6 @@
 <script setup lang="tsx">
 import { ElMessage, ElMessageBox, ElText, ElButton, ElSwitch, type Column } from 'element-plus'
 import { Delete, Refresh } from '@element-plus/icons-vue'
-import { request } from '@/api'
 
 const isShow = ref(false)
 const btnLoading = ref(false)
@@ -76,7 +75,7 @@ const credentialColumns: Column<any>[] = [
 const { data: list, refetch, isFetching } = useGetBilibiliCredential()
 
 const statusMutation = useMutation({
-    mutationFn: async (params: object) => await request.updateBiliCredential({ data: params }),
+    mutationFn: async (params: object) => await updateBiliCredential({ data: params }),
     onSuccess: (response) => {
         if (response.code != 0) {
             ElMessage.warning(response.msg || "设置失败")
@@ -90,7 +89,7 @@ const statusMutation = useMutation({
 })
 
 const checkQrCodeMutation = useMutation({
-    mutationFn: async () => await request.checkQrCode({}),
+    mutationFn: async () => await checkQrCode({}),
     onSuccess: (response) => {
         if (response.code != 0) {
             ElMessage.warning(response.msg || "请求失败")
@@ -132,7 +131,7 @@ const checkQrCodeMutation = useMutation({
 })
 
 const qrCodeMutation = useMutation({
-    mutationFn: async () => await request.getBiliCredentialCode({}),
+    mutationFn: async () => await getBiliCredentialCode({}),
     onSuccess: (response) => {
         if (response.code != 0) {
             ElMessage.warning(response.msg || "获取失败")
@@ -148,7 +147,7 @@ const qrCodeMutation = useMutation({
 })
 
 const deleteMutation = useMutation({
-    mutationFn: async (params: number) => await request.deleteBiliCredential({ id: params }),
+    mutationFn: async (params: number) => await deleteBiliCredential({ id: params }),
     onSuccess: (response) => {
         if (response.code != 0) {
             ElMessage.warning(response.msg || "请求失败")
@@ -162,7 +161,7 @@ const deleteMutation = useMutation({
 })
 
 const refreshMutation = useMutation({
-    mutationFn: async (params: number) => await request.refreshBiliCredential({ id: params }),
+    mutationFn: async (params: number) => await refreshBiliCredential({ id: params }),
     onSuccess: (response) => {
         if (response.code != 0) {
             ElMessage.warning(response.msg || "请求失败")
@@ -212,8 +211,7 @@ watch(isFetching, () => {
         <template #header>
             <div class="b-credential-card-header">
                 <span>账号设置</span>
-                <el-alert
-title="未登录账号无法获取到弹幕用户昵称等信息，如有需要可添加一个小号" type="warning" :closable="false"
+                <el-alert title="未登录账号无法获取到弹幕用户昵称等信息，如有需要可添加一个小号" type="warning" :closable="false"
                     style="margin-top: 1rem;" />
             </div>
         </template>
@@ -223,8 +221,7 @@ title="未登录账号无法获取到弹幕用户昵称等信息，如有需要�
         <div v-loading="isFetching" style="height: 300px;padding-top: 1rem;">
             <el-auto-resizer>
                 <template #default="{ width, height }">
-                    <el-table-v2
-:columns="credentialColumns" :data="credentialList" :width="width" :height="height"
+                    <el-table-v2 :columns="credentialColumns" :data="credentialList" :width="width" :height="height"
                         fixed></el-table-v2>
                 </template>
             </el-auto-resizer>

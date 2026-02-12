@@ -1,11 +1,10 @@
-import { request } from '@/api'
 import { ElMessage } from 'element-plus'
 
 export const useGetBilibiliConfig = () => {
   return useQuery({
-    queryKey: [request.getBiliConfig.name],
+    queryKey: [getBiliConfig.name],
     queryFn: async () => {
-      const response = await request.getBiliConfig({})
+      const response = await getBiliConfig({})
       if (response.code != 0) {
         ElMessage.warning(response.msg || '请求失败')
         return {

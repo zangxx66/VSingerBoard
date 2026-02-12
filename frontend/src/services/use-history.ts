@@ -1,11 +1,10 @@
-import { request } from '@/api'
 import { ElMessage } from 'element-plus'
 
 export const useGetHistoryInfinite = (params: RequestHistory) => {
   return useInfiniteQuery({
-    queryKey: [request.getHistoryList.name, params] as const,
+    queryKey: [getHistoryList.name, params] as const,
     queryFn: async (args) => {
-      const response = await request.getHistoryList({ ...args.queryKey[1], page: args.pageParam })
+      const response = await getHistoryList({ ...args.queryKey[1], page: args.pageParam })
       if (response.code != 0) {
         ElMessage.warning(response.msg || '请求失败')
         return { total: 0, rows: [] }

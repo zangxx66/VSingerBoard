@@ -32,7 +32,7 @@ export default defineConfig({
         '@vueuse/core',
         { '@tanstack/vue-query': ['useMutation', 'useQuery', 'useInfiniteQuery', 'useQueryClient'] },
       ],
-      dirs: ['./src/stores/**', './src/services/**', './src/utils/**'],
+      dirs: ['./src/stores/**', './src/services/**', './src/utils/**', './src/api/index.ts'],
       eslintrc: { enabled: true },
       resolvers: [
         ElementPlusResolver(),

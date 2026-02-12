@@ -1,7 +1,6 @@
 import { ElMessage, ElNotification } from "element-plus"
 import { emojiList } from "./emoji"
 import { emoticons } from "./emoticons"
-import { request } from "@/api"
 import type { DefaultError, InfiniteData, QueryClient, QueryKey } from '@tanstack/query-core'
 import type {
   UseInfiniteQueryOptions,
@@ -30,8 +29,8 @@ const purifyConfig = {
  *
  * 如果没有新版本，通知将显示警告消息。
  */
-export const checkUpdate = () => {
-  request.checkUpdate({}).then(response => {
+export const checkLatestUpdate = () => {
+  checkUpdate({}).then(response => {
     if (response.code != 0) {
       ElMessage.warning("检查更新失败")
       return
