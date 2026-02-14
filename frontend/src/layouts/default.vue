@@ -1,8 +1,22 @@
 <script setup lang="tsx">
 import zhCn from "element-plus/es/locale/lang/zh-cn"
-import { HomeFilled, Tools, List, InfoFilled, Sunny, Moon, Calendar, Collection } from "@element-plus/icons-vue"
+import { 
+  HomeFilled, 
+  Tools, 
+  List, 
+  InfoFilled, 
+  Sunny, 
+  Moon, 
+  Calendar, 
+  Collection, 
+} from "@element-plus/icons-vue"
 import ContextMenu from '@imengyu/vue3-context-menu'
-import { ElMessage, type MenuItemInstance, type CardConfigContext, type TabPaneName } from "element-plus"
+import { 
+  ElMessage, 
+  type MenuItemInstance, 
+  type CardConfigContext, 
+  type TabPaneName, 
+} from "element-plus"
 
 defineOptions({
   name: "defaultLayout"
@@ -275,6 +289,10 @@ const updateTheme = () => {
   themeStore.setDarkTheme(globalConfig.dark_mode)
 }
 
+const findNavIcon = (routeName: string) => {
+  return menuItemList.find(item => item.routerName == routeName)?.icon || <HomeFilled />
+}
+
 const mainStyle = computed(() => {
   return {
     left: globalConfig.collapse ? '64px' : '200px'
@@ -333,9 +351,18 @@ onMounted(() => {
     <el-main ref="mainRef" :style="mainStyle" @contextmenu="onContextMenu">
       <el-config-provider :locale="zhCn" :card="cardConfig" :dialog="dialogConfig" :message="messageConfig">
         <el-tabs v-model="activeTabName" type="card" closable @tab-remove="removeTab" @tab-change="changeTab">
-          <el-tab-pane
-          v-for="item in openTabs" :key="item.name" :label="item.title" :name="item.name"
-            :closable="item.closable"></el-tab-pane>
+          <template v-for="item in openTabs" :key="item.name">
+            <el-tab-pane :name="item.name" :closable="item.closable">
+              <template #label>
+                <span>
+                  <el-icon style="vertical-align: middle">
+                    <component :is="findNavIcon(item.path)" />
+                  </el-icon>
+                  <span style="vertical-align: middle;margin-left: 4px;">{{ item.title }}</span>
+                </span>
+              </template>
+            </el-tab-pane>
+          </template>
         </el-tabs>
         <router-view v-slot="{ Component }">
           <keep-alive :include="components">

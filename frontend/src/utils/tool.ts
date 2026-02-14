@@ -15,7 +15,8 @@ const { copy } = useClipboard()
 const purifyConfig = {
   USE_PROFILES: { html: true },
   FORBID_TAGS: ['style', 'script', 'iframe'],
-  ADD_ATTR: ['src', 'alt', 'class', 'width', 'height', 'style', 'referrerpolicy', 'target', 'href']
+  ADD_TAGS: ['svg', 'g', 'path'],
+  ADD_ATTR: ['src', 'alt', 'class', 'width', 'height', 'style', 'referrerpolicy', 'target', 'href', 'viewBox', 'fill', 'd', 'stroke', 'stroke-width', 'stroke-linecap', 'stroke-linejoin']
 }
 
 /**

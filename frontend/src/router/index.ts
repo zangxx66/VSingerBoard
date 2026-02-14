@@ -14,14 +14,10 @@ type CreateMutable<Type> = {
 
 type routeRecordType = CreateMutable<RouteRecordRaw>
 const routeRecord: routeRecordType[] = [...routes]
-const routeList: routeRecordType[] = []
-routeRecord.forEach(v => {
-  routeList.push(v?.meta?.layout != false ? setupLayouts([v])[0] : v)  
-})
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: routeList,
+  routes: setupLayouts(routeRecord)
 })
 
 router.beforeEach(async (toString, _from) => {

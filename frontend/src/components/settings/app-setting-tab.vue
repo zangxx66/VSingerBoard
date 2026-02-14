@@ -60,13 +60,13 @@ watch(isFetching, () => {
 
 </script>
 <template>
-    <el-card v-loading="isFetching">
+    <el-card>
         <template #header>
             <div class="card-header">
                 <span>应用设置</span>
             </div>
         </template>
-        <el-form ref="refForm" :model="baseFormValue" label-width="auto" inline>
+        <el-form ref="refForm" v-loading="isFetching" :model="baseFormValue" label-width="auto" inline>
             <el-form-item label="黑暗模式" prop="dark_mode">
                 <el-switch v-model="baseFormValue.dark_mode" inline-prompt style="--el-switch-off-color: #ff4949"
                     :active-icon="Check" :inactive-icon="Close"></el-switch>
