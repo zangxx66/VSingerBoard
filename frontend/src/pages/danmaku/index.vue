@@ -60,7 +60,7 @@ watch(list, async () => {
         <div class="danmaku-list-item">
           <div class="danmaku-sing">
             <template v-if="item.html != undefined && item.html.length > 0">
-              <el-text style="display: flex" v-html="item.html"></el-text>
+              <el-text class="flex" v-html="item.html"></el-text>
             </template>
             <template v-else>
               {{ item.msg }}

@@ -12,12 +12,16 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import VueRouter from 'vue-router/vite'
 import { VueRouterAutoImports } from 'unplugin-vue-router'
 import Layouts from 'vite-plugin-vue-layouts'
+import UnoCSS from 'unocss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
     vueJsx(),
+    UnoCSS({
+      configFile: './uno.config.ts'
+    }),
     Layouts({
       layoutsDirs: 'src/layouts',
       defaultLayout: 'default',

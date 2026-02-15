@@ -67,7 +67,7 @@ watch(isFetching, () => {
     <el-card>
         <template #header>
             <div class="card-header">
-                <span>抖音设置</span>
+                <line-header class="flex items-center" title="基础设置" />
             </div>
         </template>
         <el-form ref="refForm" v-loading="isFetching" :mode="baseFormValue" label-width="auto">

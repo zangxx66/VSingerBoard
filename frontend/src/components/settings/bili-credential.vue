@@ -210,7 +210,7 @@ watch(isFetching, () => {
     <el-card>
         <template #header>
             <div class="b-credential-card-header">
-                <span>账号设置</span>
+                <line-header class="flex items-center" title="账号设置" />
                 <el-alert title="未登录账号无法获取到弹幕用户昵称等信息，如有需要可添加一个小号" type="warning" :closable="false"
                     style="margin-top: 1rem;" />
             </div>

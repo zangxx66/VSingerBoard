@@ -45,7 +45,7 @@ const model = computedAsync(async () => {
   <el-card>
     <template #header>
       <div class="card-header">
-        <span>更新日志</span>
+        <line-header class="items-center flex" title="更新日志" />
       </div>
     </template>
     <div v-loading="isFetching" class="changelog-container">

@@ -125,7 +125,9 @@ onMounted(() => {
 <template>
   <el-card>
     <template #header>
-      <span>OBS设置</span>
+      <div class="card-header">
+        <line-header class="flex items-center" title="OBS设置" />
+      </div>
     </template>
     <div class="obs-container">
       <el-form :model="formValue" label-width="auto">
@@ -149,24 +151,24 @@ onMounted(() => {
         :closable="false"
         type="primary"
       />
-      <div class="obs-splitter" style="margin-top: 1rem">
+      <div class="obs-splitter mt-[1rem]"">
         <el-splitter>
           <el-splitter-panel :resizable="false">
             <div class="css-editor">
-              <line-header title="样式编辑器"></line-header>
+              <line-header title="样式编辑器" />
               <el-input v-model="css" :rows="20" type="textarea" placeholder="css样式在这里编辑" />
             </div>
           </el-splitter-panel>
           <el-splitter-panel :resizable="false">
             <div class="css-editor-preview">
-              <line-header title="样式预览"></line-header>
+              <line-header title="样式预览" />
               <div class="danmaku-container">
                 <div class="danmaku-list">
                   <template v-for="(item, index) in previewData" :key="index">
                     <div class="danmaku-list-item">
                       <div class="danmaku-sing">
                         <template v-if="item.html != undefined && item.html.length > 0">
-                          <el-text style="display: flex">
+                          <el-text class="flex">
                             <span v-html="item.html"></span>
                           </el-text>
                         </template>

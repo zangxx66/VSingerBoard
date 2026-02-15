@@ -152,7 +152,7 @@ onMounted(() => {
               </template>
             </el-select>
           </el-form-item>
-          <el-form-item label="时间范围" prop="dateRange" style="width: 350px">
+          <el-form-item label="时间范围" prop="dateRange" class="w-[350px]">
             <el-date-picker
               v-model="dateRange"
               type="daterange"
@@ -190,9 +190,9 @@ onMounted(() => {
                   width="24"
                 />
                 <text tag="span" class="chat-tag">
-                  {{ item.uname }}：<el-text style="display: flex" v-html="item.song_name"></el-text>
+                  {{ item.uname }}：<el-text class="flex" v-html="item.song_name"></el-text>
                 </text>
-                <span style="width: 15%">
+                <span class="w-[15%]">
                   {{ item.create_time_str }}
                 </span>
               </div>
@@ -200,10 +200,11 @@ onMounted(() => {
             <template v-if="resultList?.length == 0">
               <el-empty description="没有数据" />
             </template>
+            <el-backtop :right="100" :bottom="100" target=".chat-infinite-list > div" />
           </el-scrollbar>
         </template>
         <template #footer>
-          <div style="display: flex; text-align: right">
+          <div class="flex text-align-right">
             <el-button
               type="success"
               :disabled="resultList?.length == 0"

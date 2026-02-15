@@ -15,7 +15,7 @@ network_count = 0
 
 def vite_server():
     global dev_process
-    dev_process = subprocess.Popen("npm run -C frontend/ dev", shell=True)
+    dev_process = subprocess.Popen("pnpm run -C frontend/ dev", shell=True)
     dev_process.communicate()
 
 

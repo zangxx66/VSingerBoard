@@ -1,5 +1,6 @@
-/* @import './base.css'; */
+import { defineConfig } from 'unocss'
 
+const mainCss = `
 body {
   font-weight: normal;
   font-family: Inter, 'Helvetica Neue', Helvetica, 'PingFang SC',
@@ -29,29 +30,39 @@ body {
   --menu-background-color: rgba(255, 255, 255, 0.6);
   --menu-color: #000;
   --mx-menu-disabled-text: #6a6a6a;
+}
 
-  &.dark {
+.mx-menu-bar.mac.dark,
+.mx-context-menu.mac.dark {
     --menu-background-color: rgba(0, 0, 0, 0.6);
     --menu-color: #fff;
     --mx-menu-disabled-text: #a5a5a5;
-  }
-  &.disabled {
+}
+
+.mx-menu-bar.mac.disabled,
+.mx-context-menu.mac.disabled {
     color: var(--mx-menu-disabled-text);
-
     cursor: not-allowed;
+}
 
-    &:hover, &:active {
+.mx-menu-bar.mac.disabled:hover, 
+.mx-menu-bar.mac.disabled:active,
+.mx-context-menu.mac.disabled:hover,
+.mx-context-menu.mac.disabled:active {
       background-color: transparent;
-    }
+}
 
-    .mx-right-arrow, .mx-checked-mark {
+.mx-menu-bar.mac.disabled .mx-right-arrow, 
+.mx-context-menu.mac.disabled .mx-right-arrow,
+.mx-menu-bar.mac.disabled .mx-checked-mark,
+.mx-context-menu.mac.disabled .mx-checked-mark {
       fill: var(--mx-menu-disabled-text);
-    }
-    .mx-shortcut {
+}
+
+.mx-menu-bar.mac.disabled .mx-shortcut,
+.mx-context-menu.mac.disabled .mx-shortcut {
       background-color: var(--mx-menu-shortcut-backgroud-disabled);
       color: var(--mx-menu-shortcut-text-second);
-    }
-  }
 }
 
 .mx-context-menu {
@@ -443,3 +454,13 @@ a,
     padding: 0 2rem;
   }
 }
+`
+
+export default defineConfig({
+  shortcuts: [],
+  theme: {},
+  preflights: [{
+    getCSS: () => mainCss,
+  }],
+  rules: [],
+})

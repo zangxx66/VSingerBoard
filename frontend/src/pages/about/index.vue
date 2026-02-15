@@ -48,7 +48,7 @@ onMounted(() => {
     <el-card>
         <template #header>
             <div class="card-header">
-                <span>关于</span>
+                <line-header class="flex items-center" title="关于" />
             </div>
         </template>
         <div class="about-container">

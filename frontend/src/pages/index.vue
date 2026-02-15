@@ -163,10 +163,11 @@ onMounted(() => {
       <el-card class="chat-card">
         <template #header>
           <div class="card-header">
-            <span>
-              点歌列表
-              <link-icon style="cursor: pointer" @click="openDanmakuWindow" />
-            </span>
+            <line-header class="flex items-center" title="点歌列表" >
+              <template #suffix>
+                <link-icon class="cursor-pointer color-white" @click="openDanmakuWindow" />
+              </template>
+            </line-header>
           </div>
         </template>
         <el-scrollbar
@@ -239,6 +240,7 @@ onMounted(() => {
               </el-tooltip>
             </div>
           </template>
+          <el-backtop :right="100" :bottom="100" target=".chat-infinite-list > div" />
         </el-scrollbar>
         <template #footer>
           <div class="chat-card-footer">

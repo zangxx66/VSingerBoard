@@ -239,6 +239,7 @@ const search = () => {
 }
 
 const nextPage = (_remainDistance: number) => {
+  console.log(_remainDistance)
   if (list.value && list.value.length < total.value) {
     fetchNextPage()
   }
@@ -276,7 +277,7 @@ onMounted(() => {
         </el-form>
       </el-card>
       <el-divider />
-      <div style="height: 40px; display: flex">
+      <div class="h-[40px] flex">
         <el-button type="primary" @click="addOrEditPlaylist()">新增歌曲</el-button>
         <el-button type="danger" :disabled="list?.length == 0" @click="allDeletePlaylist()"
           >全部删除</el-button
@@ -300,8 +301,8 @@ onMounted(() => {
           </div>
         </template>
         <template #footer>
-          <div style="display: flex">
-            <div style="width: 100%; flex-direction: row-reverse; display: flex; gap: 10px">
+          <div class="flex">
+            <div class="w-full flex-row-reverse flex gap-[10px]">
               <el-upload
                 action="#"
                 :auto-upload="false"

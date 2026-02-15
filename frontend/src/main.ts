@@ -9,7 +9,8 @@ import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/base.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css'
-import "@/assets/main.css"
+import '@unocss/reset/normalize.css'
+import 'uno.css'
 
 const app = createApp(App)
 
