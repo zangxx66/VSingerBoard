@@ -1,0 +1,1 @@
+import{n as e,x as s,t as a,y as i,o as t,I as r,J as l}from"./vendor-libs-7289s0cb.js";const n={class:"line-header"},o={class:"line-header-title"},d=e({name:"LineHeader",__name:"line-header",props:{title:{type:String,required:!0}},setup:e=>(d,p)=>(a(),s("div",n,[i("div",o,[t(d.$slots,"prefix"),r(" "+l(e.title)+" ",1),t(d.$slots,"suffix")])]))});export{d as _};
