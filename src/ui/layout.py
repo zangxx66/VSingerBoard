@@ -6,15 +6,27 @@ from .pages.history import main as HistoryView
 from .pages.home import main as HomeView
 from .pages.playlist import main as PlaylistView
 from .pages.settings import main as SettingsView
+from src.utils import resource_path
 
 
 async def main(page: ft.Page):
     page.title = "VSingerBoard"
 
     width, height = pyautogui.size()
-    page.window.width = int(width * 0.9)
-    page.window.height = int(height * 0.9)
+    page.window.width = int(width * .9)
+    page.window.height = int(height * .9)
     page.window.resizable = False
+    page.window.shadow = True
+    page.window.icon = resource_path("icons/logo.ico")
+    page.window.title_bar_buttons_hidden = True
+    page.window.title_bar_hidden = True
+    await page.window.center()
+
+    def handle_minimized_window(e: ft.Event[ft.IconButton]):
+        page.window.minimized = True
+
+    async def handle_close_window(e: ft.Event[ft.IconButton]):
+        await page.window.close()
 
     async def handle_show_drawer():
         await page.show_drawer()
@@ -35,9 +47,6 @@ async def main(page: ft.Page):
                 await page.push_route("/about")
             case _:
                 await page.push_route("/")
-
-    def handle_context_click(e: ft.Event[ft.PopupMenuItem]):
-        page.show_dialog(ft.SnackBar(content=f"select '{e.control.content}'"))
 
     def create_drawer(select_index=0):
         return ft.NavigationDrawer(
@@ -80,18 +89,23 @@ async def main(page: ft.Page):
 
     def create_appbar(title):
         return ft.AppBar(
-            leading=ft.IconButton(ft.Icons.MENU, on_click=handle_show_drawer),
+            leading=ft.IconButton(ft.Icons.MENU, padding=ft.Padding(left=24), hover_color=ft.Colors.TRANSPARENT, on_click=handle_show_drawer),
             leading_width=40,
             title=ft.Text(title),
             center_title=False,
             bgcolor=ft.Colors.RED_ACCENT,
+            actions_padding=ft.Padding(right=24),
+            actions=[
+                ft.IconButton(ft.Icons.MINIMIZE, on_click=handle_minimized_window),
+                ft.IconButton(ft.Icons.CLOSE, on_click=handle_close_window)
+            ]
         )
 
     def route_change(route):
         page.views.clear()
         match page.route:
             case "/":
-                page.views.append(HomeView("home page", create_appbar("点歌列表"), create_drawer(0)))
+                page.views.append(HomeView(page, create_appbar("点歌列表"), create_drawer(0)))
             case "/history":
                 page.views.append(HistoryView("history page", create_appbar("点歌历史"), create_drawer(1)))
             case "/playlist":
