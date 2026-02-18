@@ -15,12 +15,13 @@ async def main(page: ft.Page):
     width, height = pyautogui.size()
     page.window.width = int(width * .9)
     page.window.height = int(height * .9)
+    page.locale_configuration = ft.LocaleConfiguration([ft.Locale("zh", "Hans")], ft.Locale("zh", "Hans"))
     page.window.resizable = False
     page.window.shadow = True
     page.window.icon = resource_path("icons/logo.ico")
     page.window.title_bar_buttons_hidden = True
     page.window.title_bar_hidden = True
-    await page.window.center()
+    page.window.alignment = ft.Alignment.CENTER
 
     def handle_minimized_window(e: ft.Event[ft.IconButton]):
         page.window.minimized = True
@@ -107,7 +108,7 @@ async def main(page: ft.Page):
             case "/":
                 page.views.append(HomeView(page, create_appbar("点歌列表"), create_drawer(0)))
             case "/history":
-                page.views.append(HistoryView("history page", create_appbar("点歌历史"), create_drawer(1)))
+                page.views.append(HistoryView(page, create_appbar("点歌历史"), create_drawer(1)))
             case "/playlist":
                 page.views.append(PlaylistView("playlist page", create_appbar("歌单管理"), create_drawer(2)))
             case "/changelog":

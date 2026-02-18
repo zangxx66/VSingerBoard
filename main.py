@@ -10,6 +10,8 @@ def run_app():
         ft.run(main, view=ft.AppView.FLET_APP_WEB)
     except Exception as ex:
         logger.exception(ex)
+    finally:
+        logger.info("------ Application Stop ------")
 
 
 if __name__ == "__main__":
