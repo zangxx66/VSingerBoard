@@ -25,7 +25,7 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
             create_time=int(time.time())
         ))
 
-    def generate_colmns():
+    def generate_columns():
         return [
             ftd.DataColumn2(label=ft.Text("歌名"), size=ftd.DataColumnSize.L, heading_row_alignment=ft.MainAxisAlignment.START),
             ftd.DataColumn2(label=ft.Text("歌手"), heading_row_alignment=ft.MainAxisAlignment.START),
@@ -60,7 +60,7 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
         heading_row_color=ft.Colors.SECONDARY_CONTAINER,
         bottom_margin=10,
         visible_vertical_scroll_bar=True,
-        columns=generate_colmns(),
+        columns=generate_columns(),
         rows=generate_rows()
     )
 

@@ -68,3 +68,15 @@ class PlaylistItem(BaseModel):
     language: str
     tag: str
     create_time: int
+
+
+class BiliCredentialItem(BaseModel):
+    id: int
+    sessdata: str
+    bili_jct: str
+    buvid3: str
+    buvid4: str
+    dedeuserid: str
+    ac_time_value: str
+    uid: int
+    enable: bool

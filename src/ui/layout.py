@@ -116,7 +116,7 @@ async def main(page: ft.Page):
             case "/changelog":
                 page.views.append(ChangelogView(version_info, create_appbar("更新日志"), create_drawer(3)))
             case "/settings":
-                page.views.append(SettingsView("settings page", create_appbar("设置"), create_drawer(4)))
+                page.views.append(SettingsView(page, create_appbar("设置"), create_drawer(4)))
             case "/about":
                 page.views.append(AboutView("about page", create_appbar("关于"), create_drawer(0)))
             case _:

@@ -25,6 +25,7 @@ from .models import (
     globalfigItem,
     WebsocketDataItem,
     PlaylistItem,
+    BiliCredentialItem,
 )
 from .ws_client import WebSocketClient
 from .worker import async_worker
@@ -61,4 +62,5 @@ __all__ = [
     "generate_ts_api",
     "get_support_dir",
     "PlaylistItem",
+    "BiliCredentialItem",
 ]
