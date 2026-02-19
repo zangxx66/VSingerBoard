@@ -6,7 +6,7 @@ from .pages.history import main as HistoryView
 from .pages.home import main as HomeView
 from .pages.playlist import main as PlaylistView
 from .pages.settings import main as SettingsView
-from src.utils import resource_path
+from src.utils import resource_path, check_for_updates
 
 
 async def main(page: ft.Page):
@@ -22,6 +22,8 @@ async def main(page: ft.Page):
     page.window.title_bar_buttons_hidden = True
     page.window.title_bar_hidden = True
     page.window.alignment = ft.Alignment.CENTER
+
+    version_info = await check_for_updates()
 
     def handle_minimized_window(e: ft.Event[ft.IconButton]):
         page.window.minimized = True
@@ -112,7 +114,7 @@ async def main(page: ft.Page):
             case "/playlist":
                 page.views.append(PlaylistView(page, create_appbar("歌单管理"), create_drawer(2)))
             case "/changelog":
-                page.views.append(ChangelogView("changelog page", create_appbar("更新日志"), create_drawer(3)))
+                page.views.append(ChangelogView(version_info, create_appbar("更新日志"), create_drawer(3)))
             case "/settings":
                 page.views.append(SettingsView("settings page", create_appbar("设置"), create_drawer(4)))
             case "/about":
