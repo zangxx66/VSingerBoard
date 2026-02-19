@@ -118,7 +118,7 @@ async def main(page: ft.Page):
             case "/settings":
                 page.views.append(SettingsView(page, create_appbar("设置"), create_drawer(4)))
             case "/about":
-                page.views.append(AboutView("about page", create_appbar("关于"), create_drawer(0)))
+                page.views.append(AboutView(page, create_appbar("关于"), create_drawer(0)))
             case _:
                 pass
 
