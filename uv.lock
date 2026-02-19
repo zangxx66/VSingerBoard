@@ -577,6 +577,18 @@ wheels = [
 ]
 
 [[package]]
+name = "flet-datatable2"
+version = "0.80.5"
+source = { registry = "https://pypi.tuna.tsinghua.edu.cn/simple" }
+dependencies = [
+    { name = "flet" },
+]
+sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/83/fb/b7b50b84f5e23b7706ce22de29d2fa1e9650e18f4c894b599040da0ed46a/flet_datatable2-0.80.5.tar.gz", hash = "sha256:4f70c4e1ce86edb1a9788cf959a20f6740589d8aa203b5d4bea89abab32896a3", size = 23096, upload_time = "2026-01-30T00:44:59.401Z" }
+wheels = [
+    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/38/82/64683607080fddcc0ea5d0e1f2189f2c83aa1b1d97b568e996b2f353a926/flet_datatable2-0.80.5-py3-none-any.whl", hash = "sha256:19950a4ea27155f4a5e9ea8f594a30ea5c99c8b1d27dcf85cd29a773d4ac7c64", size = 25238, upload_time = "2026-01-30T00:44:58.599Z" },
+]
+
+[[package]]
 name = "flet-desktop"
 version = "0.80.5"
 source = { registry = "https://pypi.tuna.tsinghua.edu.cn/simple" }
@@ -4426,6 +4438,7 @@ dependencies = [
     { name = "curl-cffi" },
     { name = "fastapi" },
     { name = "flet", extra = ["all"] },
+    { name = "flet-datatable2" },
     { name = "jinja2" },
     { name = "pyautogui" },
     { name = "pydantic" },
@@ -4449,6 +4462,7 @@ requires-dist = [
     { name = "curl-cffi", specifier = ">=0.13.0" },
     { name = "fastapi", specifier = ">=0.116.1" },
     { name = "flet", extras = ["all"], specifier = ">=0.80.5" },
+    { name = "flet-datatable2", specifier = ">=0.80.5" },
     { name = "jinja2", specifier = ">=3.1.6" },
     { name = "pyautogui", specifier = ">=0.9.54" },
     { name = "pydantic", specifier = ">=2.11.7" },

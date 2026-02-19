@@ -10,7 +10,7 @@ from src.utils import resource_path
 
 
 async def main(page: ft.Page):
-    page.title = "VSingerBoard"
+    page.title = "点歌姬"
 
     width, height = pyautogui.size()
     page.window.width = int(width * .9)
@@ -110,7 +110,7 @@ async def main(page: ft.Page):
             case "/history":
                 page.views.append(HistoryView(page, create_appbar("点歌历史"), create_drawer(1)))
             case "/playlist":
-                page.views.append(PlaylistView("playlist page", create_appbar("歌单管理"), create_drawer(2)))
+                page.views.append(PlaylistView(page, create_appbar("歌单管理"), create_drawer(2)))
             case "/changelog":
                 page.views.append(ChangelogView("changelog page", create_appbar("更新日志"), create_drawer(3)))
             case "/settings":

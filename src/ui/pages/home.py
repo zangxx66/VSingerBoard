@@ -75,9 +75,12 @@ def main(page: Page, appbar: AppBar, drawer: NavigationDrawer):
     def create_bottom_card():
         return ft.Card(
             shadow_color=ft.Colors.ON_SURFACE_VARIANT,
+            shape=ft.RoundedRectangleBorder(radius=4),
+            height=50,
             bgcolor=ft.Colors.WHITE,
+            align=ft.Alignment.CENTER,
             content=ft.Row(
-                alignment=ft.MainAxisAlignment.START,
+                margin=ft.Margin(left=24),
                 controls=[
                     ft.Button(icon=ft.Icons.EDIT, bgcolor=ft.Colors.CYAN, color=ft.Colors.WHITE, content="手动点歌"),
                     ft.Button(icon=ft.Icons.DOWNLOAD, bgcolor=ft.Colors.GREEN, color=ft.Colors.WHITE, content="导出列表"),
