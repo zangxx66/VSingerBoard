@@ -101,9 +101,7 @@ class Bili:
     def get_list(self):
         if len(self.danmus) == 0:
             return []
-        result = self.danmus.copy()
-        self.danmus.clear()
-        return result
+        return self.danmus
 
     def get_del_list(self):
         if len(self.del_list) == 0:

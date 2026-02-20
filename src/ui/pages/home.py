@@ -2,20 +2,28 @@ import flet as ft
 import pyautogui
 import asyncio
 from flet import Page, AppBar, NavigationDrawer
-from src.utils import logger
+from src.utils import DanmuInfo
 
 
 def main(page: Page, appbar: AppBar, drawer: NavigationDrawer):
     _, height = pyautogui.size()
     list_tile_list: list[ft.Column] = []
+    danmaku_list: list[DanmuInfo] = []
+
+    def on_message(msg):
+        global danmaku_list
+        danmaku_list = msg
+
+    page.pubsub.subscribe(on_message)
 
     async def handle_context_click(e: ft.Event[ft.PopupMenuItem]):
         if e.control.content == "复制":
             await ft.Clipboard().set(e.control.data)
             page.show_dialog(ft.SnackBar(f"已复制 {e.control.data}"))
         if e.control.content == "移除":
-            index = [i for i, item in enumerate(list_tile_list) if item.data["title"] == e.control.data["title"] and item.data["subtitle"] == e.control.data["subtitle"]]
-            list_tile_list.pop(index[0])
+            index = [i for i, item in enumerate(danmaku_list) if item.data["title"] == e.control.data["title"] and item.data["subtitle"] == e.control.data["subtitle"]]
+            # list_tile_list.pop(index[0])
+            danmaku_list.pop(index[0])
             page.update()
             page.show_dialog(ft.SnackBar("已移除"))
 
@@ -38,20 +46,18 @@ def main(page: Page, appbar: AppBar, drawer: NavigationDrawer):
         return menu
 
     def generate_list():
-        for i in range(0, 100):
+        for item in danmaku_list:
             col = ft.Column(
-                data={"title": f"nickname_{i}", "subtitle": "song name"},
+                data={"title": item["uname"], "subtitle": item["msg"]},
                 controls=[
                     ft.ListTile(
                         leading=ft.Icon(ft.Icons.ACCOUNT_CIRCLE),
-                        title=f"nickname_{i}",
-                        subtitle="song name",
-                        trailing=create_menu({"title": f"nickname_{i}", "subtitle": "song name"})
+                        title=item["uname"],
+                        subtitle=item["msg"],
+                        trailing=create_menu({"title": item["uname"], "subtitle": item["msg"]})
                     ),
                 ]
             )
-            if i < 99:
-                col.controls.append(ft.Divider())
 
             list_tile_list.append(col)
         return list_tile_list

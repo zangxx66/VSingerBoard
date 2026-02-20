@@ -2,9 +2,13 @@ import flet as ft
 from flet import AppBar, NavigationDrawer
 from datetime import datetime as dt
 from datetime import UTC
+from src.utils import check_for_updates, async_worker
 
 
-def main(version_info, appbar: AppBar, drawer: NavigationDrawer):
+def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
+
+    version_info = async_worker.run_sync(check_for_updates())
+
     if version_info["published_at"] is not None:
         utc_str = version_info["published_at"]
         d = dt.fromisoformat(utc_str).replace(tzinfo=UTC).astimezone()
