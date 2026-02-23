@@ -1,76 +1,13 @@
 import flet as ft
 import pyautogui
-import asyncio
 from .pages.about import main as AboutView
 from .pages.changelog import main as ChangelogView
 from .pages.history import main as HistoryView
 from .pages.home import main as HomeView
 from .pages.playlist import main as PlaylistView
 from .pages.settings import main as SettingsView
-from src.utils import resource_path, DanmuInfo, logger, async_worker
-from src.live import douyin_manager, bili_manager
-
-
-class message_manager():
-    def __init__(self, page: ft.Page):
-        self._page = page
-        self._stop_event = asyncio.Event()
-        self._run_future = None
-        self._broadcast_task = None
-        self.song_list: list[DanmuInfo] = []
-
-    def start(self):
-        if self._run_future and not self._run_future.done():
-            logger.info("message_manager is already running...")
-            return
-        self._stop_event.clear()
-        self._run_future = async_worker.submit(self._start_and_run_client())
-        logger.info("message_manager main task submitted to worker...")
-
-    async def _periodic_broadcast_task(self):
-        while not self._stop_event.is_set():
-            try:
-                douyin_list = douyin_manager.get_list()
-                bili_list = bili_manager.get_list()
-                song_list = douyin_list + bili_list
-                self._page.pubsub.send_all(song_list)
-
-                await asyncio.sleep(2)
-            except asyncio.CancelledError:
-                logger.info("periodic broadcast task was cancelled...")
-                break
-            except Exception as ex:
-                logger.error(f"Error in periodic broadcast task: {ex}")
-                await asyncio.sleep(2)
-
-    async def _start_and_run_client(self):
-        self._broadcast_task = None
-        try:
-            self._broadcast_task = asyncio.create_task(self._periodic_broadcast_task())
-            await self._stop_event.wait()
-        except asyncio.CancelledError:
-            logger.warning("message_manager task was cancelled...")
-        except Exception as ex:
-            logger.error(f"message_manager task failed: {ex}")
-        finally:
-            if self._broadcast_task:
-                self._broadcast_task.cancel()
-                await asyncio.gather(self._broadcast_task, return_exceptions=True)
-            logger.info("message_manager resources cleaned up...")
-
-    async def stop(self):
-        if self._run_future and not self._run_future.done():
-            self._stop_event.set()
-            try:
-                awaitable_future = asyncio.wrap_future(self._run_future)
-                await asyncio.wait_for(awaitable_future, timeout=5)
-            except asyncio.TimeoutError:
-                logger.warning("Timed out waiting for message_manager task to stop, cancelling...")
-                self._run_future.cancel()
-            except Exception as ex:
-                logger.error(f"Error waiting for message_manager task to stop: {ex}")
-            logger.info("message_manager main task stopped...")
-        self._run_future = None
+from src.utils import resource_path, async_worker
+from src.manager.messages import MessageManager
 
 
 async def main(page: ft.Page):
@@ -87,14 +24,21 @@ async def main(page: ft.Page):
     page.window.title_bar_hidden = True
     page.window.alignment = ft.Alignment.CENTER
 
-    message_handler = message_manager(page)
+    message_handler = MessageManager(page)
     message_handler.start()
 
     def handle_minimized_window(e: ft.Event[ft.IconButton]):
         page.window.minimized = True
 
     async def handle_close_window(e: ft.Event[ft.IconButton]):
-        await page.window.close()
+        page.show_dialog(ft.AlertDialog(
+            title=ft.Text("提示"),
+            content=ft.Text("是否退出？"),
+            actions=[
+                ft.TextButton("取消", on_click=lambda ee: page.pop_dialog()),
+                ft.TextButton("退出", on_click=lambda ee: async_worker.submit(page.window.close()))
+            ]
+        ))
 
     async def handle_show_drawer():
         await page.show_drawer()
