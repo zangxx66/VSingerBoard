@@ -28,7 +28,7 @@ def bilibili_container(page: ft.Page):
             sing_prefix=sing_prefix_text.current.value,
             sing_cd=int(sing_cd_text.current.value)
         )
-        result = await db.add_or_update_bili_config(**data.__dict__)
+        result = await async_worker.run_db_operation(db.add_or_update_bili_config(**data.__dict__))
         if result > 0:
             async_worker.submit(bili_manager.restart())
             page.show_dialog(ft.AlertDialog(
@@ -89,13 +89,13 @@ def bilibili_container(page: ft.Page):
             uid = model_dic["dedeuserid"]
             model_dic["uid"] = uid
             model_dic["enable"] = False
-            cred = await db.get_bcredential(uid=uid)
+            cred = await async_worker.run_db_operation(db.get_bcredential(uid=uid))
             if not cred:
-                await db.add_bcredential(**model_dic)
+                await async_worker.run_db_operation(db.add_bcredential(**model_dic))
             else:
                 new_dic["enable"] = cred.enable
-                await db.update_bcredential(pk=cred.id, **model_dic)
-            if login_task and login_task.cancelled():
+                await async_worker.run_db_operation(db.update_bcredential(pk=cred.id, **model_dic))
+            if login_task and not login_task.cancelled():
                 login_task.cancel()
             async_worker.submit(bili_manager.restart())
             page.pop_dialog()
@@ -171,7 +171,7 @@ def bilibili_container(page: ft.Page):
     async def on_status_click(e: ft.Event[ft.Button]):
         id = e.control.data["id"]
         enable = e.control.data["enable"]
-        result = await db.update_bcredential(pk=id, enable=enable)
+        result = await async_worker.run_db_operation(db.update_bcredential(pk=id, enable=enable))
         if result > 0:
             page.show_dialog(ft.AlertDialog(
                 icon=ft.Icons.INFO,
@@ -180,7 +180,7 @@ def bilibili_container(page: ft.Page):
                 actions=[ft.Button("确定", on_click=lambda ee: page.pop_dialog())],
             ))
             async_worker.submit(bili_manager.restart())
-            credential_list = await db.get_bcredential_list()
+            credential_list = await async_worker.run_db_operation(db.get_bcredential_list())
             data_rows = generate_rows(credential_list)
             data_table.rows = data_rows
             page.update()
@@ -195,10 +195,10 @@ def bilibili_container(page: ft.Page):
     def on_delete_click(e: ft.Event[ft.Button]):
         async def delete():
             id = e.control.data
-            result = await db.delete_bcredential(pk=id)
+            result = await async_worker.run_db_operation(db.delete_bcredential(pk=id))
             if result > 0:
                 page.show_dialog(ft.SnackBar("删除成功"))
-                credential_list = await db.get_bcredential_list()
+                credential_list = await async_worker.run_db_operation(db.get_bcredential_list())
                 data_rows = generate_rows(credential_list)
                 data_table.rows = data_rows
                 async_worker.submit(bili_manager.restart())
@@ -216,7 +216,7 @@ def bilibili_container(page: ft.Page):
         ))
 
     async def on_mount():
-        data = await db.get_bconfig()
+        data = await async_worker.run_db_operation(db.get_bconfig())
         if data:
             id_text.current.value = data.id
             room_id_text.current.value = data.room_id
@@ -224,7 +224,7 @@ def bilibili_container(page: ft.Page):
             user_lv_text.current.value = data.user_level
             sing_prefix_text.current.value = data.sing_prefix
             sing_cd_text.current.value = data.sing_cd
-        credential_list = await db.get_bcredential_list()
+        credential_list = await async_worker.run_db_operation(db.get_bcredential_list())
         data_rows = generate_rows(credential_list)
         data_table.rows = data_rows
         page.update()
