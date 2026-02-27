@@ -80,3 +80,12 @@ class BiliCredentialItem(BaseModel):
     ac_time_value: str
     uid: int
     enable: bool
+
+
+class HistoryItem(BaseModel):
+    id: int
+    uid: int
+    uname: str
+    song_name: str
+    source: str
+    create_time: int

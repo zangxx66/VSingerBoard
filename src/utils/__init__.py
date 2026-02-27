@@ -26,6 +26,7 @@ from .models import (
     WebsocketDataItem,
     PlaylistItem,
     BiliCredentialItem,
+    HistoryItem,
 )
 from .ws_client import WebSocketClient
 from .worker import async_worker
@@ -63,4 +64,5 @@ __all__ = [
     "get_support_dir",
     "PlaylistItem",
     "BiliCredentialItem",
+    "HistoryItem",
 ]
