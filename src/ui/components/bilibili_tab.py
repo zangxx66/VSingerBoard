@@ -66,7 +66,7 @@ def bilibili_container(page: ft.Page):
     login_task: Task = None
 
     async def get_qr_code():
-        global qr_code_login
+        nonlocal qr_code_login
         qr_code_login = QrCodeLogin(platform=QrCodeLoginChannel.WEB)
         await qr_code_login.generate_qrcode()
         qr_code = qr_code_login.get_qrcode_picture()
@@ -75,7 +75,7 @@ def bilibili_container(page: ft.Page):
         return encoded_string
 
     async def check_qr_code():
-        global qr_code_login, login_task
+        nonlocal qr_code_login, login_task
         if not qr_code_login:
             return
         while not qr_code_login.has_done():
@@ -101,7 +101,7 @@ def bilibili_container(page: ft.Page):
             page.pop_dialog()
 
     async def on_add_cred_click(e: ft.Event[ft.Button]):
-        global login_task
+        nonlocal login_task
         img_src = await get_qr_code()
         login_task = asyncio.create_task(check_qr_code())
         page.show_dialog(ft.AlertDialog(

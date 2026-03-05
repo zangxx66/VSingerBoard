@@ -11,7 +11,7 @@ def main(page: Page, appbar: AppBar, drawer: NavigationDrawer):
     danmaku_list: list[DanmuInfo] = []
 
     def on_message(msg):
-        global danmaku_list
+        nonlocal danmaku_list
         danmaku_list = msg
 
     page.pubsub.subscribe(on_message)
@@ -22,7 +22,6 @@ def main(page: Page, appbar: AppBar, drawer: NavigationDrawer):
             page.show_dialog(ft.SnackBar(f"已复制 {e.control.data}"))
         if e.control.content == "移除":
             index = [i for i, item in enumerate(danmaku_list) if item.data["title"] == e.control.data["title"] and item.data["subtitle"] == e.control.data["subtitle"]]
-            # list_tile_list.pop(index[0])
             danmaku_list.pop(index[0])
             page.update()
             page.show_dialog(ft.SnackBar("已移除"))

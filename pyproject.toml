@@ -25,6 +25,8 @@ dependencies = [
     "flet[all]>=0.80.5",
     "pyautogui>=0.9.54",
     "flet-datatable2>=0.80.5",
+    "pandas>=3.0.1",
+    "openpyxl>=3.1.5",
 ]
 
 [tool.aerich]
