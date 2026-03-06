@@ -2,10 +2,12 @@ import datetime
 import time
 import pyautogui
 import threading
+import io
+import pandas as pd
 import flet as ft
 from flet import AppBar, NavigationDrawer, Ref
 from src.database import Db as db
-from src.utils import logger, async_worker, HistoryItem, resource_path
+from src.utils import logger, async_worker, HistoryItem, resource_path, timespan_to_localtime
 from src.ui.components.progress import NProgress
 
 
@@ -78,6 +80,40 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
     async def handle_search_click(e: ft.Event[ft.Button]):
         await load_data(True)
 
+    async def handle_export_click(e: ft.Event[ft.Button]):
+        try:
+            uname = uname_text.current.value
+            song_name = song_name_text.current.value
+            source = source_text.current.value
+            if source == "all":
+                source = None
+            start_time = int(start_date_picker.current.value.timestamp()) if start_date_picker.current.value else None
+            end_time = int(end_date_picker.current.value.timestamp()) if end_date_picker.current.value else None
+            _, songs = await async_worker.run_db_operation(db.get_song_history_page(uname, song_name, source, start_time, end_time, 1, total))
+
+            df_dict = {
+                "日期": [timespan_to_localtime(item.create_time) for item in songs],
+                "昵称": [item.uname for item in songs],
+                "歌名": [item.song_name for item in songs],
+                "平台": [item.source for item in songs]
+            }
+            df = pd.DataFrame(df_dict)
+            excel_buffer = io.BytesIO()
+            with pd.ExcelWriter(excel_buffer) as writer:
+                df.to_excel(writer, sheet_name="Sheet1")
+            excel_bytes = excel_buffer.getvalue()
+            file_name = f"点歌历史记录_{int(time.time())}"
+            await ft.FilePicker().save_file(
+                file_name=file_name,
+                file_type=ft.FilePickerFileType.CUSTOM,
+                allowed_extensions=["xlsx"],
+                src_bytes=excel_bytes
+            )
+            page.show_dialog(ft.SnackBar("导出成功"))
+        except Exception as ex:
+            logger.error(f"export history error:{ex}")
+            page.show_dialog(ft.SnackBar("导出记录错误"))
+
     start_dp = ft.DatePicker(
         current_date=today,
         ref=start_date_picker,
@@ -139,6 +175,20 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
             )
         )
 
+    def create_actions():
+        return ft.Card(
+            shadow_color=ft.Colors.ON_SURFACE_VARIANT,
+            shape=ft.RoundedRectangleBorder(radius=4),
+            height=50,
+            align=ft.Alignment.CENTER,
+            content=ft.Row(
+                margin=ft.Margin(left=24),
+                controls=[
+                    ft.Button(icon=ft.Icons.DOWNLOAD, content="导出历史记录", on_click=handle_export_click)
+                ]
+            )
+        )
+
     page.run_task(load_data, True)
 
     return ft.View(
@@ -146,7 +196,9 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
         controls=[
             create_search_container(),
             ft.Divider(),
-            create_main_card()
+            create_main_card(),
+            ft.Divider(),
+            create_actions()
         ],
         appbar=appbar,
         drawer=drawer
