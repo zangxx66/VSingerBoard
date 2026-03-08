@@ -26,16 +26,16 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
         alignment=ft.MainAxisAlignment.CENTER,
         controls=[
             ft.Text(value=f"v{version}"),
-            ft.Button(content="检查更新")
+            ft.Button(icon=ft.Icons.CHECK, content="检查更新", style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.PRIMARY_FIXED_DIM, color=ft.Colors.WHITE))
         ]
     )
 
     actions = ft.Row(
         alignment=ft.MainAxisAlignment.CENTER,
         controls=[
-            ft.Button(content="GitHub仓库", data="github", on_click=handle_click),
-            ft.Button(content="作者主页", data="bilibili", on_click=handle_click),
-            ft.Button(content="问题反馈", data="feedback", on_click=handle_click)
+            ft.Button(icon=ft.Icons.CODE, content="GitHub仓库", data="github", style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.BLACK_38, color=ft.Colors.WHITE), on_click=handle_click),
+            ft.Button(icon=ft.Icons.HOME_FILLED, content="作者主页", data="bilibili", style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.PINK_ACCENT_200, color=ft.Colors.WHITE), on_click=handle_click),
+            ft.Button(icon=ft.Icons.FEEDBACK, content="问题反馈", data="feedback", style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.GREEN, color=ft.Colors.WHITE), on_click=handle_click)
         ]
     )
 

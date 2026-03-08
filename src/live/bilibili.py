@@ -110,6 +110,17 @@ class Bili:
         self.del_list.clear()
         return result
 
+    def del_list(self, msg_id):
+        index = [i for i, item in enumerate(self.danmus) if item["msg_id"] == msg_id]
+        self.danmus.pop(index[0])
+
+    def clear_list(self):
+        self.danmus.clear()
+
+    def add_list(self, data):
+        danmu_info = DanmuInfo(**data)
+        self.danmus.append(danmu_info)
+
     async def on_msg(self, event):
         info = event["data"]["info"]
         msg = str(info[1])

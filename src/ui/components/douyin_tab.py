@@ -25,14 +25,12 @@ def douyin_container(page: ft.Page):
         if result > 0:
             async_worker.submit(douyin_manager.restart())
             page.show_dialog(ft.AlertDialog(
-                icon=ft.Icons.INFO,
                 title=ft.Text("提示"),
                 content=ft.Text("保存成功"),
                 actions=[ft.Button("确定", on_click=lambda ee: page.pop_dialog())]
             ))
         else:
             page.show_dialog(ft.AlertDialog(
-                icon=ft.Icons.INFO,
                 title=ft.Text("提示"),
                 content=ft.Text("保存失败"),
                 actions=[ft.Button("确定", on_click=lambda ee: page.pop_dialog())],
@@ -48,7 +46,7 @@ def douyin_container(page: ft.Page):
                     ft.TextField(label="点歌指令", ref=sing_prefix_text),
                     ft.TextField(label="点歌cd", ref=sing_cd_text, input_filter=ft.InputFilter(regex_string=r"^\d+$")),
                     ft.TextField(label="粉团等级", ref=fans_lv_text, input_filter=ft.InputFilter(regex_string=r"^\d+$")),
-                    ft.Button(content="保存", on_click=on_save_click)
+                    ft.Button(content="保存", style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.PRIMARY_FIXED_DIM, color=ft.Colors.WHITE), on_click=on_save_click)
                 ]
             )
         )

@@ -22,7 +22,6 @@ def settings_container(page: ft.Page):
         startup_result = setup_autostart(data.check_update)
         if not startup_result:
             page.show_dialog(ft.AlertDialog(
-                icon=ft.Icons.INFO,
                 title=ft.Text("提示"),
                 content=ft.Text("开机启动设置失败"),
                 actions=[ft.Button("确定", on_click=lambda ee: page.pop_dialog())]
@@ -31,14 +30,12 @@ def settings_container(page: ft.Page):
         result = await async_worker.run_db_operation(db.add_or_update_gloal_config(**data.__dict__))
         if result > 0:
             page.show_dialog(ft.AlertDialog(
-                icon=ft.Icons.INFO,
                 title=ft.Text("提示"),
                 content=ft.Text("保存成功"),
                 actions=[ft.Button("确定", on_click=lambda ee: page.pop_dialog())],
             ))
         else:
             page.show_dialog(ft.AlertDialog(
-                icon=ft.Icons.INFO,
                 title=ft.Text("提示"),
                 content=ft.Text("保存失败"),
                 actions=[ft.Button("确定", on_click=lambda ee: page.pop_dialog())],
@@ -54,7 +51,7 @@ def settings_container(page: ft.Page):
                     ft.Switch(label="桌面通知", ref=notify_switch, value=False),
                     ft.Switch(label="自动检查更新", ref=update_switch, value=False),
                     ft.Switch(label="开机启动", ref=startup_switch, value=False),
-                    ft.Button("保存", on_click=on_save_click)
+                    ft.Button("保存", style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.PRIMARY_FIXED_DIM, color=ft.Colors.WHITE), on_click=on_save_click)
                 ]
             )
         )

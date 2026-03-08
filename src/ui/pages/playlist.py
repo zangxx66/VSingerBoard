@@ -109,7 +109,6 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
 
         page.show_dialog(
             ft.AlertDialog(
-                icon=ft.Icons.INFO,
                 title=ft.Text("提示"),
                 content=ft.Text("是否删除？"),
                 actions=[
@@ -126,6 +125,14 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
         title = "编辑" if data else "新增"
 
         async def submit():
+            if not song_name.value:
+                page.show_dialog(ft.SnackBar("歌名不为空"))
+                return
+            if is_sc is True:
+                if not sc_price.value or int(sc_price.value) < 30:
+                    page.show_dialog(ft.SnackBar("SC最少30"))
+                    return
+
             playlist: PlaylistItem = PlaylistItem(
                 id=data.id if data else 0,
                 song_name=song_name.value,
@@ -162,14 +169,14 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
                                     icon=ft.Icons.EDIT,
                                     data=playlist,
                                     content="编辑",
-                                    color=ft.Colors.GREEN,
+                                    style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.CYAN, color=ft.Colors.WHITE),
                                     on_click=handle_create_or_edit,
                                 ),
                                 ft.Button(
                                     icon=ft.Icons.DELETE,
                                     data=playlist.id,
                                     content="删除",
-                                    color=ft.Colors.RED,
+                                    style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.RED, color=ft.Colors.WHITE),
                                     on_click=handle_delete_click,
                                 ),
                             ]
@@ -192,6 +199,7 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
             ft.AlertDialog(
                 title=title,
                 content=ft.Column(
+                    height=400,
                     controls=[
                         song_name := ft.TextField(
                             label="歌名", value=data.song_name if data else ""
@@ -299,12 +307,15 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
                 df.to_excel(writer, sheet_name="Sheet1")
             excel_bytes = excel_buffer.getvalue()
             file_name = f"歌单_{int(time.time())}"
-            await ft.FilePicker().save_file(
+            select_path = await ft.FilePicker().save_file(
                 file_name=file_name,
                 file_type=ft.FilePickerFileType.CUSTOM,
                 allowed_extensions=["xlsx"],
                 src_bytes=excel_bytes,
             )
+            if not select_path:
+                page.show_dialog(ft.SnackBar("取消导出"))
+                return
             page.show_dialog(ft.SnackBar("导出成功"))
         except Exception as ex:
             logger.error(f"export xlsx error:{ex}")
@@ -356,14 +367,14 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
                                         icon=ft.Icons.EDIT,
                                         data=item,
                                         content="编辑",
-                                        color=ft.Colors.GREEN,
+                                        style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.CYAN, color=ft.Colors.WHITE),
                                         on_click=handle_create_or_edit,
                                     ),
                                     ft.Button(
                                         icon=ft.Icons.DELETE,
                                         data=item.id,
                                         content="删除",
-                                        color=ft.Colors.RED,
+                                        style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.RED, color=ft.Colors.WHITE),
                                         on_click=handle_delete_click,
                                     ),
                                 ]
@@ -392,6 +403,7 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
                     ft.TextField(label="关键词", ref=keyword_text),
                     ft.Button(
                         icon=ft.Icons.SEARCH,
+                        style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.PRIMARY_FIXED_DIM, color=ft.Colors.WHITE),
                         content="搜索",
                         on_click=handle_search_click,
                     ),
@@ -405,17 +417,20 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
                 controls=[
                     ft.Button(
                         icon=ft.Icons.ADD,
+                        style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.CYAN, color=ft.Colors.WHITE),
                         content="新建歌曲",
                         data=None,
                         on_click=handle_create_or_edit,
                     ),
                     ft.Button(
                         icon=ft.Icons.UPLOAD,
+                        style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.AMBER, color=ft.Colors.WHITE),
                         content="导入歌单",
                         on_click=handle_import_click,
                     ),
                     ft.Button(
                         icon=ft.Icons.DOWNLOAD,
+                        style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.GREEN, color=ft.Colors.WHITE),
                         content="导出歌单",
                         on_click=handle_export_click,
                     ),

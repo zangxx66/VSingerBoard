@@ -103,12 +103,15 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
                 df.to_excel(writer, sheet_name="Sheet1")
             excel_bytes = excel_buffer.getvalue()
             file_name = f"点歌历史记录_{int(time.time())}"
-            await ft.FilePicker().save_file(
+            select_path = await ft.FilePicker().save_file(
                 file_name=file_name,
                 file_type=ft.FilePickerFileType.CUSTOM,
                 allowed_extensions=["xlsx"],
                 src_bytes=excel_bytes
             )
+            if not select_path:
+                page.show_dialog(ft.SnackBar("取消导出"))
+                return
             page.show_dialog(ft.SnackBar("导出成功"))
         except Exception as ex:
             logger.error(f"export history error:{ex}")
@@ -139,7 +142,7 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
                     ], on_select=handle_source_change),
                     ft.TextField(label="开始时间", value="", ref=start_date_text, on_click=lambda e: page.show_dialog(start_dp)),
                     ft.TextField(label="结束时间", value="", ref=end_date_text, on_click=lambda e: page.show_dialog(end_dp)),
-                    ft.Button(icon=ft.Icons.SEARCH, content="搜索", on_click=handle_search_click)
+                    ft.Button(icon=ft.Icons.SEARCH, style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.PRIMARY_FIXED_DIM, color=ft.Colors.WHITE), content="搜索", on_click=handle_search_click)
                 ]
             )
         )
@@ -153,7 +156,8 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
                     ft.ListTile(
                         leading=ft.Image(src=img_src, width=128, height=128),
                         title=ft.Text(item.uname),
-                        subtitle=ft.Text(item.song_name)
+                        subtitle=ft.Text(item.song_name),
+                        trailing=ft.Text(timespan_to_localtime(item.create_time))
                     )
                 ]
             )
@@ -164,7 +168,7 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
         return ft.Card(
             shadow_color=ft.Colors.ON_SURFACE_VARIANT,
             bgcolor=ft.Colors.WHITE,
-            height=int(height * .7),
+            height=int(height * .65),
             content=ft.ListView(
                 ref=list_view,
                 on_scroll=handle_scroll,
@@ -180,11 +184,12 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
             shadow_color=ft.Colors.ON_SURFACE_VARIANT,
             shape=ft.RoundedRectangleBorder(radius=4),
             height=50,
+            bgcolor=ft.Colors.WHITE,
             align=ft.Alignment.CENTER,
             content=ft.Row(
                 margin=ft.Margin(left=24),
                 controls=[
-                    ft.Button(icon=ft.Icons.DOWNLOAD, content="导出历史记录", on_click=handle_export_click)
+                    ft.Button(icon=ft.Icons.DOWNLOAD, style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.GREEN, color=ft.Colors.WHITE), content="导出历史记录", on_click=handle_export_click)
                 ]
             )
         )

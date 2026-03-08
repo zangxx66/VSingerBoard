@@ -13,6 +13,7 @@ class DanmuInfo(TypedDict):
     price: Optional[int]
     send_time: int
     status: Optional[int]
+    source: str
 
 
 class ResponseItem(BaseModel):

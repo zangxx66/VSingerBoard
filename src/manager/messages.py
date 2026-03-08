@@ -18,6 +18,9 @@ class MessageManager():
             return
         self._stop_event.clear()
         self._run_future = async_worker.submit(self._start_and_run_client())
+        self._page.pubsub.subscribe_topic("del", self.on_del_message)
+        self._page.pubsub.subscribe_topic("clear", self.on_clear_message)
+        self._page.pubsub.subscribe_topic("manual", self.on_add_message)
         logger.info("message_manager main task submitted to worker...")
 
     async def _periodic_broadcast_task(self):
@@ -25,8 +28,10 @@ class MessageManager():
             try:
                 douyin_list = douyin_manager.get_list()
                 bili_list = bili_manager.get_list()
-                song_list = douyin_list + bili_list
-                self._page.pubsub.send_all(song_list)
+                combine_list = douyin_list + bili_list
+                self.song_list = combine_list[:]
+                self.song_list.sort(key=lambda x: x["send_time"], reverse=True)
+                self._page.pubsub.send_all_on_topic("add", self.song_list)
 
                 await asyncio.sleep(2)
             except asyncio.CancelledError:
@@ -50,6 +55,24 @@ class MessageManager():
                 self._broadcast_task.cancel()
                 await asyncio.gather(self._broadcast_task, return_exceptions=True)
             logger.info("message_manager resources cleaned up...")
+
+    async def on_del_message(self, _, del_dict: dict):
+        source = del_dict["source"]
+        if source == "bilibili":
+            bili_manager.del_list(del_dict["msg_id"])
+        if source == "douyin":
+            douyin_manager.del_list(del_dict["msg_id"])
+
+    def on_clear_message(self, _):
+        bili_manager.clear_list()
+        douyin_manager.clear_list()
+
+    def on_add_message(self, _, data: dict):
+        source = data["source"]
+        if source == "bilibili":
+            bili_manager.add_list(data["data"])
+        if source == "douyin":
+            douyin_manager.add_list(data["data"])
 
     async def stop(self):
         if self._run_future and not self._run_future.done():
