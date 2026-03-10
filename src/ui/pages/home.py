@@ -14,6 +14,9 @@ def main(page: Page, appbar: AppBar, drawer: NavigationDrawer):
     danmaku_list: list[DanmuInfo] = []
 
     def on_message(_, msg):
+        """
+        更新点歌列表
+        """
         nonlocal danmaku_list
         danmaku_list = msg
         list_view.controls = generate_list()
@@ -22,6 +25,9 @@ def main(page: Page, appbar: AppBar, drawer: NavigationDrawer):
     page.pubsub.subscribe_topic("add", on_message)
 
     async def handle_context_click(e: ft.Event[ft.PopupMenuItem]):
+        """
+        ContextMenu 事件
+        """
         if e.control.content == "复制":
             await on_copy(e.control.data)
         if e.control.content == "移除":
@@ -29,10 +35,16 @@ def main(page: Page, appbar: AppBar, drawer: NavigationDrawer):
             page.show_dialog(ft.SnackBar("已移除"))
 
     async def on_copy(e: ft.Event[ft.ListTile]):
+        """
+        复制歌名到剪切板
+        """
         await ft.Clipboard().set(e.control.data)
         page.show_dialog(ft.SnackBar("复制成功"))
 
     def on_clear(e: ft.Event[ft.Button]):
+        """
+        清除列表
+        """
         if len(danmaku_list) == 0:
             page.show_dialog(ft.SnackBar("没有数据"))
             return
@@ -42,6 +54,9 @@ def main(page: Page, appbar: AppBar, drawer: NavigationDrawer):
         page.show_dialog(ft.SnackBar("清除列表成功"))
 
     async def handle_export_click(e: ft.Event[ft.Button]):
+        """
+        导出列表
+        """
         try:
             if len(danmaku_list) == 0:
                 page.show_dialog(ft.SnackBar("没有数据"))
@@ -73,6 +88,9 @@ def main(page: Page, appbar: AppBar, drawer: NavigationDrawer):
             page.show_dialog(ft.SnackBar("导出点歌列表错误"))
 
     def handle_create_click(e: ft.Event[ft.Button]):
+        """
+        手动插入一条记录到列表
+        """
         def submit():
             if not uname.value:
                 page.show_dialog(ft.SnackBar("昵称不为空"))
@@ -119,6 +137,9 @@ def main(page: Page, appbar: AppBar, drawer: NavigationDrawer):
         ))
 
     def create_menu(data):
+        """
+        创建 ContextMenu 菜单
+        """
         menu = ft.ContextMenu(
             content=ft.IconButton(ft.Icons.MORE_VERT, on_click=lambda e: asyncio.create_task(menu.open())),
             items=[
@@ -137,6 +158,9 @@ def main(page: Page, appbar: AppBar, drawer: NavigationDrawer):
         return menu
 
     def generate_list():
+        """
+        生成列表
+        """
         nonlocal list_tile_list
         list_tile_list.clear()
         for item in danmaku_list:
@@ -167,26 +191,28 @@ def main(page: Page, appbar: AppBar, drawer: NavigationDrawer):
     )
 
     def create_main_card():
+        """
+        生成主视图
+        """
         return ft.Card(
             shadow_color=ft.Colors.ON_SURFACE_VARIANT,
-            bgcolor=ft.Colors.WHITE,
             height=int(height * .75),
             content=list_view
         )
 
     def create_bottom_card():
-        return ft.Card(
-            shadow_color=ft.Colors.ON_SURFACE_VARIANT,
-            shape=ft.RoundedRectangleBorder(radius=4),
+        """
+        生成底部按钮
+        """
+        return ft.Container(
             height=50,
-            bgcolor=ft.Colors.WHITE,
             align=ft.Alignment.CENTER,
             content=ft.Row(
                 margin=ft.Margin(left=24),
                 controls=[
-                    ft.Button(icon=ft.Icons.EDIT, style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.CYAN, color=ft.Colors.WHITE), content="手动点歌", on_click=handle_create_click),
-                    ft.Button(icon=ft.Icons.DOWNLOAD, style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.GREEN, color=ft.Colors.WHITE), content="导出列表", on_click=handle_export_click),
-                    ft.Button(icon=ft.Icons.DELETE, style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.RED, color=ft.Colors.WHITE), content="清除列表", on_click=on_clear)
+                    ft.Button(icon=ft.Icons.EDIT, style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.PINK_50), content="手动点歌", on_click=handle_create_click),
+                    ft.Button(icon=ft.Icons.DOWNLOAD, style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.PINK_50), content="导出列表", on_click=handle_export_click),
+                    ft.Button(icon=ft.Icons.DELETE, style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.PINK_50), content="清除列表", on_click=on_clear)
                 ]
             )
         )

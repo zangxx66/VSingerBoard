@@ -33,6 +33,9 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
     today = datetime.datetime.now()
 
     async def load_data(reload: bool):
+        """
+        获取数据
+        """
         global _page, total, songs_rows
         nprogress.start()
         if reload:
@@ -58,6 +61,9 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
         page.update()
 
     async def handle_scroll(e: ft.OnScrollEvent):
+        """
+        滚动到底部加载
+        """
         if e.pixels >= e.max_scroll_extent and len(songs_rows) < total and sem.acquire(blocking=False):
             try:
                 await load_data(False)
@@ -65,22 +71,37 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
                 sem.release()
 
     def handle_source_change(e: ft.Event[ft.Dropdown]):
+        """
+        下拉菜单事件
+        """
         source_text.current.value = e.control.value
 
     def handle_start_date_change(e: ft.Event[ft.DatePicker]):
+        """
+        选择时间事件
+        """
         time_array = time.localtime(int(e.control.value.timestamp()))
         other_style_time = time.strftime("%Y-%m-%d", time_array)
         start_date_text.current.value = other_style_time
 
     def handle_end_date_change(e: ft.Event[ft.DatePicker]):
+        """
+        选择时间事件
+        """
         time_array = time.localtime(int(e.control.value.timestamp()))
         other_style_time = time.strftime("%Y-%m-%d", time_array)
         end_date_text.current.value = other_style_time
 
     async def handle_search_click(e: ft.Event[ft.Button]):
+        """
+        搜索
+        """
         await load_data(True)
 
     async def handle_export_click(e: ft.Event[ft.Button]):
+        """
+        导出列表
+        """
         try:
             uname = uname_text.current.value
             song_name = song_name_text.current.value
@@ -130,6 +151,9 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
     )
 
     def create_search_container():
+        """
+        搜索 container
+        """
         return ft.Container(
             content=ft.Row(
                 controls=[
@@ -142,12 +166,15 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
                     ], on_select=handle_source_change),
                     ft.TextField(label="开始时间", value="", ref=start_date_text, on_click=lambda e: page.show_dialog(start_dp)),
                     ft.TextField(label="结束时间", value="", ref=end_date_text, on_click=lambda e: page.show_dialog(end_dp)),
-                    ft.Button(icon=ft.Icons.SEARCH, style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.PRIMARY_FIXED_DIM, color=ft.Colors.WHITE), content="搜索", on_click=handle_search_click)
+                    ft.Button(icon=ft.Icons.SEARCH, style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.PRIMARY_FIXED_DIM), content="搜索", on_click=handle_search_click)
                 ]
             )
         )
 
     def generate_list(songs: list[HistoryItem]):
+        """
+        生成列表
+        """
         col_list = []
         for item in songs:
             img_src = resource_path(f"images/{item.source}.png")
@@ -165,9 +192,11 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
         return col_list
 
     def create_main_card():
+        """
+        创建主视图
+        """
         return ft.Card(
             shadow_color=ft.Colors.ON_SURFACE_VARIANT,
-            bgcolor=ft.Colors.WHITE,
             height=int(height * .65),
             content=ft.ListView(
                 ref=list_view,
@@ -180,16 +209,16 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
         )
 
     def create_actions():
-        return ft.Card(
-            shadow_color=ft.Colors.ON_SURFACE_VARIANT,
-            shape=ft.RoundedRectangleBorder(radius=4),
+        """
+        创建底部按钮
+        """
+        return ft.Container(
             height=50,
-            bgcolor=ft.Colors.WHITE,
             align=ft.Alignment.CENTER,
             content=ft.Row(
                 margin=ft.Margin(left=24),
                 controls=[
-                    ft.Button(icon=ft.Icons.DOWNLOAD, style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.GREEN, color=ft.Colors.WHITE), content="导出历史记录", on_click=handle_export_click)
+                    ft.Button(icon=ft.Icons.DOWNLOAD, style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.PINK_50), content="导出历史记录", on_click=handle_export_click)
                 ]
             )
         )

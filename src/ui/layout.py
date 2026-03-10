@@ -6,7 +6,7 @@ from .pages.history import main as HistoryView
 from .pages.home import main as HomeView
 from .pages.playlist import main as PlaylistView
 from .pages.settings import main as SettingsView
-from src.utils import resource_path, async_worker
+from src.utils import resource_path
 from src.manager.messages import MessageManager
 
 
@@ -23,6 +23,11 @@ async def main(page: ft.Page):
     page.window.title_bar_buttons_hidden = True
     page.window.title_bar_hidden = True
     page.window.alignment = ft.Alignment.CENTER
+    page.theme = ft.Theme(
+        color_scheme=ft.ColorScheme(primary=ft.Colors.PINK),
+        color_scheme_seed=ft.Colors.PINK,
+        appbar_theme=ft.AppBarTheme(bgcolor=ft.Colors.PINK_ACCENT_200, shadow_color=ft.Colors.GREY_800),
+    )
 
     message_handler = MessageManager(page)
     message_handler.start()
@@ -30,13 +35,17 @@ async def main(page: ft.Page):
     def handle_minimized_window(e: ft.Event[ft.IconButton]):
         page.window.minimized = True
 
+    async def handle_exit(e: ft.Event[ft.TextButton]):
+        await message_handler.stop()
+        await page.window.close()
+
     async def handle_close_window(e: ft.Event[ft.IconButton]):
         page.show_dialog(ft.AlertDialog(
             title=ft.Text("提示"),
             content=ft.Text("是否退出？"),
             actions=[
                 ft.TextButton("取消", on_click=lambda ee: page.pop_dialog()),
-                ft.TextButton("退出", on_click=lambda ee: async_worker.submit(page.window.close()))
+                ft.TextButton("退出", on_click=handle_exit)
             ]
         ))
 
@@ -105,7 +114,6 @@ async def main(page: ft.Page):
             leading_width=40,
             title=ft.Text(title),
             center_title=False,
-            bgcolor=ft.Colors.RED_ACCENT,
             actions_padding=ft.Padding(right=24),
             actions=[
                 ft.IconButton(ft.Icons.MINIMIZE, on_click=handle_minimized_window),

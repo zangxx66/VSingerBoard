@@ -26,7 +26,7 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
         alignment=ft.MainAxisAlignment.CENTER,
         controls=[
             ft.Text(value=f"v{version}"),
-            ft.Button(icon=ft.Icons.CHECK, content="检查更新", style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.PRIMARY_FIXED_DIM, color=ft.Colors.WHITE))
+            ft.Button(icon=ft.Icons.CHECK, content="检查更新", style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.PRIMARY_FIXED_DIM))
         ]
     )
 

@@ -2,20 +2,23 @@ import flet as ft
 from flet import Ref
 from src.utils import globalfigItem, setup_autostart, async_worker
 from src.database import Db as db
+from src.ui.components.progress import NProgress
 
 
 def settings_container(page: ft.Page):
 
     id_text = Ref[ft.TextField]()
-    dark_switch = Ref[ft.Switch]()
     notify_switch = Ref[ft.Switch]()
     update_switch = Ref[ft.Switch]()
     startup_switch = Ref[ft.Switch]()
+    nprogress = NProgress(page)
 
     async def on_save_click(e: ft.Event[ft.Button]):
+        """
+        保存设置
+        """
         data = globalfigItem(
             id=int(id_text.current.value),
-            dark_mode=dark_switch.current.value,
             check_update=notify_switch.current.value,
             startup=startup_switch.current.value
         )
@@ -42,29 +45,32 @@ def settings_container(page: ft.Page):
             ))
 
     def create_form():
+        """
+        生成表单
+        """
         return ft.Card(
             content=ft.Row(
                 wrap=True,
                 controls=[
                     ft.TextField(label="id", ref=id_text, visible=False),
-                    ft.Switch(label="黑暗模式", ref=dark_switch, value=False),
                     ft.Switch(label="桌面通知", ref=notify_switch, value=False),
                     ft.Switch(label="自动检查更新", ref=update_switch, value=False),
                     ft.Switch(label="开机启动", ref=startup_switch, value=False),
-                    ft.Button("保存", style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.PRIMARY_FIXED_DIM, color=ft.Colors.WHITE), on_click=on_save_click)
+                    ft.Button("保存", style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.PRIMARY_FIXED_DIM), on_click=on_save_click)
                 ]
             )
         )
 
     async def on_mount():
+        nprogress.start()
         data = await async_worker.run_db_operation(db.get_gloal_config())
         if data:
             id_text.current.value = data.id
-            dark_switch.current.value = data.dark_mode
             notify_switch.current.value = data.notification
             update_switch.current.value = data.check_update
             startup_switch.current.value = data.startup
             page.update()
+        nprogress.stop()
 
     page.run_task(on_mount)
 

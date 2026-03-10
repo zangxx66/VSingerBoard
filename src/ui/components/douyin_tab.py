@@ -3,6 +3,7 @@ from flet import Ref
 from src.utils import dyconfigItem, async_worker
 from src.database import Db as db
 from src.live import douyin_manager
+from src.ui.components.progress import NProgress
 
 
 def douyin_container(page: ft.Page):
@@ -12,8 +13,12 @@ def douyin_container(page: ft.Page):
     sing_prefix_text = Ref[ft.TextField]()
     sing_cd_text = Ref[ft.TextField]()
     fans_lv_text = Ref[ft.TextField]()
+    nprogress = NProgress(page)
 
     async def on_save_click(e: ft.Event[ft.Button]):
+        """
+        保存设置
+        """
         data = dyconfigItem(
             id=int(id_text.current.value),
             room_id=int(room_id_text.current.value),
@@ -37,6 +42,9 @@ def douyin_container(page: ft.Page):
             ))
 
     def create_form():
+        """
+        创建表单
+        """
         return ft.Card(
             content=ft.Row(
                 wrap=True,
@@ -46,12 +54,13 @@ def douyin_container(page: ft.Page):
                     ft.TextField(label="点歌指令", ref=sing_prefix_text),
                     ft.TextField(label="点歌cd", ref=sing_cd_text, input_filter=ft.InputFilter(regex_string=r"^\d+$")),
                     ft.TextField(label="粉团等级", ref=fans_lv_text, input_filter=ft.InputFilter(regex_string=r"^\d+$")),
-                    ft.Button(content="保存", style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.PRIMARY_FIXED_DIM, color=ft.Colors.WHITE), on_click=on_save_click)
+                    ft.Button(content="保存", style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.PRIMARY_FIXED_DIM), on_click=on_save_click)
                 ]
             )
         )
 
     async def on_mount():
+        nprogress.start()
         data = await async_worker.run_db_operation(db.get_dy_config())
         if data:
             id_text.current.value = data.id
@@ -60,6 +69,7 @@ def douyin_container(page: ft.Page):
             sing_cd_text.current.value = data.sing_cd
             fans_lv_text.current.value = data.fans_level
             page.update()
+        nprogress.stop()
 
     page.run_task(on_mount)
 

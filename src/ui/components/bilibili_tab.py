@@ -8,6 +8,7 @@ from bilibili_api.login_v2 import QrCodeLogin, QrCodeLoginChannel
 from src.utils import BiliCredentialItem, bconfigItem, async_worker
 from src.database import Db as db
 from src.live import bili_manager
+from src.ui.components.progress import NProgress
 
 
 def bilibili_container(page: ft.Page):
@@ -18,8 +19,12 @@ def bilibili_container(page: ft.Page):
     user_lv_text = Ref[ft.TextField]()
     sing_prefix_text = Ref[ft.TextField]()
     sing_cd_text = Ref[ft.TextField]()
+    nprogress = NProgress(page)
 
     async def on_save_click(e: ft.Event[ft.Button]):
+        """
+        保存设置
+        """
         data = bconfigItem(
             id=int(id_text.current.value),
             room_id=int(room_id_text.current.value),
@@ -44,6 +49,9 @@ def bilibili_container(page: ft.Page):
             ))
 
     def create_form():
+        """
+        创建表单
+        """
         return ft.Container(
             margin=ft.Margin.all(12),
             content=ft.Row(
@@ -55,7 +63,7 @@ def bilibili_container(page: ft.Page):
                     ft.TextField(label="用户等级", ref=user_lv_text, input_filter=ft.InputFilter(regex_string=r"^\d+$")),
                     ft.TextField(label="点歌指令", ref=sing_prefix_text),
                     ft.TextField(label="点歌cd", ref=sing_cd_text, input_filter=ft.InputFilter(regex_string=r"^\d+$")),
-                    ft.Button(content="保存", style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.PRIMARY_FIXED_DIM, color=ft.Colors.WHITE), on_click=on_save_click)
+                    ft.Button(content="保存", style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.PRIMARY_FIXED_DIM), on_click=on_save_click)
                 ]
             )
         )
@@ -64,6 +72,9 @@ def bilibili_container(page: ft.Page):
     login_task: Task = None
 
     async def get_qr_code():
+        """
+        获取登录二维码
+        """
         nonlocal qr_code_login
         qr_code_login = QrCodeLogin(platform=QrCodeLoginChannel.WEB)
         await qr_code_login.generate_qrcode()
@@ -73,6 +84,9 @@ def bilibili_container(page: ft.Page):
         return encoded_string
 
     async def check_qr_code():
+        """
+        检查二维码状态
+        """
         nonlocal qr_code_login, login_task
         if not qr_code_login:
             return
@@ -99,6 +113,9 @@ def bilibili_container(page: ft.Page):
             page.pop_dialog()
 
     async def on_add_cred_click(e: ft.Event[ft.Button]):
+        """
+        登录二维码弹窗
+        """
         nonlocal login_task
         img_src = await get_qr_code()
         login_task = asyncio.create_task(check_qr_code())
@@ -116,11 +133,14 @@ def bilibili_container(page: ft.Page):
         ))
 
     def create_actions():
+        """
+        添加账号 container
+        """
         return ft.Container(
             padding=ft.Padding(left=24),
             content=ft.Column(
                 controls=[
-                    ft.Button(icon=ft.Icons.ADD, content="新建账号", style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.CYAN, color=ft.Colors.WHITE), on_click=on_add_cred_click),
+                    ft.Button(icon=ft.Icons.ADD, content="新建账号", style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.PRIMARY_FIXED_DIM), on_click=on_add_cred_click),
                     ft.Text(value="未登录账号无法获取到弹幕用户昵称等信息，如有需要可添加一个小号",
                             size=20,
                             text_align=ft.TextAlign.CENTER,
@@ -132,6 +152,9 @@ def bilibili_container(page: ft.Page):
     data_table: ftd.DataTable2 | None = None
 
     def generate_columns():
+        """
+        生成列
+        """
         return [
             ftd.DataColumn2(label="id", visible=False),
             ftd.DataColumn2(label="uid", heading_row_alignment=ft.MainAxisAlignment.START),
@@ -140,6 +163,9 @@ def bilibili_container(page: ft.Page):
         ]
 
     def generate_rows(itmes: list[BiliCredentialItem]):
+        """
+        生成行
+        """
         data_rows = []
         for item in itmes:
             data_rows.append(
@@ -167,6 +193,9 @@ def bilibili_container(page: ft.Page):
     )
 
     async def on_status_click(e: ft.Event[ft.Button]):
+        """
+        启用/禁用账号
+        """
         id = e.control.data["id"]
         enable = e.control.data["enable"]
         result = await async_worker.run_db_operation(db.update_bcredential(pk=id, enable=enable))
@@ -189,6 +218,9 @@ def bilibili_container(page: ft.Page):
             ))
 
     def on_delete_click(e: ft.Event[ft.Button]):
+        """
+        删除账号
+        """
         async def delete():
             id = e.control.data
             result = await async_worker.run_db_operation(db.delete_bcredential(pk=id))
@@ -212,6 +244,7 @@ def bilibili_container(page: ft.Page):
         ))
 
     async def on_mount():
+        nprogress.start()
         data = await async_worker.run_db_operation(db.get_bconfig())
         if data:
             id_text.current.value = data.id
@@ -223,6 +256,7 @@ def bilibili_container(page: ft.Page):
         credential_list = await async_worker.run_db_operation(db.get_bcredential_list())
         data_rows = generate_rows(credential_list)
         data_table.rows = data_rows
+        nprogress.stop()
         page.update()
 
     page.run_task(on_mount)

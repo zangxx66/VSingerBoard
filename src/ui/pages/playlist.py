@@ -22,6 +22,9 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
     total = 0
 
     async def load_data():
+        """
+        获取数据
+        """
         nonlocal pages_num, total
         nprogress.start()
         keyword = keyword_text.current.value if keyword_text.current else None
@@ -35,6 +38,9 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
         page.update()
 
     async def set_page(p=None, delta=0):
+        """
+        翻页事件
+        """
         nonlocal _page
         if p is not None:
             _page.current.value = p
@@ -45,27 +51,41 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
         await load_data()
 
     async def next_page(e):
+        """
+        下一页
+        """
         if _page.current.value < pages_num:
             await set_page(delta=1)
 
     async def prev_page(e):
+        """
+        上一页
+        """
         if _page.current.value > 1:
             await set_page(delta=-1)
 
     async def goto_first_page(e):
+        """
+        首页
+        """
         if _page.current.value > 1:
             await set_page(p=1)
 
     async def goto_last_page(e):
+        """
+        尾页
+        """
         if _page.current.value != pages_num:
             await set_page(p=pages_num)
 
     def create_paging():
+        """
+        创建翻页器
+        """
         return ft.Card(
             shadow_color=ft.Colors.ON_SURFACE_VARIANT,
             shape=ft.RoundedRectangleBorder(radius=4),
             height=50,
-            bgcolor=ft.Colors.WHITE,
             align=ft.Alignment.CENTER,
             content=ft.Row(
                 margin=ft.Margin(left=24),
@@ -96,6 +116,9 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
         )
 
     def handle_delete_click(e: ft.Event[ft.Button]):
+        """
+        删除事件
+        """
         async def delete():
             id = e.control.data
             result = await async_worker.run_db_operation(db.delete_playlist([id]))
@@ -121,6 +144,9 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
         )
 
     def handle_create_or_edit(e: ft.Event[ft.Button]):
+        """
+        创建/编辑记录
+        """
         data = e.control.data
         title = "编辑" if data else "新增"
 
@@ -238,6 +264,9 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
         )
 
     async def handle_import_click(e: ft.Event[ft.Button]):
+        """
+        导入列表
+        """
         nonlocal _page
         files = await ft.FilePicker().pick_files(
             allow_multiple=False,
@@ -288,6 +317,9 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
             page.show_dialog(ft.SnackBar("导入xlsx文件错误"))
 
     async def handle_export_click(e: ft.Event[ft.Button]):
+        """
+        导出列表
+        """
         try:
             keyword = keyword_text.current.value if keyword_text.current else None
             _, songs = await async_worker.run_db_operation(
@@ -322,6 +354,9 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
             page.show_dialog(ft.SnackBar("导出歌单错误"))
 
     def generate_columns():
+        """
+        生成列
+        """
         return [
             ftd.DataColumn2(
                 label=ft.Text("歌名"),
@@ -348,6 +383,9 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
         ]
 
     def generate_rows(playlist_list: list[PlaylistItem]):
+        """
+        生成行
+        """
         data_rows = []
         for item in playlist_list:
             data_rows.append(
@@ -394,9 +432,15 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
     )
 
     async def handle_search_click(e: ft.Event[ft.Button]):
+        """
+        搜索
+        """
         await set_page(p=1)
 
     def create_search_container():
+        """
+        创建搜索 container
+        """
         return ft.Card(
             content=ft.Row(
                 controls=[
@@ -412,6 +456,9 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
         )
 
     def create_action_container():
+        """
+        创建按钮
+        """
         return ft.Container(
             content=ft.Row(
                 controls=[
