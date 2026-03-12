@@ -1,6 +1,6 @@
 [project]
 name = "vsingerboard"
-version = "1.2.0"
+version = "2.0.0b1"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -8,17 +8,8 @@ dependencies = [
     "aiohttp>=3.12.15",
     "bilibili-api-python>=17.3.0",
     "curl-cffi>=0.13.0",
-    "fastapi>=0.116.1",
-    "jinja2>=3.1.6",
     "pydantic>=2.11.7",
-    "pyinstaller>=6.16.0",
-    "pyobjc>=11.1; sys_platform == 'darwin'",
-    "pyperclip>=1.9.0",
-    "pywebview>=6.0",
-    "setuptools==70.3.0",
     "tortoise-orm>=0.25.1",
-    "uvicorn[standard]>=0.35.0",
-    "pystray>=0.19.5",
     "betterproto2>=0.9.0",
     "quickjs>=1.19.4",
     "aerich>=0.9.2",
@@ -35,3 +26,8 @@ tortoise_orm = "src.database.db.TORTISE_ORM"
 [[tool.uv.index]]
 url="https://pypi.tuna.tsinghua.edu.cn/simple"
 default=true
+
+[dependency-groups]
+dev = [
+    "pyinstaller>=6.19.0",
+]

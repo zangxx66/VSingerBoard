@@ -17,7 +17,7 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
         nprogress.start()
         version_info = await async_worker.run_db_operation(check_for_updates())
 
-        if version_info["published_at"] is not None:
+        if len(version_info["published_at"]) > 0:
             utc_str = version_info["published_at"]
             d = dt.fromisoformat(utc_str).replace(tzinfo=UTC).astimezone()
             version_info["published_at"] = d.strftime("%Y-%m-%d %H:%M:%S")

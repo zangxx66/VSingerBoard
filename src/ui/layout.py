@@ -1,5 +1,5 @@
-import flet as ft
 import pyautogui
+import flet as ft
 from .pages.about import main as AboutView
 from .pages.changelog import main as ChangelogView
 from .pages.history import main as HistoryView

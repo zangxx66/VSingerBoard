@@ -1,7 +1,7 @@
 import asyncio
 import flet as ft
 from src.live import douyin_manager, bili_manager
-from src.utils import async_worker, DanmuInfo, logger
+from src.utils import async_worker, logger
 
 
 class MessageManager():
@@ -10,7 +10,6 @@ class MessageManager():
         self._stop_event = asyncio.Event()
         self._run_future = None
         self._broadcast_task = None
-        self.song_list: list[DanmuInfo] = []
 
     def start(self):
         if self._run_future and not self._run_future.done():
@@ -29,9 +28,8 @@ class MessageManager():
                 douyin_list = douyin_manager.get_list()
                 bili_list = bili_manager.get_list()
                 combine_list = douyin_list + bili_list
-                self.song_list = combine_list[:]
-                self.song_list.sort(key=lambda x: x["send_time"], reverse=True)
-                self._page.pubsub.send_all_on_topic("add", self.song_list)
+                combine_list.sort(key=lambda x: x["send_time"], reverse=True)
+                self._page.pubsub.send_all_on_topic("add", combine_list)
 
                 await asyncio.sleep(2)
             except asyncio.CancelledError:
