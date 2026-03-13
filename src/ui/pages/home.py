@@ -6,6 +6,7 @@ import pandas as pd
 import flet as ft
 from flet import Page, AppBar, NavigationDrawer
 from src.utils import DanmuInfo, logger, timespan_to_localtime
+from ..components.toast import ModernToast
 
 
 def main(page: Page, appbar: AppBar, drawer: NavigationDrawer):
@@ -32,26 +33,26 @@ def main(page: Page, appbar: AppBar, drawer: NavigationDrawer):
             await on_copy(e.control.data)
         if e.control.content == "移除":
             page.pubsub.send_all_on_topic("del", {"source": e.control.data["source"], "msg_id": e.control.data["msg_id"]})
-            page.show_dialog(ft.SnackBar("已移除"))
+            ModernToast.success(page, "已移除")
 
     async def on_copy(e: ft.Event[ft.ListTile]):
         """
         复制歌名到剪切板
         """
         await ft.Clipboard().set(e.control.data)
-        page.show_dialog(ft.SnackBar("复制成功"))
+        ModernToast.success(page, "已复制")
 
     def on_clear(e: ft.Event[ft.Button]):
         """
         清除列表
         """
         if len(danmaku_list) == 0:
-            page.show_dialog(ft.SnackBar("没有数据"))
+            ModernToast.info(page, "没有数据")
             return
         page.pubsub.send_all_on_topic("clear", None)
         danmaku_list.clear()
         page.update()
-        page.show_dialog(ft.SnackBar("清除列表成功"))
+        ModernToast.success(page, "清除列表成功")
 
     async def handle_export_click(e: ft.Event[ft.Button]):
         """
@@ -59,7 +60,7 @@ def main(page: Page, appbar: AppBar, drawer: NavigationDrawer):
         """
         try:
             if len(danmaku_list) == 0:
-                page.show_dialog(ft.SnackBar("没有数据"))
+                ModernToast.info(page, "没有数据")
                 return
             df_dict = {
                 "日期": [timespan_to_localtime(item["send_time"]) for item in danmaku_list],
@@ -80,12 +81,12 @@ def main(page: Page, appbar: AppBar, drawer: NavigationDrawer):
                 src_bytes=excel_bytes
             )
             if not select_path:
-                page.show_dialog(ft.SnackBar("取消导出"))
+                ModernToast.warning(page, "取消导出")
                 return
-            page.show_dialog(ft.SnackBar("导出成功"))
+            ModernToast.success(page, "导出成功")
         except Exception as ex:
             logger.error(f"export xlsx error:{ex}")
-            page.show_dialog(ft.SnackBar("导出点歌列表错误"))
+            ModernToast.error(page, "导出点歌列表错误")
 
     def handle_create_click(e: ft.Event[ft.Button]):
         """
@@ -93,10 +94,10 @@ def main(page: Page, appbar: AppBar, drawer: NavigationDrawer):
         """
         def submit():
             if not uname.value:
-                page.show_dialog(ft.SnackBar("昵称不为空"))
+                ModernToast.warning(page, "昵称不为空")
                 return
             if not msg.value:
-                page.show_dialog(ft.SnackBar("歌名不为空"))
+                ModernToast.warning(page, "歌名不为空")
                 return
             page.pubsub.send_all_on_topic("manual", {"source": source.value, "data": DanmuInfo(
                 msg_id=int(time.time()),

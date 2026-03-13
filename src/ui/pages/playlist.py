@@ -7,7 +7,8 @@ import flet as ft
 from flet import AppBar, NavigationDrawer, Ref
 from src.utils import PlaylistItem, async_worker, logger
 from src.database import Db as db
-from src.ui.components.progress import NProgress
+from ..components.progress import NProgress
+from ..components.toast import ModernToast
 
 
 def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
@@ -124,11 +125,12 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
             result = await async_worker.run_db_operation(db.delete_playlist([id]))
             if result > 0:
                 page.pop_dialog()
-                page.show_dialog(ft.SnackBar("删除成功"))
+                ModernToast.success(page, "删除成功")
                 await set_page(p=1)
             else:
                 page.pop_dialog()
                 page.show_dialog(ft.SnackBar("删除失败"))
+                ModernToast.warning(page, "删除失败")
 
         page.show_dialog(
             ft.AlertDialog(
@@ -152,11 +154,11 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
 
         async def submit():
             if not song_name.value:
-                page.show_dialog(ft.SnackBar("歌名不为空"))
+                ModernToast.warning(page, "歌名不为空")
                 return
             if is_sc is True:
                 if not sc_price.value or int(sc_price.value) < 30:
-                    page.show_dialog(ft.SnackBar("SC最少30"))
+                    ModernToast.warning(page, "SC最少30")
                     return
 
             playlist: PlaylistItem = PlaylistItem(
@@ -174,8 +176,10 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
                 db.add_or_update_playlist(**playlist.__dict__)
             )
             msg = f"{title}成功" if result > 0 else f"{title}失败"
-            page.show_dialog(ft.SnackBar(msg))
+            if result > 0:
+                ModernToast.success(page, msg)
             if result <= 0:
+                ModernToast.warning(page, msg)
                 page.pop_dialog()
                 return
 
@@ -309,12 +313,12 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
                 }
                 import_list.append(import_data)
             await async_worker.run_db_operation(db.bulk_add_playlist(import_list))
-            page.show_dialog(ft.SnackBar("导入成功"))
+            ModernToast.success(page, "导入成功")
             _page.current.value = 1
             await load_data()
         except Exception as ex:
             logger.error(f"import xlsx error:{ex}")
-            page.show_dialog(ft.SnackBar("导入xlsx文件错误"))
+            ModernToast.error(page, "导入xlsx文件错误")
 
     async def handle_export_click(e: ft.Event[ft.Button]):
         """
@@ -346,12 +350,12 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
                 src_bytes=excel_bytes,
             )
             if not select_path:
-                page.show_dialog(ft.SnackBar("取消导出"))
+                ModernToast.info(page, "取消导出")
                 return
-            page.show_dialog(ft.SnackBar("导出成功"))
+            ModernToast.success(page, "导出成功")
         except Exception as ex:
             logger.error(f"export xlsx error:{ex}")
-            page.show_dialog(ft.SnackBar("导出歌单错误"))
+            ModernToast.error(page, "导出歌单错误")
 
     def generate_columns():
         """

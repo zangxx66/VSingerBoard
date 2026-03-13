@@ -7,8 +7,15 @@ import pandas as pd
 import flet as ft
 from flet import AppBar, NavigationDrawer, Ref
 from src.database import Db as db
-from src.utils import logger, async_worker, HistoryItem, resource_path, timespan_to_localtime
-from src.ui.components.progress import NProgress
+from src.utils import (
+    logger,
+    async_worker,
+    HistoryItem,
+    resource_path,
+    timespan_to_localtime,
+)
+from ..components.progress import NProgress
+from ..components.toast import ModernToast
 
 
 _page = 1
@@ -49,9 +56,21 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
         source = source_text.current.value
         if source == "all":
             source = None
-        start_time = int(start_date_picker.current.value.timestamp()) if start_date_picker.current.value else None
-        end_time = int(end_date_picker.current.value.timestamp()) if end_date_picker.current.value else None
-        total, songs = await async_worker.run_db_operation(db.get_song_history_page(uname, song_name, source, start_time, end_time, _page, 20))
+        start_time = (
+            int(start_date_picker.current.value.timestamp())
+            if start_date_picker.current.value
+            else None
+        )
+        end_time = (
+            int(end_date_picker.current.value.timestamp())
+            if end_date_picker.current.value
+            else None
+        )
+        total, songs = await async_worker.run_db_operation(
+            db.get_song_history_page(
+                uname, song_name, source, start_time, end_time, _page, 20
+            )
+        )
         if reload:
             songs_rows = songs
         else:
@@ -64,7 +83,9 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
         """
         滚动到底部加载
         """
-        if e.pixels >= e.max_scroll_extent and len(songs_rows) < total and sem.acquire(blocking=False):
+        if (
+            e.pixels >= e.max_scroll_extent and len(songs_rows) < total and sem.acquire(blocking=False)
+        ):
             try:
                 await load_data(False)
             finally:
@@ -108,15 +129,27 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
             source = source_text.current.value
             if source == "all":
                 source = None
-            start_time = int(start_date_picker.current.value.timestamp()) if start_date_picker.current.value else None
-            end_time = int(end_date_picker.current.value.timestamp()) if end_date_picker.current.value else None
-            _, songs = await async_worker.run_db_operation(db.get_song_history_page(uname, song_name, source, start_time, end_time, 1, total))
+            start_time = (
+                int(start_date_picker.current.value.timestamp())
+                if start_date_picker.current.value
+                else None
+            )
+            end_time = (
+                int(end_date_picker.current.value.timestamp())
+                if end_date_picker.current.value
+                else None
+            )
+            _, songs = await async_worker.run_db_operation(
+                db.get_song_history_page(
+                    uname, song_name, source, start_time, end_time, 1, total
+                )
+            )
 
             df_dict = {
                 "日期": [timespan_to_localtime(item.create_time) for item in songs],
                 "昵称": [item.uname for item in songs],
                 "歌名": [item.song_name for item in songs],
-                "平台": [item.source for item in songs]
+                "平台": [item.source for item in songs],
             }
             df = pd.DataFrame(df_dict)
             excel_buffer = io.BytesIO()
@@ -128,26 +161,22 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
                 file_name=file_name,
                 file_type=ft.FilePickerFileType.CUSTOM,
                 allowed_extensions=["xlsx"],
-                src_bytes=excel_bytes
+                src_bytes=excel_bytes,
             )
             if not select_path:
-                page.show_dialog(ft.SnackBar("取消导出"))
+                ModernToast.info(page, "取消导出")
                 return
-            page.show_dialog(ft.SnackBar("导出成功"))
+            ModernToast.success(page, "导出成功")
         except Exception as ex:
             logger.error(f"export history error:{ex}")
-            page.show_dialog(ft.SnackBar("导出记录错误"))
+            ModernToast.error(page, "导出记录错误")
 
     start_dp = ft.DatePicker(
-        current_date=today,
-        ref=start_date_picker,
-        on_change=handle_start_date_change
+        current_date=today, ref=start_date_picker, on_change=handle_start_date_change
     )
 
     end_dp = ft.DatePicker(
-        current_date=today,
-        ref=end_date_picker,
-        on_change=handle_end_date_change
+        current_date=today, ref=end_date_picker, on_change=handle_end_date_change
     )
 
     def create_search_container():
@@ -159,14 +188,40 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
                 controls=[
                     ft.TextField(label="歌名", ref=song_name_text),
                     ft.TextField(label="昵称", ref=uname_text),
-                    ft.Dropdown(label="平台", ref=source_text, value="all", options=[
-                        ft.DropdownOption(key="bilibili", content=ft.Text("哔哩哔哩")),
-                        ft.DropdownOption(key="douyin", content=ft.Text("抖音")),
-                        ft.DropdownOption(key="all", content=ft.Text("全部"))
-                    ], on_select=handle_source_change),
-                    ft.TextField(label="开始时间", value="", ref=start_date_text, on_click=lambda e: page.show_dialog(start_dp)),
-                    ft.TextField(label="结束时间", value="", ref=end_date_text, on_click=lambda e: page.show_dialog(end_dp)),
-                    ft.Button(icon=ft.Icons.SEARCH, style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.PRIMARY_FIXED_DIM), content="搜索", on_click=handle_search_click)
+                    ft.Dropdown(
+                        label="平台",
+                        ref=source_text,
+                        value="all",
+                        options=[
+                            ft.DropdownOption(
+                                key="bilibili", content=ft.Text("哔哩哔哩")
+                            ),
+                            ft.DropdownOption(key="douyin", content=ft.Text("抖音")),
+                            ft.DropdownOption(key="all", content=ft.Text("全部")),
+                        ],
+                        on_select=handle_source_change,
+                    ),
+                    ft.TextField(
+                        label="开始时间",
+                        value="",
+                        ref=start_date_text,
+                        on_click=lambda e: page.show_dialog(start_dp),
+                    ),
+                    ft.TextField(
+                        label="结束时间",
+                        value="",
+                        ref=end_date_text,
+                        on_click=lambda e: page.show_dialog(end_dp),
+                    ),
+                    ft.Button(
+                        icon=ft.Icons.SEARCH,
+                        style=ft.ButtonStyle(
+                            shape=ft.ContinuousRectangleBorder(radius=30),
+                            bgcolor=ft.Colors.PRIMARY_FIXED_DIM,
+                        ),
+                        content="搜索",
+                        on_click=handle_search_click,
+                    ),
                 ]
             )
         )
@@ -184,7 +239,7 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
                         leading=ft.Image(src=img_src, width=128, height=128),
                         title=ft.Text(item.uname),
                         subtitle=ft.Text(item.song_name),
-                        trailing=ft.Text(timespan_to_localtime(item.create_time))
+                        trailing=ft.Text(timespan_to_localtime(item.create_time)),
                     )
                 ]
             )
@@ -197,15 +252,15 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
         """
         return ft.Card(
             shadow_color=ft.Colors.ON_SURFACE_VARIANT,
-            height=int(height * .65),
+            height=int(height * 0.65),
             content=ft.ListView(
                 ref=list_view,
                 on_scroll=handle_scroll,
                 divider_thickness=1,
                 spacing=10,
                 scroll="auto",
-                controls=[]
-            )
+                controls=[],
+            ),
         )
 
     def create_actions():
@@ -218,9 +273,17 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
             content=ft.Row(
                 margin=ft.Margin(left=24),
                 controls=[
-                    ft.Button(icon=ft.Icons.DOWNLOAD, style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.PINK_50), content="导出历史记录", on_click=handle_export_click)
-                ]
-            )
+                    ft.Button(
+                        icon=ft.Icons.DOWNLOAD,
+                        style=ft.ButtonStyle(
+                            shape=ft.ContinuousRectangleBorder(radius=30),
+                            bgcolor=ft.Colors.PINK_50,
+                        ),
+                        content="导出历史记录",
+                        on_click=handle_export_click,
+                    )
+                ],
+            ),
         )
 
     page.run_task(load_data, True)
@@ -232,8 +295,8 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
             ft.Divider(),
             create_main_card(),
             ft.Divider(),
-            create_actions()
+            create_actions(),
         ],
         appbar=appbar,
-        drawer=drawer
+        drawer=drawer,
     )

@@ -1,5 +1,6 @@
 import pyautogui
 import flet as ft
+from .components.toast import ModernToast
 from .pages.about import main as AboutView
 from .pages.changelog import main as ChangelogView
 from .pages.history import main as HistoryView
@@ -33,10 +34,16 @@ async def main(page: ft.Page):
     message_handler.start()
 
     def on_notify(_, msg: dict[str, bool]):
-        page.show_dialog(ft.SnackBar(
-            content=msg["message"],
-            duration=1500
-        ))
+        if msg["is_connect"]:
+            ModernToast.success(
+                page,
+                msg["message"]
+            )
+        else:
+            ModernToast.warning(
+                page,
+                msg["message"]
+            )
 
     page.pubsub.subscribe_topic("notify", on_notify)
 

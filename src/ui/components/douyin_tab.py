@@ -3,7 +3,8 @@ from flet import Ref
 from src.utils import dyconfigItem, async_worker
 from src.database import Db as db
 from src.live import douyin_manager
-from src.ui.components.progress import NProgress
+from .progress import NProgress
+from .toast import ModernToast
 
 
 def douyin_container(page: ft.Page):
@@ -29,17 +30,9 @@ def douyin_container(page: ft.Page):
         result = await async_worker.run_db_operation(db.add_or_updae_dy_config(**data.__dict__))
         if result > 0:
             async_worker.submit(douyin_manager.restart())
-            page.show_dialog(ft.AlertDialog(
-                title=ft.Text("提示"),
-                content=ft.Text("保存成功"),
-                actions=[ft.Button("确定", on_click=lambda ee: page.pop_dialog())]
-            ))
+            ModernToast.success(page, "保存成功")
         else:
-            page.show_dialog(ft.AlertDialog(
-                title=ft.Text("提示"),
-                content=ft.Text("保存失败"),
-                actions=[ft.Button("确定", on_click=lambda ee: page.pop_dialog())],
-            ))
+            ModernToast.warning(page, "保存失败")
 
     def create_form():
         """

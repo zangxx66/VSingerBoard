@@ -8,7 +8,8 @@ from bilibili_api.login_v2 import QrCodeLogin, QrCodeLoginChannel
 from src.utils import BiliCredentialItem, bconfigItem, async_worker
 from src.database import Db as db
 from src.live import bili_manager
-from src.ui.components.progress import NProgress
+from .progress import NProgress
+from .toast import ModernToast
 
 
 def bilibili_container(page: ft.Page):
@@ -36,17 +37,9 @@ def bilibili_container(page: ft.Page):
         result = await async_worker.run_db_operation(db.add_or_update_bili_config(**data.__dict__))
         if result > 0:
             async_worker.submit(bili_manager.restart())
-            page.show_dialog(ft.AlertDialog(
-                title=ft.Text("提示"),
-                content=ft.Text("保存成功"),
-                actions=[ft.Button("确定", on_click=lambda ee: page.pop_dialog())],
-            ))
+            ModernToast.success(page, "保存成功")
         else:
-            page.show_dialog(ft.AlertDialog(
-                title=ft.Text("提示"),
-                content=ft.Text("保存失败"),
-                actions=[ft.Button("确定", on_click=lambda ee: page.pop_dialog())],
-            ))
+            ModernToast.warning(page, "保存失败")
 
     def create_form():
         """
@@ -200,22 +193,14 @@ def bilibili_container(page: ft.Page):
         enable = e.control.data["enable"]
         result = await async_worker.run_db_operation(db.update_bcredential(pk=id, enable=enable))
         if result > 0:
-            page.show_dialog(ft.AlertDialog(
-                title=ft.Text("提示"),
-                content=ft.Text("保存成功"),
-                actions=[ft.Button("确定", on_click=lambda ee: page.pop_dialog())],
-            ))
+            ModernToast.success(page, "保存成功")
             async_worker.submit(bili_manager.restart())
             credential_list = await async_worker.run_db_operation(db.get_bcredential_list())
             data_rows = generate_rows(credential_list)
             data_table.rows = data_rows
             page.update()
         else:
-            page.show_dialog(ft.AlertDialog(
-                title=ft.Text("提示"),
-                content=ft.Text("保存失败"),
-                actions=[ft.Button("确定", on_click=lambda ee: page.pop_dialog())],
-            ))
+            ModernToast.warning(page, "保存失败")
 
     def on_delete_click(e: ft.Event[ft.Button]):
         """
@@ -225,14 +210,14 @@ def bilibili_container(page: ft.Page):
             id = e.control.data
             result = await async_worker.run_db_operation(db.delete_bcredential(pk=id))
             if result > 0:
-                page.show_dialog(ft.SnackBar("删除成功"))
+                ModernToast.success(page, "删除成功")
                 credential_list = await async_worker.run_db_operation(db.get_bcredential_list())
                 data_rows = generate_rows(credential_list)
                 data_table.rows = data_rows
                 async_worker.submit(bili_manager.restart())
                 page.update()
             else:
-                page.show_dialog(ft.SnackBar("删除失败"))
+                ModernToast.warning(page, "删除失败")
 
         page.show_dialog(ft.AlertDialog(
             title=ft.Text("提示"),

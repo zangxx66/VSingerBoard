@@ -2,7 +2,8 @@ import flet as ft
 from flet import Ref
 from src.utils import globalfigItem, setup_autostart, async_worker
 from src.database import Db as db
-from src.ui.components.progress import NProgress
+from .progress import NProgress
+from .toast import ModernToast
 
 
 def settings_container(page: ft.Page):
@@ -24,25 +25,13 @@ def settings_container(page: ft.Page):
         )
         startup_result = setup_autostart(data.check_update)
         if not startup_result:
-            page.show_dialog(ft.AlertDialog(
-                title=ft.Text("提示"),
-                content=ft.Text("开机启动设置失败"),
-                actions=[ft.Button("确定", on_click=lambda ee: page.pop_dialog())]
-            ))
+            ModernToast.warning(page, "开机启动设置失败")
             return
         result = await async_worker.run_db_operation(db.add_or_update_gloal_config(**data.__dict__))
         if result > 0:
-            page.show_dialog(ft.AlertDialog(
-                title=ft.Text("提示"),
-                content=ft.Text("保存成功"),
-                actions=[ft.Button("确定", on_click=lambda ee: page.pop_dialog())],
-            ))
+            ModernToast.success(page, "保存成功")
         else:
-            page.show_dialog(ft.AlertDialog(
-                title=ft.Text("提示"),
-                content=ft.Text("保存失败"),
-                actions=[ft.Button("确定", on_click=lambda ee: page.pop_dialog())],
-            ))
+            ModernToast.warning(page, "保存失败")
 
     def create_form():
         """
