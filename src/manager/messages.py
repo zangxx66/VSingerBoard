@@ -10,6 +10,8 @@ class MessageManager():
         self._stop_event = asyncio.Event()
         self._run_future = None
         self._broadcast_task = None
+        self.douyin_status = 0
+        self.bilibili_status = 0
 
     def start(self):
         if self._run_future and not self._run_future.done():
@@ -30,6 +32,19 @@ class MessageManager():
                 combine_list = douyin_list + bili_list
                 combine_list.sort(key=lambda x: x["send_time"], reverse=True)
                 self._page.pubsub.send_all_on_topic("add", combine_list)
+
+                douyin_status = douyin_manager.get_status()
+                if self.douyin_status != douyin_status:
+                    dy_connect_status = douyin_status == 1
+                    dy_msg = "抖音已连接" if dy_connect_status else "抖音未连接"
+                    self.douyin_status = douyin_status
+                    self._page.pubsub.send_all_on_topic("notify", {"is_connect": dy_connect_status, "message": dy_msg})
+                bilibili_status = bili_manager.get_status()
+                if self.bilibili_status != bilibili_status:
+                    bili_connect_status = bilibili_status == 2
+                    bili_msg = "哔哩哔哩已连接" if bili_connect_status else "哔哩哔哩未连接"
+                    self.bilibili_status = bilibili_status
+                    self._page.pubsub.send_all_on_topic("notify", {"is_connect": bili_connect_status, "message": bili_msg})
 
                 await asyncio.sleep(2)
             except asyncio.CancelledError:

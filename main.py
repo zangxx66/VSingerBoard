@@ -15,7 +15,7 @@ def run_app():
         server_manager.start_websocket_server()
         server_manager.start_network_check()
 
-        ft.run(main, name="VSingerBoard", assets_dir="assets", view=ft.AppView.FLET_APP_WEB)
+        ft.run(main, name="VSingerBoard", assets_dir="assets")
     except Exception as ex:
         logger.exception(ex)
     finally:

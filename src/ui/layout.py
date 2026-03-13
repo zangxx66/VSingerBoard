@@ -32,6 +32,14 @@ async def main(page: ft.Page):
     message_handler = MessageManager(page)
     message_handler.start()
 
+    def on_notify(_, msg: dict[str, bool]):
+        page.show_dialog(ft.SnackBar(
+            content=msg["message"],
+            duration=1500
+        ))
+
+    page.pubsub.subscribe_topic("notify", on_notify)
+
     def handle_minimized_window(e: ft.Event[ft.IconButton]):
         page.window.minimized = True
 
