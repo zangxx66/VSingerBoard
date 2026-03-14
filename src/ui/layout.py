@@ -28,6 +28,7 @@ async def main(page: ft.Page):
         color_scheme=ft.ColorScheme(primary=ft.Colors.PINK),
         color_scheme_seed=ft.Colors.PINK,
         appbar_theme=ft.AppBarTheme(bgcolor=ft.Colors.PINK_ACCENT_200, shadow_color=ft.Colors.GREY_800),
+        font_family=resource_path("fonts/NotoSansSC-VariableFont_wght.ttf")
     )
 
     message_handler = MessageManager(page)
