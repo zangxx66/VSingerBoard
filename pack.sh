@@ -54,7 +54,6 @@ case "${OS}" in
             "--uac-admin"
             "--onedir"
             "--pyinstaller-build-args=--version-file=version.txt"
-            "--pyinstaller-build-args=--splash=assets/custom_splash.png"
             )
         echo "Running on Windows."
         ;;
