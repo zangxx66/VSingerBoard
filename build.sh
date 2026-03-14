@@ -47,6 +47,7 @@ rm -rf build dist
 
 # 拼接参数
 ARGS=(
+    "$PLATFORM"
     "--arch" "$ARCH"
     "--artifact" "VSingerBoard"
     "--build-number" "$BUILD_NUM"
@@ -67,7 +68,6 @@ ARGS=(
     "--exclude" "build"
     "--exclude" "dist"
     "--exclude" "doc"
-    "--exclude" "flet-build-template"
     "--exclude" "hooks"
     "--exclude" "tests"
     "--exclude" ".gitignore"
@@ -85,14 +85,12 @@ ARGS=(
     "--skip-flutter-doctor"
     "--template-ref" "$FLET_VER"
     "--verbose"
-    "$PLATFORM"
-    "."
 )
 
 echo "Running flet build with arguments..."
 
 # 开始打包
-if uv run flet build "${ARGS[@]}"; then
+if uv run fs-build "${ARGS[@]}"; then
     mkdir dist
     mv build/"$PLATFORM"/** dist/
     echo "Application packaging successful."

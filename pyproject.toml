@@ -20,14 +20,20 @@ dependencies = [
     "flet[all]>=0.82.2",
 ]
 
+[dependency-groups]
+dev = [
+    "flet-splash>=0.2.2",
+    "pyinstaller>=6.19.0",
+]
+
 [tool.aerich]
 tortoise_orm = "src.database.db.TORTISE_ORM"
 
 [[tool.uv.index]]
-url="https://pypi.tuna.tsinghua.edu.cn/simple"
-default=true
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+default = true
 
-[dependency-groups]
-dev = [
-    "pyinstaller>=6.19.0",
-]
+[tool.flet.splash]
+type = "image"
+source = "assets/custom_splash.png"
+background = "#FCF1F1"

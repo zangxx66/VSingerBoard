@@ -42,7 +42,7 @@ def douyin_container(page: ft.Page):
             content=ft.Row(
                 wrap=True,
                 controls=[
-                    ft.TextField(label="id", ref=id_text, visible=False),
+                    ft.TextField(label="id", ref=id_text, visible=False, value=0),
                     ft.TextField(label="房间号", ref=room_id_text, input_filter=ft.InputFilter(regex_string=r"^[1-9]\d*$")),
                     ft.TextField(label="点歌指令", ref=sing_prefix_text),
                     ft.TextField(label="点歌cd", ref=sing_cd_text, input_filter=ft.InputFilter(regex_string=r"^\d+$")),

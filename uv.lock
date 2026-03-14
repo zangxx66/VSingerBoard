@@ -622,6 +622,18 @@ wheels = [
 ]
 
 [[package]]
+name = "flet-splash"
+version = "0.2.2"
+source = { registry = "https://pypi.tuna.tsinghua.edu.cn/simple" }
+dependencies = [
+    { name = "rich" },
+]
+sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/b6/2f/d7b6536f7e40e58590e95335a02463fec67dba533065d6418fcdb00f3001/flet_splash-0.2.2.tar.gz", hash = "sha256:8543e8af1f2fcccb8b75c0f57db03c0991f7abf206e3097e7551773bfb29c5cd", size = 480030, upload-time = "2026-03-10T06:33:20.685Z" }
+wheels = [
+    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/e8/0b/c369e082464f2cce4936e6de9f79127e777edc0eda62e49af8457cbb631d/flet_splash-0.2.2-py3-none-any.whl", hash = "sha256:88712842258af9190db820059061c163e94563eb2106ee7382dc69db29ccecf6", size = 22215, upload-time = "2026-03-10T06:33:18.65Z" },
+]
+
+[[package]]
 name = "flet-web"
 version = "0.82.2"
 source = { registry = "https://pypi.tuna.tsinghua.edu.cn/simple" }
@@ -1934,6 +1946,7 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "flet-splash" },
     { name = "pyinstaller" },
 ]
 
@@ -1955,7 +1968,10 @@ requires-dist = [
 ]
 
 [package.metadata.requires-dev]
-dev = [{ name = "pyinstaller", specifier = ">=6.19.0" }]
+dev = [
+    { name = "flet-splash", specifier = ">=0.2.2" },
+    { name = "pyinstaller", specifier = ">=6.19.0" },
+]
 
 [[package]]
 name = "watchdog"

@@ -2,6 +2,7 @@ import asyncio
 import flet as ft
 from src.live import douyin_manager, bili_manager
 from src.utils import async_worker, logger
+from src.manager import subscribe_manager
 
 
 class MessageManager():
@@ -9,9 +10,9 @@ class MessageManager():
         self._page = page
         self._stop_event = asyncio.Event()
         self._run_future = None
-        self._broadcast_task = None
         self.douyin_status = 0
         self.bilibili_status = 0
+        self.danmaku_list = []
 
     def start(self):
         if self._run_future and not self._run_future.done():
@@ -25,13 +26,15 @@ class MessageManager():
         logger.info("message_manager main task submitted to worker...")
 
     async def _periodic_broadcast_task(self):
-        while not self._stop_event.is_set():
+        if not self._stop_event.is_set():
             try:
                 douyin_list = douyin_manager.get_list()
                 bili_list = bili_manager.get_list()
                 combine_list = douyin_list + bili_list
-                combine_list.sort(key=lambda x: x["send_time"], reverse=True)
-                self._page.pubsub.send_all_on_topic("add", combine_list)
+                if sorted(combine_list) != sorted(self.danmaku_list):
+                    combine_list.sort(key=lambda x: x["send_time"], reverse=True)
+                    self.danmaku_list = combine_list[:]
+                    self._page.pubsub.send_all_on_topic("add", self.danmaku_list)
 
                 douyin_status = douyin_manager.get_status()
                 if self.douyin_status != douyin_status:
@@ -46,27 +49,21 @@ class MessageManager():
                     self.bilibili_status = bilibili_status
                     self._page.pubsub.send_all_on_topic("notify", {"is_connect": bili_connect_status, "message": bili_msg})
 
-                await asyncio.sleep(2)
             except asyncio.CancelledError:
                 logger.info("periodic broadcast task was cancelled...")
-                break
             except Exception as ex:
                 logger.error(f"Error in periodic broadcast task: {ex}")
-                await asyncio.sleep(2)
 
     async def _start_and_run_client(self):
-        self._broadcast_task = None
         try:
-            self._broadcast_task = asyncio.create_task(self._periodic_broadcast_task())
+            subscribe_manager.add_job("interval", seconds=2, id="flet_on_notify", replace_existing=True)(self._periodic_broadcast_task)
             await self._stop_event.wait()
         except asyncio.CancelledError:
             logger.warning("message_manager task was cancelled...")
         except Exception as ex:
             logger.error(f"message_manager task failed: {ex}")
         finally:
-            if self._broadcast_task:
-                self._broadcast_task.cancel()
-                await asyncio.gather(self._broadcast_task, return_exceptions=True)
+            subscribe_manager.cancel_subscribe("flet_on_notify")
             logger.info("message_manager resources cleaned up...")
 
     async def on_del_message(self, _, del_dict: dict):

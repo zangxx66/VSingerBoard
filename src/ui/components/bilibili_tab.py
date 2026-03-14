@@ -50,7 +50,7 @@ def bilibili_container(page: ft.Page):
             content=ft.Row(
                 wrap=True,
                 controls=[
-                    ft.TextField(label="id", ref=id_text, visible=False),
+                    ft.TextField(label="id", ref=id_text, visible=False, value=0),
                     ft.TextField(label="房间号", ref=room_id_text, input_filter=ft.InputFilter(regex_string=r"^[1-9]\d*$")),
                     ft.TextField(label="粉丝牌等级", ref=modal_lv_text, input_filter=ft.InputFilter(regex_string=r"^\d+$")),
                     ft.TextField(label="用户等级", ref=user_lv_text, input_filter=ft.InputFilter(regex_string=r"^\d+$")),
