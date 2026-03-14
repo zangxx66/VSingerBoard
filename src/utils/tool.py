@@ -110,9 +110,12 @@ def resource_path(relative_path: str):
     Returns:
         str: 资源文件的完整路径
     """
-    if hasattr(sys, "_MEIPASS"):
-        return os.path.join(sys._MEIPASS, "assets", relative_path)
-    return os.path.join(os.path.abspath("."), "assets", relative_path)
+    default_assets_dir = Path(__file__) / "assets"
+    assets_resolve = Path(os.environ.get("FLET_ASSETS_DIR", str(default_assets_dir))).resolve()
+    resource_dir = assets_resolve / relative_path
+    return resource_dir.as_posix()
+
+    # return os.path.join(os.path.abspath("."), "assets", relative_path)
 
 
 def send_notification(title, message):
