@@ -102,8 +102,8 @@ BUILD_ARGS=(
     "--pyinstaller-build-args=--add-data=assets/douyinjs:assets/douyinjs"
     "--pyinstaller-build-args=--add-data=assets/icons:assets/icons"
     "--pyinstaller-build-args=--add-data=assets/images:assets/images"
-    "--pyinstaller-build-args=--add-data=assets/favicon.png:assets/favicon.png"
-    "--pyinstaller-build-args=--add-data=assets/fonts/NotoSansSC-VariableFont_wght.ttf:assets/fonts/NotoSansSC-VariableFont_wght.ttf"
+    "--pyinstaller-build-args=--add-data=assets/favicon.png:assets"
+    "--pyinstaller-build-args=--add-data=assets/fonts/NotoSansSC-VariableFont_wght.ttf:assets/fonts"
 
     # 包含平台特定参数
     "${EXTRA_ARGS[@]}"

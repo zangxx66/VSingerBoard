@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="doc/634-.jpg" width="180" height="180" alt="VSingerBoard Logo">
+  <img src="assets/icon.png" width="180" height="180" alt="VSingerBoard Logo">
   <br>
 </div>
 
@@ -7,24 +7,22 @@
 
 # VSingerBoard - 您的专属虚拟主播点歌台
 
-![Release Status](https://github.com/zangxx66/VSingerBoard/actions/workflows/release.yml/badge.svg) ![Push Status](https://github.com/zangxx66/VSingerBoard/actions/workflows/ci.yml/badge.svg) ![Python Version](https://img.shields.io/badge/python-3.12-blue.svg) ![Node.js Version](https://img.shields.io/badge/node.js-24.0-blue.svg) ![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)
+![Flet](https://img.shields.io/badge/flet-0.82.0-blue.svg) ![Python Version](https://img.shields.io/badge/python-3.12-blue.svg) ![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)
 
 </div>
 
 ---
 
-> 在弹幕的海洋中，手动记录点歌请求不仅繁琐，还容易错失粉丝的热情。VSingerBoard 专为解决这一痛点而生，它是一座连接主播与粉丝的桥梁，一个为虚拟主播、歌手和音乐爱好者打造的跨平台智能点歌管理面板。
-> 
-> **VSingerBoard** 将混乱的弹幕点歌请求，转化为一个优雅、有序、可交互的列表，让您能专注于直播，而非手忙脚乱的管理。
+> **VSingerBoard** 是一款专为虚拟主播、歌手和音乐爱好者打造的跨平台智能点歌管理面板。它能将直播间混乱的点歌弹幕转化为一个优雅、有序、可交互的列表，让您专注于直播，而非手忙脚乱地记录。
 
 ## ✨ 核心功能
 
-- 🎤 **多平台支持**: 已无缝支持 **Bilibili** 和 **抖音** 两大主流直播平台，并具备良好的扩展性。
-- 🚀 **实时弹幕抓取**: 基于高性能异步框架，实时捕获并智能过滤点歌弹幕，确保不会错失粉丝的热情互动。
-- 🛡️ **高稳定连接**: 针对抖音平台，通过模拟浏览器签名算法和原生 WebSocket 通信，结合后台异步任务处理，实现长期、稳定的弹幕连接。
-- 🎨 **现代化UI界面**: 采用 Vue 3 和 Element Plus 构建，界面简洁美观，支持亮色/暗色模式一键切换，提供卓越的操作体验。
-- 🛠️ **自动化构建与部署**: 借助 GitHub Actions 实现全自动的跨平台（Windows, macOS, Linux）打包与发布，确保您随时能获取最新的稳定版本。
-- 🔒 **本地化数据存储**: 使用 Tortoise-ORM 配合 SQLite，将所有配置和凭据安全存储在本地，杜绝隐私泄露风险。
+- 🎤 **多平台支持**: 无缝支持 **Bilibili** 和 **抖音** 两大主流直播平台。
+- 🚀 **实时弹幕抓取**: 基于异步 I/O 框架，实时捕获并智能识别点歌请求，确保不遗漏每一份热情。
+- 🛡️ **高稳定连接**: 针对抖音平台，集成签名算法和 WebSocket 原生通信，配合后台异步任务，实现长期、稳定的弹幕监听。
+- 🎨 **现代化 UI 界面**: 基于 **Flet (Flutter for Python)** 构建，采用 Material Design 风格，界面精美且支持跨平台原生体验。
+- 📊 **歌单与历史管理**: 内置数据库，支持导入本地歌单，自动记录点歌历史，方便复盘和管理。
+- 🔒 **本地化存储**: 使用 Tortoise-ORM 配合 SQLite，所有配置和凭据均存储在本地，安全可控。
 
 ## 📸 应用截图
 
@@ -37,105 +35,66 @@
 ![image](doc/7.png)
 ![image](doc/8.png)
 
-## 🚀 如何使用
-
-对于普通用户，我们强烈建议您直接下载已打包好的应用程序。
-
-1.  前往 [**GitHub Releases**](https://github.com/zangxx66/VSingerBoard/releases/latest) 页面。
-2.  根据您的操作系统（Windows, macOS, 或 Linux），下载最新版本的压缩包。
-3.  解压后，直接运行主程序即可！  
-4.  有不明白的地方可参考 [**文档**](doc/README.md)  
-
 ## 🛠️ 技术栈
 
-- **后端**: Python 3.12, FastAPI, Uvicorn, Tortoise-ORM
-- **前端**: Vue 3, Vite, Element Plus, TypeScript
-- **桌面端框架**: Pywebview
-- **直播平台接口**: `bilibili-api-python`, `aiohttp`, `pyexecjs`, `Protobuf`
-- **构建与打包**: PyInstaller, GitHub Actions
+- **UI 框架**: [Flet](https://flet.dev/) (Flutter for Python)
+- **核心语言**: Python 3.12+
+- **数据库**: Tortoise-ORM, Aerich (迁移管理)
+- **网络与通信**: `aiohttp`, `curl-cffi`, `betterproto2` (Protobuf)
+- **直播接口**: `bilibili-api-python`, 抖音自定义 WebSocket 客户端
+- **打包工具**: PyInstaller (通过 `flet pack`)
 
 ## 📂 项目结构
 
 ```
 .
-├── .github/                  # GitHub Actions CI/CD 工作流
-│   └── workflows/            # 自动化工作流定义
-├── doc/                      # 项目文档和图片
-├── frontend/                 # 前端Vue应用源码
-│   ├── public/               # 前端静态资源
-│   └── src/                  # 前端核心代码
-│       ├── api/              # API 服务定义
-│       ├── assets/           # 静态资源(如CSS,图片)
-│       ├── components/       # Vue 公共组件
-│       ├── layouts/          # 布局组件
-│       ├── pages/            # 页面组件
-│       ├── router/           # Vue Router 配置
-│       ├── stores/           # Pinia 状态管理
-│       ├── types/            # TypeScript 类型定义
-│       └── utils/            # 前端工具函数
-├── hooks/                    # PyInstaller打包钩子
-├── resources/                # 应用打包所需资源
-│   ├── douyinjs/             # 抖音签名相关JS文件
-│   ├── icons/                # 应用图标
-│   └── Notificator.app/      # macOS通知程序
-├── src/                      # Python后端应用源码
-│   ├── database/             # 数据库模型和操作
-│   ├── douyin/               # 抖音直播相关逻辑
-│   │   └── lib/              # Protobuf编译库
-│   ├── jsBridge/             # Python与JavaScript桥接
-│   ├── live/                 # 各直播平台实现
-│   ├── manager/              # 核心管理器模块
-│   ├── notifypy/             # 跨平台桌面通知库
-│   │   └── os_notifiers/     # 特定操作系统的通知实现
-│   ├── server/               # FastAPI后端服务
-│   └── utils/                # 后端通用工具函数
-└── tests/                    # 测试代码
+├── assets/                   # 静态资源 (图标、字体、JS 签名库等)
+├── src/                      # 核心源码
+│   ├── database/             # 数据模型与数据库操作封装
+│   ├── douyin/               # 抖音协议适配与签名逻辑
+│   ├── live/                 # 直播平台适配器实现
+│   ├── manager/              # 生命周期、服务器与订阅管理器
+│   ├── ui/                   # Flet UI 组件与页面
+│   │   ├── components/       # 通用 UI 组件
+│   │   └── pages/            # 各功能模块页面
+│   └── utils/                # 工具函数 (日志、异步工作流、路径处理)
+├── hooks/                    # PyInstaller 打包钩子
+├── main.py                   # 应用入口
+├── pack.sh                   # 打包构建脚本
+└── pyproject.toml            # uv 项目配置文件
 ```
 
-## 🤝 如何贡献
+## 🤝 开发与贡献
 
-我们欢迎任何形式的贡献！无论是提交 Bug、建议新功能，还是直接贡献代码，都将是对本项目的巨大支持。
+本项目推荐使用 [**uv**](https://docs.astral.sh/uv/) 进行包管理，推荐使用 **VS Code** 作为开发 IDE。
 
-推荐使用 **VS Code** 作为开发IDE。环境要求：**Python 3.12+** 和 **Node.js 20.19+**。
+1.  **克隆项目**:
+    ```bash
+    git clone https://github.com/zangxx66/VSingerBoard.git
+    cd VSingerBoard
+    ```
 
-1.  **Fork** 本仓库。
-2.  创建您的新分支 (`git checkout -b feature/AmazingFeature`)。
-3.  **安装依赖:**
-    - **后端:**
-      ```bash
-      pip install uv && uv sync
-      ```
-      > **⚠️ Linux 用户请注意:**
-      > 如果您使用 Linux 系统，请额外安装 GTK 和 WebKit 的开发库：
-      > `sudo apt-get install -y python3-gi python3-gi-cairo gir1.2-gtk-3.0 gir1.2-webkit2-4.1`
+2.  **安装依赖**:
+    ```bash
+    uv sync
+    ```
 
-    - **前端:**
-      ```bash
-      cd frontend
-      pnpm install
-      ```
-4.  **运行与开发:**
-    启动开发环境：
+3.  **运行应用**:
     ```bash
     uv run main.py
     ```
-    > 该命令将同时启动后端的 FastAPI 服务与前端的 Vite 开发服务器。代码修改后，应用会自动热重载。
-5.  **本地Build:**  
-    运行build脚本:  
-    ```bash  
-    bash build.sh
-    ```  
-6.  **提交您的更改** (`git commit -m 'feat: Add some AmazingFeature'`)。
-7.  **推送您的分支** (`git push origin feature/AmazingFeature`)。
-8.  **创建 Pull Request**。
+
+4.  **本地构建 (打包)**:
+    ```bash
+    bash pack.sh
+    ```
 
 ## ❤️ 致谢
 
 本项目的实现离不开以下优秀开源项目的支持：
-
+- [Flet](https://flet.dev/)
 - [bilibili-api](https://github.com/Nemo2011/bilibili-api)
-- [DouyinLiveWebFetcher](https://github.com/saermart/DouyinLiveWebFetcher)
-- [PyWebview](https://github.com/r0x0r/pywebview)
+- [Tortoise-ORM](https://tortoise.github.io/)
 
 ## 📄 许可证
 
