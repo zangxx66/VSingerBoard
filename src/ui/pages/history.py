@@ -1,6 +1,5 @@
 import datetime
 import time
-import pyautogui
 import threading
 import io
 import pandas as pd
@@ -25,7 +24,7 @@ sem = threading.Semaphore()
 
 
 def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
-    _, height = pyautogui.size()
+    height = page.window.height
 
     song_name_text = Ref[ft.TextField]()
     uname_text = Ref[ft.TextField]()

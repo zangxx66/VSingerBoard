@@ -1,11 +1,10 @@
-import pyautogui
 import flet as ft
 from flet import AppBar, NavigationDrawer
 from src.ui.components import bilibili_tab, douyin_tab, settings_tab
 
 
 def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
-    _, height = pyautogui.size()
+    height = page.window.height
 
     return ft.View(
         route="/settings",

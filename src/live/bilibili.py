@@ -12,7 +12,6 @@ class Bili:
         self._run_future = None
         self.live = None
         self.danmus: list[DanmuInfo] = []
-        self.del_list = []
         self.config = None
         self.credential = None
 
@@ -99,27 +98,16 @@ class Bili:
             return -1
 
     def get_list(self):
-        if len(self.danmus) == 0:
-            return []
         return self.danmus
 
-    def get_del_list(self):
-        if len(self.del_list) == 0:
-            return []
-        result = self.del_list.copy()
-        self.del_list.clear()
-        return result
-
     def del_list(self, msg_id):
-        index = [i for i, item in enumerate(self.danmus) if item["msg_id"] == msg_id]
-        self.danmus.pop(index[0])
+        self.danmus = [item for item in self.danmus if item.msg_id != msg_id]
 
     def clear_list(self):
         self.danmus.clear()
 
     def add_list(self, data):
-        danmu_info = DanmuInfo(**data)
-        self.danmus.append(danmu_info)
+        self.danmus.insert(0, data)
 
     async def on_msg(self, event):
         info = event["data"]["info"]
@@ -138,10 +126,9 @@ class Bili:
 
         logger.debug(f"[{medal_name} {medal_level}]:{uname}:{msg}")
         if msg.startswith("取消点歌"):
-            cancel_song = msg.replace("取消点歌", "", 1).strip()
             history = await Db.get_song_history(uid=uid, source="bilibili")
             if history:
-                self.del_list.append({"msg_id": history.id, "uid": uid, "uname": uname, "song_name": cancel_song})
+                self.del_list(history.id)
             return
         if not msg.startswith(self.config.sing_prefix):
             return
@@ -159,17 +146,17 @@ class Bili:
 
         history = await Db.add_song_history(uid=uid, uname=uname, song_name=song_name, source="bilibili", create_time=now)
 
-        danmu_info: DanmuInfo = {
-            "msg_id": history.id,
-            "uid": uid,
-            "uname": uname,
-            "msg": song_name,
-            "medal_level": medal_level,
-            "medal_name": medal_name,
-            "guard_level": guard_level,
-            "send_time": now,
-            "source": "bilibili"
-        }
+        danmu_info = DanmuInfo(
+            uid,
+            uname,
+            medal_level,
+            medal_name,
+            guard_level,
+            msg=song_name,
+            msg_id=history.id,
+            send_time=now,
+            source="bilibili"
+        )
         self.danmus.append(danmu_info)
 
         config = await Db.get_gloal_config()
@@ -213,18 +200,18 @@ class Bili:
 
         history = await Db.add_song_history(uid=uid, uname=uname, song_name=song_name, source="bilibili", create_time=now)
 
-        sc_info: DanmuInfo = {
-            "msg_id": history.id,
-            "uid": uid,
-            "uname": uname,
-            "msg": song_name,
-            "medal_level": medal_level,
-            "medal_name": medal_name,
-            "guard_level": guard_level,
-            "price": price,
-            "send_time": now,
-            "source": "bilibili"
-        }
+        sc_info = DanmuInfo(
+            uid,
+            uname,
+            medal_level,
+            medal_name,
+            guard_level,
+            price,
+            msg=song_name,
+            msg_id=history.id,
+            send_time=now,
+            source="bilibili"
+        )
         self.danmus.append(sc_info)
 
         config = await Db.get_gloal_config()

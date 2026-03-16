@@ -1,7 +1,7 @@
 import asyncio
 import flet as ft
 from src.live import douyin_manager, bili_manager
-from src.utils import async_worker, logger
+from src.utils import async_worker, logger, DanmuInfo
 from src.manager import subscribe_manager
 
 
@@ -12,7 +12,7 @@ class MessageManager():
         self._run_future = None
         self.douyin_status = 0
         self.bilibili_status = 0
-        self.danmaku_list = []
+        self.danmaku_list: list[DanmuInfo] = []
 
     def start(self):
         if self._run_future and not self._run_future.done():
@@ -31,8 +31,8 @@ class MessageManager():
                 douyin_list = douyin_manager.get_list()
                 bili_list = bili_manager.get_list()
                 combine_list = douyin_list + bili_list
-                if sorted(combine_list) != sorted(self.danmaku_list):
-                    combine_list.sort(key=lambda x: x["send_time"], reverse=True)
+                if set(combine_list) != set(self.danmaku_list):
+                    combine_list.sort(key=lambda x: x.send_time, reverse=True)
                     self.danmaku_list = combine_list[:]
                     self._page.pubsub.send_all_on_topic("add", self.danmaku_list)
 
@@ -73,9 +73,10 @@ class MessageManager():
         if source == "douyin":
             douyin_manager.del_list(del_dict["msg_id"])
 
-    def on_clear_message(self, _):
+    def on_clear_message(self, *_):
         bili_manager.clear_list()
         douyin_manager.clear_list()
+        self._page.pubsub.send_all_on_topic("add", [])
 
     def on_add_message(self, _, data: dict):
         source = data["source"]

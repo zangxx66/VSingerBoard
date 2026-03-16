@@ -17,7 +17,7 @@ flet_logger.setLevel(logging.INFO)
 file_handle = logging.handlers.TimedRotatingFileHandler(dir_path, when="midnight", interval=1, backupCount=30, encoding="utf-8")
 file_formatter = logging.Formatter(fmt="[%(asctime)s][%(levelname)s][%(module)s][%(funcName)s][%(lineno)d] - %(message)s", datefmt="%Y-%m-%d  %H:%M:%S")
 file_handle.setFormatter(file_formatter)
-file_handle.setLevel(logging.INFO)
+file_handle.setLevel(logging.WARNING)
 logger.addHandler(file_handle)
 flet_logger.addHandler(file_handle)
 

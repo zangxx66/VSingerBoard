@@ -1,4 +1,3 @@
-import pyautogui
 import flet as ft
 from .components.toast import ModernToast
 from .pages.about import main as AboutView
@@ -14,21 +13,22 @@ from src.manager.messages import MessageManager
 async def main(page: ft.Page):
     page.title = "点歌姬"
 
-    width, height = pyautogui.size()
-    page.window.width = int(width * .9)
-    page.window.height = int(height * .9)
-    page.locale_configuration = ft.LocaleConfiguration([ft.Locale("zh", "Hans")], ft.Locale("zh", "Hans"))
+    page.window.width = int(1920 * .8)
+    page.window.height = int(1080 * .8)
+    page.window.full_screen = False
     page.window.resizable = False
     page.window.shadow = True
     page.window.icon = resource_path("icons/logo.ico")
     page.window.title_bar_buttons_hidden = True
     page.window.title_bar_hidden = True
     page.window.alignment = ft.Alignment.CENTER
+    page.locale_configuration = ft.LocaleConfiguration([ft.Locale("zh", "Hans")], ft.Locale("zh", "Hans"))
+    page.fonts = {"AlibabaPuHuiTi": resource_path("fonts/AlibabaPuHuiTi-Medium.ttf")}
     page.theme = ft.Theme(
         color_scheme=ft.ColorScheme(primary=ft.Colors.PINK),
         color_scheme_seed=ft.Colors.PINK,
         appbar_theme=ft.AppBarTheme(bgcolor=ft.Colors.PINK_ACCENT_200, shadow_color=ft.Colors.GREY_800),
-        font_family=resource_path("fonts/NotoSansSC-VariableFont_wght.ttf")
+        font_family="AlibabaPuHuiTi"
     )
 
     message_handler = MessageManager(page)
@@ -126,14 +126,14 @@ async def main(page: ft.Page):
 
     def create_appbar(title):
         return ft.AppBar(
-            leading=ft.IconButton(ft.Icons.MENU, padding=ft.Padding(left=24), hover_color=ft.Colors.TRANSPARENT, on_click=handle_show_drawer),
+            leading=ft.IconButton(ft.Icons.MENU, padding=ft.Padding.only(left=10), hover_color=ft.Colors.TRANSPARENT, on_click=handle_show_drawer),
             leading_width=40,
             title=ft.Text(title),
             center_title=False,
-            actions_padding=ft.Padding(right=24),
+            actions_padding=ft.Padding.only(right=24),
             actions=[
-                ft.IconButton(ft.Icons.MINIMIZE, on_click=handle_minimized_window),
-                ft.IconButton(ft.Icons.CLOSE, on_click=handle_close_window)
+                ft.IconButton(ft.Icons.MINIMIZE, tooltip="最小化", on_click=handle_minimized_window),
+                ft.IconButton(ft.Icons.CLOSE, tooltip="退出", on_click=handle_close_window)
             ]
         )
 

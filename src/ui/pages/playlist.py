@@ -1,5 +1,4 @@
 import time
-import pyautogui
 import io
 import pandas as pd
 import flet_datatable2 as ftd
@@ -12,7 +11,7 @@ from ..components.toast import ModernToast
 
 
 def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
-    _, height = pyautogui.size()
+    height = page.window.height
 
     keyword_text = Ref[ft.TextField]()
     data_table: ftd.DataTable2 | None = None
