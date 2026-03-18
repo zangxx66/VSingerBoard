@@ -40,7 +40,7 @@
 # 安装依赖
 uv sync
 # 启动开发服务器
-uv run main.py
+uv run flet run main.py
 ```
 
 ### 数据库迁移 (Aerich)

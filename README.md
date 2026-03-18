@@ -81,7 +81,7 @@
 
 3.  **运行应用**:
     ```bash
-    uv run main.py
+    uv run flet run main.py
     ```
 
 4.  **本地构建 (打包)**:

@@ -31,6 +31,7 @@ from .ws_client import WebSocketClient
 from .worker import async_worker
 from .ws_server import WebSocketServer
 from .emoji import bilibili_emoji, douyin_emoji
+from .event import EventEmitter
 
 __all__ = [
     "logger",
@@ -63,4 +64,5 @@ __all__ = [
     "HistoryItem",
     "bilibili_emoji",
     "douyin_emoji",
+    "EventEmitter",
 ]

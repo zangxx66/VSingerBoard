@@ -6,8 +6,8 @@ from .pages.history import main as HistoryView
 from .pages.home import main as HomeView
 from .pages.playlist import main as PlaylistView
 from .pages.settings import main as SettingsView
-from src.utils import resource_path
-from src.manager.messages import MessageManager
+from src.utils import resource_path, EventEmitter
+from src.manager import MessageManager
 
 
 async def main(page: ft.Page):
@@ -32,22 +32,26 @@ async def main(page: ft.Page):
         font_family="AlibabaPuHuiTi",
     )
 
-    message_handler = MessageManager(page)
+    event_bus = EventEmitter()
+    message_handler = MessageManager(event_bus)
+    page.data = {"message_handler": message_handler}
     message_handler.start()
 
-    def on_notify(_, msg: dict[str, bool]):
-        if msg["is_connect"]:
-            ModernToast.success(
-                page,
-                msg["message"]
-            )
-        else:
-            ModernToast.warning(
-                page,
-                msg["message"]
-            )
+    def on_notify(msg: dict[str, bool]):
+        def show_toast():
+            if msg["is_connect"]:
+                ModernToast.success(
+                    page,
+                    msg["message"]
+                )
+            else:
+                ModernToast.warning(
+                    page,
+                    msg["message"]
+                )
+        page.run_thread(show_toast)
 
-    page.pubsub.subscribe_topic("notify", on_notify)
+    event_bus.on("on_status_change", on_notify)
 
     def handle_minimized_window(e: ft.Event[ft.IconButton]):
         page.window.minimized = True

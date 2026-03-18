@@ -2,7 +2,9 @@ import time
 import io
 import pandas as pd
 import flet as ft
+from typing import cast
 from src.utils import DanmuInfo, logger, timespan_to_localtime
+from src.manager import MessageManager
 from ..components import ModernToast
 
 
@@ -11,19 +13,27 @@ def main(page: ft.Page):
     list_tile_list: list[ft.Column] = []
     danmaku_list: list[DanmuInfo] = []
 
-    def on_message(_, msg):
+    message_handler = cast(MessageManager, page.data["message_handler"])
+
+    def on_message(msg):
         """
         更新点歌列表
         """
         nonlocal danmaku_list
         danmaku_list = msg
-        list_view.controls = generate_list()
-        page.update()
 
-    page.pubsub.subscribe_topic("add", on_message)
+        def update_ui():
+            list_view.controls = generate_list()
+            page.update()
+        page.run_thread(update_ui)
 
-    def on_mount():
-        page.pubsub.send_all_on_topic("on_mount", None)
+    message_handler.events.on("on_message_update", on_message)
+
+    async def on_mount():
+        """
+        初始化数据同步
+        """
+        await message_handler.sync_current_messages()
 
     async def handle_context_click(e: ft.Event[ft.IconButton]):
         """
@@ -32,9 +42,9 @@ def main(page: ft.Page):
         if e.control.data["action"] == "copy":
             await on_copy(e.control.data["msg"])
         if e.control.data["action"] == "delete":
-            page.pubsub.send_all_on_topic(
-                "del",
-                {"source": e.control.data["source"], "msg_id": e.control.data["msg_id"]},
+            message_handler.delete_message(
+                e.control.data["source"], 
+                e.control.data["msg_id"]
             )
             ModernToast.success(page, "已移除")
 
@@ -52,9 +62,12 @@ def main(page: ft.Page):
         if len(danmaku_list) == 0:
             ModernToast.info(page, "没有数据")
             return
-        page.pubsub.send_all_on_topic("clear", None)
-        page.update()
-        ModernToast.success(page, "清除列表成功")
+
+        async def do_clear():
+            await message_handler.clear_all_messages()
+            ModernToast.success(page, "清除列表成功")
+
+        page.run_task(do_clear)
 
     async def handle_export_click(e: ft.Event[ft.Button]):
         """
@@ -104,8 +117,8 @@ def main(page: ft.Page):
             if not msg.value:
                 ModernToast.warning(page, "歌名不为空")
                 return
-            page.pubsub.send_all_on_topic(
-                "manual",
+
+            message_handler.add_manual_message(
                 {
                     "source": source.value,
                     "data": DanmuInfo(
@@ -253,7 +266,7 @@ def main(page: ft.Page):
             ),
         )
 
-    page.run_thread(on_mount)
+    page.run_task(on_mount)
 
     return ft.View(
         route="/",
