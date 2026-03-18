@@ -1,9 +1,8 @@
 import flet as ft
-from flet import AppBar, NavigationDrawer
 from src.utils import resource_path, __version__ as version
 
 
-def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
+def main(page: ft.Page):
     url_launcher = ft.UrlLauncher()
 
     async def handle_click(e: ft.Event[ft.Button]):
@@ -81,6 +80,4 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
         vertical_alignment=ft.MainAxisAlignment.CENTER,
         controls=[logo, title, ver, actions],
-        appbar=appbar,
-        drawer=drawer,
     )

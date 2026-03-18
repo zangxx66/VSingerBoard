@@ -1,9 +1,8 @@
 import flet as ft
-from flet import AppBar, NavigationDrawer
-from src.ui.components import bilibili_tab, douyin_tab, settings_tab
+from ..components import bilibili_container, douyin_container, settings_container
 
 
-def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
+def main(page: ft.Page):
     height = page.window.height
 
     return ft.View(
@@ -24,9 +23,9 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
                             ft.TabBarView(
                                 height=int(height * .8),
                                 controls=[
-                                    bilibili_tab.bilibili_container(page),
-                                    douyin_tab.douyin_container(page),
-                                    settings_tab.settings_container(page)
+                                    bilibili_container(page),
+                                    douyin_container(page),
+                                    settings_container(page)
                                 ]
                             )
                         ]
@@ -34,6 +33,4 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
                 )
             )
         ],
-        appbar=appbar,
-        drawer=drawer
     )

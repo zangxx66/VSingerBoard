@@ -2,12 +2,11 @@ import time
 import io
 import pandas as pd
 import flet as ft
-from flet import Page, AppBar, NavigationDrawer
 from src.utils import DanmuInfo, logger, timespan_to_localtime
-from ..components.toast import ModernToast
+from ..components import ModernToast
 
 
-def main(page: Page, appbar: AppBar, drawer: NavigationDrawer):
+def main(page: ft.Page):
     height = page.window.height
     list_tile_list: list[ft.Column] = []
     danmaku_list: list[DanmuInfo] = []
@@ -22,6 +21,9 @@ def main(page: Page, appbar: AppBar, drawer: NavigationDrawer):
         page.update()
 
     page.pubsub.subscribe_topic("add", on_message)
+
+    def on_mount():
+        page.pubsub.send_all_on_topic("on_mount", None)
 
     async def handle_context_click(e: ft.Event[ft.IconButton]):
         """
@@ -251,9 +253,9 @@ def main(page: Page, appbar: AppBar, drawer: NavigationDrawer):
             ),
         )
 
+    page.run_thread(on_mount)
+
     return ft.View(
         route="/",
         controls=[create_main_card(), create_bottom_card()],
-        appbar=appbar,
-        drawer=drawer,
     )

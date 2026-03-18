@@ -3,19 +3,17 @@ import io
 import pandas as pd
 import flet_datatable2 as ftd
 import flet as ft
-from flet import AppBar, NavigationDrawer, Ref
+from flet import Ref
 from src.utils import PlaylistItem, async_worker, logger
 from src.database import Db as db
-from ..components.progress import NProgress
-from ..components.toast import ModernToast
+from ..components import NProgress, ModernToast
 
 
-def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
+def main(page: ft.Page):
     height = page.window.height
 
     keyword_text = Ref[ft.TextField]()
     data_table: ftd.DataTable2 | None = None
-    nprogress = NProgress(page)
 
     _page = Ref[ft.Text]()
     pages_num = 0
@@ -26,7 +24,7 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
         获取数据
         """
         nonlocal pages_num, total
-        nprogress.start()
+        NProgress.start(page)
         keyword = keyword_text.current.value if keyword_text.current else None
         count, songs = await async_worker.run_db_operation(
             db.get_playlist_page(keyword, _page.current.value, 20)
@@ -34,7 +32,7 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
         total = count
         pages_num = (count + 20 - 1) // 20
         data_table.rows = generate_rows(songs)
-        nprogress.stop()
+        NProgress.stop(page)
         page.update()
 
     async def set_page(p=None, delta=0):
@@ -501,6 +499,4 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
             ft.Divider(),
             create_paging(),
         ],
-        appbar=appbar,
-        drawer=drawer,
     )

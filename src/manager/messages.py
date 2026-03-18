@@ -23,6 +23,7 @@ class MessageManager():
         self._page.pubsub.subscribe_topic("del", self.on_del_message)
         self._page.pubsub.subscribe_topic("clear", self.on_clear_message)
         self._page.pubsub.subscribe_topic("manual", self.on_add_message)
+        self._page.pubsub.subscribe_topic("on_mount", self.on_init_message)
         logger.info("message_manager main task submitted to worker...")
 
     async def _periodic_broadcast_task(self):
@@ -84,6 +85,9 @@ class MessageManager():
             bili_manager.add_list(data["data"])
         if source == "douyin":
             douyin_manager.add_list(data["data"])
+
+    def on_init_message(self, *_):
+        self._page.pubsub.send_all_on_topic("add", self.danmaku_list)
 
     async def stop(self):
         if self._run_future and not self._run_future.done():

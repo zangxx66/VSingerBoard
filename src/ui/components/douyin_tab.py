@@ -14,7 +14,6 @@ def douyin_container(page: ft.Page):
     sing_prefix_text = Ref[ft.TextField]()
     sing_cd_text = Ref[ft.TextField]()
     fans_lv_text = Ref[ft.TextField]()
-    nprogress = NProgress(page)
 
     async def on_save_click(e: ft.Event[ft.Button]):
         """
@@ -53,7 +52,7 @@ def douyin_container(page: ft.Page):
         )
 
     async def on_mount():
-        nprogress.start()
+        NProgress.start(page)
         data = await async_worker.run_db_operation(db.get_dy_config())
         if data:
             id_text.current.value = data.id
@@ -62,7 +61,7 @@ def douyin_container(page: ft.Page):
             sing_cd_text.current.value = data.sing_cd
             fans_lv_text.current.value = data.fans_level
             page.update()
-        nprogress.stop()
+        NProgress.stop(page)
 
     page.run_task(on_mount)
 

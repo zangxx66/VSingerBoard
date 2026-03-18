@@ -20,7 +20,6 @@ def bilibili_container(page: ft.Page):
     user_lv_text = Ref[ft.TextField]()
     sing_prefix_text = Ref[ft.TextField]()
     sing_cd_text = Ref[ft.TextField]()
-    nprogress = NProgress(page)
 
     async def on_save_click(e: ft.Event[ft.Button]):
         """
@@ -229,7 +228,7 @@ def bilibili_container(page: ft.Page):
         ))
 
     async def on_mount():
-        nprogress.start()
+        NProgress.start(page)
         data = await async_worker.run_db_operation(db.get_bconfig())
         if data:
             id_text.current.value = data.id
@@ -241,7 +240,7 @@ def bilibili_container(page: ft.Page):
         credential_list = await async_worker.run_db_operation(db.get_bcredential_list())
         data_rows = generate_rows(credential_list)
         data_table.rows = data_rows
-        nprogress.stop()
+        NProgress.stop(page)
         page.update()
 
     page.run_task(on_mount)

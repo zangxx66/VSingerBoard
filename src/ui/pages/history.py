@@ -4,7 +4,7 @@ import threading
 import io
 import pandas as pd
 import flet as ft
-from flet import AppBar, NavigationDrawer, Ref
+from flet import Ref
 from src.database import Db as db
 from src.utils import (
     logger,
@@ -13,8 +13,7 @@ from src.utils import (
     resource_path,
     timespan_to_localtime,
 )
-from ..components.progress import NProgress
-from ..components.toast import ModernToast
+from ..components import NProgress, ModernToast
 
 
 _page = 1
@@ -23,7 +22,7 @@ songs_rows: list[HistoryItem] = []
 sem = threading.Semaphore()
 
 
-def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
+def main(page: ft.Page):
     height = page.window.height
 
     song_name_text = Ref[ft.TextField]()
@@ -34,7 +33,6 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
     start_date_text = Ref[ft.TextField]()
     end_date_text = Ref[ft.TextField]()
     list_view = Ref[ft.ListView]()
-    nprogress = NProgress(page)
 
     today = datetime.datetime.now()
 
@@ -43,7 +41,7 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
         获取数据
         """
         global _page, total, songs_rows
-        nprogress.start()
+        NProgress.start(page)
         if reload:
             _page = 1
             list_view.current.controls = []
@@ -75,7 +73,7 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
         else:
             songs_rows.extend(songs)
         list_view.current.controls = generate_list(songs_rows)
-        nprogress.stop()
+        NProgress.stop(page)
         page.update()
 
     async def handle_scroll(e: ft.OnScrollEvent):
@@ -296,6 +294,4 @@ def main(page: ft.Page, appbar: AppBar, drawer: NavigationDrawer):
             ft.Divider(),
             create_actions(),
         ],
-        appbar=appbar,
-        drawer=drawer,
     )

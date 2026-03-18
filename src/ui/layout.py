@@ -1,5 +1,5 @@
 import flet as ft
-from .components.toast import ModernToast
+from .components import ModernToast
 from .pages.about import main as AboutView
 from .pages.changelog import main as ChangelogView
 from .pages.history import main as HistoryView
@@ -25,10 +25,11 @@ async def main(page: ft.Page):
     page.locale_configuration = ft.LocaleConfiguration([ft.Locale("zh", "Hans")], ft.Locale("zh", "Hans"))
     page.fonts = {"AlibabaPuHuiTi": resource_path("fonts/AlibabaPuHuiTi-Medium.ttf")}
     page.theme = ft.Theme(
+        appbar_theme=ft.AppBarTheme(bgcolor=ft.Colors.PINK_ACCENT_200, shadow_color=ft.Colors.GREY_800),
         color_scheme=ft.ColorScheme(primary=ft.Colors.PINK),
         color_scheme_seed=ft.Colors.PINK,
-        appbar_theme=ft.AppBarTheme(bgcolor=ft.Colors.PINK_ACCENT_200, shadow_color=ft.Colors.GREY_800),
-        font_family="AlibabaPuHuiTi"
+        dialog_theme=ft.DialogTheme(shadow_color=ft.Colors.ON_SURFACE_VARIANT),
+        font_family="AlibabaPuHuiTi",
     )
 
     message_handler = MessageManager(page)
@@ -85,75 +86,86 @@ async def main(page: ft.Page):
             case _:
                 await page.push_route("/")
 
-    def create_drawer(select_index=0):
-        return ft.NavigationDrawer(
-            selected_index=select_index,
-            on_change=handle_drawer_change,
-            controls=[
-                ft.Container(height=12),
-                ft.NavigationDrawerDestination(
-                    label="点歌板",
-                    icon=ft.Icons.HOME,
-                    selected_icon=ft.Icon(ft.Icons.HOME),
-                ),
-                ft.NavigationDrawerDestination(
-                    label="点歌历史",
-                    icon=ft.Icons.CALENDAR_TODAY,
-                    selected_icon=ft.Icon(ft.Icons.CALENDAR_TODAY),
-                ),
-                ft.NavigationDrawerDestination(
-                    label="歌单管理",
-                    icon=ft.Icons.COLLECTIONS,
-                    selected_icon=ft.Icon(ft.Icons.COLLECTIONS),
-                ),
-                ft.NavigationDrawerDestination(
-                    label="更新日志",
-                    icon=ft.Icons.HISTORY,
-                    selected_icon=ft.Icon(ft.Icons.HISTORY),
-                ),
-                ft.NavigationDrawerDestination(
-                    label="设置",
-                    icon=ft.Icons.SETTINGS,
-                    selected_icon=ft.Icon(ft.Icons.SETTINGS),
-                ),
-                ft.NavigationDrawerDestination(
-                    label="关于",
-                    icon=ft.Icons.INFO,
-                    selected_icon=ft.Icon(ft.Icons.INFO),
-                ),
-            ]
-        )
+    drawer = ft.NavigationDrawer(
+        selected_index=0,
+        on_change=handle_drawer_change,
+        controls=[
+            ft.Container(height=12),
+            ft.NavigationDrawerDestination(
+                label="点歌板",
+                icon=ft.Icons.HOME,
+                selected_icon=ft.Icon(ft.Icons.HOME),
+            ),
+            ft.NavigationDrawerDestination(
+                label="点歌历史",
+                icon=ft.Icons.CALENDAR_TODAY,
+                selected_icon=ft.Icon(ft.Icons.CALENDAR_TODAY),
+            ),
+            ft.NavigationDrawerDestination(
+                label="歌单管理",
+                icon=ft.Icons.COLLECTIONS,
+                selected_icon=ft.Icon(ft.Icons.COLLECTIONS),
+            ),
+            ft.NavigationDrawerDestination(
+                label="更新日志",
+                icon=ft.Icons.HISTORY,
+                selected_icon=ft.Icon(ft.Icons.HISTORY),
+            ),
+            ft.NavigationDrawerDestination(
+                label="设置",
+                icon=ft.Icons.SETTINGS,
+                selected_icon=ft.Icon(ft.Icons.SETTINGS),
+            ),
+            ft.NavigationDrawerDestination(
+                label="关于",
+                icon=ft.Icons.INFO,
+                selected_icon=ft.Icon(ft.Icons.INFO),
+            ),
+        ]
+    )
 
-    def create_appbar(title):
-        return ft.AppBar(
-            leading=ft.IconButton(ft.Icons.MENU, padding=ft.Padding.only(left=10), hover_color=ft.Colors.TRANSPARENT, on_click=handle_show_drawer),
-            leading_width=40,
-            title=ft.Text(title),
-            center_title=False,
-            actions_padding=ft.Padding.only(right=24),
-            actions=[
-                ft.IconButton(ft.Icons.MINIMIZE, tooltip="最小化", on_click=handle_minimized_window),
-                ft.IconButton(ft.Icons.CLOSE, tooltip="退出", on_click=handle_close_window)
-            ]
-        )
+    app_bar = ft.AppBar(
+        leading=ft.IconButton(ft.Icons.MENU, padding=ft.Padding.only(left=10), hover_color=ft.Colors.TRANSPARENT, on_click=handle_show_drawer),
+        leading_width=40,
+        center_title=False,
+        actions_padding=ft.Padding.only(right=24),
+        actions=[
+            ft.IconButton(ft.Icons.MINIMIZE, tooltip="最小化", on_click=handle_minimized_window),
+            ft.IconButton(ft.Icons.CLOSE, tooltip="退出", on_click=handle_close_window)
+        ]
+    )
 
     def route_change(route):
         page.views.clear()
         match page.route:
             case "/":
-                page.views.append(HomeView(page, create_appbar("点歌列表"), create_drawer(0)))
+                app_bar.title = ft.Text("点歌列表")
+                drawer.selected_index = 0
+                page.views.append(HomeView(page))
             case "/history":
-                page.views.append(HistoryView(page, create_appbar("点歌历史"), create_drawer(1)))
+                app_bar.title = ft.Text("点歌历史")
+                drawer.selected_index = 1
+                page.views.append(HistoryView(page))
             case "/playlist":
-                page.views.append(PlaylistView(page, create_appbar("歌单管理"), create_drawer(2)))
+                app_bar.title = ft.Text("歌单管理")
+                drawer.selected_index = 2
+                page.views.append(PlaylistView(page))
             case "/changelog":
-                page.views.append(ChangelogView(page, create_appbar("更新日志"), create_drawer(3)))
+                app_bar.title = ft.Text("更新日志")
+                drawer.selected_index = 3
+                page.views.append(ChangelogView(page))
             case "/settings":
-                page.views.append(SettingsView(page, create_appbar("设置"), create_drawer(4)))
+                app_bar.title = ft.Text("设置")
+                drawer.selected_index = 4
+                page.views.append(SettingsView(page))
             case "/about":
-                page.views.append(AboutView(page, create_appbar("关于"), create_drawer(5)))
+                app_bar.title = ft.Text("关于")
+                drawer.selected_index = 5
+                page.views.append(AboutView(page))
             case _:
                 pass
+        page.appbar = app_bar
+        page.drawer = drawer
 
     async def view_pop(view):
         page.views.pop()

@@ -30,6 +30,7 @@ from .models import (
 from .ws_client import WebSocketClient
 from .worker import async_worker
 from .ws_server import WebSocketServer
+from .emoji import bilibili_emoji, douyin_emoji
 
 __all__ = [
     "logger",
@@ -60,4 +61,6 @@ __all__ = [
     "PlaylistItem",
     "BiliCredentialItem",
     "HistoryItem",
+    "bilibili_emoji",
+    "douyin_emoji",
 ]

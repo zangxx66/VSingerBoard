@@ -12,7 +12,6 @@ def settings_container(page: ft.Page):
     notify_switch = Ref[ft.Switch]()
     update_switch = Ref[ft.Switch]()
     startup_switch = Ref[ft.Switch]()
-    nprogress = NProgress(page)
 
     async def on_save_click(e: ft.Event[ft.Button]):
         """
@@ -51,7 +50,7 @@ def settings_container(page: ft.Page):
         )
 
     async def on_mount():
-        nprogress.start()
+        NProgress.start(page)
         data = await async_worker.run_db_operation(db.get_gloal_config())
         if data:
             id_text.current.value = data.id
@@ -59,7 +58,7 @@ def settings_container(page: ft.Page):
             update_switch.current.value = data.check_update
             startup_switch.current.value = data.startup
             page.update()
-        nprogress.stop()
+        NProgress.stop(page)
 
     page.run_task(on_mount)
 
