@@ -29,6 +29,7 @@ def main(page: ft.Page):
                 icon=ft.Icons.CHECK,
                 content="检查更新",
                 bgcolor=ft.Colors.PRIMARY_FIXED_DIM,
+                color=ft.Colors.WHITE,
             ),
         ],
     )
@@ -41,6 +42,7 @@ def main(page: ft.Page):
                 content="GitHub仓库",
                 data="github",
                 bgcolor=ft.Colors.BLACK_38,
+                color=ft.Colors.WHITE,
                 on_click=handle_click,
             ),
             ft.Button(
@@ -48,6 +50,7 @@ def main(page: ft.Page):
                 content="作者主页",
                 data="bilibili",
                 bgcolor=ft.Colors.PINK_ACCENT_200,
+                color=ft.Colors.WHITE,
                 on_click=handle_click,
             ),
             ft.Button(
@@ -55,6 +58,7 @@ def main(page: ft.Page):
                 content="问题反馈",
                 data="feedback",
                 bgcolor=ft.Colors.GREEN,
+                color=ft.Colors.WHITE,
                 on_click=handle_click,
             ),
         ],

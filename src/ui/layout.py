@@ -1,4 +1,5 @@
 import flet as ft
+from flet import AppBar, NavigationDrawer, Ref
 from .components import ModernToast
 from .pages.about import main as AboutView
 from .pages.changelog import main as ChangelogView
@@ -6,8 +7,9 @@ from .pages.history import main as HistoryView
 from .pages.home import main as HomeView
 from .pages.playlist import main as PlaylistView
 from .pages.settings import main as SettingsView
-from src.utils import resource_path, EventEmitter
+from src.utils import resource_path, EventEmitter, globalfigItem
 from src.manager import MessageManager
+from src.database import Db as db
 
 
 async def main(page: ft.Page):
@@ -26,12 +28,17 @@ async def main(page: ft.Page):
     page.fonts = {"AlibabaPuHuiTi": resource_path("fonts/AlibabaPuHuiTi-Medium.ttf")}
     page.theme = ft.Theme(
         appbar_theme=ft.AppBarTheme(bgcolor=ft.Colors.PINK_ACCENT_200, shadow_color=ft.Colors.GREY_800),
-        button_theme=ft.ButtonTheme(style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), color=ft.Colors.WHITE)),
+        button_theme=ft.ButtonTheme(style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30))),
         color_scheme=ft.ColorScheme(primary=ft.Colors.PINK),
         color_scheme_seed=ft.Colors.PINK,
         dialog_theme=ft.DialogTheme(shadow_color=ft.Colors.ON_SURFACE_VARIANT),
         font_family="AlibabaPuHuiTi",
     )
+
+    app_bar: AppBar | None = None
+    drawer: NavigationDrawer | None = None
+    global_config: globalfigItem | None = None
+    theme_destination = Ref[ft.NavigationDrawerDestination]()
 
     event_bus = EventEmitter()
     message_handler = MessageManager(event_bus)
@@ -71,6 +78,32 @@ async def main(page: ft.Page):
             ]
         ))
 
+    async def handle_theme_switch():
+        result = await db.add_or_update_gloal_config(**{"id": global_config.id, "dark_mode": not global_config.dark_mode})
+        if result == 0:
+            ModernToast.warning(page, "切换失败")
+        else:
+            global_config.dark_mode = not global_config.dark_mode
+            page.theme_mode = ft.ThemeMode.DARK if global_config.dark_mode else ft.ThemeMode.LIGHT
+            theme_destination.current.label = "DARK" if global_config.dark_mode else "LIGHT"
+            theme_destination.current.icon = ft.Icons.DARK_MODE if global_config.dark_mode else ft.Icons.LIGHT_MODE
+            theme_destination.current.selected_icon = ft.Icons.DARK_MODE if global_config.dark_mode else ft.Icons.LIGHT_MODE
+            ModernToast.success(page, "切换成功")
+
+    async def on_mount():
+        nonlocal global_config
+        global_config = await db.get_gloal_config()
+        if global_config:
+            page.theme_mode = ft.ThemeMode.DARK if global_config.dark_mode else ft.ThemeMode.LIGHT
+        else:
+            global_config = globalfigItem()
+            global_config.id = 0
+            global_config.dark_mode = False
+            page.theme_mode = ft.ThemeMode.LIGHT
+        theme_destination.current.label = "DARK" if global_config.dark_mode else "LIGHT"
+        theme_destination.current.icon = ft.Icons.DARK_MODE if global_config.dark_mode else ft.Icons.LIGHT_MODE
+        theme_destination.current.selected_icon = ft.Icons.DARK_MODE if global_config.dark_mode else ft.Icons.LIGHT_MODE
+
     async def handle_show_drawer():
         await page.show_drawer()
 
@@ -88,6 +121,8 @@ async def main(page: ft.Page):
                 await page.push_route("/settings")
             case 5:
                 await page.push_route("/about")
+            case 6:
+                await handle_theme_switch()
             case _:
                 await page.push_route("/")
 
@@ -126,6 +161,12 @@ async def main(page: ft.Page):
                 icon=ft.Icons.INFO,
                 selected_icon=ft.Icon(ft.Icons.INFO),
             ),
+            ft.NavigationDrawerDestination(
+                label="LIGHT",
+                icon=ft.Icons.LIGHT_MODE,
+                selected_icon=ft.Icons.LIGHT_MODE,
+                ref=theme_destination,
+            )
         ]
     )
 
@@ -179,4 +220,7 @@ async def main(page: ft.Page):
 
     page.on_route_change = route_change
     page.on_view_pop = view_pop
+
+    page.run_task(on_mount)
+
     route_change(page.route)

@@ -237,7 +237,7 @@ def main(page: ft.Page):
                 controls=[
                     ft.Button(
                         icon=ft.Icons.EDIT,
-                        bgcolor=ft.Colors.GREEN_50,
+                        bgcolor=ft.Colors.PRIMARY_FIXED_DIM,
                         content="手动点歌",
                         on_click=handle_create_click,
                     ),

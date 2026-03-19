@@ -168,8 +168,8 @@ def bilibili_container(page: ft.Page):
                         ft.DataCell(content=ft.Text(item.uid)),
                         ft.DataCell(content=ft.Text("启用" if item.enable else "禁用")),
                         ft.DataCell(content=ft.Row(controls=[
-                            ft.Button(icon=ft.Icons.REFRESH, content="启用/禁用", bgcolor=ft.Colors.GREEN_400, data={"id": item.id, "enable": not item.enable}, on_click=on_status_click),
-                            ft.Button(icon=ft.Icons.DELETE, content="删除", bgcolor=ft.Colors.RED, data=item.id, on_click=on_delete_click)
+                            ft.Button(icon=ft.Icons.REFRESH, content="启用/禁用", bgcolor=ft.Colors.GREEN_400, color=ft.Colors.WHITE, data={"id": item.id, "enable": not item.enable}, on_click=on_status_click),
+                            ft.Button(icon=ft.Icons.DELETE, content="删除", bgcolor=ft.Colors.RED, color=ft.Colors.WHITE, data=item.id, on_click=on_delete_click)
                         ]))
                     ]
                 )

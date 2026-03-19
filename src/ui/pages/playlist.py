@@ -242,6 +242,7 @@ def main(page: ft.Page):
                                     data=playlist,
                                     content="编辑",
                                     bgcolor=ft.Colors.CYAN,
+                                    color=ft.Colors.WHITE,
                                     on_click=handle_create_or_edit,
                                 ),
                                 ft.Button(
@@ -249,6 +250,7 @@ def main(page: ft.Page):
                                     data=playlist.id,
                                     content="删除",
                                     bgcolor=ft.Colors.RED,
+                                    color=ft.Colors.WHITE,
                                     on_click=handle_delete_click,
                                 ),
                             ]
@@ -453,6 +455,7 @@ def main(page: ft.Page):
                                         data=item,
                                         content="编辑",
                                         bgcolor=ft.Colors.CYAN,
+                                        color=ft.Colors.WHITE,
                                         on_click=handle_create_or_edit,
                                     ),
                                     ft.Button(
@@ -460,6 +463,7 @@ def main(page: ft.Page):
                                         data=item.id,
                                         content="删除",
                                         bgcolor=ft.Colors.RED,
+                                        color=ft.Colors.WHITE,
                                         on_click=handle_delete_click,
                                     ),
                                 ]
@@ -513,6 +517,7 @@ def main(page: ft.Page):
                     ft.Button(
                         icon=ft.Icons.ADD,
                         bgcolor=ft.Colors.CYAN,
+                        color=ft.Colors.WHITE,
                         content="新建歌曲",
                         data=None,
                         on_click=handle_create_or_edit,
@@ -520,6 +525,7 @@ def main(page: ft.Page):
                     ft.Button(
                         icon=ft.Icons.DELETE,
                         bgcolor=ft.Colors.RED_300,
+                        color=ft.Colors.WHITE,
                         content="删除所选",
                         disabled=not data_table.data,
                         on_click=handle_delete_select,
@@ -528,12 +534,14 @@ def main(page: ft.Page):
                     ft.Button(
                         icon=ft.Icons.UPLOAD,
                         bgcolor=ft.Colors.AMBER,
+                        color=ft.Colors.WHITE,
                         content="导入歌单",
                         on_click=handle_import_click,
                     ),
                     ft.Button(
                         icon=ft.Icons.DOWNLOAD,
                         bgcolor=ft.Colors.GREEN,
+                        color=ft.Colors.WHITE,
                         content="导出歌单",
                         on_click=handle_export_click,
                     ),
