@@ -26,6 +26,7 @@ async def main(page: ft.Page):
     page.fonts = {"AlibabaPuHuiTi": resource_path("fonts/AlibabaPuHuiTi-Medium.ttf")}
     page.theme = ft.Theme(
         appbar_theme=ft.AppBarTheme(bgcolor=ft.Colors.PINK_ACCENT_200, shadow_color=ft.Colors.GREY_800),
+        button_theme=ft.ButtonTheme(style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), color=ft.Colors.WHITE)),
         color_scheme=ft.ColorScheme(primary=ft.Colors.PINK),
         color_scheme_seed=ft.Colors.PINK,
         dialog_theme=ft.DialogTheme(shadow_color=ft.Colors.ON_SURFACE_VARIANT),

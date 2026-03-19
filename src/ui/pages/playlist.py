@@ -13,6 +13,7 @@ def main(page: ft.Page):
     height = page.window.height
 
     keyword_text = Ref[ft.TextField]()
+    delete_all_btn = Ref[ft.Button]()
     data_table: ftd.DataTable2 | None = None
 
     _page = Ref[ft.Text]()
@@ -113,6 +114,51 @@ def main(page: ft.Page):
             ),
         )
 
+    def handle_row_selection_change(e: ft.Event[ftd.DataRow2]):
+        """
+        单选某行
+        """
+        e.control.selected = not e.control.selected
+        delete_all_btn.current.disabled = len([row for row in data_table.rows if row.selected]) == 0
+        delete_all_btn.current.bgcolor = ft.Colors.RED if delete_all_btn.current.disabled else ft.Colors.RED_300
+        page.update()
+
+    def handle_row_selection_all(e: ft.Event[ftd.DataTable2]):
+        """
+        全选/反选
+        """
+        delete_all_btn.current.disabled = not e.data
+        delete_all_btn.current.bgcolor = ft.Colors.RED if e.data else ft.Colors.RED_300
+        for _, row in enumerate(e.control.rows):
+            row.selected = e.data
+        page.update()
+
+    def handle_delete_select(e: ft.Event[ft.Button]):
+        """
+        删除所选
+        """
+        async def delete():
+            ids = [row.data for row in data_table.rows if row.selected]
+            result = await async_worker.run_db_operation(db.delete_playlist(ids))
+            if result > 0:
+                page.pop_dialog()
+                ModernToast.success(page, "删除成功")
+                await set_page(p=1)
+            else:
+                page.pop_dialog()
+                ModernToast.warning(page, "删除失败")
+
+        page.show_dialog(ft.AlertDialog(
+            title=ft.Text("提示"),
+            content=ft.Text("是否删除所选？"),
+            actions=[
+                ft.TextButton("取消", on_click=lambda ee: page.pop_dialog()),
+                ft.TextButton(
+                    "删除", on_click=lambda ee: async_worker.submit(delete())
+                )
+            ]
+        ))
+
     def handle_delete_click(e: ft.Event[ft.Button]):
         """
         删除事件
@@ -126,7 +172,6 @@ def main(page: ft.Page):
                 await set_page(p=1)
             else:
                 page.pop_dialog()
-                page.show_dialog(ft.SnackBar("删除失败"))
                 ModernToast.warning(page, "删除失败")
 
         page.show_dialog(
@@ -196,14 +241,14 @@ def main(page: ft.Page):
                                     icon=ft.Icons.EDIT,
                                     data=playlist,
                                     content="编辑",
-                                    style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.CYAN, color=ft.Colors.WHITE),
+                                    bgcolor=ft.Colors.CYAN,
                                     on_click=handle_create_or_edit,
                                 ),
                                 ft.Button(
                                     icon=ft.Icons.DELETE,
                                     data=playlist.id,
                                     content="删除",
-                                    style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.RED, color=ft.Colors.WHITE),
+                                    bgcolor=ft.Colors.RED,
                                     on_click=handle_delete_click,
                                 ),
                             ]
@@ -391,6 +436,7 @@ def main(page: ft.Page):
         for item in playlist_list:
             data_rows.append(
                 ftd.DataRow2(
+                    on_select_change=handle_row_selection_change,
                     data=item.id,
                     specific_row_height=50,
                     cells=[
@@ -406,14 +452,14 @@ def main(page: ft.Page):
                                         icon=ft.Icons.EDIT,
                                         data=item,
                                         content="编辑",
-                                        style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.CYAN, color=ft.Colors.WHITE),
+                                        bgcolor=ft.Colors.CYAN,
                                         on_click=handle_create_or_edit,
                                     ),
                                     ft.Button(
                                         icon=ft.Icons.DELETE,
                                         data=item.id,
                                         content="删除",
-                                        style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.RED, color=ft.Colors.WHITE),
+                                        bgcolor=ft.Colors.RED,
                                         on_click=handle_delete_click,
                                     ),
                                 ]
@@ -425,11 +471,12 @@ def main(page: ft.Page):
         return data_rows
 
     data_table = ftd.DataTable2(
+        show_checkbox_column=True,
         heading_row_color=ft.Colors.SECONDARY_CONTAINER,
         bottom_margin=10,
-        visible_vertical_scroll_bar=True,
         columns=generate_columns(),
         rows=[],
+        on_select_all=handle_row_selection_all
     )
 
     async def handle_search_click(e: ft.Event[ft.Button]):
@@ -448,7 +495,7 @@ def main(page: ft.Page):
                     ft.TextField(label="关键词", ref=keyword_text),
                     ft.Button(
                         icon=ft.Icons.SEARCH,
-                        style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.PRIMARY_FIXED_DIM, color=ft.Colors.WHITE),
+                        bgcolor=ft.Colors.PRIMARY_FIXED_DIM,
                         content="搜索",
                         on_click=handle_search_click,
                     ),
@@ -465,20 +512,28 @@ def main(page: ft.Page):
                 controls=[
                     ft.Button(
                         icon=ft.Icons.ADD,
-                        style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.CYAN, color=ft.Colors.WHITE),
+                        bgcolor=ft.Colors.CYAN,
                         content="新建歌曲",
                         data=None,
                         on_click=handle_create_or_edit,
                     ),
                     ft.Button(
+                        icon=ft.Icons.DELETE,
+                        bgcolor=ft.Colors.RED_300,
+                        content="删除所选",
+                        disabled=not data_table.data,
+                        on_click=handle_delete_select,
+                        ref=delete_all_btn,
+                    ),
+                    ft.Button(
                         icon=ft.Icons.UPLOAD,
-                        style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.AMBER, color=ft.Colors.WHITE),
+                        bgcolor=ft.Colors.AMBER,
                         content="导入歌单",
                         on_click=handle_import_click,
                     ),
                     ft.Button(
                         icon=ft.Icons.DOWNLOAD,
-                        style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.GREEN, color=ft.Colors.WHITE),
+                        bgcolor=ft.Colors.GREEN,
                         content="导出歌单",
                         on_click=handle_export_click,
                     ),

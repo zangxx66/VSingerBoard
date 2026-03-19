@@ -44,7 +44,7 @@ def settings_container(page: ft.Page):
                     ft.Switch(label="桌面通知", ref=notify_switch, value=False),
                     ft.Switch(label="自动检查更新", ref=update_switch, value=False),
                     ft.Switch(label="开机启动", ref=startup_switch, value=False),
-                    ft.Button("保存", style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.PRIMARY_FIXED_DIM), on_click=on_save_click)
+                    ft.Button("保存", bgcolor=ft.Colors.PRIMARY_FIXED_DIM, on_click=on_save_click)
                 ]
             )
         )

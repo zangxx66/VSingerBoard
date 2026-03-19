@@ -237,28 +237,19 @@ def main(page: ft.Page):
                 controls=[
                     ft.Button(
                         icon=ft.Icons.EDIT,
-                        style=ft.ButtonStyle(
-                            shape=ft.ContinuousRectangleBorder(radius=30),
-                            bgcolor=ft.Colors.PINK_50,
-                        ),
+                        bgcolor=ft.Colors.GREEN_50,
                         content="手动点歌",
                         on_click=handle_create_click,
                     ),
                     ft.Button(
                         icon=ft.Icons.DOWNLOAD,
-                        style=ft.ButtonStyle(
-                            shape=ft.ContinuousRectangleBorder(radius=30),
-                            bgcolor=ft.Colors.PINK_50,
-                        ),
+                        bgcolor=ft.Colors.PINK_50,
                         content="导出列表",
                         on_click=handle_export_click,
                     ),
                     ft.Button(
                         icon=ft.Icons.DELETE,
-                        style=ft.ButtonStyle(
-                            shape=ft.ContinuousRectangleBorder(radius=30),
-                            bgcolor=ft.Colors.PINK_50,
-                        ),
+                        bgcolor=ft.Colors.RED_50,
                         content="清除列表",
                         on_click=on_clear,
                     ),

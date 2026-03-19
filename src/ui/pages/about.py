@@ -28,10 +28,7 @@ def main(page: ft.Page):
             ft.Button(
                 icon=ft.Icons.CHECK,
                 content="检查更新",
-                style=ft.ButtonStyle(
-                    shape=ft.ContinuousRectangleBorder(radius=30),
-                    bgcolor=ft.Colors.PRIMARY_FIXED_DIM,
-                ),
+                bgcolor=ft.Colors.PRIMARY_FIXED_DIM,
             ),
         ],
     )
@@ -43,33 +40,21 @@ def main(page: ft.Page):
                 icon=ft.Icons.CODE,
                 content="GitHub仓库",
                 data="github",
-                style=ft.ButtonStyle(
-                    shape=ft.ContinuousRectangleBorder(radius=30),
-                    bgcolor=ft.Colors.BLACK_38,
-                    color=ft.Colors.WHITE,
-                ),
+                bgcolor=ft.Colors.BLACK_38,
                 on_click=handle_click,
             ),
             ft.Button(
                 icon=ft.Icons.HOME_FILLED,
                 content="作者主页",
                 data="bilibili",
-                style=ft.ButtonStyle(
-                    shape=ft.ContinuousRectangleBorder(radius=30),
-                    bgcolor=ft.Colors.PINK_ACCENT_200,
-                    color=ft.Colors.WHITE,
-                ),
+                bgcolor=ft.Colors.PINK_ACCENT_200,
                 on_click=handle_click,
             ),
             ft.Button(
                 icon=ft.Icons.FEEDBACK,
                 content="问题反馈",
                 data="feedback",
-                style=ft.ButtonStyle(
-                    shape=ft.ContinuousRectangleBorder(radius=30),
-                    bgcolor=ft.Colors.GREEN,
-                    color=ft.Colors.WHITE,
-                ),
+                bgcolor=ft.Colors.GREEN,
                 on_click=handle_click,
             ),
         ],

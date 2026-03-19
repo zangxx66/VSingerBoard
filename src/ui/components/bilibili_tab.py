@@ -55,7 +55,7 @@ def bilibili_container(page: ft.Page):
                     ft.TextField(label="用户等级", ref=user_lv_text, input_filter=ft.InputFilter(regex_string=r"^\d+$")),
                     ft.TextField(label="点歌指令", ref=sing_prefix_text),
                     ft.TextField(label="点歌cd", ref=sing_cd_text, input_filter=ft.InputFilter(regex_string=r"^\d+$")),
-                    ft.Button(content="保存", style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.PRIMARY_FIXED_DIM), on_click=on_save_click)
+                    ft.Button(content="保存", bgcolor=ft.Colors.PRIMARY_FIXED_DIM, on_click=on_save_click)
                 ]
             )
         )
@@ -132,7 +132,7 @@ def bilibili_container(page: ft.Page):
             padding=ft.Padding(left=24),
             content=ft.Column(
                 controls=[
-                    ft.Button(icon=ft.Icons.ADD, content="新建账号", style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.PRIMARY_FIXED_DIM), on_click=on_add_cred_click),
+                    ft.Button(icon=ft.Icons.ADD, content="新建账号", bgcolor=ft.Colors.PRIMARY_FIXED_DIM, on_click=on_add_cred_click),
                     ft.Text(value="未登录账号无法获取到弹幕用户昵称等信息，如有需要可添加一个小号",
                             size=20,
                             text_align=ft.TextAlign.CENTER,
@@ -168,8 +168,8 @@ def bilibili_container(page: ft.Page):
                         ft.DataCell(content=ft.Text(item.uid)),
                         ft.DataCell(content=ft.Text("启用" if item.enable else "禁用")),
                         ft.DataCell(content=ft.Row(controls=[
-                            ft.Button(icon=ft.Icons.REFRESH, content="启用/禁用", style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.GREEN_200, color=ft.Colors.WHITE), data={"id": item.id, "enable": not item.enable}, on_click=on_status_click),
-                            ft.Button(icon=ft.Icons.DELETE, content="删除", style=ft.ButtonStyle(shape=ft.ContinuousRectangleBorder(radius=30), bgcolor=ft.Colors.RED, color=ft.Colors.WHITE), data=item.id, on_click=on_delete_click)
+                            ft.Button(icon=ft.Icons.REFRESH, content="启用/禁用", bgcolor=ft.Colors.GREEN_400, data={"id": item.id, "enable": not item.enable}, on_click=on_status_click),
+                            ft.Button(icon=ft.Icons.DELETE, content="删除", bgcolor=ft.Colors.RED, data=item.id, on_click=on_delete_click)
                         ]))
                     ]
                 )
