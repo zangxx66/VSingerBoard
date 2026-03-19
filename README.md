@@ -29,11 +29,6 @@
 ![image](doc/1.png)
 ![image](doc/2.png)
 ![image](doc/3.png)
-![image](doc/4.png)
-![image](doc/5.png)
-![image](doc/6.png)
-![image](doc/7.png)
-![image](doc/8.png)
 
 ## 🛠️ 技术栈
 
