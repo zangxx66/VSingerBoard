@@ -9,6 +9,7 @@ def main(page: ft.Page):
         route="/settings",
         controls=[
             ft.Card(
+                margin=ft.Margin.only(left=10, right=10),
                 content=ft.Tabs(
                     length=3,
                     content=ft.Column(

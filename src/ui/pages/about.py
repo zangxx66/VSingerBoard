@@ -73,6 +73,7 @@ def main(page: ft.Page):
     )
 
     main_container = ft.Card(
+        margin=ft.Margin.only(left=10, right=10),
         height=page.height,
         content=ft.Column(
             alignment=ft.MainAxisAlignment.CENTER,

@@ -84,6 +84,7 @@ def main(page: ft.Page):
         return ft.Card(
             shadow_color=ft.Colors.ON_SURFACE_VARIANT,
             shape=ft.RoundedRectangleBorder(radius=4),
+            margin=ft.Margin.only(left=10, right=10),
             height=50,
             align=ft.Alignment.CENTER,
             content=ft.Row(
@@ -494,6 +495,7 @@ def main(page: ft.Page):
         创建搜索 container
         """
         return ft.Card(
+            margin=ft.Margin.only(left=10, right=10),
             content=ft.Row(
                 controls=[
                     ft.TextField(label="关键词", ref=keyword_text),
@@ -512,6 +514,7 @@ def main(page: ft.Page):
         创建按钮
         """
         return ft.Container(
+            margin=ft.Margin.only(left=10, right=10),
             content=ft.Row(
                 controls=[
                     ft.Button(
@@ -558,7 +561,7 @@ def main(page: ft.Page):
             ft.Divider(),
             create_action_container(),
             ft.Divider(),
-            ft.Card(content=data_table, height=int(height * 0.6)),
+            ft.Card(content=data_table, height=int(height * 0.6), margin=ft.Margin.only(left=10, right=10)),
             ft.Divider(),
             create_paging(),
         ],

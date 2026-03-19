@@ -181,6 +181,7 @@ def main(page: ft.Page):
         搜索 container
         """
         return ft.Container(
+            margin=ft.Margin.only(left=10, right=10),
             content=ft.Row(
                 controls=[
                     ft.TextField(label="歌名", ref=song_name_text),
@@ -247,6 +248,7 @@ def main(page: ft.Page):
         return ft.Card(
             shadow_color=ft.Colors.ON_SURFACE_VARIANT,
             height=int(height * 0.65),
+            margin=ft.Margin.only(left=10, right=10),
             content=ft.ListView(
                 ref=list_view,
                 on_scroll=handle_scroll,
@@ -263,6 +265,7 @@ def main(page: ft.Page):
         """
         return ft.Container(
             height=50,
+            margin=ft.Margin.only(left=10, right=10),
             align=ft.Alignment.CENTER,
             content=ft.Row(
                 margin=ft.Margin(left=24),

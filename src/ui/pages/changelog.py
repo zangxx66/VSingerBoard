@@ -36,6 +36,7 @@ def main(page: ft.Page):
         route="/changelog",
         controls=[
             ft.Card(
+                margin=ft.Margin.only(left=10, right=10),
                 content=ft.ListView(
                     padding=ft.Padding.all(24),
                     spacing=8,

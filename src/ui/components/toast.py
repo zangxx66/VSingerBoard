@@ -38,11 +38,11 @@ class ModernToast:
         column.top = column.bottom = column.left = column.right = None
 
         if "top" in position:
-            column.top = 20
+            column.top = 70
         elif "bottom" in position:
             column.bottom = 20
         else:
-            column.top = 50
+            column.top = 70
 
         if "left" in position:
             column.left = 20

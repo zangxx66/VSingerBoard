@@ -220,6 +220,7 @@ def main(page: ft.Page):
         生成主视图
         """
         return ft.Card(
+            margin=ft.Margin.only(left=10, right=10),
             shadow_color=ft.Colors.ON_SURFACE_VARIANT,
             height=int(height * 0.8),
             content=list_view,
@@ -231,6 +232,7 @@ def main(page: ft.Page):
         """
         return ft.Container(
             height=50,
+            margin=ft.Margin.only(left=10, right=10),
             align=ft.Alignment.CENTER,
             content=ft.Row(
                 margin=ft.Margin(left=24),
