@@ -15,11 +15,19 @@ def main(page: ft.Page):
         else:
             await url_launcher.launch_url("https://space.bilibili.com/909267")
 
-    logo = ft.Container(
-        content=ft.Image(src=resource_path("icons/logo.png"), width=128, height=128)
+    logo = ft.Row(
+        alignment=ft.MainAxisAlignment.CENTER,
+        controls=[
+            ft.Image(src=resource_path("icons/logo.png"), width=128, height=128)
+        ]
     )
 
-    title = ft.Container(content=ft.Text(value="点歌姬", size=20))
+    title = ft.Row(
+        alignment=ft.MainAxisAlignment.CENTER,
+        controls=[
+            ft.Text(value="点歌姬", size=20)
+        ]
+    )
 
     ver = ft.Row(
         alignment=ft.MainAxisAlignment.CENTER,
@@ -41,7 +49,7 @@ def main(page: ft.Page):
                 icon=ft.Icons.CODE,
                 content="GitHub仓库",
                 data="github",
-                bgcolor=ft.Colors.BLACK_38,
+                bgcolor=ft.Colors.GREY_400,
                 color=ft.Colors.WHITE,
                 on_click=handle_click,
             ),
@@ -64,9 +72,21 @@ def main(page: ft.Page):
         ],
     )
 
+    main_container = ft.Card(
+        height=page.height,
+        content=ft.Column(
+            alignment=ft.MainAxisAlignment.CENTER,
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            controls=[
+                logo,
+                title,
+                ver,
+                actions
+            ]
+        )
+    )
+
     return ft.View(
         route="/about",
-        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-        vertical_alignment=ft.MainAxisAlignment.CENTER,
-        controls=[logo, title, ver, actions],
+        controls=[main_container],
     )

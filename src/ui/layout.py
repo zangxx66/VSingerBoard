@@ -15,6 +15,7 @@ from src.database import Db as db
 async def main(page: ft.Page):
     page.title = "点歌姬"
 
+    # flet 属性初始设置
     page.window.width = int(1920 * .8)
     page.window.height = int(1080 * .8)
     page.window.full_screen = False
@@ -35,17 +36,22 @@ async def main(page: ft.Page):
         font_family="AlibabaPuHuiTi",
     )
 
+    # AppBar，抽屉导航，系统主题设置
     app_bar: AppBar | None = None
     drawer: NavigationDrawer | None = None
     global_config: globalfigItem | None = None
     theme_destination = Ref[ft.NavigationDrawerDestination]()
 
+    # 事件分发器
     event_bus = EventEmitter()
     message_handler = MessageManager(event_bus)
     page.data = {"message_handler": message_handler}
     message_handler.start()
 
     def on_notify(msg: dict[str, bool]):
+        """
+        toast 通知
+        """
         def show_toast():
             if msg["is_connect"]:
                 ModernToast.success(
@@ -61,14 +67,27 @@ async def main(page: ft.Page):
 
     event_bus.on("on_status_change", on_notify)
 
+    def handle_keyboard(e: ft.KeyboardEvent):
+        if e.key == "Escape":
+            return
+
     def handle_minimized_window(e: ft.Event[ft.IconButton]):
+        """
+        最小化
+        """
         page.window.minimized = True
 
     async def handle_exit(e: ft.Event[ft.TextButton]):
+        """
+        退出应用
+        """
         await message_handler.stop()
         await page.window.close()
 
     async def handle_close_window(e: ft.Event[ft.IconButton]):
+        """
+        退出确认
+        """
         page.show_dialog(ft.AlertDialog(
             title=ft.Text("提示"),
             content=ft.Text("是否退出？"),
@@ -79,6 +98,9 @@ async def main(page: ft.Page):
         ))
 
     async def handle_theme_switch():
+        """
+        切换主题
+        """
         result = await db.add_or_update_gloal_config(**{"id": global_config.id, "dark_mode": not global_config.dark_mode})
         if result == 0:
             ModernToast.warning(page, "切换失败")
@@ -91,6 +113,9 @@ async def main(page: ft.Page):
             ModernToast.success(page, "切换成功")
 
     async def on_mount():
+        """
+        初始化主题
+        """
         nonlocal global_config
         global_config = await db.get_gloal_config()
         if global_config:
@@ -105,9 +130,15 @@ async def main(page: ft.Page):
         theme_destination.current.selected_icon = ft.Icons.DARK_MODE if global_config.dark_mode else ft.Icons.LIGHT_MODE
 
     async def handle_show_drawer():
+        """
+        打开抽屉导航
+        """
         await page.show_drawer()
 
     async def handle_drawer_change(e: ft.Event[ft.NavigationDrawer]):
+        """
+        抽屉导航点击事件
+        """
         match e.control.selected_index:
             case 0:
                 await page.push_route("/")
@@ -220,6 +251,7 @@ async def main(page: ft.Page):
 
     page.on_route_change = route_change
     page.on_view_pop = view_pop
+    page.on_keyboard_event = handle_keyboard
 
     page.run_task(on_mount)
 

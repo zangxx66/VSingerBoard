@@ -12,7 +12,7 @@ logger.setLevel(logging.DEBUG)
 
 # flet 日志级别
 flet_logger = logging.getLogger("flet")
-flet_logger.setLevel(logging.INFO)
+flet_logger.setLevel(logging.DEBUG)
 
 file_handle = logging.handlers.TimedRotatingFileHandler(dir_path, when="midnight", interval=1, backupCount=30, encoding="utf-8")
 file_formatter = logging.Formatter(fmt="[%(asctime)s][%(levelname)s][%(module)s][%(funcName)s][%(lineno)d] - %(message)s", datefmt="%Y-%m-%d  %H:%M:%S")

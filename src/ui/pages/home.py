@@ -179,7 +179,7 @@ def main(page: ft.Page):
                 controls=[
                     ft.ListTile(
                         leading=ft.Icon(ft.Icons.ACCOUNT_CIRCLE),
-                        bgcolor=ft.Colors.PRIMARY_FIXED_DIM,
+                        bgcolor=ft.Colors.PRIMARY_CONTAINER,
                         shape=ft.RoundedRectangleBorder(radius=15),
                         title=item.uname,
                         subtitle=item.msg,
