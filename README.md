@@ -44,19 +44,24 @@
 ```
 .
 ├── assets/                   # 静态资源 (图标、字体、JS 签名库等)
+├── doc/                      # 项目文档与截图
+├── hooks/                    # PyInstaller 打包与运行时钩子
 ├── src/                      # 核心源码
-│   ├── database/             # 数据模型与数据库操作封装
-│   ├── douyin/               # 抖音协议适配与签名逻辑
-│   ├── live/                 # 直播平台适配器实现
-│   ├── manager/              # 生命周期、服务器与订阅管理器
+│   ├── database/             # 数据模型与 Tortoise-ORM 封装
+│   ├── douyin/               # 抖音协议适配、签名逻辑与 Protobuf 定义
+│   ├── live/                 # 直播平台 (Bilibili/抖音) 适配器实现
+│   ├── manager/              # 服务器、消息订阅与生命周期管理器
+│   ├── notifypy/             # 跨平台桌面通知封装库
 │   ├── ui/                   # Flet UI 组件与页面
-│   │   ├── components/       # 通用 UI 组件
-│   │   └── pages/            # 各功能模块页面
-│   └── utils/                # 工具函数 (日志、异步工作流、路径处理)
-├── hooks/                    # PyInstaller 打包钩子
-├── main.py                   # 应用入口
-├── pack.sh                   # 打包构建脚本
-└── pyproject.toml            # uv 项目配置文件
+│   │   ├── components/       # 业务相关 UI 组件 (如平台 Tab)
+│   │   ├── controls/         # 通用自定义控件 (分页、进度条、Toast)
+│   │   └── pages/            # 各功能模块路由页面
+│   └── utils/                # 工具函数 (日志、异步工作流、WebSocket 封装)
+├── tests/                    # 单元测试与集成测试
+├── main.py                   # 应用启动入口
+├── pack.sh                   # 多平台打包构建脚本
+├── pyproject.toml            # uv 项目配置与依赖管理
+└── VSingerBoard.spec         # PyInstaller 打包配置文件
 ```
 
 ## 🤝 开发与贡献

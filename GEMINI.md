@@ -18,13 +18,16 @@
 - **包管理**: [uv](https://docs.astral.sh/uv/)
 
 ## 关键目录结构
-- `src/ui/`: UI 层。包含 `layout.py` (主布局)、`pages/` (各功能页面) 和 `components/` (通用组件)。
-- `src/manager/`: 核心管理器。管理应用生命周期、后台任务、消息分发及订阅逻辑。
-- `src/database/`: 数据持久化。包含 `model.py` (定义模型) 和 `db.py` (封装数据库操作)。
-- `src/live/`: 直播适配层。实现各平台弹幕抓取的具体逻辑。
-- `src/utils/`: 通用工具。日志、异步工作流、路径处理（`tool.py`）等。
-- `assets/`: 静态资源（图标、字体、JS 签名库、图片等）。
-- `hooks/`: PyInstaller 打包钩子与运行时钩子。
+- `src/ui/`: UI 层。包含 `layout.py` (主布局)、`pages/` (各功能路由页面)、`components/` (业务组件) 和 `controls/` (通用自定义控件)。
+- `src/manager/`: 核心管理器。管理应用生命周期、消息分发、服务器管理及订阅逻辑。
+- `src/database/`: 数据持久化。包含 `model.py` (ORM 模型) 和 `db.py` (封装数据库 CRUD 操作)。
+- `src/live/`: 直播适配层。实现 Bilibili 和抖音弹幕抓取的具体逻辑。
+- `src/douyin/`: 抖音协议。包含签名算法、Protobuf 定义和 WebSocket 客户端实现。
+- `src/notifypy/`: 通知模块。跨平台桌面弹幕/系统通知封装。
+- `src/utils/`: 通用工具。日志、异步工作流、路径处理（`tool.py`）、事件驱动与 WebSocket 基础封装。
+- `assets/`: 静态资源（图标、字体、抖音签名 JS、图片及 macOS 通知存根等）。
+- `hooks/`: PyInstaller 钩子。处理打包时的资源收集与运行时路径修正。
+- `tests/`: 测试目录。包含各模块的单元测试与集成测试。
 
 ## 开发规范与约定
 1. **异步优先**: 核心业务逻辑必须使用 `async/await`，确保 UI 线程不被阻塞。
