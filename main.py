@@ -1,54 +1,38 @@
-import sys
 import os
-import time
-import webview
-from src.utils import logger, async_worker, generate_ts_api
-from src.manager import gui_manager, lifecycle, server_manager, version_manager, subscribe_manager
-from src.jsBridge import Api
-
-
-def main():
-    logger.info("------ Application Startup ------")
-
-    # 注册信号处理
-    lifecycle.setup_signal_handlers()
-
-    # 启动异步任务
-    async_worker.start()
-
-    async_worker.submit(subscribe_manager.start_subscribe())
-
-    # 启动FastApi
-    server_manager.start_http_server()
-
-    DEBUG = not getattr(sys, "frozen", False)
-    if DEBUG:
-        version_manager.update_build()
-        generate_ts_api()
-        # 启动Vite
-        server_manager.start_vite_server()
-        time.sleep(3)
-
-    # 启动websocket
-    server_manager.start_websocket_server()
-    server_manager.start_network_check()
-
-    api = Api()
-    window = gui_manager.create_window(DEBUG, api)
-    window.events.closing += lifecycle.on_closing
-    gui_manager.setup_tray(window)
-    webview.start(gui_manager.on_start, window, debug=DEBUG, user_agent="pywebview")
+import sys
+import flet as ft
+from src.utils import logger, async_worker
+from src.ui.layout import main
+from src.manager import (
+    start_websocket_server,
+    stop_all_servers,
+    start_subscribe,
+    stop_subscribe,
+)
 
 
 def run_app():
+    logger.info("------ Application Startup ------")
+
     try:
-        main()
+        if sys.platform == "win32":
+            import asyncio
+
+            asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
+
+        async_worker.start()
+        async_worker.submit(start_subscribe())
+
+        start_websocket_server()
+
+        ft.run(main, name="VSingerBoard", assets_dir="assets")
     except Exception as ex:
         logger.exception(ex)
     finally:
-        subscribe_manager.stop_subscribe()
-        lifecycle.on_closing()
+        stop_subscribe()
+        stop_all_servers()
         async_worker.stop()
+        logger.info("------ Application Stop ------")
         os._exit(0)
 
 

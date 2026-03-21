@@ -1,7 +1,7 @@
 import os
+import sys
 import pathlib
 import subprocess
-import sys
 
 from src.utils import logger, resource_path, get_support_dir
 from ..exceptions import BinaryNotFound, InvalidMacOSNotificator
@@ -60,14 +60,8 @@ class MacOSNotifier(BaseNotifier):
     def _find_bundled_notificator():
         """Gets the bundled Notifcator"""
         try:
-            if getattr(sys, "frozen", False):
-                current_bundled = os.path.join(
-                    get_support_dir(),
-                    "Notificator.app",
-                    "Contents",
-                    "MacOS",
-                    "applet",
-                )
+            if hasattr(sys, "_MEIPASS"):
+                current_bundled = os.path.join(get_support_dir(), "Notificator.app")
             else:
                 current_bundled = os.path.join(
                     resource_path("Notificator.app"),
@@ -117,7 +111,7 @@ class MacOSNotifier(BaseNotifier):
 
             if notification_audio:
 
-                if self._afplay_binary == False:
+                if not self._afplay_binary:
                     raise BinaryNotFound("afplay")
 
                 subprocess.Popen(

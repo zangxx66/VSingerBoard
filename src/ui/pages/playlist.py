@@ -1,0 +1,505 @@
+import time
+import io
+import pandas as pd
+import flet_datatable2 as ftd
+import flet as ft
+from flet import Ref
+from src.utils import PlaylistItem, async_worker, logger
+from src.database import Db as db
+from ..controls import NProgress, ModernToast, Pagination
+
+
+def main(page: ft.Page):
+    height = page.window.height
+
+    keyword_text = Ref[ft.TextField]()
+    delete_all_btn = Ref[ft.Button]()
+    pagination = Ref[Pagination]()
+    data_table: ftd.DataTable2 | None = None
+
+    total = 0
+
+    async def load_data(current_page: int):
+        """
+        获取数据
+        """
+        nonlocal total
+        NProgress.start(page)
+        keyword = keyword_text.current.value if keyword_text.current else None
+        count, songs = await async_worker.run_db_operation(
+            db.get_playlist_page(keyword, current_page, 20)
+        )
+        total = count
+        pagination.current.total = total
+        data_table.rows = generate_rows(songs)
+        NProgress.stop(page)
+        page.update()
+
+    async def handle_paging(e: ft.Event[Pagination]):
+        await load_data(e.control.data)
+
+    def create_paging():
+        """
+        创建分页器
+        """
+        return Pagination(
+            shadow_color=ft.Colors.ON_SURFACE_VARIANT,
+            shape=ft.RoundedRectangleBorder(radius=4),
+            margin=ft.Margin.only(left=10, right=10),
+            height=50,
+            align=ft.Alignment.CENTER,
+            total=total,
+            size=20,
+            ref=pagination,
+            on_page_change=handle_paging,
+        )
+
+    def handle_row_selection_change(e: ft.Event[ftd.DataRow2]):
+        """
+        单选某行
+        """
+        e.control.selected = not e.control.selected
+        delete_all_btn.current.disabled = len([row for row in data_table.rows if row.selected]) == 0
+        delete_all_btn.current.bgcolor = ft.Colors.RED if delete_all_btn.current.disabled else ft.Colors.RED_300
+        page.update()
+
+    def handle_row_selection_all(e: ft.Event[ftd.DataTable2]):
+        """
+        全选/反选
+        """
+        delete_all_btn.current.disabled = not e.data
+        delete_all_btn.current.bgcolor = ft.Colors.RED if e.data else ft.Colors.RED_300
+        for _, row in enumerate(e.control.rows):
+            row.selected = e.data
+        page.update()
+
+    def handle_delete_select(e: ft.Event[ft.Button]):
+        """
+        删除所选
+        """
+        async def delete():
+            ids = [row.data for row in data_table.rows if row.selected]
+            result = await async_worker.run_db_operation(db.delete_playlist(ids))
+            if result > 0:
+                page.pop_dialog()
+                ModernToast.success(page, "删除成功")
+                await load_data(1)
+            else:
+                page.pop_dialog()
+                ModernToast.warning(page, "删除失败")
+
+        page.show_dialog(ft.AlertDialog(
+            title=ft.Text("提示"),
+            content=ft.Text("是否删除所选？"),
+            actions=[
+                ft.TextButton("取消", on_click=lambda ee: page.pop_dialog()),
+                ft.TextButton(
+                    "删除", on_click=lambda ee: async_worker.submit(delete())
+                )
+            ]
+        ))
+
+    def handle_delete_click(e: ft.Event[ft.Button]):
+        """
+        删除事件
+        """
+        async def delete():
+            id = e.control.data
+            result = await async_worker.run_db_operation(db.delete_playlist([id]))
+            if result > 0:
+                page.pop_dialog()
+                ModernToast.success(page, "删除成功")
+                await load_data(1)
+            else:
+                page.pop_dialog()
+                ModernToast.warning(page, "删除失败")
+
+        page.show_dialog(
+            ft.AlertDialog(
+                title=ft.Text("提示"),
+                content=ft.Text("是否删除？"),
+                actions=[
+                    ft.TextButton("取消", on_click=lambda ee: page.pop_dialog()),
+                    ft.TextButton(
+                        "删除", on_click=lambda ee: async_worker.submit(delete())
+                    ),
+                ],
+            )
+        )
+
+    def handle_create_or_edit(e: ft.Event[ft.Button]):
+        """
+        创建/编辑记录
+        """
+        data = e.control.data
+        title = "编辑" if data else "新增"
+
+        async def submit():
+            if not song_name.value:
+                ModernToast.warning(page, "歌名不为空")
+                return
+            if is_sc is True:
+                if not sc_price.value or int(sc_price.value) < 30:
+                    ModernToast.warning(page, "SC最少30")
+                    return
+
+            playlist: PlaylistItem = PlaylistItem(
+                id=data.id if data else 0,
+                song_name=song_name.value,
+                singer=singer.value,
+                language=language.value,
+                tag=tag.value,
+                is_sc=bool(is_sc.value),
+                sc_price=int(sc_price.value),
+                create_time=data.create_time if data else int(time.time()),
+            )
+
+            result = await async_worker.run_db_operation(
+                db.add_or_update_playlist(**playlist.__dict__)
+            )
+            msg = f"{title}成功" if result > 0 else f"{title}失败"
+            if result > 0:
+                ModernToast.success(page, msg)
+            if result <= 0:
+                ModernToast.warning(page, msg)
+                page.pop_dialog()
+                return
+
+            new_rows = ftd.DataRow2(
+                data=result,
+                specific_row_height=50,
+                cells=[
+                    ft.DataCell(content=ft.Text(playlist.song_name)),
+                    ft.DataCell(content=ft.Text(playlist.singer)),
+                    ft.DataCell(content=ft.Text(playlist.language)),
+                    ft.DataCell(content=ft.Text(playlist.tag)),
+                    ft.DataCell(content=ft.Text(playlist.sc_price)),
+                    ft.DataCell(
+                        content=ft.Row(
+                            controls=[
+                                ft.Button(
+                                    icon=ft.Icons.EDIT,
+                                    data=playlist,
+                                    content="编辑",
+                                    bgcolor=ft.Colors.CYAN,
+                                    color=ft.Colors.WHITE,
+                                    on_click=handle_create_or_edit,
+                                ),
+                                ft.Button(
+                                    icon=ft.Icons.DELETE,
+                                    data=playlist.id,
+                                    content="删除",
+                                    bgcolor=ft.Colors.RED,
+                                    color=ft.Colors.WHITE,
+                                    on_click=handle_delete_click,
+                                ),
+                            ]
+                        )
+                    ),
+                ],
+            )
+
+            if data:
+                data_table.rows = [
+                    new_rows if item.data == data.id else item
+                    for item in data_table.rows
+                ]
+            else:
+                data_table.rows.insert(0, new_rows)
+            page.pop_dialog()
+            page.update()
+
+        page.show_dialog(
+            ft.AlertDialog(
+                title=title,
+                content=ft.Column(
+                    height=400,
+                    controls=[
+                        song_name := ft.TextField(
+                            label="歌名", value=data.song_name if data else ""
+                        ),
+                        singer := ft.TextField(
+                            label="歌手", value=data.singer if data else ""
+                        ),
+                        language := ft.TextField(
+                            label="语种", value=data.language if data else ""
+                        ),
+                        tag := ft.TextField(
+                            label="标签", value=data.tag if data else ""
+                        ),
+                        ft.Text("是否SC歌曲"),
+                        is_sc := ft.RadioGroup(
+                            value=data.is_sc if data else False,
+                            content=ft.Row(
+                                controls=[
+                                    ft.Radio(label="是", value=True),
+                                    ft.Radio(label="否", value=False),
+                                ]
+                            ),
+                        ),
+                        sc_price := ft.TextField(
+                            label="SC价格",
+                            value=data.sc_price if data else 0,
+                            input_filter=ft.InputFilter(regex_string=r"^\d+$"),
+                        ),
+                    ]
+                ),
+                actions=[
+                    ft.TextButton("取消", on_click=lambda ee: page.pop_dialog()),
+                    ft.TextButton("提交", on_click=submit),
+                ],
+            )
+        )
+
+    async def handle_import_click(e: ft.Event[ft.Button]):
+        """
+        导入列表
+        """
+        files = await ft.FilePicker().pick_files(
+            allow_multiple=False,
+            with_data=False,
+            file_type=ft.FilePickerFileType.CUSTOM,
+            allowed_extensions=["xlsx"],
+        )
+
+        if not files:
+            return
+
+        try:
+            selected = files[0]
+            df = pd.read_excel(
+                selected.path,
+                na_values="",
+                dtype={
+                    "歌曲名": str,
+                    "歌手": str,
+                    "语种": str,
+                    "标签": str,
+                    "是否SC曲目": str,
+                    "SC曲目价格": int,
+                },
+            )
+            import_list: list[PlaylistItem] = []
+            for index in range(0, len(df)):
+                import_data = {
+                    "song_name": df.iloc[index]["歌曲名"],
+                    "singer": df.iloc[index]["歌手"],
+                    "language": df.iloc[index]["语种"],
+                    "tag": df.iloc[index]["标签"] if df.iloc[index]["标签"] else None,
+                    "is_sc": True if df.iloc[index]["是否SC曲目"] == "是" else False,
+                    "sc_price": (
+                        int(df.iloc[index]["SC曲目价格"])
+                        if df.iloc[index]["SC曲目价格"]
+                        else 0
+                    ),
+                    "create_time": int(time.time()),
+                }
+                import_list.append(import_data)
+            await async_worker.run_db_operation(db.bulk_add_playlist(import_list))
+            ModernToast.success(page, "导入成功")
+            await load_data(1)
+        except Exception as ex:
+            logger.error(f"import xlsx error:{ex}")
+            ModernToast.error(page, "导入xlsx文件错误")
+
+    async def handle_export_click(e: ft.Event[ft.Button]):
+        """
+        导出列表
+        """
+        try:
+            keyword = keyword_text.current.value if keyword_text.current else None
+            _, songs = await async_worker.run_db_operation(
+                db.get_playlist_page(keyword, 1, total)
+            )
+            df_dict = {
+                "歌曲名": [item.song_name for item in songs],
+                "歌手": [item.singer for item in songs],
+                "语种": [item.language for item in songs],
+                "标签": [item.tag for item in songs],
+                "是否SC曲目": ["是" if item.is_sc else "否" for item in songs],
+                "SC曲目价格": [item.sc_price for item in songs],
+            }
+            df = pd.DataFrame(df_dict)
+            excel_buffer = io.BytesIO()
+            with pd.ExcelWriter(excel_buffer) as writer:
+                df.to_excel(writer, sheet_name="Sheet1")
+            excel_bytes = excel_buffer.getvalue()
+            file_name = f"歌单_{int(time.time())}"
+            select_path = await ft.FilePicker().save_file(
+                file_name=file_name,
+                file_type=ft.FilePickerFileType.CUSTOM,
+                allowed_extensions=["xlsx"],
+                src_bytes=excel_bytes,
+            )
+            if not select_path:
+                ModernToast.info(page, "取消导出")
+                return
+            ModernToast.success(page, "导出成功")
+        except Exception as ex:
+            logger.error(f"export xlsx error:{ex}")
+            ModernToast.error(page, "导出歌单错误")
+
+    def generate_columns():
+        """
+        生成列
+        """
+        return [
+            ftd.DataColumn2(
+                label=ft.Text("歌名"),
+                size=ftd.DataColumnSize.L,
+                heading_row_alignment=ft.MainAxisAlignment.CENTER,
+            ),
+            ftd.DataColumn2(
+                label=ft.Text("歌手"), heading_row_alignment=ft.MainAxisAlignment.CENTER
+            ),
+            ftd.DataColumn2(
+                label=ft.Text("语种"), heading_row_alignment=ft.MainAxisAlignment.CENTER
+            ),
+            ftd.DataColumn2(
+                label=ft.Text("标签"), heading_row_alignment=ft.MainAxisAlignment.CENTER
+            ),
+            ftd.DataColumn2(
+                label=ft.Text("SC曲目价格"),
+                numeric=True,
+                heading_row_alignment=ft.MainAxisAlignment.CENTER,
+            ),
+            ftd.DataColumn2(
+                label="操作", heading_row_alignment=ft.MainAxisAlignment.CENTER
+            ),
+        ]
+
+    def generate_rows(playlist_list: list[PlaylistItem]):
+        """
+        生成行
+        """
+        data_rows = []
+        for item in playlist_list:
+            data_rows.append(
+                ftd.DataRow2(
+                    on_select_change=handle_row_selection_change,
+                    data=item.id,
+                    specific_row_height=50,
+                    cells=[
+                        ft.DataCell(content=ft.Text(item.song_name)),
+                        ft.DataCell(content=ft.Text(item.singer)),
+                        ft.DataCell(content=ft.Text(item.language)),
+                        ft.DataCell(content=ft.Text(item.tag)),
+                        ft.DataCell(content=ft.Text(item.sc_price)),
+                        ft.DataCell(
+                            content=ft.Row(
+                                controls=[
+                                    ft.Button(
+                                        icon=ft.Icons.EDIT,
+                                        data=item,
+                                        content="编辑",
+                                        bgcolor=ft.Colors.CYAN,
+                                        color=ft.Colors.WHITE,
+                                        on_click=handle_create_or_edit,
+                                    ),
+                                    ft.Button(
+                                        icon=ft.Icons.DELETE,
+                                        data=item.id,
+                                        content="删除",
+                                        bgcolor=ft.Colors.RED,
+                                        color=ft.Colors.WHITE,
+                                        on_click=handle_delete_click,
+                                    ),
+                                ]
+                            )
+                        ),
+                    ],
+                )
+            )
+        return data_rows
+
+    data_table = ftd.DataTable2(
+        show_checkbox_column=True,
+        heading_row_color=ft.Colors.SECONDARY_CONTAINER,
+        bottom_margin=10,
+        columns=generate_columns(),
+        rows=[],
+        on_select_all=handle_row_selection_all
+    )
+
+    async def handle_search_click(e: ft.Event[ft.Button]):
+        """
+        搜索
+        """
+        await load_data(1)
+
+    def create_search_container():
+        """
+        创建搜索 container
+        """
+        return ft.Card(
+            margin=ft.Margin.only(left=10, right=10),
+            content=ft.Row(
+                controls=[
+                    ft.TextField(label="关键词", ref=keyword_text),
+                    ft.Button(
+                        icon=ft.Icons.SEARCH,
+                        bgcolor=ft.Colors.PRIMARY_FIXED_DIM,
+                        content="搜索",
+                        on_click=handle_search_click,
+                    ),
+                ]
+            )
+        )
+
+    def create_action_container():
+        """
+        创建按钮
+        """
+        return ft.Container(
+            margin=ft.Margin.only(left=10, right=10),
+            content=ft.Row(
+                controls=[
+                    ft.Button(
+                        icon=ft.Icons.ADD,
+                        bgcolor=ft.Colors.CYAN,
+                        color=ft.Colors.WHITE,
+                        content="新建歌曲",
+                        data=None,
+                        on_click=handle_create_or_edit,
+                    ),
+                    ft.Button(
+                        icon=ft.Icons.DELETE,
+                        bgcolor=ft.Colors.RED_300,
+                        color=ft.Colors.WHITE,
+                        content="删除所选",
+                        disabled=not data_table.data,
+                        on_click=handle_delete_select,
+                        ref=delete_all_btn,
+                    ),
+                    ft.Button(
+                        icon=ft.Icons.UPLOAD,
+                        bgcolor=ft.Colors.AMBER,
+                        color=ft.Colors.WHITE,
+                        content="导入歌单",
+                        on_click=handle_import_click,
+                    ),
+                    ft.Button(
+                        icon=ft.Icons.DOWNLOAD,
+                        bgcolor=ft.Colors.GREEN,
+                        color=ft.Colors.WHITE,
+                        content="导出歌单",
+                        on_click=handle_export_click,
+                    ),
+                ]
+            )
+        )
+
+    page.run_task(load_data, 1)
+
+    return ft.View(
+        route="/playlist",
+        controls=[
+            create_search_container(),
+            ft.Divider(),
+            create_action_container(),
+            ft.Divider(),
+            ft.Card(content=data_table, height=int(height * 0.6), margin=ft.Margin.only(left=10, right=10)),
+            ft.Divider(),
+            create_paging(),
+        ],
+    )

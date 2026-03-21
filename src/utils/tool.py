@@ -100,27 +100,24 @@ def get_version():
     return "0.0.1"
 
 
-def resource_path(relative_path, is_resources=True):
+def resource_path(relative_path: str):
     """
     获取项目中的资源文件路径
 
     Args:
         relative_path (str): 资源文件相对路径
-        is_resources (bool, optional): 是否属于 resources 目录. Defaults to True.
 
     Returns:
         str: 资源文件的完整路径
     """
-    try:
-        # PyInstaller 创建一个临时文件夹，并将路径存储在 _MEIPASS 中
-        base_path = sys._MEIPASS
-    except Exception:
-        # 未打包状态下，基路径就是项目根目录
-        base_path = os.path.abspath(".")
-    # 是否属于resources目录
-    if is_resources:
-        return os.path.join(base_path, "resources", relative_path)
-    return os.path.join(base_path, relative_path)
+    # flet pack 打包
+    if hasattr(sys, "_MEIPASS"):
+        return os.path.join(sys._MEIPASS, "assets", relative_path)
+    # flet build 打包和本地开发环境
+    default_assets_dir = Path(__file__) / "assets"
+    assets_resolve = Path(os.environ.get("FLET_ASSETS_DIR", str(default_assets_dir))).resolve()
+    resource_dir = assets_resolve / relative_path
+    return resource_dir.as_posix()
 
 
 def send_notification(title, message):
@@ -373,69 +370,3 @@ def is_internet_available(host: str = "www.baidu.com", port: int = 80, timeout: 
         return True
     except socket.error:
         return False
-
-
-def generate_ts_api():
-    """
-    自动解析 src/server/router.py 中的 FastAPI 路由定义，
-    并生成一个 TypeScript API 客户端，路径为 frontend/src/api/request.ts，
-    以匹配文件的原始风格。
-    """
-    project_root = Path(__file__).parent.parent.parent
-    router_file = project_root / "src" / "server" / "router.py"
-    output_file = project_root / "frontend" / "src" / "api" / "request.ts"
-
-    # 1. 从 router.py 解析 FastAPI 路由
-    api_endpoints = []
-    try:
-        with open(router_file, "r", encoding="utf-8") as f:
-            content = f.read()
-            # 简化版正则表达式，只捕获方法、路径和函数名
-            route_matches = re.finditer(
-                r'@router\.(get|post|put|delete)\(\s*"([^"]+)"[\s\S]+?'
-                r'async\s+def\s+(\w+)\(',
-                content
-            )
-            for match in route_matches:
-                method = match.group(1)
-                path = "/api" + match.group(2)  # 添加 /api 前缀
-                func_name = match.group(3)
-
-                api_endpoints.append({
-                    "method": method,
-                    "path": path,
-                    "func_name": func_name,
-                })
-    except Exception as e:
-        logger.debug(f"解析路由时出错: {e}")
-        return
-
-    # 2. 生成 TypeScript 代码
-    ts_code = []
-    ts_code.append('import { client } from "./client"')
-    ts_code.append('')
-
-    for endpoint in api_endpoints:
-        # 生成函数名 (snake_case to camelCase)
-        ts_func_name = re.sub(r"_([a-z])", lambda m: m.group(1).upper(), endpoint["func_name"])
-
-        # 添加 JSDoc 注释
-        ts_code.append("/**")
-        ts_code.append(f" * {endpoint['func_name']}.")
-        ts_code.append(" * @param {Object} params 传递给服务器的参数对象。")
-        ts_code.append(" * @returns {Promise<ResponseModel>} 操作的响应。")
-        ts_code.append(" */")
-        # 生成函数签名
-        ts_code.append(f'export const {ts_func_name} = async (params: object): Promise<ResponseModel> => {{')
-        # 生成函数体
-        ts_code.append(f'  return await client.{endpoint["method"]}("{endpoint["path"]}", params)')
-        ts_code.append("}")
-        ts_code.append("")
-
-    # 3. 写入文件
-    try:
-        with open(output_file, "w", encoding="utf-8") as f:
-            f.write("\n".join(ts_code))
-        logger.debug(f"成功生成 TypeScript API 客户端: {output_file}")
-    except Exception as e:
-        logger.debug(f"写入文件时出错: {e}")

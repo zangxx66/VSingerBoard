@@ -10,6 +10,10 @@ dir_path = get_path(file_name, dir_name="logs")
 logger = logging.getLogger("danmaku")
 logger.setLevel(logging.DEBUG)
 
+# flet 日志级别
+flet_logger = logging.getLogger("flet")
+flet_logger.setLevel(logging.DEBUG)
+
 file_handle = logging.handlers.TimedRotatingFileHandler(dir_path, when="midnight", interval=1, backupCount=30, encoding="utf-8")
 file_formatter = logging.Formatter(fmt="[%(asctime)s][%(levelname)s][%(module)s][%(funcName)s][%(lineno)d] - %(message)s", datefmt="%Y-%m-%d  %H:%M:%S")
 file_handle.setFormatter(file_formatter)
@@ -27,6 +31,7 @@ else:
     # 生产环境
     console_handle.setLevel(logging.INFO)
 logger.addHandler(console_handle)
+flet_logger.addHandler(console_handle)
 
 
 def exception_handle(exc_type, exc_obj, exc_traceback):
