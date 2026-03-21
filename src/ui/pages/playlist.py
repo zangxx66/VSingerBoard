@@ -6,7 +6,7 @@ import flet as ft
 from flet import Ref
 from src.utils import PlaylistItem, async_worker, logger
 from src.database import Db as db
-from ..components import NProgress, ModernToast
+from ..controls import NProgress, ModernToast, Pagination
 
 
 def main(page: ft.Page):
@@ -14,105 +14,44 @@ def main(page: ft.Page):
 
     keyword_text = Ref[ft.TextField]()
     delete_all_btn = Ref[ft.Button]()
+    pagination = Ref[Pagination]()
     data_table: ftd.DataTable2 | None = None
 
-    _page = Ref[ft.Text]()
-    pages_num = 0
     total = 0
 
-    async def load_data():
+    async def load_data(current_page: int):
         """
         获取数据
         """
-        nonlocal pages_num, total
+        nonlocal total
         NProgress.start(page)
         keyword = keyword_text.current.value if keyword_text.current else None
         count, songs = await async_worker.run_db_operation(
-            db.get_playlist_page(keyword, _page.current.value, 20)
+            db.get_playlist_page(keyword, current_page, 20)
         )
         total = count
-        pages_num = (count + 20 - 1) // 20
+        pagination.current.total = total
         data_table.rows = generate_rows(songs)
         NProgress.stop(page)
         page.update()
 
-    async def set_page(p=None, delta=0):
-        """
-        翻页事件
-        """
-        nonlocal _page
-        if p is not None:
-            _page.current.value = p
-        elif delta:
-            _page.current.value += delta
-        else:
-            return
-        await load_data()
-
-    async def next_page(e):
-        """
-        下一页
-        """
-        if _page.current.value < pages_num:
-            await set_page(delta=1)
-
-    async def prev_page(e):
-        """
-        上一页
-        """
-        if _page.current.value > 1:
-            await set_page(delta=-1)
-
-    async def goto_first_page(e):
-        """
-        首页
-        """
-        if _page.current.value > 1:
-            await set_page(p=1)
-
-    async def goto_last_page(e):
-        """
-        尾页
-        """
-        if _page.current.value != pages_num:
-            await set_page(p=pages_num)
+    async def handle_paging(e: ft.Event[Pagination]):
+        await load_data(e.control.data)
 
     def create_paging():
         """
-        创建翻页器
+        创建分页器
         """
-        return ft.Card(
+        return Pagination(
             shadow_color=ft.Colors.ON_SURFACE_VARIANT,
             shape=ft.RoundedRectangleBorder(radius=4),
             margin=ft.Margin.only(left=10, right=10),
             height=50,
             align=ft.Alignment.CENTER,
-            content=ft.Row(
-                margin=ft.Margin(left=24),
-                controls=[
-                    ft.IconButton(
-                        icon=ft.Icons.KEYBOARD_DOUBLE_ARROW_LEFT,
-                        on_click=goto_first_page,
-                        tooltip="首页",
-                    ),
-                    ft.IconButton(
-                        icon=ft.Icons.KEYBOARD_ARROW_LEFT,
-                        on_click=prev_page,
-                        tooltip="上一页",
-                    ),
-                    ft.Text(value=1, ref=_page),
-                    ft.IconButton(
-                        icon=ft.Icons.KEYBOARD_ARROW_RIGHT,
-                        on_click=next_page,
-                        tooltip="下一页",
-                    ),
-                    ft.IconButton(
-                        icon=ft.Icons.KEYBOARD_DOUBLE_ARROW_RIGHT,
-                        on_click=goto_last_page,
-                        tooltip="尾页",
-                    ),
-                ],
-            ),
+            total=total,
+            size=20,
+            ref=pagination,
+            on_page_change=handle_paging,
         )
 
     def handle_row_selection_change(e: ft.Event[ftd.DataRow2]):
@@ -144,7 +83,7 @@ def main(page: ft.Page):
             if result > 0:
                 page.pop_dialog()
                 ModernToast.success(page, "删除成功")
-                await set_page(p=1)
+                await load_data(1)
             else:
                 page.pop_dialog()
                 ModernToast.warning(page, "删除失败")
@@ -170,7 +109,7 @@ def main(page: ft.Page):
             if result > 0:
                 page.pop_dialog()
                 ModernToast.success(page, "删除成功")
-                await set_page(p=1)
+                await load_data(1)
             else:
                 page.pop_dialog()
                 ModernToast.warning(page, "删除失败")
@@ -316,7 +255,6 @@ def main(page: ft.Page):
         """
         导入列表
         """
-        nonlocal _page
         files = await ft.FilePicker().pick_files(
             allow_multiple=False,
             with_data=False,
@@ -359,8 +297,7 @@ def main(page: ft.Page):
                 import_list.append(import_data)
             await async_worker.run_db_operation(db.bulk_add_playlist(import_list))
             ModernToast.success(page, "导入成功")
-            _page.current.value = 1
-            await load_data()
+            await load_data(1)
         except Exception as ex:
             logger.error(f"import xlsx error:{ex}")
             ModernToast.error(page, "导入xlsx文件错误")
@@ -488,7 +425,7 @@ def main(page: ft.Page):
         """
         搜索
         """
-        await set_page(p=1)
+        await load_data(1)
 
     def create_search_container():
         """
@@ -552,7 +489,7 @@ def main(page: ft.Page):
             )
         )
 
-    page.run_task(load_data)
+    page.run_task(load_data, 1)
 
     return ft.View(
         route="/playlist",

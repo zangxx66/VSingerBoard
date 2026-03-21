@@ -5,7 +5,7 @@ import flet as ft
 from typing import cast
 from src.utils import DanmuInfo, logger, timespan_to_localtime
 from src.manager import MessageManager
-from ..components import ModernToast
+from ..controls import ModernToast
 
 
 def main(page: ft.Page):

@@ -3,7 +3,7 @@ from flet import Ref
 from datetime import datetime as dt
 from datetime import UTC
 from src.utils import check_for_updates, async_worker
-from ..components import NProgress
+from ..controls import NProgress
 
 
 def main(page: ft.Page):

@@ -8,8 +8,8 @@ from bilibili_api.login_v2 import QrCodeLogin, QrCodeLoginChannel
 from src.utils import BiliCredentialItem, bconfigItem, async_worker
 from src.database import Db as db
 from src.live import bili_manager
-from .progress import NProgress
-from .toast import ModernToast
+from ..controls.progress import NProgress
+from ..controls.toast import ModernToast
 
 
 def bilibili_container(page: ft.Page):

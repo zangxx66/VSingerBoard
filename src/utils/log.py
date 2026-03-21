@@ -19,7 +19,6 @@ file_formatter = logging.Formatter(fmt="[%(asctime)s][%(levelname)s][%(module)s]
 file_handle.setFormatter(file_formatter)
 file_handle.setLevel(logging.WARNING)
 logger.addHandler(file_handle)
-flet_logger.addHandler(file_handle)
 
 console_handle = logging.StreamHandler()
 console_handle.setFormatter(file_formatter)

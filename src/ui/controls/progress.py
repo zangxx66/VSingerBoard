@@ -15,8 +15,10 @@ class NProgress:
             controls=[
                 ft.Container(
                     expand=True,
-                    bgcolor=ft.Colors.WHITE,
-                    opacity=0.8
+                    margin=ft.Margin.only(top=50),
+                    height=page.window.height - 50,
+                    bgcolor=ft.Colors.with_opacity(0.8, ft.Colors.WHITE),
+                    blur=50,
                 ),
                 ft.Column(
                     controls=[ft.ProgressRing()],

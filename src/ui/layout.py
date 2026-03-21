@@ -1,6 +1,6 @@
 import flet as ft
 from flet import NavigationDrawer, Ref
-from .components import ModernToast
+from .controls import ModernToast
 from .pages.about import main as AboutView
 from .pages.changelog import main as ChangelogView
 from .pages.history import main as HistoryView
@@ -111,18 +111,15 @@ async def main(page: ft.Page):
             ModernToast.warning(page, "切换失败")
         else:
             global_config.dark_mode = not global_config.dark_mode
+            theme_icon = ft.Icons.DARK_MODE if global_config.dark_mode else ft.Icons.LIGHT_MODE
             page.theme_mode = (
                 ft.ThemeMode.DARK if global_config.dark_mode else ft.ThemeMode.LIGHT
             )
             theme_destination.current.label = (
                 "DARK" if global_config.dark_mode else "LIGHT"
             )
-            theme_destination.current.icon = (
-                ft.Icons.DARK_MODE if global_config.dark_mode else ft.Icons.LIGHT_MODE
-            )
-            theme_destination.current.selected_icon = (
-                ft.Icons.DARK_MODE if global_config.dark_mode else ft.Icons.LIGHT_MODE
-            )
+            theme_destination.current.icon = theme_icon
+            theme_destination.current.selected_icon = theme_icon
             ModernToast.success(page, "切换成功")
 
     async def on_mount():
@@ -140,13 +137,10 @@ async def main(page: ft.Page):
             global_config.id = 0
             global_config.dark_mode = False
             page.theme_mode = ft.ThemeMode.LIGHT
+        theme_icon = ft.Icons.DARK_MODE if global_config.dark_mode else ft.Icons.LIGHT_MODE
         theme_destination.current.label = "DARK" if global_config.dark_mode else "LIGHT"
-        theme_destination.current.icon = (
-            ft.Icons.DARK_MODE if global_config.dark_mode else ft.Icons.LIGHT_MODE
-        )
-        theme_destination.current.selected_icon = (
-            ft.Icons.DARK_MODE if global_config.dark_mode else ft.Icons.LIGHT_MODE
-        )
+        theme_destination.current.icon = theme_icon
+        theme_destination.current.selected_icon = theme_icon
 
     async def handle_show_drawer():
         """
@@ -251,6 +245,7 @@ async def main(page: ft.Page):
             case _:
                 pass
 
+        page.views[0].drawer = drawer
         page.views[0].padding = ft.Padding.all(0)
         page.views[0].controls.insert(
             0,
@@ -299,7 +294,6 @@ async def main(page: ft.Page):
                 ],
             ),
         )
-        page.drawer = drawer
 
     async def view_pop(view):
         page.views.pop()

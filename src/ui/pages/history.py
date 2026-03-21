@@ -1,6 +1,5 @@
 import datetime
 import time
-import threading
 import io
 import pandas as pd
 import flet as ft
@@ -13,13 +12,7 @@ from src.utils import (
     resource_path,
     timespan_to_localtime,
 )
-from ..components import NProgress, ModernToast
-
-
-_page = 1
-total = 0
-songs_rows: list[HistoryItem] = []
-sem = threading.Semaphore()
+from ..controls import NProgress, ModernToast, Pagination
 
 
 def main(page: ft.Page):
@@ -33,21 +26,20 @@ def main(page: ft.Page):
     start_date_text = Ref[ft.TextField]()
     end_date_text = Ref[ft.TextField]()
     list_view = Ref[ft.ListView]()
+    pagination = Ref[Pagination]()
 
     today = datetime.datetime.now()
 
-    async def load_data(reload: bool):
+    total = 0
+    songs_rows: list[HistoryItem] = []
+
+    async def load_data(current_page: int):
         """
         获取数据
         """
-        global _page, total, songs_rows
+        nonlocal total, songs_rows
         NProgress.start(page)
-        if reload:
-            _page = 1
-            list_view.current.controls = []
-            await list_view.current.scroll_to(offset=0)
-        else:
-            _page += 1
+
         uname = uname_text.current.value
         song_name = song_name_text.current.value
         source = source_text.current.value
@@ -65,28 +57,34 @@ def main(page: ft.Page):
         )
         total, songs = await async_worker.run_db_operation(
             db.get_song_history_page(
-                uname, song_name, source, start_time, end_time, _page, 20
+                uname, song_name, source, start_time, end_time, current_page, 20
             )
         )
-        if reload:
-            songs_rows = songs
-        else:
-            songs_rows.extend(songs)
-        list_view.current.controls = generate_list(songs_rows)
+        songs_rows = songs
+        pagination.current.total = total
+        list_view.current.controls = generate_list()
+        await list_view.current.scroll_to(offset=0)
         NProgress.stop(page)
         page.update()
 
-    async def handle_scroll(e: ft.OnScrollEvent):
+    async def handle_paging(e: ft.Event[Pagination]):
+        await load_data(e.control.data)
+
+    def create_paging():
         """
-        滚动到底部加载
+        创建分页器
         """
-        if (
-            e.pixels >= e.max_scroll_extent and len(songs_rows) < total and sem.acquire(blocking=False)
-        ):
-            try:
-                await load_data(False)
-            finally:
-                sem.release()
+        return Pagination(
+            shadow_color=ft.Colors.ON_SURFACE_VARIANT,
+            shape=ft.RoundedRectangleBorder(radius=4),
+            margin=ft.Margin.only(left=10, right=10),
+            height=50,
+            align=ft.Alignment.CENTER,
+            total=total,
+            size=20,
+            ref=pagination,
+            on_page_change=handle_paging,
+        )
 
     def handle_source_change(e: ft.Event[ft.Dropdown]):
         """
@@ -114,7 +112,7 @@ def main(page: ft.Page):
         """
         搜索
         """
-        await load_data(True)
+        await load_data(1)
 
     async def handle_export_click(e: ft.Event[ft.Button]):
         """
@@ -221,12 +219,12 @@ def main(page: ft.Page):
             )
         )
 
-    def generate_list(songs: list[HistoryItem]):
+    def generate_list():
         """
         生成列表
         """
         col_list = []
-        for item in songs:
+        for item in songs_rows:
             img_src = resource_path(f"images/{item.source}.png")
             col = ft.Column(
                 controls=[
@@ -247,11 +245,10 @@ def main(page: ft.Page):
         """
         return ft.Card(
             shadow_color=ft.Colors.ON_SURFACE_VARIANT,
-            height=int(height * 0.65),
+            height=int(height * 0.6),
             margin=ft.Margin.only(left=10, right=10),
             content=ft.ListView(
                 ref=list_view,
-                on_scroll=handle_scroll,
                 divider_thickness=1,
                 spacing=10,
                 scroll="auto",
@@ -261,10 +258,9 @@ def main(page: ft.Page):
 
     def create_actions():
         """
-        创建底部按钮
+        创建导出按钮
         """
         return ft.Container(
-            height=50,
             margin=ft.Margin.only(left=10, right=10),
             align=ft.Alignment.CENTER,
             content=ft.Row(
@@ -280,15 +276,17 @@ def main(page: ft.Page):
             ),
         )
 
-    page.run_task(load_data, True)
+    page.run_task(load_data, 1)
 
     return ft.View(
         route="/history",
         controls=[
             create_search_container(),
             ft.Divider(),
+            create_actions(),
+            ft.Divider(),
             create_main_card(),
             ft.Divider(),
-            create_actions(),
+            create_paging(),
         ],
     )

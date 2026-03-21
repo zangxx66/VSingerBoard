@@ -3,8 +3,8 @@ from flet import Ref
 from src.utils import dyconfigItem, async_worker
 from src.database import Db as db
 from src.live import douyin_manager
-from .progress import NProgress
-from .toast import ModernToast
+from ..controls.progress import NProgress
+from ..controls.toast import ModernToast
 
 
 def douyin_container(page: ft.Page):
