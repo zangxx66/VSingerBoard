@@ -40,6 +40,11 @@ async def main(page: ft.Page):
         color_scheme_seed=ft.Colors.PINK,
         dialog_theme=ft.DialogTheme(shadow_color=ft.Colors.ON_SURFACE_VARIANT),
         font_family="AlibabaPuHuiTi",
+        page_transitions=ft.PageTransitionsTheme(
+            macos=ft.PageTransitionTheme.FADE_UPWARDS,
+            windows=ft.PageTransitionTheme.FADE_UPWARDS,
+            linux=ft.PageTransitionTheme.FADE_UPWARDS
+        )
     )
 
     # 抽屉导航，系统主题设置
@@ -245,6 +250,7 @@ async def main(page: ft.Page):
             case _:
                 pass
 
+        # 在顶部insert自定义appbar和drawer
         page.views[0].drawer = drawer
         page.views[0].padding = ft.Padding.all(0)
         page.views[0].controls.insert(
@@ -259,6 +265,7 @@ async def main(page: ft.Page):
                         bgcolor=ft.Colors.PINK_ACCENT_200,
                         content=ft.IconButton(
                             ft.Icons.MENU,
+                            tooltip="打开抽屉导航",
                             on_click=handle_show_drawer,
                         ),
                     ),
@@ -304,6 +311,7 @@ async def main(page: ft.Page):
     page.on_view_pop = view_pop
     page.on_keyboard_event = handle_keyboard
 
-    page.run_task(on_mount)
+    # page.run_task(on_mount)
+    await on_mount()
 
     route_change(page.route)

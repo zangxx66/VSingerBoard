@@ -29,36 +29,53 @@ class Pagination(Card):
         self._page = 1
         self._page_num = (self.total + self.size - 1) // self.size
         self._ref_page = Ref[ft.Text]()
+        self._ref_first_page = Ref[ft.IconButton]()
+        self._ref_prev_page = Ref[ft.IconButton]()
+        self._ref_next_page = Ref[ft.IconButton]()
+        self._ref_last_page = Ref[ft.IconButton]()
         self.content = ft.Row(
             margin=ft.Margin.only(left=24),
             controls=[
                 ft.IconButton(
                     icon=ft.Icons.KEYBOARD_DOUBLE_ARROW_LEFT,
                     on_click=self._goto_first_page,
+                    ref=self._ref_first_page,
+                    disabled=True,
                     tooltip="首页"
                 ),
                 ft.IconButton(
                     icon=ft.Icons.KEYBOARD_ARROW_LEFT,
                     on_click=self._prev_page,
+                    ref=self._ref_prev_page,
+                    disabled=True,
                     tooltip="上一页",
                 ),
                 ft.Text(value=self._page, ref=self._ref_page),
                 ft.IconButton(
                     icon=ft.Icons.KEYBOARD_ARROW_RIGHT,
                     on_click=self._next_page,
+                    ref=self._ref_next_page,
+                    disabled=True,
                     tooltip="下一页",
                 ),
                 ft.IconButton(
                     icon=ft.Icons.KEYBOARD_DOUBLE_ARROW_RIGHT,
                     on_click=self._goto_last_page,
+                    ref=self._ref_last_page,
+                    disabled=True,
                     tooltip="尾页",
                 )
             ]
         )
 
     def before_update(self):
+        # control 更新前先更新属性，否则 page.update() 不会生效
         self._page_num = (self.total + self.size - 1) // self.size
         self._ref_page.current.value = self._page
+        self._ref_first_page.current.disabled = self._page == 1
+        self._ref_prev_page.current.disabled = self._page == 1
+        self._ref_next_page.current.disabled = self._page == self._page_num
+        self._ref_last_page.current.disabled = self._page == self._page_num
         return super().before_update()
 
     async def _set_page(self, p=None, delta=0):
@@ -71,6 +88,7 @@ class Pagination(Card):
         else:
             return
         self.data = self._page
+        # 判断是否异步函数
         if inspect.iscoroutinefunction(self.on_page_change):
             await self.on_page_change(ft.Event[self](name="Pagination", control=self))
         else:
