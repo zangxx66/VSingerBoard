@@ -1,6 +1,6 @@
 import flet as ft
 from flet import NavigationDrawer, Ref
-from .controls import ModernToast
+from .controls import ModernToast, MenuBar
 from .pages.about import main as AboutView
 from .pages.changelog import main as ChangelogView
 from .pages.history import main as HistoryView
@@ -77,20 +77,20 @@ async def main(page: ft.Page):
         if e.key == "Escape":
             return
 
-    def handle_minimized_window(e: ft.Event[ft.IconButton]):
+    def handle_minimized_window(_: ft.Event[ft.IconButton]):
         """
         最小化
         """
         page.window.minimized = True
 
-    async def handle_exit(e: ft.Event[ft.TextButton]):
+    async def handle_exit(_: ft.Event[ft.TextButton]):
         """
         退出应用
         """
         await message_handler.stop()
         await page.window.close()
 
-    async def handle_close_window(e: ft.Event[ft.IconButton]):
+    async def handle_close_window(_: ft.Event[ft.IconButton]):
         """
         退出确认
         """
@@ -147,7 +147,7 @@ async def main(page: ft.Page):
         theme_destination.current.icon = theme_icon
         theme_destination.current.selected_icon = theme_icon
 
-    async def handle_show_drawer():
+    async def handle_show_drawer(_: ft.Event[ft.IconButton]):
         """
         打开抽屉导航
         """
@@ -255,51 +255,14 @@ async def main(page: ft.Page):
         page.views[0].padding = ft.Padding.all(0)
         page.views[0].controls.insert(
             0,
-            ft.Row(
-                height=50,
-                spacing=0,
-                controls=[
-                    ft.Container(
-                        height=50,
-                        padding=ft.Padding.only(left=10),
-                        bgcolor=ft.Colors.PINK_ACCENT_200,
-                        content=ft.IconButton(
-                            ft.Icons.MENU,
-                            tooltip="打开抽屉导航",
-                            on_click=handle_show_drawer,
-                        ),
-                    ),
-                    ft.WindowDragArea(
-                        expand=True,
-                        content=ft.Container(
-                            height=50,
-                            padding=ft.Padding.only(left=10),
-                            alignment=ft.Alignment.CENTER_LEFT,
-                            bgcolor=ft.Colors.PINK_ACCENT_200,
-                            content=title,
-                        ),
-                    ),
-                    ft.Container(
-                        height=50,
-                        padding=ft.Padding.only(right=10),
-                        bgcolor=ft.Colors.PINK_ACCENT_200,
-                        content=ft.Row(
-                            controls=[
-                                ft.IconButton(
-                                    ft.Icons.MINIMIZE,
-                                    tooltip="最小化",
-                                    on_click=handle_minimized_window,
-                                ),
-                                ft.IconButton(
-                                    ft.Icons.CLOSE,
-                                    tooltip="退出",
-                                    on_click=handle_close_window,
-                                ),
-                            ]
-                        ),
-                    ),
-                ],
-            ),
+            MenuBar(
+                bar_height=50,
+                bar_title=title,
+                bar_bgcolor=ft.Colors.PINK_ACCENT_200,
+                on_drawer_click=handle_show_drawer,
+                on_min_click=handle_minimized_window,
+                on_close_click=handle_close_window
+            )
         )
 
     async def view_pop(view):
@@ -311,7 +274,6 @@ async def main(page: ft.Page):
     page.on_view_pop = view_pop
     page.on_keyboard_event = handle_keyboard
 
-    # page.run_task(on_mount)
     await on_mount()
 
     route_change(page.route)
