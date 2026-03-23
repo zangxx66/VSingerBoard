@@ -131,7 +131,7 @@ class Bili:
             if history:
                 self.del_list(history.id)
             return
-        if not msg.startswith(self.config.sing_prefix):
+        if not msg.startswith(f"{self.config.sing_prefix} "):
             return
         if self.config.modal_level > 0 and medal_level < self.config.modal_level:
             return

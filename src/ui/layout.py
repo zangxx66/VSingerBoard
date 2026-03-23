@@ -7,6 +7,7 @@ from .pages.history import main as HistoryView
 from .pages.home import main as HomeView
 from .pages.playlist import main as PlaylistView
 from .pages.settings import main as SettingsView
+from .pages.statistic import main as StatisticView
 from src.utils import resource_path, EventEmitter, globalfigItem
 from src.manager import MessageManager
 from src.database import Db as db
@@ -165,12 +166,14 @@ async def main(page: ft.Page):
             case 2:
                 await page.push_route("/playlist")
             case 3:
-                await page.push_route("/changelog")
+                await page.push_route("/statistic")
             case 4:
                 await page.push_route("/settings")
             case 5:
-                await page.push_route("/about")
+                await page.push_route("/changelog")
             case 6:
+                await page.push_route("/about")
+            case 7:
                 await handle_theme_switch()
             case _:
                 await page.push_route("/")
@@ -196,14 +199,19 @@ async def main(page: ft.Page):
                 selected_icon=ft.Icon(ft.Icons.COLLECTIONS),
             ),
             ft.NavigationDrawerDestination(
-                label="更新日志",
-                icon=ft.Icons.HISTORY,
-                selected_icon=ft.Icon(ft.Icons.HISTORY),
+                label="统计",
+                icon=ft.Icons.DONUT_LARGE,
+                selected_icon=ft.Icons.DONUT_LARGE
             ),
             ft.NavigationDrawerDestination(
                 label="设置",
                 icon=ft.Icons.SETTINGS,
                 selected_icon=ft.Icon(ft.Icons.SETTINGS),
+            ),
+            ft.NavigationDrawerDestination(
+                label="更新日志",
+                icon=ft.Icons.HISTORY,
+                selected_icon=ft.Icon(ft.Icons.HISTORY),
             ),
             ft.NavigationDrawerDestination(
                 label="关于",
@@ -235,17 +243,21 @@ async def main(page: ft.Page):
                 title.value = "歌单管理"
                 drawer.selected_index = 2
                 page.views.append(PlaylistView(page))
-            case "/changelog":
-                title.value = "更新日志"
+            case "/statistic":
+                title.value = "统计"
                 drawer.selected_index = 3
-                page.views.append(ChangelogView(page))
+                page.views.append(StatisticView(page))
             case "/settings":
                 title.value = "设置"
                 drawer.selected_index = 4
                 page.views.append(SettingsView(page))
+            case "/changelog":
+                title.value = "更新日志"
+                drawer.selected_index = 5
+                page.views.append(ChangelogView(page))
             case "/about":
                 title.value = "关于"
-                drawer.selected_index = 5
+                drawer.selected_index = 6
                 page.views.append(AboutView(page))
             case _:
                 pass
