@@ -50,14 +50,24 @@ async def main(page: ft.Page):
 
     # 抽屉导航，系统主题设置
     drawer: NavigationDrawer | None = None
-    global_config: globalfigItem | None = None
+    global_config = await db.get_gloal_config()
     theme_destination = Ref[ft.NavigationDrawerDestination]()
 
     # 事件分发器
     event_bus = EventEmitter()
     message_handler = MessageManager(event_bus)
     page.data = {"message_handler": message_handler}
-    message_handler.start()
+
+    if global_config:
+        page.theme_mode = (
+            ft.ThemeMode.DARK if global_config.dark_mode else ft.ThemeMode.LIGHT
+        )
+    else:
+        global_config = globalfigItem()
+        global_config.id = 0
+        global_config.dark_mode = False
+        page.theme_mode = ft.ThemeMode.LIGHT
+    theme_icon = ft.Icons.DARK_MODE if global_config.dark_mode else ft.Icons.LIGHT_MODE
 
     def on_notify(msg: dict[str, bool]):
         """
@@ -128,26 +138,6 @@ async def main(page: ft.Page):
             theme_destination.current.selected_icon = theme_icon
             ModernToast.success(page, "切换成功")
 
-    async def on_mount():
-        """
-        初始化主题
-        """
-        nonlocal global_config
-        global_config = await db.get_gloal_config()
-        if global_config:
-            page.theme_mode = (
-                ft.ThemeMode.DARK if global_config.dark_mode else ft.ThemeMode.LIGHT
-            )
-        else:
-            global_config = globalfigItem()
-            global_config.id = 0
-            global_config.dark_mode = False
-            page.theme_mode = ft.ThemeMode.LIGHT
-        theme_icon = ft.Icons.DARK_MODE if global_config.dark_mode else ft.Icons.LIGHT_MODE
-        theme_destination.current.label = "DARK" if global_config.dark_mode else "LIGHT"
-        theme_destination.current.icon = theme_icon
-        theme_destination.current.selected_icon = theme_icon
-
     async def handle_show_drawer(_: ft.Event[ft.IconButton]):
         """
         打开抽屉导航
@@ -200,8 +190,8 @@ async def main(page: ft.Page):
             ),
             ft.NavigationDrawerDestination(
                 label="统计",
-                icon=ft.Icons.DONUT_LARGE,
-                selected_icon=ft.Icons.DONUT_LARGE
+                icon=ft.Icons.BAR_CHART,
+                selected_icon=ft.Icons.BAR_CHART
             ),
             ft.NavigationDrawerDestination(
                 label="设置",
@@ -219,9 +209,9 @@ async def main(page: ft.Page):
                 selected_icon=ft.Icon(ft.Icons.INFO),
             ),
             ft.NavigationDrawerDestination(
-                label="LIGHT",
-                icon=ft.Icons.LIGHT_MODE,
-                selected_icon=ft.Icons.LIGHT_MODE,
+                label="DARK" if global_config.dark_mode else "LIGHT",
+                icon=theme_icon,
+                selected_icon=theme_icon,
                 ref=theme_destination,
             ),
         ],
@@ -286,6 +276,6 @@ async def main(page: ft.Page):
     page.on_view_pop = view_pop
     page.on_keyboard_event = handle_keyboard
 
-    await on_mount()
+    message_handler.start()
 
     route_change(page.route)

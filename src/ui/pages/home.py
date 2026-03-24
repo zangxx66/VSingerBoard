@@ -2,6 +2,7 @@ import time
 import io
 import pandas as pd
 import flet as ft
+from flet import Ref
 from typing import cast
 from src.utils import DanmuInfo, logger, timespan_to_localtime
 from src.manager import MessageManager
@@ -110,29 +111,28 @@ def main(page: ft.Page):
         手动插入一条记录到列表
         """
 
+        song_name_text = Ref[ft.TextField]()
+
         def submit():
-            if not uname.value:
-                ModernToast.warning(page, "昵称不为空")
-                return
-            if not msg.value:
+            if not song_name_text.current.value:
                 ModernToast.warning(page, "歌名不为空")
                 return
 
             message_handler.add_manual_message(
                 {
-                    "source": source.value,
+                    "source": "bilibili",
                     "data": DanmuInfo(
                         msg_id=int(time.time()),
                         uid=1,
-                        uname=uname.value,
-                        msg=msg.value,
+                        uname="主播",
+                        msg=song_name_text.current.value,
                         medal_level=0,
                         medal_name="",
                         guard_level=0,
                         price=0,
                         send_time=int(time.time()),
                         status=0,
-                        source=source.value,
+                        source="bilibili",
                     ),
                 },
             )
@@ -141,25 +141,7 @@ def main(page: ft.Page):
         page.show_dialog(
             ft.AlertDialog(
                 title="手动点歌",
-                content=ft.Column(
-                    height=240,
-                    controls=[
-                        uname := ft.TextField(label="用户昵称"),
-                        msg := ft.TextField(label="点歌内容"),
-                        source := ft.Dropdown(
-                            label="点歌平台",
-                            value="bilibili",
-                            options=[
-                                ft.DropdownOption(
-                                    key="bilibili", content=ft.Text("哔哩哔哩")
-                                ),
-                                ft.DropdownOption(
-                                    key="douyin", content=ft.Text("抖音")
-                                ),
-                            ],
-                        ),
-                    ],
-                ),
+                content=ft.TextField(label="歌名", autofocus=True, ref=song_name_text),
                 actions=[
                     ft.TextButton("取消", on_click=lambda ee: page.pop_dialog()),
                     ft.TextButton("提交", on_click=submit),
