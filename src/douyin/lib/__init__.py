@@ -24,6 +24,8 @@ __all__ = (
     "WebcastDataAdventureUserInfo",
     "WebcastDataAgainst",
     "WebcastDataAggregateInfo",
+    "WebcastDataAiPublicScreenContainer",
+    "WebcastDataAiPublicScreenContainerAbility",
     "WebcastDataAnchorBottomToolBar",
     "WebcastDataAnchorGiftData",
     "WebcastDataAnchorHistoryItem",
@@ -57,10 +59,12 @@ __all__ = (
     "WebcastDataAsyncAuthData",
     "WebcastDataAudienceActionSource",
     "WebcastDataAudienceEntranceInfo",
+    "WebcastDataAudienceLimitRoomConfig",
     "WebcastDataAudienceLinkmicEntranceInfo",
     "WebcastDataAudioBgData",
     "WebcastDataAudioChatCycleUiInfo",
     "WebcastDataAudioChatCycleUiInfoInfo",
+    "WebcastDataAudioHonorRankContent",
     "WebcastDataAudioSpeakingImageList",
     "WebcastDataAudioSpeakingImageListSpeakingImage",
     "WebcastDataAudioSubtitleContent",
@@ -90,15 +94,24 @@ __all__ = (
     "WebcastDataBattleAnchorContributors",
     "WebcastDataBattleArmy",
     "WebcastDataBattleArmyRankUser",
+    "WebcastDataBattleAuxiliaryConfig",
     "WebcastDataBattleAuxiliaryData",
     "WebcastDataBattleBarConfig",
     "WebcastDataBattleBonusInfo",
     "WebcastDataBattleBuffCardInfo",
     "WebcastDataBattleBuffCardMeta",
+    "WebcastDataBattleCloudCollaborateConfig",
+    "WebcastDataBattleCloudCollaborateThroneFightInfo",
+    "WebcastDataBattleCloudCollaborateThroneFightInfoEvenStageInfo",
+    "WebcastDataBattleCloudCollaborateThroneFightInfoOddStageInfo",
+    "WebcastDataBattleCloudCollaborateThroneFightInfoSettleUserInfo",
+    "WebcastDataBattleCloudCollaborateThroneFightInfoStage",
+    "WebcastDataBattleCloudCollaborateThroneFightInfoUserInfo",
     "WebcastDataBattleConfigSetting",
     "WebcastDataBattleConsecutiveRecordInfo",
     "WebcastDataBattleContributorsRankListV2",
     "WebcastDataBattleLinkerInviteMessageExtra",
+    "WebcastDataBattleLinkerInviteMessageExtraAcceptTip",
     "WebcastDataBattleLinkerInviteMessageExtraGameInfo",
     "WebcastDataBattleLinkerInviteMessageExtraInviterRivalExtra",
     "WebcastDataBattleLinkerInviteMessageExtraRankSeasonInfo",
@@ -139,6 +152,7 @@ __all__ = (
     "WebcastDataBonusAuthor",
     "WebcastDataBonusCommerce",
     "WebcastDataBorderInfo",
+    "WebcastDataBottomInputData",
     "WebcastDataBottomPanel",
     "WebcastDataBottomPanelData",
     "WebcastDataBottomRightCardArea",
@@ -169,6 +183,7 @@ __all__ = (
     "WebcastDataCastOttPermission",
     "WebcastDataCastScreenData",
     "WebcastDataChangePlayModeData",
+    "WebcastDataChangeRoomInfo",
     "WebcastDataChannelListUser",
     "WebcastDataChatEmojiGuideInfo",
     "WebcastDataChatEmojiGuideInfoEmojiGuideConf",
@@ -187,6 +202,8 @@ __all__ = (
     "WebcastDataChestGameContent",
     "WebcastDataChestGameSetting",
     "WebcastDataChestTask",
+    "WebcastDataChorusAccompanimentInfo",
+    "WebcastDataChorusAccompanist",
     "WebcastDataChorusCdnInfo",
     "WebcastDataChorusCdnInfoPlayInfo",
     "WebcastDataChorusCdnInfoPushInfo",
@@ -227,6 +244,7 @@ __all__ = (
     "WebcastDataCommonCardArea",
     "WebcastDataCommonCardDisplayInfo",
     "WebcastDataCommonDetail",
+    "WebcastDataCommonDot",
     "WebcastDataComponentSkin",
     "WebcastDataContainerLayout",
     "WebcastDataContentInfo",
@@ -268,6 +286,7 @@ __all__ = (
     "WebcastDataEcomGoodsCard",
     "WebcastDataEcomIcon",
     "WebcastDataEcomLiveCard",
+    "WebcastDataEcomLiveReviewInfo",
     "WebcastDataEcomPop",
     "WebcastDataEcomPrice",
     "WebcastDataEcomProduct",
@@ -306,9 +325,11 @@ __all__ = (
     "WebcastDataFeedbackProps",
     "WebcastDataFilterReason",
     "WebcastDataFilterWord",
+    "WebcastDataFindPeopleInfo",
     "WebcastDataFinishMultiChorusContent",
     "WebcastDataFreeGift",
     "WebcastDataFreqCtrlParams",
+    "WebcastDataFundCheckExtraInfo",
     "WebcastDataGameAnchorInfo",
     "WebcastDataGameBarrageRtcInfo",
     "WebcastDataGameCardInfo",
@@ -338,10 +359,16 @@ __all__ = (
     "WebcastDataGiftPanelTopperTrayPeriodText",
     "WebcastDataGiftPanelUserExtraInfo",
     "WebcastDataGiftPreviewInfo",
+    "WebcastDataGiftSingCollectModeContent",
+    "WebcastDataGiftSingContent",
+    "WebcastDataGiftSingGiftInfo",
+    "WebcastDataGiftSingVoteModeContent",
+    "WebcastDataGiftSingVoteModeGuideTextInfo",
     "WebcastDataGiftSortStrategy",
     "WebcastDataGiftStruct",
     "WebcastDataGiftStructGiftMsgBoard",
     "WebcastDataGiftStructGiftStructFansClubInfo",
+    "WebcastDataGiftTextInfo",
     "WebcastDataGiftTip",
     "WebcastDataGiftTouchLabel",
     "WebcastDataGiftTrayInfo",
@@ -374,11 +401,18 @@ __all__ = (
     "WebcastDataGuestBattleInfo",
     "WebcastDataGuestBattleUiInfo",
     "WebcastDataGuestBattleUserGradeInfo",
+    "WebcastDataGuestBattleV2ConfigContent",
+    "WebcastDataGuestBattleV2Info",
+    "WebcastDataGuestBattleV2PkBar",
+    "WebcastDataGuestBattleV2UiInfo",
     "WebcastDataGuestLinkChannelInfo",
     "WebcastDataGuestLinkContent",
+    "WebcastDataGuideChatConf",
     "WebcastDataHeaderMedia",
     "WebcastDataHeaderMediaViewButton",
     "WebcastDataHighValueUserData",
+    "WebcastDataHighlightAreaContainer",
+    "WebcastDataHighlightAreaContainerTrigger",
     "WebcastDataHighlightAreaPriorityConfig",
     "WebcastDataHostInfo",
     "WebcastDataHotRoomInfo",
@@ -397,8 +431,20 @@ __all__ = (
     "WebcastDataIndustryServiceInfoConsultInfo",
     "WebcastDataInitInfoSetting",
     "WebcastDataInputDefaultConfig",
+    "WebcastDataInteractActingBg",
+    "WebcastDataInteractActingContent",
+    "WebcastDataInteractActingGift",
+    "WebcastDataInteractActingGiftContent",
+    "WebcastDataInteractActingRole",
+    "WebcastDataInteractActingRoleInfo",
+    "WebcastDataInteractActingThemeRole",
+    "WebcastDataInteractCompeteEvalConfig",
+    "WebcastDataInteractConfig",
+    "WebcastDataInteractEffectInfo",
     "WebcastDataInteractGiftContent",
+    "WebcastDataInteractGiftEvalConfig",
     "WebcastDataInteractOpenExtra",
+    "WebcastDataInteractRewardPunishConfig",
     "WebcastDataInteractionGameContainerFlowData",
     "WebcastDataInteractionPluginGamePlusContainerData",
     "WebcastDataInteractiveScreenCastInfo",
@@ -411,6 +457,7 @@ __all__ = (
     "WebcastDataIosFragment",
     "WebcastDataItemBubbleInfo",
     "WebcastDataItemCardInfo",
+    "WebcastDataItemDotInfo",
     "WebcastDataItemInfo",
     "WebcastDataJoinMultiChorusContent",
     "WebcastDataJoinTeamfightInfo",
@@ -429,6 +476,7 @@ __all__ = (
     "WebcastDataKtvSongStructPersonalSongInfo",
     "WebcastDataKtvSongStructRealTimeChorusInfo",
     "WebcastDataKtvSongStructRecommendRealTimeChorusInfo",
+    "WebcastDataKtvSongStructRegionList",
     "WebcastDataKtvSongStructUserInfo",
     "WebcastDataKtvSongStructWantListenInfo",
     "WebcastDataKtvmvInfo",
@@ -458,6 +506,7 @@ __all__ = (
     "WebcastDataLinkerDetail",
     "WebcastDataLinkerUsers",
     "WebcastDataLinkmic2DAvatar",
+    "WebcastDataLinkmicAiUser",
     "WebcastDataLinkmicAudienceEmoji",
     "WebcastDataLinkmicBadge",
     "WebcastDataLinkmicCustomizedRandomEmoji",
@@ -506,6 +555,8 @@ __all__ = (
     "WebcastDataLotteryLuckyUserAwardPrizeDetail",
     "WebcastDataLotteryPrize",
     "WebcastDataLotteryRegularlyConfig",
+    "WebcastDataLowPcuGuideChatData",
+    "WebcastDataLowPcuGuideData",
     "WebcastDataLuckyMoneyGiftMeta",
     "WebcastDataMainCameraMatchInfo",
     "WebcastDataMatchChatConfig",
@@ -578,6 +629,7 @@ __all__ = (
     "WebcastDataOrderData",
     "WebcastDataOrderSingItemV2",
     "WebcastDataOrderSingMvInfo",
+    "WebcastDataOrderSongUser",
     "WebcastDataPackMetaInfo",
     "WebcastDataPaidLinkmicExplainCardInfo",
     "WebcastDataPaidLinkmicTag",
@@ -596,15 +648,19 @@ __all__ = (
     "WebcastDataParallelRewardPopup",
     "WebcastDataParentProductSimpleData",
     "WebcastDataPatternRef",
+    "WebcastDataPayloadStartMicrogameStamp",
     "WebcastDataPaymentArea",
     "WebcastDataPaymentAreaAdditionalButton",
     "WebcastDataPaymentAreaPayButton",
     "WebcastDataPersonalKaraokeMediaInfo",
     "WebcastDataPetEffectInfo",
     "WebcastDataPicoInfo",
+    "WebcastDataPicoInfoMultiStreamInfo",
     "WebcastDataPicoInfoVirtualLiveBgImages",
     "WebcastDataPicoInfoVirtualLiveBgImagesConvertedImage",
     "WebcastDataPicoVirtualLiveConfig",
+    "WebcastDataPiggyBank",
+    "WebcastDataPiggyBankButton",
     "WebcastDataPlayByPlayItemInfo",
     "WebcastDataPlayTeamMember",
     "WebcastDataPlayerInfo",
@@ -624,20 +680,26 @@ __all__ = (
     "WebcastDataPreviewExposeData",
     "WebcastDataPreviewExposeDataChatMessage",
     "WebcastDataPreviewExposeDataEtData",
+    "WebcastDataPreviewExposeDataFeedLiveIdeaGuide",
+    "WebcastDataPreviewExposeDataFeedPromoteLiveAnchorPoint",
     "WebcastDataPreviewExposeDataGrowthTask",
     "WebcastDataPreviewExposeDataMeta",
     "WebcastDataPreviewExposeDataMetaHost",
+    "WebcastDataPreviewExposeDataPortraitData",
+    "WebcastDataPreviewExposeDataPreviewButtonData",
     "WebcastDataPreviewExposeDataPreviewExitGuide",
     "WebcastDataPreviewExposeDataPreviewExtendArea",
     "WebcastDataPreviewExposeDataPreviewExtendAreaActionConfig",
     "WebcastDataPreviewExposeDataPreviewExtendAreaPart",
     "WebcastDataPreviewExposeDataPreviewGuide",
+    "WebcastDataPreviewExposeDataPreviewHighLight",
     "WebcastDataPreviewExposeDataPreviewImExtend",
     "WebcastDataPreviewExposeDataPreviewPromotion",
     "WebcastDataPreviewExposeDataPreviewPromotionSyncData",
     "WebcastDataPreviewExposeDataPreviewPromotionSyncDataLuckyBag",
     "WebcastDataPreviewExposeDataPreviewPromotionSyncDataLuckyMoney",
     "WebcastDataPreviewExposeDataPreviewSwitch",
+    "WebcastDataPreviewExposeDataRevenueData",
     "WebcastDataPreviewLabel",
     "WebcastDataPrivilegeBaseInfo",
     "WebcastDataPrivilegeInfo",
@@ -683,9 +745,13 @@ __all__ = (
     "WebcastDataPurchaseSimpleData",
     "WebcastDataQuiz",
     "WebcastDataQuizExtra",
+    "WebcastDataRank",
     "WebcastDataRankEnterInfo",
     "WebcastDataRankEnterInfoPage",
     "WebcastDataRankEnterInfoRankInfo",
+    "WebcastDataRankSeasonScoreUpdateInfo",
+    "WebcastDataRankSeasonScoreUpdateInfoNotifyInfo",
+    "WebcastDataRankSeasonScoreUpdateInfoProgressInfo",
     "WebcastDataRanklistHourEntrance",
     "WebcastDataRanklistHourEntranceDetail",
     "WebcastDataRanklistHourEntranceInfo",
@@ -752,6 +818,7 @@ __all__ = (
     "WebcastDataRoomFullVideoBtn",
     "WebcastDataRoomGameData",
     "WebcastDataRoomGameDataChannelConfig",
+    "WebcastDataRoomGravitySensor",
     "WebcastDataRoomHealthScoreInfo",
     "WebcastDataRoomImInfo",
     "WebcastDataRoomInteractData",
@@ -759,6 +826,7 @@ __all__ = (
     "WebcastDataRoomIntroLabel",
     "WebcastDataRoomLinkerContent",
     "WebcastDataRoomOthersData",
+    "WebcastDataRoomPkRankInviteChangeInfo",
     "WebcastDataRoomPlatformComponentsData",
     "WebcastDataRoomPublicScreenAttachments",
     "WebcastDataRoomPublicScreenInfo",
@@ -766,6 +834,7 @@ __all__ = (
     "WebcastDataRoomReqUserData",
     "WebcastDataRoomRevenueData",
     "WebcastDataRoomShortTouchAreaConfig",
+    "WebcastDataRoomShortTouchAreaConfigBigCardDisplayStrategy",
     "WebcastDataRoomShortTouchAreaConfigElement",
     "WebcastDataRoomShortTouchAreaConfigForbiddenType",
     "WebcastDataRoomShortTouchAreaConfigTempStateCondition",
@@ -773,6 +842,7 @@ __all__ = (
     "WebcastDataRoomShortTouchAreaConfigTempStateStrategy",
     "WebcastDataRoomShortTouchAreaConfigTempStateStrategyTempStateStrategyInfo",
     "WebcastDataRoomShortTouchAreaConfigTempStateType",
+    "WebcastDataRoomSongInfo",
     "WebcastDataRoomSpecificSceneTypeInfo",
     "WebcastDataRoomStats",
     "WebcastDataRoomStatsUserCountComposition",
@@ -783,10 +853,12 @@ __all__ = (
     "WebcastDataRoomViewStats",
     "WebcastDataRtcExtInfo",
     "WebcastDataSafeReason",
+    "WebcastDataSameTypePkStrategy",
     "WebcastDataSandwichBorderInfo",
     "WebcastDataSchemaInfo",
     "WebcastDataScreenBarConfigure",
     "WebcastDataSeasonConfig",
+    "WebcastDataSeasonRankInfo",
     "WebcastDataSecretChatInfo",
     "WebcastDataSelfDisciplineInfo",
     "WebcastDataSendInteractEmojiConfig",
@@ -794,6 +866,7 @@ __all__ = (
     "WebcastDataSeriesPlayGift",
     "WebcastDataSeriesTrayInfo",
     "WebcastDataSettingContent",
+    "WebcastDataShareAnchorInfo",
     "WebcastDataShareComponentInfo",
     "WebcastDataShareItemStyle",
     "WebcastDataSharePosterInfo",
@@ -823,6 +896,12 @@ __all__ = (
     "WebcastDataSkuEntityIDsMap",
     "WebcastDataSkuLimitedFreeNotice",
     "WebcastDataSkuRelatedSkuSimpleInfo",
+    "WebcastDataSpecifiedGuestsPkBarEffect",
+    "WebcastDataSpecifiedGuestsPkContent",
+    "WebcastDataSpecifiedGuestsPkFlyMicEmojiEffect",
+    "WebcastDataSpecifiedGuestsPkInfo",
+    "WebcastDataSpecifiedGuestsPkPlayerInfo",
+    "WebcastDataSpecifiedGuestsPkRoundInfo",
     "WebcastDataSpecifyGiftConfig",
     "WebcastDataSpliceLabel",
     "WebcastDataStampInfo",
@@ -832,6 +911,10 @@ __all__ = (
     "WebcastDataStarwishGiftContent",
     "WebcastDataStarwishStageToast",
     "WebcastDataStaticBorderInfo",
+    "WebcastDataStealDragonInfo",
+    "WebcastDataStealDragonInfoPeriodConfig",
+    "WebcastDataStealDragonInfoSettleInfo",
+    "WebcastDataStealDragonInfoStealInfo",
     "WebcastDataStickerInfo",
     "WebcastDataStickers",
     "WebcastDataStreamRecognitionCandidate",
@@ -853,6 +936,8 @@ __all__ = (
     "WebcastDataStreamUrlStreamUrlExtraAdaptionInfo",
     "WebcastDataStreamUrlStreamUrlExtraAnchorClientInfo",
     "WebcastDataStreamUrlStreamUrlExtraSuperResolution",
+    "WebcastDataStreamXInfo",
+    "WebcastDataStreamXrtcSetting",
     "WebcastDataSubscribeMember",
     "WebcastDataSubscribeMemberMark",
     "WebcastDataSurvivalConfig",
@@ -921,6 +1006,8 @@ __all__ = (
     "WebcastDataTreasureCompeteData",
     "WebcastDataTreasureDetail",
     "WebcastDataTvStation",
+    "WebcastDataUiLayoutPositionLiveCoreInfo",
+    "WebcastDataUiLayoutPositionRtcInfo",
     "WebcastDataUiTranslation",
     "WebcastDataUnionLiveInfo",
     "WebcastDataUnionLiveInfoGuestAnchor",
@@ -936,6 +1023,7 @@ __all__ = (
     "WebcastDataUserAuthorStats",
     "WebcastDataUserBizRelation",
     "WebcastDataUserBorder",
+    "WebcastDataUserBottomEntry",
     "WebcastDataUserBrotherhoodInfo",
     "WebcastDataUserChorusInfo",
     "WebcastDataUserExtraInfo",
@@ -963,6 +1051,7 @@ __all__ = (
     "WebcastDataUserUserStats",
     "WebcastDataUserVersionInfo",
     "WebcastDataUserVipInfo",
+    "WebcastDataUserWorldChatInfo",
     "WebcastDataUserXiguaParams",
     "WebcastDataUserXiguaParamsUserExtendInfo",
     "WebcastDataUserXiguaParamsUserExtendInfoRocketSchema",
@@ -972,6 +1061,7 @@ __all__ = (
     "WebcastDataVideoDuoBattleRtcInfo",
     "WebcastDataVideoEqualRoomLiveCoreInfo",
     "WebcastDataVideoEqualRoomRtcInfo",
+    "WebcastDataVideoLinkmicDoNotDisturbContent",
     "WebcastDataVideoPositionLiveCoreInfo",
     "WebcastDataVideoPositionRtcInfo",
     "WebcastDataView",
@@ -1003,9 +1093,11 @@ __all__ = (
     "WebcastDataWebProgramme",
     "WebcastDataWebSkinData",
     "WebcastDataWelfareProjectInfo",
+    "WebcastDataWindmillData",
     "WebcastDataWishContributor",
     "WebcastDataWishContributorContributor",
     "WebcastIm",
+    "WebcastImActUserInfo",
     "WebcastImActivityCouponInvalidMessage",
     "WebcastImActivityEffectRefreshMessage",
     "WebcastImActivityEmojiGroupsMessage",
@@ -1022,6 +1114,8 @@ __all__ = (
     "WebcastImAgMatchInfo",
     "WebcastImAiAutoReplyMessage",
     "WebcastImAiBootMessage",
+    "WebcastImAiWishBizInfo",
+    "WebcastImAiWishGiftInfo",
     "WebcastImAllQuizInfo",
     "WebcastImAnchorAppointmentNumUpdateMessage",
     "WebcastImAnchorAppointmentNumUpdateMessageData",
@@ -1029,9 +1123,13 @@ __all__ = (
     "WebcastImAnchorBoostMessage",
     "WebcastImAnchorCommonPopupMessage",
     "WebcastImAnchorFaceConfig",
+    "WebcastImAnchorInstantPlayChangeInfo",
+    "WebcastImAnchorInstantPlayChangeMessage",
     "WebcastImAnchorLinkGameVoiceMessage",
     "WebcastImAnchorLinkmicAudioPunishMessage",
+    "WebcastImAnchorLinkmicBackstageInviteMessage",
     "WebcastImAnchorLinkmicBizMessage",
+    "WebcastImAnchorLinkmicPreLoadMessage",
     "WebcastImAnchorLinkmicSilenceMessage",
     "WebcastImAnchorPkPlayConfig",
     "WebcastImAnchorRoomDataChangeMessage",
@@ -1062,6 +1160,7 @@ __all__ = (
     "WebcastImAudioBgImgMessage",
     "WebcastImAudioChatMessage",
     "WebcastImAudioDumpSupportMessage",
+    "WebcastImAudioShowMediaContent",
     "WebcastImAuthorizationNotifyMessage",
     "WebcastImAuthorizationNotifyMessageContentBlock",
     "WebcastImAuthorizationNotifyMessageRelationBlock",
@@ -1073,6 +1172,7 @@ __all__ = (
     "WebcastImAvatarAudioMeta",
     "WebcastImAvatarAudioToTextRequest",
     "WebcastImAvatarAudioToTextResponse",
+    "WebcastImAvatarCardDrawResultMessage",
     "WebcastImAvatarChatData",
     "WebcastImAvatarChatMessage",
     "WebcastImAvatarChatRequest",
@@ -1083,7 +1183,11 @@ __all__ = (
     "WebcastImAvatarInstructionRequest",
     "WebcastImAvatarInstructionResponse",
     "WebcastImAvatarMessage",
+    "WebcastImAvatarMessageChat",
+    "WebcastImAvatarMessageContent",
     "WebcastImAvatarPhone",
+    "WebcastImAvatarRoomChatMessage",
+    "WebcastImAvatarRoomCommandMessage",
     "WebcastImAvatarRoomLeaveMessage",
     "WebcastImAvatarRoomLeaveNotify",
     "WebcastImAvatarRoomStateRequest",
@@ -1103,6 +1207,7 @@ __all__ = (
     "WebcastImBattleAutoMatchMessagePreviewUser",
     "WebcastImBattleAutoMatchMessageResponseData",
     "WebcastImBattleAutoMatchMessageRivalInfo",
+    "WebcastImBattleAutoStartFindPeopleMessage",
     "WebcastImBattleAuxiliaryMessage",
     "WebcastImBattleAuxiliaryMessageCloseContent",
     "WebcastImBattleAuxiliaryMessageInviteContent",
@@ -1138,6 +1243,8 @@ __all__ = (
     "WebcastImBattlePowerContainerMessage",
     "WebcastImBattlePowerContainerMessageReverseInfo",
     "WebcastImBattlePrecisionMatchMessage",
+    "WebcastImBattleRankSeasonMessage",
+    "WebcastImBattleRankSeasonScoreUpdateMessage",
     "WebcastImBattleRejectMessage",
     "WebcastImBattleReserveInviteMessage",
     "WebcastImBattleReserveReplyMessage",
@@ -1146,6 +1253,8 @@ __all__ = (
     "WebcastImBattleRewardMessageLinkmicBackground",
     "WebcastImBattleRewardMessagePkChangeBackground",
     "WebcastImBattleRewardMessagePkReward",
+    "WebcastImBattleScoreContestRoundFinishMessage",
+    "WebcastImBattleScoreContestRoundFinishMessageRank",
     "WebcastImBattleSeasonPkResultMessage",
     "WebcastImBattleSeasonPkResultMessageGetGradeInfo",
     "WebcastImBattleSeasonPkResultMessagePkResult",
@@ -1153,6 +1262,8 @@ __all__ = (
     "WebcastImBattleSeasonPkResultMessageUpgradeResult",
     "WebcastImBattleSettings",
     "WebcastImBattleStateSyncMessage",
+    "WebcastImBattleStealDragonMessage",
+    "WebcastImBattleSwitchSkinMessage",
     "WebcastImBattleTask",
     "WebcastImBattleTeamTaskAskMessage",
     "WebcastImBattleTeamTaskMessage",
@@ -1169,6 +1280,7 @@ __all__ = (
     "WebcastImBizContent",
     "WebcastImBizMessage",
     "WebcastImBorderEffectMessage",
+    "WebcastImBottomPinInfo",
     "WebcastImBridgeData",
     "WebcastImBridgeMessage",
     "WebcastImBroadcastPcuMessage",
@@ -1182,6 +1294,7 @@ __all__ = (
     "WebcastImCarSeriesInfoMessage",
     "WebcastImCardEffectInfo",
     "WebcastImCarnivalMessage",
+    "WebcastImCarouselComponent",
     "WebcastImCarouselInfo",
     "WebcastImCategoryChangeMessage",
     "WebcastImCategoryInfo",
@@ -1208,18 +1321,24 @@ __all__ = (
     "WebcastImChestOpenedInfo",
     "WebcastImChestOpenedInfoWinningUser",
     "WebcastImChijiNoticeMessage",
+    "WebcastImChorusAccompanimentInfoContent",
     "WebcastImChorusCdnSingersOnlyContent",
+    "WebcastImChorusComponentSwitchContent",
+    "WebcastImChorusConcertStartContent",
     "WebcastImChorusFinishContent",
     "WebcastImChorusFollowCdnStartContent",
     "WebcastImChorusFollowCdnStopContent",
     "WebcastImChorusGiftSentContent",
+    "WebcastImChorusInfoChangedContent",
     "WebcastImChorusInitContent",
+    "WebcastImChorusLeaderSettingContent",
     "WebcastImChorusMessage",
     "WebcastImChorusMidiRankContent",
     "WebcastImChorusOrderedSongListChangeContent",
     "WebcastImChorusStageContent",
     "WebcastImChorusTriggerReportContent",
     "WebcastImChorusUserChangedContent",
+    "WebcastImChorusVolumeChangedContent",
     "WebcastImCityEffect",
     "WebcastImClientFallbackDynamicMessage",
     "WebcastImClientOperation",
@@ -1233,6 +1352,8 @@ __all__ = (
     "WebcastImCnyReward",
     "WebcastImCnyaTaskMessage",
     "WebcastImCollectModule",
+    "WebcastImCombinedMessageMeta",
+    "WebcastImCombinedTextMessage",
     "WebcastImComboTrayInfo",
     "WebcastImComment",
     "WebcastImCommentDressInfo",
@@ -1250,6 +1371,7 @@ __all__ = (
     "WebcastImCommonBubbleConfig",
     "WebcastImCommonBubbleMessage",
     "WebcastImCommonCardAreaMessage",
+    "WebcastImCommonDotMessage",
     "WebcastImCommonGuideMessage",
     "WebcastImCommonLuckyMoneyMessage",
     "WebcastImCommonLuckyMoneyMessageLuckyIcon",
@@ -1279,6 +1401,7 @@ __all__ = (
     "WebcastImCreateTeamfightGuideContent",
     "WebcastImCrossLinkGuideAudioBubbleAnimationContent",
     "WebcastImCrossLinkGuideBubbleContent",
+    "WebcastImCrossRoomInteractActingInfo",
     "WebcastImCrossRoomLinkCancelInviteContent",
     "WebcastImCrossRoomLinkInviteContent",
     "WebcastImCrossRoomLinkReplyContent",
@@ -1399,6 +1522,8 @@ __all__ = (
     "WebcastImGameRoleRole",
     "WebcastImGameRoomStickerOprMessage",
     "WebcastImGameRoomStickerSize",
+    "WebcastImGameRoomSuggestionFloatWindowMessage",
+    "WebcastImGameRoomSuggestionMessage",
     "WebcastImGameRuntimeMessage",
     "WebcastImGameStatusMessage",
     "WebcastImGameStatusUpdateMessage",
@@ -1413,8 +1538,13 @@ __all__ = (
     "WebcastImGeneralCarnivalMessageSpecialDanmakuPlay",
     "WebcastImGeneralCarnivalMessageSpecialDanmakuPlayEcomRedPacket",
     "WebcastImGeneralCarnivalSyncData",
+    "WebcastImGiftAgentGiftStruct",
+    "WebcastImGiftAgentQueryMessage",
+    "WebcastImGiftAgentQueryValue",
     "WebcastImGiftCommentAuditContent",
     "WebcastImGiftCommentCommentListContent",
+    "WebcastImGiftCommentGuideTextAuditContent",
+    "WebcastImGiftCommentGuideTextShowContent",
     "WebcastImGiftCommentMessage",
     "WebcastImGiftCommentMetaContent",
     "WebcastImGiftCommentWallContent",
@@ -1422,6 +1552,12 @@ __all__ = (
     "WebcastImGiftContent",
     "WebcastImGiftCycleReleaseMessage",
     "WebcastImGiftCycleReleaseMessageGiftIcon",
+    "WebcastImGiftEffectGameBattleBattleGate",
+    "WebcastImGiftEffectGameBattleBattleTreasure",
+    "WebcastImGiftEffectGameBattleDefense",
+    "WebcastImGiftEffectGameBattleDefenseGate",
+    "WebcastImGiftEffectGameBattleGuard",
+    "WebcastImGiftEffectGameBattleScore",
     "WebcastImGiftEffectGameGift",
     "WebcastImGiftEffectGameInviters",
     "WebcastImGiftEffectGameMessage",
@@ -1434,6 +1570,14 @@ __all__ = (
     "WebcastImGiftMessageTextEffectDetail",
     "WebcastImGiftPanelTopBar",
     "WebcastImGiftPlayEventMessage",
+    "WebcastImGiftSingGuideTextContent",
+    "WebcastImGiftSingGuideTextContentCollectModeGuideTextContent",
+    "WebcastImGiftSingGuideTextContentVoteModeGuideTextContent",
+    "WebcastImGiftSingMessage",
+    "WebcastImGiftSingMetaContent",
+    "WebcastImGiftSingMetaContentCollectModeContent",
+    "WebcastImGiftSingMetaContentPlayInfo",
+    "WebcastImGiftSingMetaContentVoteModeContent",
     "WebcastImGiftSortMessage",
     "WebcastImGiftTouchMessage",
     "WebcastImGiftUpdateMessage",
@@ -1447,6 +1591,7 @@ __all__ = (
     "WebcastImGroupLiveGiftRecipientRecommendMessage",
     "WebcastImGroupLiveIncomeChangeMessage",
     "WebcastImGroupLiveMemberChangeMessage",
+    "WebcastImGroupLiveRoomPkRankInviteChangeMessage",
     "WebcastImGroupPhotoJumpDetail",
     "WebcastImGroupShowUserUpdateMessage",
     "WebcastImGrowthTaskMessage",
@@ -1456,6 +1601,7 @@ __all__ = (
     "WebcastImGuestBattleMessage",
     "WebcastImGuestBattleScoreMessage",
     "WebcastImGuestBattleUpdateContent",
+    "WebcastImGuestBattleV2Message",
     "WebcastImGuideMessage",
     "WebcastImGuideMessageGameInfo",
     "WebcastImHamletAvatarStartContent",
@@ -1475,6 +1621,7 @@ __all__ = (
     "WebcastImHighlightDataVideo",
     "WebcastImHighlightItem",
     "WebcastImHighlightTempInfo",
+    "WebcastImHomelandMessage",
     "WebcastImHonorInfo",
     "WebcastImHonorUserInfo",
     "WebcastImHostVersion",
@@ -1502,6 +1649,7 @@ __all__ = (
     "WebcastImInitLinkmicContent",
     "WebcastImInputPanelComponentSyncData",
     "WebcastImInstantCommandMessage",
+    "WebcastImInteractActingMessage",
     "WebcastImInteractControlMessage",
     "WebcastImInteractEffectMessage",
     "WebcastImInteractEffectOpenDataMessage",
@@ -1672,11 +1820,13 @@ __all__ = (
     "WebcastImLinkerGuestInviteContent",
     "WebcastImLinkerInitChatRoomContent",
     "WebcastImLinkerInviteContent",
+    "WebcastImLinkerInviteContentGameExtra",
     "WebcastImLinkerInviteContentInviterInfo",
     "WebcastImLinkerItemContent",
     "WebcastImLinkerKickOutContent",
     "WebcastImLinkerLeaveContent",
     "WebcastImLinkerLinkedListChangeContent",
+    "WebcastImLinkerLiveCoreBizTagChangeContent",
     "WebcastImLinkerLockPositionContent",
     "WebcastImLinkerLowBalanceForPaidLinkmicContent",
     "WebcastImLinkerPrepareInviteContent",
@@ -1703,9 +1853,20 @@ __all__ = (
     "WebcastImLinkerUpdateWaitingUserOffsetContent",
     "WebcastImLinkerViolationReminderContent",
     "WebcastImLinkerWaitingListChangeContent",
+    "WebcastImLinkmicAiGuestMessage",
+    "WebcastImLinkmicAiGuestModeContent",
+    "WebcastImLinkmicAiGuestToolModeContent",
+    "WebcastImLinkmicAiRecommendMessage",
+    "WebcastImLinkmicAiSilenceStatusMessage",
+    "WebcastImLinkmicAiUserJoinMessage",
+    "WebcastImLinkmicAiUserLeaveMessage",
+    "WebcastImLinkmicAnchorSettingMessage",
     "WebcastImLinkmicAnnounceMessage",
     "WebcastImLinkmicAsrSummary",
     "WebcastImLinkmicAsrSummaryMessage",
+    "WebcastImLinkmicAudienceChangeRoomMessage",
+    "WebcastImLinkmicAudienceEnterChatRoomContent",
+    "WebcastImLinkmicAudienceLeaveChatRoomContent",
     "WebcastImLinkmicBattleFinishExtra",
     "WebcastImLinkmicBigEventMessage",
     "WebcastImLinkmicChatMatchFinishGroupContent",
@@ -1715,7 +1876,10 @@ __all__ = (
     "WebcastImLinkmicChatMatchUserJoinContent",
     "WebcastImLinkmicChatMatchUserLeaveContent",
     "WebcastImLinkmicChestGameStatus",
+    "WebcastImLinkmicChorusUserListChangedContent",
+    "WebcastImLinkmicChorusUserListChangedContentSimpleLinkmicChorusUser",
     "WebcastImLinkmicEcologyMessage",
+    "WebcastImLinkmicEffectMessage",
     "WebcastImLinkmicEnlargeGuestChangeUserContent",
     "WebcastImLinkmicEnlargeGuestMessage",
     "WebcastImLinkmicEnlargeGuestTurnOffContent",
@@ -1738,6 +1902,33 @@ __all__ = (
     "WebcastImLinkmicGuestLinkReplyContent",
     "WebcastImLinkmicGuestLinkReplyMatchmakingContent",
     "WebcastImLinkmicInfo",
+    "WebcastImLinkmicInstructionApplyRankChangeContent",
+    "WebcastImLinkmicInstructionApplyStrongReminderContent",
+    "WebcastImLinkmicInstructionAudienceLeaveChatRoomContent",
+    "WebcastImLinkmicInstructionChangeMediaInfoContent",
+    "WebcastImLinkmicInstructionConfirmUnSilenceContent",
+    "WebcastImLinkmicInstructionEnlargeGuestApplyContent",
+    "WebcastImLinkmicInstructionEnlargeGuestInviteContent",
+    "WebcastImLinkmicInstructionEnlargeGuestReplyContent",
+    "WebcastImLinkmicInstructionEnterContent",
+    "WebcastImLinkmicInstructionFinishContent",
+    "WebcastImLinkmicInstructionInviteContent",
+    "WebcastImLinkmicInstructionInviteContentInvitorInfo",
+    "WebcastImLinkmicInstructionKickOutContent",
+    "WebcastImLinkmicInstructionKickOutContentKickOutUserInfo",
+    "WebcastImLinkmicInstructionLeaveContent",
+    "WebcastImLinkmicInstructionMessage",
+    "WebcastImLinkmicInstructionPermitContent",
+    "WebcastImLinkmicInstructionReplyContent",
+    "WebcastImLinkmicInstructionRtcActionContent",
+    "WebcastImLinkmicInstructionSilenceContent",
+    "WebcastImLinkmicInstructionTurnOnContent",
+    "WebcastImLinkmicInstructionUnSilenceContent",
+    "WebcastImLinkmicInstructionUpdateLinkTypeApplyContent",
+    "WebcastImLinkmicInstructionUpdateLinkTypeReplyContent",
+    "WebcastImLinkmicInstructionWaitingListChangeContent",
+    "WebcastImLinkmicJoinChannelData",
+    "WebcastImLinkmicJoinChannelDataDelegateSetting",
     "WebcastImLinkmicOrderSingActionContent",
     "WebcastImLinkmicOrderSingActionToastContent",
     "WebcastImLinkmicOrderSingCreateContent",
@@ -1774,6 +1965,8 @@ __all__ = (
     "WebcastImLinkmicRoomBattleInviteContent",
     "WebcastImLinkmicRoomBattleMatchSuccessContent",
     "WebcastImLinkmicRoomBattleReplyContent",
+    "WebcastImLinkmicRoomBattleSwitchContent",
+    "WebcastImLinkmicRoomSongMessage",
     "WebcastImLinkmicSelfDisciplineConfigContent",
     "WebcastImLinkmicSelfDisciplineLikeContent",
     "WebcastImLinkmicSelfDisciplineMessage",
@@ -1800,16 +1993,45 @@ __all__ = (
     "WebcastImLinkmicThemedCompetitionShowTimeStartContent",
     "WebcastImLinkmicThemedCompetitionStartContent",
     "WebcastImLinkmicThemedCompetitionToastMessageForPc",
+    "WebcastImLinkmicUiBadge",
+    "WebcastImLinkmicUiBadgeBadge",
+    "WebcastImLinkmicUiBasic",
+    "WebcastImLinkmicUiBasicEmptyPosition",
+    "WebcastImLinkmicUiBasicLinkmicPosition",
+    "WebcastImLinkmicUiBasicMicTag",
+    "WebcastImLinkmicUiBasicNormalMicTag",
+    "WebcastImLinkmicUiBasicPositionNameMicTag",
+    "WebcastImLinkmicUiBasicUser",
+    "WebcastImLinkmicUiComponent",
+    "WebcastImLinkmicUiCustomizedRandomEmoji",
+    "WebcastImLinkmicUiFanTicket",
+    "WebcastImLinkmicUiFanTicketFanTicketData",
+    "WebcastImLinkmicUiFanTicketUserFanTicket",
+    "WebcastImLinkmicUiMessage",
+    "WebcastImLinkmicUiVoiceWave",
+    "WebcastImLinkmicUiVoiceWaveVoiceWave",
+    "WebcastImLinkmicUibgImg",
+    "WebcastImLinkmicUibgImgBgData",
     "WebcastImLinkmicWebAntiCheatContent",
     "WebcastImLiveBindMicroAppMessage",
     "WebcastImLiveEcomGeneralMessage",
     "WebcastImLiveEcomMessage",
+    "WebcastImLiveEcomRankListMessage",
     "WebcastImLiveMateDemoteMessage",
     "WebcastImLiveMatrixEntranceChangeContent",
     "WebcastImLiveMountMicroAppLimitDataMessage",
+    "WebcastImLiveMsgCarouselComponentInfo",
+    "WebcastImLiveMsgGuideLike",
+    "WebcastImLiveMsgLeaveRoom",
+    "WebcastImLiveMsgOnlineUserStatus",
+    "WebcastImLiveMsgPromotionFlush",
+    "WebcastImLiveMsgRecallMessage",
+    "WebcastImLiveMsgStartPlayScheduleVideo",
+    "WebcastImLiveMsgSugInfo",
     "WebcastImLiveShoppingMessage",
     "WebcastImLiveStreamControlMessage",
     "WebcastImLiveplaysHonorMessage",
+    "WebcastImLiveplaysRandomMagicGiftMessage",
     "WebcastImLiveplaysSdkCommentMessage",
     "WebcastImLiveplaysSdkCommentMessagePayload",
     "WebcastImLiveplaysSdkFansclubMessage",
@@ -1833,6 +2055,8 @@ __all__ = (
     "WebcastImLotteryMessage",
     "WebcastImLotteryProductShortInfo",
     "WebcastImLotteryUnusualInfo",
+    "WebcastImLowPcuGuideChatMessage",
+    "WebcastImLowPcuGuideMessage",
     "WebcastImLuckyBoxEndMessage",
     "WebcastImLuckyBoxMessage",
     "WebcastImLuckyBoxMessageBottomCommentMsg",
@@ -1869,6 +2093,9 @@ __all__ = (
     "WebcastImMemberMessageEffectConfig",
     "WebcastImMemberMessagePicoEffectConfig",
     "WebcastImMessage",
+    "WebcastImMicAvatarInfo",
+    "WebcastImMicAvatarMessage",
+    "WebcastImMicAvatarRoomInfo",
     "WebcastImMicroAppShelfMessage",
     "WebcastImMicroAppStartSyncData",
     "WebcastImMiniAppCommonMessage",
@@ -1880,6 +2107,7 @@ __all__ = (
     "WebcastImMotorCustomMessage",
     "WebcastImMotorCustomMessageData",
     "WebcastImMultiChorusWaitingListChangedContent",
+    "WebcastImMultiContentSug",
     "WebcastImNabobImNoticeMessage",
     "WebcastImNewHotGatherMessage",
     "WebcastImNews",
@@ -1921,6 +2149,7 @@ __all__ = (
     "WebcastImOrderSingItemByPosition",
     "WebcastImOrderSingSyncData",
     "WebcastImOrderSingUserScore",
+    "WebcastImOriginRoomInfo",
     "WebcastImPackageMeta",
     "WebcastImPageFilter",
     "WebcastImPaidBusinessData",
@@ -1929,6 +2158,7 @@ __all__ = (
     "WebcastImPaidLiveTypeModifyMessage",
     "WebcastImPaiedOrTimeLimitChangeContent",
     "WebcastImPanelComponentItem",
+    "WebcastImPanelDotInfo",
     "WebcastImPausePlaySongContent",
     "WebcastImPayloadInIm",
     "WebcastImPcAnchorRoomDataChangeMessage",
@@ -1941,6 +2171,7 @@ __all__ = (
     "WebcastImPermissionCheckTriggerSyncData",
     "WebcastImPermitWantToListenSongContent",
     "WebcastImPersonalizedDisplayInfo",
+    "WebcastImPicAuditResultMessage",
     "WebcastImPicoDisplayInfo",
     "WebcastImPictureTextStyle",
     "WebcastImPinCommon",
@@ -1951,7 +2182,11 @@ __all__ = (
     "WebcastImPkIconBubble",
     "WebcastImPkIconBubbleMessage",
     "WebcastImPkLinkBubbleContent",
+    "WebcastImPkPlayAnchorMatchMessage",
+    "WebcastImPkPlayAnchorMatchMessagePlayerData",
     "WebcastImPkPlayAnchorPanelMessage",
+    "WebcastImPkPlayAnchorRandMatchMessage",
+    "WebcastImPkPlayAnchorRandMatchMessagePkPlayRandMatchUser",
     "WebcastImPkPlayDataItem",
     "WebcastImPkPlayDataKv",
     "WebcastImPkPlayDetailAnchorTab",
@@ -1959,6 +2194,7 @@ __all__ = (
     "WebcastImPkPlayDetailPanelMessage",
     "WebcastImPkPlayDetailTeamTab",
     "WebcastImPkPlayDimensionData",
+    "WebcastImPkPlayInfoMessage",
     "WebcastImPkPlayPlayerData",
     "WebcastImPkPlayUpdateConfigMessage",
     "WebcastImPlatformAdviseMessage",
@@ -2038,9 +2274,19 @@ __all__ = (
     "WebcastImQuizResult",
     "WebcastImQuizResultMessage",
     "WebcastImQuizStartMessage",
+    "WebcastImRandomMagicGiftInfo",
     "WebcastImRankItem",
+    "WebcastImRankList",
     "WebcastImRankListAwardMessage",
     "WebcastImRankListHourEnterMessage",
+    "WebcastImRankListItem",
+    "WebcastImRankSeasonResult",
+    "WebcastImRankSeasonResultDeltaScoreDetail",
+    "WebcastImRankSeasonResultDeltaScoreInfo",
+    "WebcastImRankSeasonResultRankChangeImgInfo",
+    "WebcastImRankSeasonResultRankChangeInfo",
+    "WebcastImRankSeasonResultRankInfo",
+    "WebcastImRankSeasonResultStarChangeImgInfo",
     "WebcastImRanklistHourEntranceMessage",
     "WebcastImRcmdUser",
     "WebcastImRealPersonAuditMessage",
@@ -2057,10 +2303,13 @@ __all__ = (
     "WebcastImReplyRoomChannelMessage",
     "WebcastImRequest",
     "WebcastImReserveItem",
+    "WebcastImResidentGuestAllowContent",
+    "WebcastImResidentGuestMessage",
     "WebcastImResponse",
     "WebcastImRiskAdviseSyncData",
     "WebcastImRoomAnchorFansChannelMessage",
     "WebcastImRoomAnchorFansChannelSyncData",
+    "WebcastImRoomAnswerCommonMessage",
     "WebcastImRoomAnswerQuestionMessage",
     "WebcastImRoomAppConfigMessage",
     "WebcastImRoomAuthInterventionVerifyMessage",
@@ -2072,6 +2321,7 @@ __all__ = (
     "WebcastImRoomChannelAccessMessage",
     "WebcastImRoomChannelAssetMessage",
     "WebcastImRoomChannelChatMessage",
+    "WebcastImRoomChannelCipherMessage",
     "WebcastImRoomChannelDisbandMessage",
     "WebcastImRoomChannelEmojiChatMessage",
     "WebcastImRoomChannelGiftMessage",
@@ -2089,7 +2339,11 @@ __all__ = (
     "WebcastImRoomCommentTopicMessageChatItem",
     "WebcastImRoomConfigMessage",
     "WebcastImRoomDataSyncMessage",
+    "WebcastImRoomDigitalHumanMessage",
+    "WebcastImRoomDigitalHumanMessageDigitalHumanUsageInfo",
+    "WebcastImRoomDigitalHumanMessageDigitalHumanUsageInfoRtcInfo",
     "WebcastImRoomGroupChannelNotifyMessage",
+    "WebcastImRoomHighlightAreaContainerMessage",
     "WebcastImRoomHotInfo",
     "WebcastImRoomHotSentenceMessage",
     "WebcastImRoomImgMessage",
@@ -2162,6 +2416,7 @@ __all__ = (
     "WebcastImSocialMessage",
     "WebcastImSongWaitingListChangedContent",
     "WebcastImSpecialPushMessage",
+    "WebcastImSpecifiedGuestsPkMessage",
     "WebcastImSportsQuiz",
     "WebcastImSportsQuizMessage",
     "WebcastImSportsQuizOption",
@@ -2174,6 +2429,7 @@ __all__ = (
     "WebcastImSubscribeInfoMessage",
     "WebcastImSubscribeVipLiveMessage",
     "WebcastImSuffixText",
+    "WebcastImSugContent",
     "WebcastImSunDailyRankMessage",
     "WebcastImSunDailyRankMessageRankInfo",
     "WebcastImSwitchAvatarActionContent",
@@ -2228,6 +2484,7 @@ __all__ = (
     "WebcastImToolbarItemMessage",
     "WebcastImTopAggregateChatMessage",
     "WebcastImTopEffectMessage",
+    "WebcastImTopEffectMessageExtra",
     "WebcastImTopLeftBubbleMessage",
     "WebcastImTraceTimeMetric",
     "WebcastImTraceTimeMetricV2",
@@ -2299,6 +2556,7 @@ __all__ = (
     "WebcastImWaitChestOpenInfoAchieveTaskUser",
     "WebcastImWantToListenSongListChangedContent",
     "WebcastImWantToListenSongRemovedContent",
+    "WebcastImWebcastAvatarRoomChatMessage",
     "WebcastImWebcastBattleBonusMessage",
     "WebcastImWebcastBattleBonusMessageMvpMessage",
     "WebcastImWebcastBattleBonusMessagePlayerMessage",
@@ -2309,11 +2567,13 @@ __all__ = (
     "WebcastImWebcastLifeLotteryDrawResultEventMessage",
     "WebcastImWebcastPopularCardMessage",
     "WebcastImWebcastPopularCardMessagePopularCardInfo",
+    "WebcastImWebcastUeControlMessage",
     "WebcastImWelfareProjectOperateMessage",
     "WebcastImWinLotteryAlert",
     "WebcastImWinLotteryInfo",
     "WebcastImWishFinishMessage",
     "WebcastImWord",
+    "WebcastImWorldChatData",
     "WebcastImXgLotteryMessage",
     "WebcastImXplayHamletAvatarInitContent",
     "WebcastImXplayInitContent",
@@ -2880,6 +3140,56 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastDataAiPublicScreenContainer(betterproto2.Message):
+    role: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    nick_name: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    icon: "WebcastDataImage | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    welcome_tip: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    area_schema: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    abilities: "list[WebcastDataAiPublicScreenContainerAbility]" = betterproto2.field(
+        6, betterproto2.TYPE_MESSAGE, repeated=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.AIPublicScreenContainer", WebcastDataAiPublicScreenContainer
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataAiPublicScreenContainerAbility(betterproto2.Message):
+    type: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    text: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    schema: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    name: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    params: "dict[str, str]" = betterproto2.field(
+        5,
+        betterproto2.TYPE_MAP,
+        map_meta=betterproto2.map_meta(
+            betterproto2.TYPE_STRING, betterproto2.TYPE_STRING
+        ),
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.AIPublicScreenContainer.Ability",
+    WebcastDataAiPublicScreenContainerAbility,
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastDataAnchorBottomToolBar(betterproto2.Message):
     anchor_linkmic_entrance: "WebcastDataAnchorLinkmicEntranceInfo | None" = (
         betterproto2.field(1, betterproto2.TYPE_MESSAGE, optional=True)
@@ -3161,6 +3471,12 @@ class WebcastDataAnchorLinkmicUserSettings(betterproto2.Message):
 
     auto_start_prop_card: "bool" = betterproto2.field(12, betterproto2.TYPE_BOOL)
 
+    auto_start_steal_dragon: "bool" = betterproto2.field(13, betterproto2.TYPE_BOOL)
+
+    show_season_user_rank: "bool" = betterproto2.field(14, betterproto2.TYPE_BOOL)
+
+    accept_find_people_invite: "bool" = betterproto2.field(15, betterproto2.TYPE_BOOL)
+
 
 default_message_pool.register_message(
     "douyin",
@@ -3305,6 +3621,10 @@ class WebcastDataAnimeInfo(betterproto2.Message):
 
     cur_aura_url: "str" = betterproto2.field(7, betterproto2.TYPE_STRING)
 
+    skin_url: "str" = betterproto2.field(8, betterproto2.TYPE_STRING)
+
+    user_avatar_url: "str" = betterproto2.field(9, betterproto2.TYPE_STRING)
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.AnimeInfo", WebcastDataAnimeInfo
@@ -3336,6 +3656,8 @@ class WebcastDataAnnounceInfo(betterproto2.Message):
     image_list_thumb: "list[WebcastDataImage]" = betterproto2.field(
         10, betterproto2.TYPE_MESSAGE, repeated=True
     )
+
+    announce_id_str: "str" = betterproto2.field(11, betterproto2.TYPE_STRING)
 
 
 default_message_pool.register_message(
@@ -3609,9 +3931,29 @@ class WebcastDataAudienceEntranceInfo(betterproto2.Message):
 
     entrance_schema_url: "str" = betterproto2.field(102, betterproto2.TYPE_STRING)
 
+    vision_type: "int" = betterproto2.field(103, betterproto2.TYPE_INT32)
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.AudienceEntranceInfo", WebcastDataAudienceEntranceInfo
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataAudienceLimitRoomConfig(betterproto2.Message):
+    version: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    restriction_reason: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    mock_max_audience_cnt: "int" = betterproto2.field(3, betterproto2.TYPE_INT32)
+
+    extra: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    max_audience_cnt: "int" = betterproto2.field(5, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.AudienceLimitRoomConfig", WebcastDataAudienceLimitRoomConfig
 )
 
 
@@ -3762,6 +4104,22 @@ default_message_pool.register_message(
     "douyin",
     "Webcast.Data.AudioChatCycleUIInfo.Info",
     WebcastDataAudioChatCycleUiInfoInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataAudioHonorRankContent(betterproto2.Message):
+    show_real_time_rank: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    show_real_time_contribute: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    show_daily_rank: "int" = betterproto2.field(3, betterproto2.TYPE_INT32)
+
+    show_daily_contribute: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.AudioHonorRankContent", WebcastDataAudioHonorRankContent
 )
 
 
@@ -4456,6 +4814,24 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastDataBattleAuxiliaryConfig(betterproto2.Message):
+    operate_type: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    gift_id: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+    suffix_number_mode: "int" = betterproto2.field(3, betterproto2.TYPE_INT32)
+
+    fixed_number: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+    index: "int" = betterproto2.field(5, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.BattleAuxiliaryConfig", WebcastDataBattleAuxiliaryConfig
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastDataBattleAuxiliaryData(betterproto2.Message):
     title_config: "WebcastDataBattleTitleConfig | None" = betterproto2.field(
         1, betterproto2.TYPE_MESSAGE, optional=True
@@ -4540,6 +4916,154 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastDataBattleCloudCollaborateConfig(betterproto2.Message):
+    panel_type: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    start_lightning_effect: "bool" = betterproto2.field(2, betterproto2.TYPE_BOOL)
+
+    target_value: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    expand_time_per_round: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.BattleCloudCollaborateConfig",
+    WebcastDataBattleCloudCollaborateConfig,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataBattleCloudCollaborateThroneFightInfo(betterproto2.Message):
+    stages: "list[WebcastDataBattleCloudCollaborateThroneFightInfoStage]" = (
+        betterproto2.field(1, betterproto2.TYPE_MESSAGE, repeated=True)
+    )
+
+    cur_stage: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    even_stage_info: "WebcastDataBattleCloudCollaborateThroneFightInfoEvenStageInfo | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    odd_stage_info: "WebcastDataBattleCloudCollaborateThroneFightInfoOddStageInfo | None" = betterproto2.field(
+        4, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    stream_x_info: "WebcastDataStreamXInfo | None" = betterproto2.field(
+        5, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.BattleCloudCollaborateThroneFightInfo",
+    WebcastDataBattleCloudCollaborateThroneFightInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataBattleCloudCollaborateThroneFightInfoEvenStageInfo(
+    betterproto2.Message
+):
+    title: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    users: "list[WebcastDataBattleCloudCollaborateThroneFightInfoUserInfo]" = (
+        betterproto2.field(2, betterproto2.TYPE_MESSAGE, repeated=True)
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.BattleCloudCollaborateThroneFightInfo.EvenStageInfo",
+    WebcastDataBattleCloudCollaborateThroneFightInfoEvenStageInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataBattleCloudCollaborateThroneFightInfoOddStageInfo(
+    betterproto2.Message
+):
+    users: "list[WebcastDataBattleCloudCollaborateThroneFightInfoSettleUserInfo]" = (
+        betterproto2.field(1, betterproto2.TYPE_MESSAGE, repeated=True)
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.BattleCloudCollaborateThroneFightInfo.OddStageInfo",
+    WebcastDataBattleCloudCollaborateThroneFightInfoOddStageInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataBattleCloudCollaborateThroneFightInfoSettleUserInfo(
+    betterproto2.Message
+):
+    avatar: "WebcastDataImage | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    crown_icon: "WebcastDataImage | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    name: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    user_id: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    user_open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.BattleCloudCollaborateThroneFightInfo.SettleUserInfo",
+    WebcastDataBattleCloudCollaborateThroneFightInfoSettleUserInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataBattleCloudCollaborateThroneFightInfoStage(betterproto2.Message):
+    delta_seconds: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.BattleCloudCollaborateThroneFightInfo.Stage",
+    WebcastDataBattleCloudCollaborateThroneFightInfoStage,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataBattleCloudCollaborateThroneFightInfoUserInfo(betterproto2.Message):
+    user_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    room_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    avatar: "WebcastDataImage | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    name: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    score: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    crown_icon: "WebcastDataImage | None" = betterproto2.field(
+        6, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    success_times_desc: "str" = betterproto2.field(7, betterproto2.TYPE_STRING)
+
+    user_open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.BattleCloudCollaborateThroneFightInfo.UserInfo",
+    WebcastDataBattleCloudCollaborateThroneFightInfoUserInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastDataBattleConfigSetting(betterproto2.Message):
     mod_type: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
 
@@ -4590,6 +5114,22 @@ class WebcastDataBattleConfigSetting(betterproto2.Message):
     from_anchor_id: "int" = betterproto2.field(15, betterproto2.TYPE_UINT64)
 
     activity_id: "str" = betterproto2.field(16, betterproto2.TYPE_STRING)
+
+    auxiliary_config: "WebcastDataBattleAuxiliaryConfig | None" = betterproto2.field(
+        17, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    cloud_collaborate_config: "WebcastDataBattleCloudCollaborateConfig | None" = (
+        betterproto2.field(18, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    from_anchor_id_str: "str" = betterproto2.field(19, betterproto2.TYPE_STRING)
+
+    interact_config: "WebcastDataInteractConfig | None" = betterproto2.field(
+        20, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    score_contest_id: "str" = betterproto2.field(21, betterproto2.TYPE_STRING)
 
     from_anchor_open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
 
@@ -4735,6 +5275,14 @@ class WebcastDataBattleLinkerInviteMessageExtra(betterproto2.Message):
         29, betterproto2.TYPE_MESSAGE, optional=True
     )
 
+    accept_tip: "WebcastDataBattleLinkerInviteMessageExtraAcceptTip | None" = (
+        betterproto2.field(30, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    find_people_info: "WebcastDataFindPeopleInfo | None" = betterproto2.field(
+        31, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
     can_not_pass_anchor_open_ids: "str" = betterproto2.field(
         5000, betterproto2.TYPE_STRING
     )
@@ -4748,6 +5296,24 @@ default_message_pool.register_message(
     "douyin",
     "Webcast.Data.BattleLinkerInviteMessageExtra",
     WebcastDataBattleLinkerInviteMessageExtra,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataBattleLinkerInviteMessageExtraAcceptTip(betterproto2.Message):
+    content: "list[WebcastDataRichText]" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, repeated=True
+    )
+
+    bg_img: "WebcastDataImage | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.BattleLinkerInviteMessageExtra.AcceptTip",
+    WebcastDataBattleLinkerInviteMessageExtraAcceptTip,
 )
 
 
@@ -5103,6 +5669,12 @@ class WebcastDataBattleSettings(betterproto2.Message):
 
     lynx_data: "str" = betterproto2.field(38, betterproto2.TYPE_STRING)
 
+    sub_type: "int" = betterproto2.field(39, betterproto2.TYPE_UINT64)
+
+    battle_status: "int" = betterproto2.field(40, betterproto2.TYPE_UINT64)
+
+    initiator_open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.BattleSettings", WebcastDataBattleSettings
@@ -5349,6 +5921,10 @@ class WebcastDataBattleUserInfoUserImgFlipInfo(betterproto2.Message):
 
     scheme: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
 
+    season_avatar_frame: "WebcastDataImage | None" = betterproto2.field(
+        5, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
 
 default_message_pool.register_message(
     "douyin",
@@ -5402,6 +5978,12 @@ class WebcastDataBattleUserSettings(betterproto2.Message):
     )
 
     auto_start_prop_card: "bool" = betterproto2.field(15, betterproto2.TYPE_BOOL)
+
+    auto_start_steal_dragon: "bool" = betterproto2.field(16, betterproto2.TYPE_BOOL)
+
+    show_season_user_rank: "bool" = betterproto2.field(17, betterproto2.TYPE_BOOL)
+
+    accept_find_people_invite: "bool" = betterproto2.field(18, betterproto2.TYPE_BOOL)
 
 
 default_message_pool.register_message(
@@ -5600,6 +6182,14 @@ class WebcastDataBindSubProductData(betterproto2.Message):
     disable_reason: "int" = betterproto2.field(18, betterproto2.TYPE_INT32)
 
     camera_id: "str" = betterproto2.field(19, betterproto2.TYPE_STRING)
+
+    price_info: "WebcastDataProductPriceStruct | None" = betterproto2.field(
+        20, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    jump_schema: "str" = betterproto2.field(21, betterproto2.TYPE_STRING)
+
+    item_id: "str" = betterproto2.field(22, betterproto2.TYPE_STRING)
 
 
 default_message_pool.register_message(
@@ -5802,6 +6392,20 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastDataBottomInputData(betterproto2.Message):
+    content: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    frequency: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+    duration: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.BottomInputData", WebcastDataBottomInputData
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastDataBottomPanel(betterproto2.Message):
     data: "WebcastDataBottomPanelData | None" = betterproto2.field(
         1, betterproto2.TYPE_MESSAGE, optional=True
@@ -5923,7 +6527,21 @@ class WebcastDataBreakthroughInfo(betterproto2.Message):
 
     state: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
 
+    stage_info_map: "dict[int, WebcastDataBreakthroughInfoStageInfo]" = (
+        betterproto2.field(
+            5,
+            betterproto2.TYPE_MAP,
+            map_meta=betterproto2.map_meta(
+                betterproto2.TYPE_INT64, betterproto2.TYPE_MESSAGE
+            ),
+        )
+    )
+
+    mvp_anchor_id_str: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
     mvp_anchor_open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
+
+    mvp_anchor_open_id_str: "str" = betterproto2.field(5001, betterproto2.TYPE_STRING)
 
 
 default_message_pool.register_message(
@@ -5952,6 +6570,8 @@ class WebcastDataBuffLockInfo(betterproto2.Message):
     schema: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
 
     cell_text: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    custom_button_color: "bool" = betterproto2.field(5, betterproto2.TYPE_BOOL)
 
 
 default_message_pool.register_message(
@@ -6422,6 +7042,22 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastDataChangeRoomInfo(betterproto2.Message):
+    has_change_room: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    before_room_id: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+    before_anchor_id: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    open_before_anchor_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.ChangeRoomInfo", WebcastDataChangeRoomInfo
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastDataChannelListUser(betterproto2.Message):
     user: "WebcastDataUser | None" = betterproto2.field(
         1, betterproto2.TYPE_MESSAGE, optional=True
@@ -6776,6 +7412,36 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastDataChorusAccompanimentInfo(betterproto2.Message):
+    accompaniment_type: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    chorus_accompanist: "WebcastDataChorusAccompanist | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.ChorusAccompanimentInfo", WebcastDataChorusAccompanimentInfo
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataChorusAccompanist(betterproto2.Message):
+    rtc_app_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    rtc_room_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    rtc_user_id: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    sub_rtc_room_id: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.ChorusAccompanist", WebcastDataChorusAccompanist
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastDataChorusCdnInfo(betterproto2.Message):
     stream: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
 
@@ -6822,6 +7488,10 @@ class WebcastDataChorusConcertSong(betterproto2.Message):
     artist_name: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
 
     song_name: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    order_user: "WebcastDataOrderSongUser | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
 
 
 default_message_pool.register_message(
@@ -7246,6 +7916,8 @@ class WebcastDataCombined(betterproto2.Message):
     )
 
     bind_sub_ticket_total: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
+
+    combination_updated: "bool" = betterproto2.field(5, betterproto2.TYPE_BOOL)
 
 
 default_message_pool.register_message(
@@ -7682,6 +8354,32 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastDataCommonDot(betterproto2.Message):
+    id: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    priority: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+    style: "int" = betterproto2.field(3, betterproto2.TYPE_INT32)
+
+    appear_mode: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
+
+    disappear_mode: "int" = betterproto2.field(5, betterproto2.TYPE_INT32)
+
+    extra: "dict[str, str]" = betterproto2.field(
+        99,
+        betterproto2.TYPE_MAP,
+        map_meta=betterproto2.map_meta(
+            betterproto2.TYPE_STRING, betterproto2.TYPE_STRING
+        ),
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.CommonDot", WebcastDataCommonDot
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastDataComponentSkin(betterproto2.Message):
     vertical: "dict[str, WebcastDataToolbarBizSkin]" = betterproto2.field(
         1,
@@ -8005,8 +8703,8 @@ default_message_pool.register_message(
 
 @dataclass(eq=False, repr=False)
 class WebcastDataCustomConfig(betterproto2.Message):
-    score_elements: "WebcastDataCustomConfigScoreElement | None" = betterproto2.field(
-        1, betterproto2.TYPE_MESSAGE, optional=True
+    score_elements: "list[WebcastDataCustomConfigScoreElement]" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, repeated=True
     )
 
     name: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
@@ -8479,6 +9177,10 @@ class WebcastDataEcomData(betterproto2.Message):
 
     route_rule: "str" = betterproto2.field(7, betterproto2.TYPE_STRING)
 
+    shop_author_header: "str" = betterproto2.field(8, betterproto2.TYPE_STRING)
+
+    intro_type: "int" = betterproto2.field(9, betterproto2.TYPE_INT32)
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.EcomData", WebcastDataEcomData
@@ -8544,6 +9246,22 @@ class WebcastDataEcomLiveCard(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.EcomLiveCard", WebcastDataEcomLiveCard
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataEcomLiveReviewInfo(betterproto2.Message):
+    need_review: "bool" = betterproto2.field(1, betterproto2.TYPE_BOOL)
+
+    timeout_timestamp: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+    review_duration: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    approval_reason: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.EcomLiveReviewInfo", WebcastDataEcomLiveReviewInfo
 )
 
 
@@ -9111,6 +9829,8 @@ class WebcastDataEpisodeExtraInfo(betterproto2.Message):
         ),
     )
 
+    share_type: "int" = betterproto2.field(74, betterproto2.TYPE_INT32)
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.EpisodeExtraInfo", WebcastDataEpisodeExtraInfo
@@ -9253,6 +9973,10 @@ class WebcastDataFansChannelCreateInfo(betterproto2.Message):
 
     group_id_str: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
 
+    expired_time: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+    fans_channel_create_type: "int" = betterproto2.field(5, betterproto2.TYPE_UINT64)
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.FansChannelCreateInfo", WebcastDataFansChannelCreateInfo
@@ -9264,6 +9988,10 @@ class WebcastDataFeaturedPublicScreenConf(betterproto2.Message):
     status: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
 
     mode: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+    ai_container: "WebcastDataAiPublicScreenContainer | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
 
 
 default_message_pool.register_message(
@@ -9492,6 +10220,42 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastDataFindPeopleInfo(betterproto2.Message):
+    user_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    room_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    user: "WebcastDataUser | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    recommend_reason: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    season_rank_info: "WebcastDataSeasonRankInfo | None" = betterproto2.field(
+        5, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    stream_data: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+    user_count: "int" = betterproto2.field(7, betterproto2.TYPE_INT32)
+
+    cover_image: "WebcastDataImage | None" = betterproto2.field(
+        8, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    screen_image: "WebcastDataImage | None" = betterproto2.field(
+        9, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    user_open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.FindPeopleInfo", WebcastDataFindPeopleInfo
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastDataFinishMultiChorusContent(betterproto2.Message):
     common: "WebcastDataMultiChorusCommonContent | None" = betterproto2.field(
         1, betterproto2.TYPE_MESSAGE, optional=True
@@ -9546,6 +10310,22 @@ class WebcastDataFreqCtrlParams(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.FreqCtrlParams", WebcastDataFreqCtrlParams
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataFundCheckExtraInfo(betterproto2.Message):
+    unique_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    from_user_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    to_user_id: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    env: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.FundCheckExtraInfo", WebcastDataFundCheckExtraInfo
 )
 
 
@@ -9873,6 +10653,20 @@ class WebcastDataGiftBuffInfo(betterproto2.Message):
 
     default_expand: "bool" = betterproto2.field(18, betterproto2.TYPE_BOOL)
 
+    gift_icon_asset_img: "WebcastDataImage | None" = betterproto2.field(
+        19, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    default_gift_text: "dict[int, WebcastDataGiftTextInfo]" = betterproto2.field(
+        20,
+        betterproto2.TYPE_MAP,
+        map_meta=betterproto2.map_meta(
+            betterproto2.TYPE_INT32, betterproto2.TYPE_MESSAGE
+        ),
+    )
+
+    un_select_lock_sub_text: "str" = betterproto2.field(21, betterproto2.TYPE_STRING)
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.GiftBuffInfo", WebcastDataGiftBuffInfo
@@ -10004,6 +10798,8 @@ class WebcastDataGiftEffectGameStruct(betterproto2.Message):
     )
 
     game_extra: "str" = betterproto2.field(9, betterproto2.TYPE_STRING)
+
+    cur_time_ms: "int" = betterproto2.field(10, betterproto2.TYPE_UINT64)
 
 
 default_message_pool.register_message(
@@ -10222,6 +11018,98 @@ class WebcastDataGiftPreviewInfo(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.GiftPreviewInfo", WebcastDataGiftPreviewInfo
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataGiftSingCollectModeContent(betterproto2.Message):
+    second_duration: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    guide_text: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    target_gift_id: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    target_score: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+    is_choose_gift: "bool" = betterproto2.field(5, betterproto2.TYPE_BOOL)
+
+    target_num: "int" = betterproto2.field(6, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.GiftSingCollectModeContent",
+    WebcastDataGiftSingCollectModeContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataGiftSingContent(betterproto2.Message):
+    select_mode: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    collect_mode_content: "WebcastDataGiftSingCollectModeContent | None" = (
+        betterproto2.field(2, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    vote_mode_content: "WebcastDataGiftSingVoteModeContent | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.GiftSingContent", WebcastDataGiftSingContent
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataGiftSingGiftInfo(betterproto2.Message):
+    gift_id: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    gift_name: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    gift_diamond_count: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    icon: "WebcastDataImage | None" = betterproto2.field(
+        4, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.GiftSingGiftInfo", WebcastDataGiftSingGiftInfo
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataGiftSingVoteModeContent(betterproto2.Message):
+    second_duration: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    guide_text: "WebcastDataGiftSingVoteModeGuideTextInfo | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    gift_id1: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    gift_id2: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.GiftSingVoteModeContent", WebcastDataGiftSingVoteModeContent
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataGiftSingVoteModeGuideTextInfo(betterproto2.Message):
+    title: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    gift_text1: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    gift_text2: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.GiftSingVoteModeGuideTextInfo",
+    WebcastDataGiftSingVoteModeGuideTextInfo,
 )
 
 
@@ -10518,6 +11406,18 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastDataGiftTextInfo(betterproto2.Message):
+    default_gift_main_text: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    default_gift_sub_text: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.GiftTextInfo", WebcastDataGiftTextInfo
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastDataGiftTip(betterproto2.Message):
     display_text: "WebcastDataText | None" = betterproto2.field(
         1, betterproto2.TYPE_MESSAGE, optional=True
@@ -10620,6 +11520,10 @@ class WebcastDataGiftTrayInfo(betterproto2.Message):
     )
 
     tray_group_mode: "int" = betterproto2.field(21, betterproto2.TYPE_INT32)
+
+    expensive_tray_group_num: "int" = betterproto2.field(22, betterproto2.TYPE_INT32)
+
+    regular_tray_group_num: "int" = betterproto2.field(23, betterproto2.TYPE_INT32)
 
 
 default_message_pool.register_message(
@@ -10815,6 +11719,8 @@ class WebcastDataGroupLiveContainerData(betterproto2.Message):
 
     horizontal_url_web: "str" = betterproto2.field(13, betterproto2.TYPE_STRING)
 
+    preview_url: "str" = betterproto2.field(14, betterproto2.TYPE_STRING)
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.GroupLiveContainerData", WebcastDataGroupLiveContainerData
@@ -10863,6 +11769,8 @@ class WebcastDataGroupLiveData(betterproto2.Message):
 
     group_live_mode: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
 
+    group_live_type: "int" = betterproto2.field(3, betterproto2.TYPE_INT32)
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.GroupLiveData", WebcastDataGroupLiveData
@@ -10880,6 +11788,12 @@ class WebcastDataGroupLiveIncomeInfo(betterproto2.Message):
     other_income: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
 
     gift_income: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+    star_guard_income: "int" = betterproto2.field(5, betterproto2.TYPE_UINT64)
+
+    star_guard_activated_user_count: "int" = betterproto2.field(
+        7, betterproto2.TYPE_UINT64
+    )
 
 
 default_message_pool.register_message(
@@ -11105,6 +12019,8 @@ class WebcastDataGrowthTaskReward(betterproto2.Message):
 
     remaining_count: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
 
+    count: "int" = betterproto2.field(5, betterproto2.TYPE_UINT64)
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.GrowthTaskReward", WebcastDataGrowthTaskReward
@@ -11170,6 +12086,8 @@ class WebcastDataGuestBattleConfigContent(betterproto2.Message):
     ui_type: "int" = betterproto2.field(5, betterproto2.TYPE_UINT64)
 
     chest_game_switch: "int" = betterproto2.field(6, betterproto2.TYPE_INT32)
+
+    mode: "int" = betterproto2.field(7, betterproto2.TYPE_INT32)
 
 
 default_message_pool.register_message(
@@ -11253,6 +12171,8 @@ class WebcastDataGuestBattleInfo(betterproto2.Message):
 
     start_operator_user_id: "int" = betterproto2.field(17, betterproto2.TYPE_UINT64)
 
+    mode: "int" = betterproto2.field(18, betterproto2.TYPE_INT32)
+
     start_operator_user_open_id: "str" = betterproto2.field(
         5000, betterproto2.TYPE_STRING
     )
@@ -11306,6 +12226,94 @@ default_message_pool.register_message(
     "douyin",
     "Webcast.Data.GuestBattleUserGradeInfo",
     WebcastDataGuestBattleUserGradeInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataGuestBattleV2ConfigContent(betterproto2.Message):
+    last_battle_duration_by_anchor: "int" = betterproto2.field(
+        1, betterproto2.TYPE_UINT64
+    )
+
+    score_type: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.GuestBattleV2ConfigContent",
+    WebcastDataGuestBattleV2ConfigContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataGuestBattleV2Info(betterproto2.Message):
+    battle_id: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    battle_id_str: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    battle_start_time: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    battle_end_time: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+    finish_time: "int" = betterproto2.field(5, betterproto2.TYPE_UINT64)
+
+    current_time_ms: "int" = betterproto2.field(6, betterproto2.TYPE_UINT64)
+
+    battle_status: "int" = betterproto2.field(7, betterproto2.TYPE_INT32)
+
+    score_type: "int" = betterproto2.field(8, betterproto2.TYPE_INT32)
+
+    ui_info: "WebcastDataGuestBattleV2UiInfo | None" = betterproto2.field(
+        9, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    reason: "int" = betterproto2.field(10, betterproto2.TYPE_INT32)
+
+    battle_end_remain_time_ms: "int" = betterproto2.field(11, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.GuestBattleV2Info", WebcastDataGuestBattleV2Info
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataGuestBattleV2PkBar(betterproto2.Message):
+    battle_id_str: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    battle_start_time: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+    battle_end_time: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    finish_time: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+    current_time_ms: "int" = betterproto2.field(5, betterproto2.TYPE_UINT64)
+
+    battle_status: "int" = betterproto2.field(6, betterproto2.TYPE_INT32)
+
+    score_type: "int" = betterproto2.field(7, betterproto2.TYPE_INT32)
+
+    battle_end_remain_time_ms: "int" = betterproto2.field(8, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.GuestBattleV2PKBar", WebcastDataGuestBattleV2PkBar
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataGuestBattleV2UiInfo(betterproto2.Message):
+    open_animation: "WebcastDataImage | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    finish_animation: "WebcastDataImage | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.GuestBattleV2UIInfo", WebcastDataGuestBattleV2UiInfo
 )
 
 
@@ -11364,6 +12372,26 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastDataGuideChatConf(betterproto2.Message):
+    type: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    image_id: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+    image_id_str: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    image_text: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    emoji: "WebcastDataImage | None" = betterproto2.field(
+        5, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.GuideChatConf", WebcastDataGuideChatConf
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastDataHeaderMedia(betterproto2.Message):
     type: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
 
@@ -11396,6 +12424,72 @@ class WebcastDataHeaderMediaViewButton(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.HeaderMedia.ViewButton", WebcastDataHeaderMediaViewButton
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataHighlightAreaContainer(betterproto2.Message):
+    type: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    biz_scene: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    display_text: "WebcastDataText | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    scene_id: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+    extra: "dict[str, str]" = betterproto2.field(
+        5,
+        betterproto2.TYPE_MAP,
+        map_meta=betterproto2.map_meta(
+            betterproto2.TYPE_STRING, betterproto2.TYPE_STRING
+        ),
+    )
+
+    area_priority_config: "WebcastDataHighlightAreaPriorityConfig | None" = (
+        betterproto2.field(6, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    show_duration_ms: "int" = betterproto2.field(7, betterproto2.TYPE_UINT64)
+
+    triggers: "list[WebcastDataHighlightAreaContainerTrigger]" = betterproto2.field(
+        8, betterproto2.TYPE_MESSAGE, repeated=True
+    )
+
+    anim_type: "int" = betterproto2.field(9, betterproto2.TYPE_UINT64)
+
+    same_type_pk_strategy: "WebcastDataSameTypePkStrategy | None" = betterproto2.field(
+        10, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    schema: "str" = betterproto2.field(12, betterproto2.TYPE_STRING)
+
+    operate: "int" = betterproto2.field(13, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.HighlightAreaContainer", WebcastDataHighlightAreaContainer
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataHighlightAreaContainerTrigger(betterproto2.Message):
+    event: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    extra: "dict[str, str]" = betterproto2.field(
+        2,
+        betterproto2.TYPE_MAP,
+        map_meta=betterproto2.map_meta(
+            betterproto2.TYPE_STRING, betterproto2.TYPE_STRING
+        ),
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.HighlightAreaContainer.Trigger",
+    WebcastDataHighlightAreaContainerTrigger,
 )
 
 
@@ -11728,6 +12822,218 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastDataInteractActingBg(betterproto2.Message):
+    tab_name: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    description: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    bg_id: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.InteractActingBG", WebcastDataInteractActingBg
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataInteractActingContent(betterproto2.Message):
+    bg: "WebcastDataInteractActingBg | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    gift: "WebcastDataInteractActingGift | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    role: "WebcastDataInteractActingRole | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    show_role_nick_name: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.InteractActingContent", WebcastDataInteractActingContent
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataInteractActingGift(betterproto2.Message):
+    gift_id: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    gift_name: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.InteractActingGift", WebcastDataInteractActingGift
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataInteractActingGiftContent(betterproto2.Message):
+    gift_id: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    gift_name: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    gift_diamond_count: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    icon: "WebcastDataImage | None" = betterproto2.field(
+        4, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.InteractActingGiftContent",
+    WebcastDataInteractActingGiftContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataInteractActingRole(betterproto2.Message):
+    tab_name: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    theme_id: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+    theme_name: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.InteractActingRole", WebcastDataInteractActingRole
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataInteractActingRoleInfo(betterproto2.Message):
+    role_id: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    avatar_thumb: "WebcastDataImage | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    nick_name: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    pos: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+    audit_status: "int" = betterproto2.field(5, betterproto2.TYPE_INT32)
+
+    extra: "str" = betterproto2.field(100, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.InteractActingRoleInfo", WebcastDataInteractActingRoleInfo
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataInteractActingThemeRole(betterproto2.Message):
+    theme_id: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    theme_name: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    role_list: "list[WebcastDataInteractActingRoleInfo]" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, repeated=True
+    )
+
+    audit_status: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
+
+    audit_reason: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    extra: "str" = betterproto2.field(100, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.InteractActingThemeRole", WebcastDataInteractActingThemeRole
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataInteractCompeteEvalConfig(betterproto2.Message):
+    like_to_score: "dict[int, int]" = betterproto2.field(
+        1,
+        betterproto2.TYPE_MAP,
+        map_meta=betterproto2.map_meta(
+            betterproto2.TYPE_INT64, betterproto2.TYPE_INT64
+        ),
+    )
+
+    gift_eval_list: "list[WebcastDataInteractGiftEvalConfig]" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, repeated=True
+    )
+
+    comment_to_score: "dict[str, int]" = betterproto2.field(
+        3,
+        betterproto2.TYPE_MAP,
+        map_meta=betterproto2.map_meta(
+            betterproto2.TYPE_STRING, betterproto2.TYPE_INT64
+        ),
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.InteractCompeteEvalConfig",
+    WebcastDataInteractCompeteEvalConfig,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataInteractConfig(betterproto2.Message):
+    id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    interact_type: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    name: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    desc: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    battle_effect_config: "WebcastDataInteractEffectInfo | None" = betterproto2.field(
+        5, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    reward_punish_config: "WebcastDataInteractRewardPunishConfig | None" = (
+        betterproto2.field(6, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    eval_type: "int" = betterproto2.field(7, betterproto2.TYPE_INT32)
+
+    compete_eval_config: "WebcastDataInteractCompeteEvalConfig | None" = (
+        betterproto2.field(8, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    icon: "WebcastDataImage | None" = betterproto2.field(
+        9, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    play_rule: "list[str]" = betterproto2.field(
+        10, betterproto2.TYPE_STRING, repeated=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.InteractConfig", WebcastDataInteractConfig
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataInteractEffectInfo(betterproto2.Message):
+    resource_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    icon: "WebcastDataImage | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    effect_id: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    pc_effect_id: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.InteractEffectInfo", WebcastDataInteractEffectInfo
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastDataInteractGiftContent(betterproto2.Message):
     audit_status: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
 
@@ -11736,6 +13042,24 @@ class WebcastDataInteractGiftContent(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.InteractGiftContent", WebcastDataInteractGiftContent
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataInteractGiftEvalConfig(betterproto2.Message):
+    gift_id: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    gift_icon: "WebcastDataImage | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    gift_name: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    score: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.InteractGiftEvalConfig", WebcastDataInteractGiftEvalConfig
 )
 
 
@@ -11796,6 +13120,24 @@ class WebcastDataInteractOpenExtra(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.InteractOpenExtra", WebcastDataInteractOpenExtra
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataInteractRewardPunishConfig(betterproto2.Message):
+    reward_effect: "WebcastDataInteractEffectInfo | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    punish_effect: "WebcastDataInteractEffectInfo | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.InteractRewardPunishConfig",
+    WebcastDataInteractRewardPunishConfig,
 )
 
 
@@ -11982,6 +13324,22 @@ class WebcastDataItemCardInfo(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.ItemCardInfo", WebcastDataItemCardInfo
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataItemDotInfo(betterproto2.Message):
+    show_path: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    show_item_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    dot: "WebcastDataCommonDot | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.ItemDotInfo", WebcastDataItemDotInfo
 )
 
 
@@ -12321,6 +13679,20 @@ class WebcastDataKtvSongStruct(betterproto2.Message):
         46, betterproto2.TYPE_UINT64, repeated=True
     )
 
+    global_copyright_region_info: "dict[int, WebcastDataKtvSongStructRegionList]" = (
+        betterproto2.field(
+            47,
+            betterproto2.TYPE_MAP,
+            map_meta=betterproto2.map_meta(
+                betterproto2.TYPE_INT64, betterproto2.TYPE_MESSAGE
+            ),
+        )
+    )
+
+    artist_idstrs: "list[str]" = betterproto2.field(
+        48, betterproto2.TYPE_STRING, repeated=True
+    )
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.KtvSongStruct", WebcastDataKtvSongStruct
@@ -12346,6 +13718,8 @@ class WebcastDataKtvSongStructAudioInfo(betterproto2.Message):
     create_time: "int" = betterproto2.field(8, betterproto2.TYPE_UINT64)
 
     file_hash: "str" = betterproto2.field(9, betterproto2.TYPE_STRING)
+
+    audio_id_str: "str" = betterproto2.field(10, betterproto2.TYPE_STRING)
 
 
 default_message_pool.register_message(
@@ -12405,6 +13779,8 @@ default_message_pool.register_message(
 class WebcastDataKtvSongStructRealTimeChorusInfo(betterproto2.Message):
     chorus_id: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
 
+    chorus_id_str: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
 
 default_message_pool.register_message(
     "douyin",
@@ -12432,6 +13808,18 @@ default_message_pool.register_message(
     "douyin",
     "Webcast.Data.KtvSongStruct.RecommendRealTimeChorusInfo",
     WebcastDataKtvSongStructRecommendRealTimeChorusInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataKtvSongStructRegionList(betterproto2.Message):
+    values: "list[str]" = betterproto2.field(1, betterproto2.TYPE_STRING, repeated=True)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.KtvSongStruct.RegionList",
+    WebcastDataKtvSongStructRegionList,
 )
 
 
@@ -12990,6 +14378,30 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastDataLinkmicAiUser(betterproto2.Message):
+    id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    nickname: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    avatar_medium: "WebcastDataImage | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    belong_user_id: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    belong_room_id: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    linkmic_id_str: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+    belong_open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.LinkmicAIUser", WebcastDataLinkmicAiUser
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastDataLinkmicAudienceEmoji(betterproto2.Message):
     emoji_id: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
 
@@ -13068,6 +14480,8 @@ class WebcastDataLinkMicBizExtra(betterproto2.Message):
     open_game_config: "WebcastDataOpenGameConfig | None" = betterproto2.field(
         1, betterproto2.TYPE_MESSAGE, optional=True
     )
+
+    invite_request_source: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
 
 
 default_message_pool.register_message(
@@ -13167,6 +14581,10 @@ class WebcastDataLinkmicInitInfoContent(betterproto2.Message):
 
     audio_chat_init_info: "WebcastDataInitInfoSetting | None" = betterproto2.field(
         2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    video_linkmic_init_info: "WebcastDataInitInfoSetting | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
     )
 
 
@@ -13272,6 +14690,10 @@ class WebcastDataLinkmicMediaInfo(betterproto2.Message):
     multi_live_core_info: "WebcastDataMultiLiveCoreInfo | None" = betterproto2.field(
         5, betterproto2.TYPE_MESSAGE, optional=True
     )
+
+    biz_tag: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+    version: "int" = betterproto2.field(7, betterproto2.TYPE_UINT64)
 
 
 default_message_pool.register_message(
@@ -13543,6 +14965,8 @@ class WebcastDataLinkmicStreamInfo(betterproto2.Message):
 
     rtc_ext_info: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
 
+    biz_tag: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.LinkmicStreamInfo", WebcastDataLinkmicStreamInfo
@@ -13587,6 +15011,10 @@ default_message_pool.register_message(
 class WebcastDataLinkmicTeamfightContributors(betterproto2.Message):
     user_ids: "list[int]" = betterproto2.field(
         1, betterproto2.TYPE_UINT64, repeated=True
+    )
+
+    user_ids_str: "list[str]" = betterproto2.field(
+        9, betterproto2.TYPE_STRING, repeated=True
     )
 
     open_ids: "list[str]" = betterproto2.field(
@@ -13680,6 +15108,10 @@ class WebcastDataLinkmicTeamfightPlayer(betterproto2.Message):
     )
 
     hit_toast: "bool" = betterproto2.field(8, betterproto2.TYPE_BOOL)
+
+    user_id_str: "str" = betterproto2.field(9, betterproto2.TYPE_STRING)
+
+    open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
 
 
 default_message_pool.register_message(
@@ -13929,6 +15361,8 @@ class WebcastDataListUserLinkmicAudienceContent(betterproto2.Message):
 
     ai_guest_type: "int" = betterproto2.field(29, betterproto2.TYPE_INT32)
 
+    ai_guest_type_int: "int" = betterproto2.field(30, betterproto2.TYPE_INT32)
+
     rank_contributor_open_ids: "list[str]" = betterproto2.field(
         5000, betterproto2.TYPE_STRING, repeated=True
     )
@@ -13960,6 +15394,20 @@ class WebcastDataListUserLinkmicContent(betterproto2.Message):
     )
 
     anchor_auth_role: "int" = betterproto2.field(8, betterproto2.TYPE_INT32)
+
+    host_name: "str" = betterproto2.field(9, betterproto2.TYPE_STRING)
+
+    host_back_color: "str" = betterproto2.field(10, betterproto2.TYPE_STRING)
+
+    host_name_color: "str" = betterproto2.field(11, betterproto2.TYPE_STRING)
+
+    host_switch: "bool" = betterproto2.field(12, betterproto2.TYPE_BOOL)
+
+    live_room_mode: "int" = betterproto2.field(13, betterproto2.TYPE_UINT64)
+
+    virtual_tool: "str" = betterproto2.field(14, betterproto2.TYPE_STRING)
+
+    wtn_stream_id: "str" = betterproto2.field(15, betterproto2.TYPE_STRING)
 
 
 default_message_pool.register_message(
@@ -14414,6 +15862,36 @@ class WebcastDataLotteryRegularlyConfig(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.LotteryRegularlyConfig", WebcastDataLotteryRegularlyConfig
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataLowPcuGuideChatData(betterproto2.Message):
+    status: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    guide_chat_config: "list[WebcastDataGuideChatConf]" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, repeated=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.LowPcuGuideChatData", WebcastDataLowPcuGuideChatData
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataLowPcuGuideData(betterproto2.Message):
+    guide_text: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    status: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+    enable_backup: "bool" = betterproto2.field(3, betterproto2.TYPE_BOOL)
+
+    delay_time: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.LowPcuGuideData", WebcastDataLowPcuGuideData
 )
 
 
@@ -15039,6 +16517,20 @@ class WebcastDataMoreLiveEntrance(betterproto2.Message):
 
     entrance_type: "int" = betterproto2.field(11, betterproto2.TYPE_INT32)
 
+    short_topic_id: "int" = betterproto2.field(12, betterproto2.TYPE_UINT64)
+
+    short_topic_content: "str" = betterproto2.field(13, betterproto2.TYPE_STRING)
+
+    topic_id: "int" = betterproto2.field(14, betterproto2.TYPE_UINT64)
+
+    topic_content: "str" = betterproto2.field(15, betterproto2.TYPE_STRING)
+
+    content_type: "int" = betterproto2.field(16, betterproto2.TYPE_INT32)
+
+    fe_url: "str" = betterproto2.field(17, betterproto2.TYPE_STRING)
+
+    fe_dynamic_param: "str" = betterproto2.field(18, betterproto2.TYPE_STRING)
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.MoreLiveEntrance", WebcastDataMoreLiveEntrance
@@ -15333,6 +16825,10 @@ class WebcastDataMultiLiveCoreInfo(betterproto2.Message):
         betterproto2.field(7, betterproto2.TYPE_MESSAGE, optional=True)
     )
 
+    ui_layout_position_live_core_info: "WebcastDataUiLayoutPositionLiveCoreInfo | None" = betterproto2.field(
+        8, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.MultiLiveCoreInfo", WebcastDataMultiLiveCoreInfo
@@ -15382,6 +16878,16 @@ class WebcastDataMultipleMatches3(betterproto2.Message):
     winner_uid: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
 
     current_winner_uid: "int" = betterproto2.field(5, betterproto2.TYPE_UINT64)
+
+    open_user_infos: "dict[str, WebcastDataMultipleMatchesUserInfo]" = (
+        betterproto2.field(
+            5000,
+            betterproto2.TYPE_MAP,
+            map_meta=betterproto2.map_meta(
+                betterproto2.TYPE_STRING, betterproto2.TYPE_MESSAGE
+            ),
+        )
+    )
 
     winner_open_id: "str" = betterproto2.field(5001, betterproto2.TYPE_STRING)
 
@@ -15433,6 +16939,10 @@ class WebcastDataMultiRtcInfo(betterproto2.Message):
 
     game_barrage_rtc_info: "WebcastDataGameBarrageRtcInfo | None" = betterproto2.field(
         8, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    ui_layout_position_rtc_info: "WebcastDataUiLayoutPositionRtcInfo | None" = (
+        betterproto2.field(9, betterproto2.TYPE_MESSAGE, optional=True)
     )
 
 
@@ -16068,6 +17578,24 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastDataOrderSongUser(betterproto2.Message):
+    id: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    nickname: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    avatar_thumb: "WebcastDataImage | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.OrderSongUser", WebcastDataOrderSongUser
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastDataPackMetaInfo(betterproto2.Message):
     scene: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
 
@@ -16508,6 +18036,34 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastDataPayloadStartMicrogameStamp(betterproto2.Message):
+    mp_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    type: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    status: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    task_id: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    task_source: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    entrance_from: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+    bid_type: "int" = betterproto2.field(7, betterproto2.TYPE_INT32)
+
+    bid_price: "int" = betterproto2.field(8, betterproto2.TYPE_INT32)
+
+    bid_ratio: "int" = betterproto2.field(9, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.PayloadStartMicrogameStamp",
+    WebcastDataPayloadStartMicrogameStamp,
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastDataPaymentArea(betterproto2.Message):
     pay_button: "WebcastDataPaymentAreaPayButton | None" = betterproto2.field(
         1, betterproto2.TYPE_MESSAGE, optional=True
@@ -16637,9 +18193,41 @@ class WebcastDataPicoInfo(betterproto2.Message):
         ),
     )
 
+    multi_stream_info: "WebcastDataPicoInfoMultiStreamInfo | None" = betterproto2.field(
+        14, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.PicoInfo", WebcastDataPicoInfo
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataPicoInfoMultiStreamInfo(betterproto2.Message):
+    multi_stream_scene: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    multi_stream_default_view_angle: "dict[str, int]" = betterproto2.field(
+        2,
+        betterproto2.TYPE_MAP,
+        map_meta=betterproto2.map_meta(
+            betterproto2.TYPE_STRING, betterproto2.TYPE_INT64
+        ),
+    )
+
+    multi_stream_type: "dict[str, int]" = betterproto2.field(
+        3,
+        betterproto2.TYPE_MAP,
+        map_meta=betterproto2.map_meta(
+            betterproto2.TYPE_STRING, betterproto2.TYPE_INT64
+        ),
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.PicoInfo.MultiStreamInfo",
+    WebcastDataPicoInfoMultiStreamInfo,
 )
 
 
@@ -16700,6 +18288,64 @@ class WebcastDataPicoVirtualLiveConfig(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.PicoVirtualLiveConfig", WebcastDataPicoVirtualLiveConfig
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataPiggyBank(betterproto2.Message):
+    title: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    desc: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    short_desc: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    status: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
+
+    stored_amount: "int" = betterproto2.field(5, betterproto2.TYPE_UINT64)
+
+    threshold_amount: "int" = betterproto2.field(6, betterproto2.TYPE_UINT64)
+
+    max_amount: "int" = betterproto2.field(7, betterproto2.TYPE_UINT64)
+
+    button: "WebcastDataPiggyBankButton | None" = betterproto2.field(
+        8, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    short_desc_list: "list[str]" = betterproto2.field(
+        9, betterproto2.TYPE_STRING, repeated=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.PiggyBank", WebcastDataPiggyBank
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataPiggyBankButton(betterproto2.Message):
+    type: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    button_text: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    count_down: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    tag: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    gift_id: "int" = betterproto2.field(5, betterproto2.TYPE_UINT64)
+
+    gift_type: "int" = betterproto2.field(6, betterproto2.TYPE_UINT64)
+
+    gift_count: "int" = betterproto2.field(7, betterproto2.TYPE_UINT64)
+
+    gift_source: "str" = betterproto2.field(8, betterproto2.TYPE_STRING)
+
+    gift_icon_url: "str" = betterproto2.field(9, betterproto2.TYPE_STRING)
+
+    task_key: "str" = betterproto2.field(10, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.PiggyBank.Button", WebcastDataPiggyBankButton
 )
 
 
@@ -16987,6 +18633,10 @@ class WebcastDataPopularityEggPlayArea(betterproto2.Message):
 
     one_user_take_all: "bool" = betterproto2.field(3, betterproto2.TYPE_BOOL)
 
+    gift_task: "WebcastDataPopularityEggPlayAreaPlayData | None" = betterproto2.field(
+        4, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.PopularityEggPlayArea", WebcastDataPopularityEggPlayArea
@@ -17009,6 +18659,10 @@ class WebcastDataPopularityEggPlayAreaPlayData(betterproto2.Message):
 
     play_results: "list[WebcastDataPopularityEggPlayResult]" = betterproto2.field(
         6, betterproto2.TYPE_MESSAGE, repeated=True
+    )
+
+    button: "WebcastDataPopularityEggButton | None" = betterproto2.field(
+        7, betterproto2.TYPE_MESSAGE, optional=True
     )
 
 
@@ -17259,6 +18913,32 @@ class WebcastDataPreviewExposeData(betterproto2.Message):
         29, betterproto2.TYPE_MESSAGE, repeated=True
     )
 
+    feed_live_idea_guide: "WebcastDataPreviewExposeDataFeedLiveIdeaGuide | None" = (
+        betterproto2.field(30, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    revenue_data: "WebcastDataPreviewExposeDataRevenueData | None" = betterproto2.field(
+        31, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    portrait_data: "WebcastDataPreviewExposeDataPortraitData | None" = (
+        betterproto2.field(32, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    feed_promote_live_anchor_point: "WebcastDataPreviewExposeDataFeedPromoteLiveAnchorPoint | None" = betterproto2.field(
+        33, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    preview_button: "WebcastDataPreviewExposeDataPreviewButtonData | None" = (
+        betterproto2.field(34, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    show_similar_feed_button: "bool" = betterproto2.field(35, betterproto2.TYPE_BOOL)
+
+    preview_high_light: "WebcastDataPreviewExposeDataPreviewHighLight | None" = (
+        betterproto2.field(36, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.PreviewExposeData", WebcastDataPreviewExposeData
@@ -17302,6 +18982,42 @@ default_message_pool.register_message(
     "douyin",
     "Webcast.Data.PreviewExposeData.EtData",
     WebcastDataPreviewExposeDataEtData,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataPreviewExposeDataFeedLiveIdeaGuide(betterproto2.Message):
+    is_recall: "bool" = betterproto2.field(1, betterproto2.TYPE_BOOL)
+
+    latest_live_record: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+    show_time_interval: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    disappear_time_interval: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.PreviewExposeData.FeedLiveIdeaGuide",
+    WebcastDataPreviewExposeDataFeedLiveIdeaGuide,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataPreviewExposeDataFeedPromoteLiveAnchorPoint(betterproto2.Message):
+    recall_type: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    latest_live_record: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    show_time_interval: "int" = betterproto2.field(3, betterproto2.TYPE_INT32)
+
+    disappear_time_interval: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.PreviewExposeData.FeedPromoteLiveAnchorPoint",
+    WebcastDataPreviewExposeDataFeedPromoteLiveAnchorPoint,
 )
 
 
@@ -17360,6 +19076,44 @@ default_message_pool.register_message(
     "douyin",
     "Webcast.Data.PreviewExposeData.Meta.Host",
     WebcastDataPreviewExposeDataMetaHost,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataPreviewExposeDataPortraitData(betterproto2.Message):
+    pk_paid: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    exhibition_paid: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.PreviewExposeData.PortraitData",
+    WebcastDataPreviewExposeDataPortraitData,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataPreviewExposeDataPreviewButtonData(betterproto2.Message):
+    type: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    text: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    lottery_id: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    box_id: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+    button_priority: "int" = betterproto2.field(5, betterproto2.TYPE_INT32)
+
+    enter_schema: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+    extra: "str" = betterproto2.field(7, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.PreviewExposeData.PreviewButtonData",
+    WebcastDataPreviewExposeDataPreviewButtonData,
 )
 
 
@@ -17464,6 +19218,8 @@ class WebcastDataPreviewExposeDataPreviewExtendArea(betterproto2.Message):
     )
 
     clickable_area: "int" = betterproto2.field(24, betterproto2.TYPE_INT32)
+
+    use_title_fusion: "bool" = betterproto2.field(25, betterproto2.TYPE_BOOL)
 
 
 default_message_pool.register_message(
@@ -17572,6 +19328,44 @@ default_message_pool.register_message(
     "douyin",
     "Webcast.Data.PreviewExposeData.PreviewGuide",
     WebcastDataPreviewExposeDataPreviewGuide,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataPreviewExposeDataPreviewHighLight(betterproto2.Message):
+    enable: "bool" = betterproto2.field(1, betterproto2.TYPE_BOOL)
+
+    video_url: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    show_duration: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    guide_text: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    guide_icon: "WebcastDataImage | None" = betterproto2.field(
+        5, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    video_id: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+    highlight_id: "int" = betterproto2.field(7, betterproto2.TYPE_UINT64)
+
+    highlight_id_str: "str" = betterproto2.field(8, betterproto2.TYPE_STRING)
+
+    cover: "WebcastDataImage | None" = betterproto2.field(
+        9, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    highlight_type: "str" = betterproto2.field(10, betterproto2.TYPE_STRING)
+
+    m3u8_url: "str" = betterproto2.field(11, betterproto2.TYPE_STRING)
+
+    reason: "str" = betterproto2.field(12, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.PreviewExposeData.PreviewHighLight",
+    WebcastDataPreviewExposeDataPreviewHighLight,
 )
 
 
@@ -17706,6 +19500,18 @@ default_message_pool.register_message(
     "douyin",
     "Webcast.Data.PreviewExposeData.PreviewSwitch",
     WebcastDataPreviewExposeDataPreviewSwitch,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataPreviewExposeDataRevenueData(betterproto2.Message):
+    exhibition_paid_tip_text: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.PreviewExposeData.RevenueData",
+    WebcastDataPreviewExposeDataRevenueData,
 )
 
 
@@ -18044,6 +19850,8 @@ class WebcastDataProductBasicInfo(betterproto2.Message):
     recent_purchased_user: "list[WebcastDataRecentPurchasedUser]" = betterproto2.field(
         40, betterproto2.TYPE_MESSAGE, repeated=True
     )
+
+    update_time: "int" = betterproto2.field(41, betterproto2.TYPE_UINT64)
 
     owner_open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
 
@@ -18784,6 +20592,38 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastDataRank(betterproto2.Message):
+    user: "WebcastDataUser | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    score: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+    rank: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    gap_description: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    delta: "int" = betterproto2.field(5, betterproto2.TYPE_UINT64)
+
+    first_gift: "bool" = betterproto2.field(6, betterproto2.TYPE_BOOL)
+
+    is_hidden: "bool" = betterproto2.field(7, betterproto2.TYPE_BOOL)
+
+    score_description: "str" = betterproto2.field(8, betterproto2.TYPE_STRING)
+
+    exactly_score: "str" = betterproto2.field(9, betterproto2.TYPE_STRING)
+
+    app_name: "str" = betterproto2.field(11, betterproto2.TYPE_STRING)
+
+    bg_image: "WebcastDataImage | None" = betterproto2.field(
+        12, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message("douyin", "Webcast.Data.Rank", WebcastDataRank)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastDataRankEnterInfo(betterproto2.Message):
     rank_infos: "list[WebcastDataRankEnterInfoRankInfo]" = betterproto2.field(
         1, betterproto2.TYPE_MESSAGE, repeated=True
@@ -18944,6 +20784,64 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastDataRankSeasonScoreUpdateInfo(betterproto2.Message):
+    progress_infos: "list[WebcastDataRankSeasonScoreUpdateInfoProgressInfo]" = (
+        betterproto2.field(1, betterproto2.TYPE_MESSAGE, repeated=True)
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.RankSeasonScoreUpdateInfo",
+    WebcastDataRankSeasonScoreUpdateInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataRankSeasonScoreUpdateInfoNotifyInfo(betterproto2.Message):
+    is_gray: "bool" = betterproto2.field(1, betterproto2.TYPE_BOOL)
+
+    duration: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+    content: "list[WebcastDataRichText]" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, repeated=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.RankSeasonScoreUpdateInfo.NotifyInfo",
+    WebcastDataRankSeasonScoreUpdateInfoNotifyInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataRankSeasonScoreUpdateInfoProgressInfo(betterproto2.Message):
+    show_bar: "bool" = betterproto2.field(1, betterproto2.TYPE_BOOL)
+
+    progress: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+    content: "list[WebcastDataRichText]" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, repeated=True
+    )
+
+    notify_infos: "list[WebcastDataRankSeasonScoreUpdateInfoNotifyInfo]" = (
+        betterproto2.field(4, betterproto2.TYPE_MESSAGE, repeated=True)
+    )
+
+    is_finished: "bool" = betterproto2.field(5, betterproto2.TYPE_BOOL)
+
+    task_id: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.RankSeasonScoreUpdateInfo.ProgressInfo",
+    WebcastDataRankSeasonScoreUpdateInfoProgressInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastDataRating(betterproto2.Message):
     pass
 
@@ -18985,6 +20883,16 @@ class WebcastDataRealTimeChorusInfo(betterproto2.Message):
 
     cdn_singer_only: "int" = betterproto2.field(5, betterproto2.TYPE_UINT64)
 
+    concert_song: "WebcastDataChorusConcertSong | None" = betterproto2.field(
+        6, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    main_singer_linkmic_id_str: "str" = betterproto2.field(7, betterproto2.TYPE_STRING)
+
+    main_singer_uid: "str" = betterproto2.field(8, betterproto2.TYPE_STRING)
+
+    open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.RealTimeChorusInfo", WebcastDataRealTimeChorusInfo
@@ -19020,6 +20928,8 @@ class WebcastDataRealTimeChorusUiInfo(betterproto2.Message):
     chorus_leader_str: "list[str]" = betterproto2.field(
         9, betterproto2.TYPE_STRING, repeated=True
     )
+
+    is_chorus_chat_mode: "bool" = betterproto2.field(10, betterproto2.TYPE_BOOL)
 
     open_user_infos: "dict[str, WebcastDataUserChorusInfo]" = betterproto2.field(
         5000,
@@ -20243,6 +22153,12 @@ class WebcastDataRoomAnchorData(betterproto2.Message):
 
     group_id_list: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
 
+    conversation_id: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    share_anchor_info: "WebcastDataShareAnchorInfo | None" = betterproto2.field(
+        6, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.RoomAnchorData", WebcastDataRoomAnchorData
@@ -20555,7 +22471,13 @@ class WebcastDataRoomAuthStatus(betterproto2.Message):
 
     room_pin_highlight: "int" = betterproto2.field(147, betterproto2.TYPE_UINT64)
 
+    highlight_area_container: "int" = betterproto2.field(148, betterproto2.TYPE_UINT64)
+
+    low_pcu_guide_chat_data: "int" = betterproto2.field(149, betterproto2.TYPE_UINT64)
+
     preview_dan_ma_ku: "int" = betterproto2.field(160, betterproto2.TYPE_UINT64)
+
+    world_square: "int" = betterproto2.field(161, betterproto2.TYPE_UINT64)
 
     vs_comment_bar: "int" = betterproto2.field(200, betterproto2.TYPE_UINT64)
 
@@ -20807,6 +22729,8 @@ class WebcastDataRoomBattleProcessSelectGuestsContent(betterproto2.Message):
         1, betterproto2.TYPE_MESSAGE, repeated=True
     )
 
+    max_member: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
 
 default_message_pool.register_message(
     "douyin",
@@ -20862,6 +22786,8 @@ class WebcastDataRoomBattleSettingContent(betterproto2.Message):
     )
 
     introduction_content: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+    score_type: "int" = betterproto2.field(7, betterproto2.TYPE_INT32)
 
 
 default_message_pool.register_message(
@@ -20955,6 +22881,18 @@ class WebcastDataRoomChannelData(betterproto2.Message):
         map_meta=betterproto2.map_meta(betterproto2.TYPE_INT64, betterproto2.TYPE_BOOL),
     )
 
+    user_channel_apply_map: "dict[int, bool]" = betterproto2.field(
+        10,
+        betterproto2.TYPE_MAP,
+        map_meta=betterproto2.map_meta(betterproto2.TYPE_INT64, betterproto2.TYPE_BOOL),
+    )
+
+    user_in_fans_club_map: "dict[int, bool]" = betterproto2.field(
+        11,
+        betterproto2.TYPE_MAP,
+        map_meta=betterproto2.map_meta(betterproto2.TYPE_INT64, betterproto2.TYPE_BOOL),
+    )
+
     hide_landscape: "bool" = betterproto2.field(101, betterproto2.TYPE_BOOL)
 
 
@@ -21012,6 +22950,16 @@ class WebcastDataRoomChannelInfo(betterproto2.Message):
     invite_disable_toast: "str" = betterproto2.field(18, betterproto2.TYPE_STRING)
 
     create_app_id: "int" = betterproto2.field(19, betterproto2.TYPE_UINT64)
+
+    channel_state: "int" = betterproto2.field(20, betterproto2.TYPE_UINT64)
+
+    avatar_thumb: "WebcastDataImage | None" = betterproto2.field(
+        21, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    group_live_member: "WebcastDataUser | None" = betterproto2.field(
+        22, betterproto2.TYPE_MESSAGE, optional=True
+    )
 
     rtc_ext_info: "WebcastDataRtcExtInfo | None" = betterproto2.field(
         200, betterproto2.TYPE_MESSAGE, optional=True
@@ -21089,6 +23037,22 @@ class WebcastDataRoomExtra(betterproto2.Message):
 
     max_audience_cnt: "int" = betterproto2.field(19, betterproto2.TYPE_INT32)
 
+    virtual_tool: "str" = betterproto2.field(20, betterproto2.TYPE_STRING)
+
+    payload_start_microgame_stamp: "WebcastDataPayloadStartMicrogameStamp | None" = (
+        betterproto2.field(21, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    audience_limit_config: "WebcastDataAudienceLimitRoomConfig | None" = (
+        betterproto2.field(22, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    ecom_live_shop_v2: "int" = betterproto2.field(23, betterproto2.TYPE_INT32)
+
+    ecom_live_review_info: "WebcastDataEcomLiveReviewInfo | None" = betterproto2.field(
+        24, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.RoomExtra", WebcastDataRoomExtra
@@ -21120,6 +23084,8 @@ class WebcastDataRoomFeedData(betterproto2.Message):
     module_title: "str" = betterproto2.field(7, betterproto2.TYPE_STRING)
 
     is_superior: "bool" = betterproto2.field(8, betterproto2.TYPE_BOOL)
+
+    distribution_scene_id: "str" = betterproto2.field(9, betterproto2.TYPE_STRING)
 
 
 default_message_pool.register_message(
@@ -21372,6 +23338,16 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastDataRoomGravitySensor(betterproto2.Message):
+    open: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.RoomGravitySensor", WebcastDataRoomGravitySensor
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastDataRoomHealthScoreInfo(betterproto2.Message):
     score: "float" = betterproto2.field(1, betterproto2.TYPE_DOUBLE)
 
@@ -21423,6 +23399,18 @@ class WebcastDataRoomInteractData(betterproto2.Message):
 
     input_default_config: "WebcastDataInputDefaultConfig | None" = betterproto2.field(
         6, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    low_pcu_guide_info: "WebcastDataLowPcuGuideData | None" = betterproto2.field(
+        7, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    user_world_chat_info: "WebcastDataUserWorldChatInfo | None" = betterproto2.field(
+        8, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    bottom_input_custom_topic: "WebcastDataBottomInputData | None" = betterproto2.field(
+        9, betterproto2.TYPE_MESSAGE, optional=True
     )
 
 
@@ -21589,9 +23577,51 @@ class WebcastDataRoomOthersData(betterproto2.Message):
         betterproto2.field(21, betterproto2.TYPE_MESSAGE, optional=True)
     )
 
+    windmill_data: "WebcastDataWindmillData | None" = betterproto2.field(
+        22, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    room_chat_guide_locale_city: "str" = betterproto2.field(
+        23, betterproto2.TYPE_STRING
+    )
+
+    redirect_from: "int" = betterproto2.field(24, betterproto2.TYPE_INT32)
+
+    change_room_info: "WebcastDataChangeRoomInfo | None" = betterproto2.field(
+        25, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    panel_guidance: "str" = betterproto2.field(26, betterproto2.TYPE_STRING)
+
+    participant_activity: "str" = betterproto2.field(27, betterproto2.TYPE_STRING)
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.RoomOthersData", WebcastDataRoomOthersData
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataRoomPkRankInviteChangeInfo(betterproto2.Message):
+    invite_anchor_info: "WebcastDataUser | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    invited_anchor_info: "WebcastDataUser | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    rank_duration: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    invite_id: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    invite_status: "int" = betterproto2.field(5, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.RoomPKRankInviteChangeInfo",
+    WebcastDataRoomPkRankInviteChangeInfo,
 )
 
 
@@ -21627,6 +23657,10 @@ class WebcastDataRoomPlatformComponentsData(betterproto2.Message):
 
     share_component_info: "WebcastDataShareComponentInfo | None" = betterproto2.field(
         8, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    room_gravity_sensor: "WebcastDataRoomGravitySensor | None" = betterproto2.field(
+        9, betterproto2.TYPE_MESSAGE, optional=True
     )
 
 
@@ -21759,11 +23793,33 @@ class WebcastDataRoomShortTouchAreaConfig(betterproto2.Message):
         7, betterproto2.TYPE_MESSAGE, optional=True
     )
 
+    big_card_display_strategy: "dict[int, WebcastDataRoomShortTouchAreaConfigBigCardDisplayStrategy]" = betterproto2.field(
+        8,
+        betterproto2.TYPE_MAP,
+        map_meta=betterproto2.map_meta(
+            betterproto2.TYPE_INT32, betterproto2.TYPE_MESSAGE
+        ),
+    )
+
 
 default_message_pool.register_message(
     "douyin",
     "Webcast.Data.RoomShortTouchAreaConfig",
     WebcastDataRoomShortTouchAreaConfig,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataRoomShortTouchAreaConfigBigCardDisplayStrategy(betterproto2.Message):
+    type: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    allow_repeat_display: "bool" = betterproto2.field(2, betterproto2.TYPE_BOOL)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.RoomShortTouchAreaConfig.BigCardDisplayStrategy",
+    WebcastDataRoomShortTouchAreaConfigBigCardDisplayStrategy,
 )
 
 
@@ -21878,6 +23934,24 @@ default_message_pool.register_message(
     "douyin",
     "Webcast.Data.RoomShortTouchAreaConfig.TempStateType",
     WebcastDataRoomShortTouchAreaConfigTempStateType,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataRoomSongInfo(betterproto2.Message):
+    song_id: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    mv_base_info: "WebcastDataMvBaseInfo | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    mv_color_list: "list[WebcastDataKtvAtmosphereVideoFrameColorData]" = (
+        betterproto2.field(3, betterproto2.TYPE_MESSAGE, repeated=True)
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.RoomSongInfo", WebcastDataRoomSongInfo
 )
 
 
@@ -22118,6 +24192,24 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastDataSameTypePkStrategy(betterproto2.Message):
+    priority: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    judge_action_higher: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+    judge_action_same: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    judge_action_lower: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+    judge_action_defeated: "int" = betterproto2.field(5, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.SameTypePKStrategy", WebcastDataSameTypePkStrategy
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastDataSandwichBorderInfo(betterproto2.Message):
     top: "float" = betterproto2.field(1, betterproto2.TYPE_DOUBLE)
 
@@ -22170,6 +24262,24 @@ class WebcastDataSeasonConfig(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.SeasonConfig", WebcastDataSeasonConfig
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataSeasonRankInfo(betterproto2.Message):
+    detail: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    big_badge: "WebcastDataImage | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    small_badge: "WebcastDataImage | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.SeasonRankInfo", WebcastDataSeasonRankInfo
 )
 
 
@@ -22399,9 +24509,47 @@ class WebcastDataSettingContent(betterproto2.Message):
         18, betterproto2.TYPE_MESSAGE, optional=True
     )
 
+    interact_acting_content: "WebcastDataInteractActingContent | None" = (
+        betterproto2.field(19, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    specified_guests_pk_content: "WebcastDataSpecifiedGuestsPkContent | None" = (
+        betterproto2.field(20, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    audio_honor_rank_content: "WebcastDataAudioHonorRankContent | None" = (
+        betterproto2.field(21, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    guest_battle_v2_config_content: "WebcastDataGuestBattleV2ConfigContent | None" = (
+        betterproto2.field(22, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    video_linkmic_do_not_disturb_content: "WebcastDataVideoLinkmicDoNotDisturbContent | None" = betterproto2.field(
+        23, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    gift_sing_content: "WebcastDataGiftSingContent | None" = betterproto2.field(
+        24, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.SettingContent", WebcastDataSettingContent
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataShareAnchorInfo(betterproto2.Message):
+    is_latest_anchor: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    is_reflow_anchor: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+    is_low_fans_anchor: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.ShareAnchorInfo", WebcastDataShareAnchorInfo
 )
 
 
@@ -23031,6 +25179,8 @@ class WebcastDataSku(betterproto2.Message):
 
     right_valid_duration: "int" = betterproto2.field(29, betterproto2.TYPE_UINT64)
 
+    create_time: "int" = betterproto2.field(30, betterproto2.TYPE_UINT64)
+
 
 default_message_pool.register_message("douyin", "Webcast.Data.SKU", WebcastDataSku)
 
@@ -23088,6 +25238,168 @@ default_message_pool.register_message(
     "douyin",
     "Webcast.Data.SKU.RelatedSkuSimpleInfo",
     WebcastDataSkuRelatedSkuSimpleInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataSpecifiedGuestsPkBarEffect(betterproto2.Message):
+    effect_type: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    score: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+    score_str: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    score_fuzzy: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    from_user_avatar_thumb: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    expire_time: "int" = betterproto2.field(6, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.SpecifiedGuestsPKBarEffect",
+    WebcastDataSpecifiedGuestsPkBarEffect,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataSpecifiedGuestsPkContent(betterproto2.Message):
+    pk_duration: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    open_continuous_pk: "bool" = betterproto2.field(2, betterproto2.TYPE_BOOL)
+
+    enable_enlarge_pk_guests: "bool" = betterproto2.field(3, betterproto2.TYPE_BOOL)
+
+    gift_id: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.SpecifiedGuestsPKContent",
+    WebcastDataSpecifiedGuestsPkContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataSpecifiedGuestsPkFlyMicEmojiEffect(betterproto2.Message):
+    player_type: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    expire_time: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.SpecifiedGuestsPKFlyMicEmojiEffect",
+    WebcastDataSpecifiedGuestsPkFlyMicEmojiEffect,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataSpecifiedGuestsPkInfo(betterproto2.Message):
+    play_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    type: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    status: "int" = betterproto2.field(3, betterproto2.TYPE_INT32)
+
+    round_count: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+    round_info: "WebcastDataSpecifiedGuestsPkRoundInfo | None" = betterproto2.field(
+        5, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    create_time: "int" = betterproto2.field(6, betterproto2.TYPE_UINT64)
+
+    update_time: "int" = betterproto2.field(7, betterproto2.TYPE_UINT64)
+
+    finish_time: "int" = betterproto2.field(8, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.SpecifiedGuestsPKInfo", WebcastDataSpecifiedGuestsPkInfo
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataSpecifiedGuestsPkPlayerInfo(betterproto2.Message):
+    user_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    player_type: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    score: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    score_str: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    score_fuzzy: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    rank: "int" = betterproto2.field(6, betterproto2.TYPE_UINT64)
+
+    winning_tag: "int" = betterproto2.field(7, betterproto2.TYPE_INT32)
+
+    winning_streak_count: "int" = betterproto2.field(8, betterproto2.TYPE_UINT64)
+
+    avatar_pendant: "int" = betterproto2.field(9, betterproto2.TYPE_INT32)
+
+    pk_bar_effect: "WebcastDataSpecifiedGuestsPkBarEffect | None" = betterproto2.field(
+        10, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    top_contributor_ids: "list[str]" = betterproto2.field(
+        11, betterproto2.TYPE_STRING, repeated=True
+    )
+
+    score_diff_fuzzy: "str" = betterproto2.field(12, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.SpecifiedGuestsPKPlayerInfo",
+    WebcastDataSpecifiedGuestsPkPlayerInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataSpecifiedGuestsPkRoundInfo(betterproto2.Message):
+    round_id: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    players: "list[WebcastDataSpecifiedGuestsPkPlayerInfo]" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, repeated=True
+    )
+
+    pk_duration: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    final_stretch_duration: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+    settle_duration: "int" = betterproto2.field(5, betterproto2.TYPE_UINT64)
+
+    gift_icon_url: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+    gift_id: "int" = betterproto2.field(7, betterproto2.TYPE_UINT64)
+
+    start_time: "int" = betterproto2.field(8, betterproto2.TYPE_UINT64)
+
+    settle_time: "int" = betterproto2.field(9, betterproto2.TYPE_UINT64)
+
+    finish_time: "int" = betterproto2.field(10, betterproto2.TYPE_UINT64)
+
+    update_time: "int" = betterproto2.field(11, betterproto2.TYPE_UINT64)
+
+    fly_mic_emoji_effect: "WebcastDataSpecifiedGuestsPkFlyMicEmojiEffect | None" = (
+        betterproto2.field(12, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    winner: "int" = betterproto2.field(13, betterproto2.TYPE_INT32)
+
+    target_ui_layout: "int" = betterproto2.field(14, betterproto2.TYPE_UINT64)
+
+    enable_enlarge_pk_guests: "bool" = betterproto2.field(15, betterproto2.TYPE_BOOL)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.SpecifiedGuestsPKRoundInfo",
+    WebcastDataSpecifiedGuestsPkRoundInfo,
 )
 
 
@@ -23304,6 +25616,84 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastDataStealDragonInfo(betterproto2.Message):
+    battle_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    init_dragon_level: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+    period_list: "list[WebcastDataStealDragonInfoPeriodConfig]" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, repeated=True
+    )
+
+    steal_info: "WebcastDataStealDragonInfoStealInfo | None" = betterproto2.field(
+        4, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    settle_info: "WebcastDataStealDragonInfoSettleInfo | None" = betterproto2.field(
+        5, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    ui_resource: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+    lynx_data: "str" = betterproto2.field(7, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.StealDragonInfo", WebcastDataStealDragonInfo
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataStealDragonInfoPeriodConfig(betterproto2.Message):
+    stage: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    start_time_sec: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+    duration_sec: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.StealDragonInfo.PeriodConfig",
+    WebcastDataStealDragonInfoPeriodConfig,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataStealDragonInfoSettleInfo(betterproto2.Message):
+    dragon_level: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    cur_top_anchor_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    cur_top_anchor_open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.StealDragonInfo.SettleInfo",
+    WebcastDataStealDragonInfoSettleInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataStealDragonInfoStealInfo(betterproto2.Message):
+    dragon_level: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    cur_top_anchor_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    version: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    cur_top_anchor_open_id: "str" = betterproto2.field(5001, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.StealDragonInfo.StealInfo",
+    WebcastDataStealDragonInfoStealInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastDataStickerInfo(betterproto2.Message):
     effect_id: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
 
@@ -23462,6 +25852,12 @@ class WebcastDataStreamUrl(betterproto2.Message):
     )
 
     vr_type: "int" = betterproto2.field(26, betterproto2.TYPE_INT32)
+
+    multi_stream_scene: "int" = betterproto2.field(27, betterproto2.TYPE_INT32)
+
+    resolution_select_panel_resident: "int" = betterproto2.field(
+        28, betterproto2.TYPE_INT32
+    )
 
     open_stream_url_encrypt: "WebcastDataOpenStreamUrlEncrypt | None" = (
         betterproto2.field(5000, betterproto2.TYPE_MESSAGE, optional=True)
@@ -23655,6 +26051,8 @@ class WebcastDataStreamUrlLiveCoreSdkDataPullDataOptions(betterproto2.Message):
 
     vpass_default: "bool" = betterproto2.field(3, betterproto2.TYPE_BOOL)
 
+    quality_strategy: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
 
 default_message_pool.register_message(
     "douyin",
@@ -23821,6 +26219,8 @@ class WebcastDataStreamUrlStreamUrlExtra(betterproto2.Message):
         betterproto2.field(22, betterproto2.TYPE_MESSAGE, optional=True)
     )
 
+    business_name: "str" = betterproto2.field(23, betterproto2.TYPE_STRING)
+
 
 default_message_pool.register_message(
     "douyin",
@@ -23866,6 +26266,30 @@ default_message_pool.register_message(
     "douyin",
     "Webcast.Data.StreamUrl.StreamUrlExtra.SuperResolution",
     WebcastDataStreamUrlStreamUrlExtraSuperResolution,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataStreamXInfo(betterproto2.Message):
+    settings: "list[WebcastDataStreamXrtcSetting]" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, repeated=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.StreamXInfo", WebcastDataStreamXInfo
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataStreamXrtcSetting(betterproto2.Message):
+    role: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    linkmic_id_str: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.StreamXRTCSetting", WebcastDataStreamXrtcSetting
 )
 
 
@@ -24044,6 +26468,8 @@ class WebcastDataSwitchSceneData(betterproto2.Message):
     )
 
     battle_attached_info: "str" = betterproto2.field(17, betterproto2.TYPE_STRING)
+
+    event_tracking_info: "str" = betterproto2.field(18, betterproto2.TYPE_STRING)
 
 
 default_message_pool.register_message(
@@ -24352,6 +26778,14 @@ class WebcastDataTeamTask(betterproto2.Message):
     battle_type: "int" = betterproto2.field(5, betterproto2.TYPE_INT32)
 
     webcast_trigger_uid: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+    open_info: "dict[str, WebcastDataTeamTaskInfo]" = betterproto2.field(
+        5000,
+        betterproto2.TYPE_MAP,
+        map_meta=betterproto2.map_meta(
+            betterproto2.TYPE_STRING, betterproto2.TYPE_MESSAGE
+        ),
+    )
 
     trigger_open_id: "str" = betterproto2.field(5001, betterproto2.TYPE_STRING)
 
@@ -25465,6 +27899,12 @@ class WebcastDataTrayPostEffect(betterproto2.Message):
 
     post_effect_source: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
 
+    sub_title: "WebcastDataText | None" = betterproto2.field(
+        5, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    show_type: "int" = betterproto2.field(6, betterproto2.TYPE_INT32)
+
     event_tracking: "dict[str, str]" = betterproto2.field(
         10,
         betterproto2.TYPE_MAP,
@@ -25555,6 +27995,8 @@ class WebcastDataTreasureCompeteData(betterproto2.Message):
 
     freq_limit: "bool" = betterproto2.field(20, betterproto2.TYPE_BOOL)
 
+    reward_count: "int" = betterproto2.field(21, betterproto2.TYPE_UINT64)
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.TreasureCompeteData", WebcastDataTreasureCompeteData
@@ -25590,6 +28032,42 @@ class WebcastDataTvStation(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.TVStation", WebcastDataTvStation
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataUiLayoutPositionLiveCoreInfo(betterproto2.Message):
+    live_core_info_map: "dict[int, WebcastDataVideoPositionLiveCoreInfo]" = (
+        betterproto2.field(
+            1,
+            betterproto2.TYPE_MAP,
+            map_meta=betterproto2.map_meta(
+                betterproto2.TYPE_INT64, betterproto2.TYPE_MESSAGE
+            ),
+        )
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.UILayoutPositionLiveCoreInfo",
+    WebcastDataUiLayoutPositionLiveCoreInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataUiLayoutPositionRtcInfo(betterproto2.Message):
+    rtc_info_map: "dict[int, WebcastDataVideoPositionRtcInfo]" = betterproto2.field(
+        1,
+        betterproto2.TYPE_MAP,
+        map_meta=betterproto2.map_meta(
+            betterproto2.TYPE_INT64, betterproto2.TYPE_MESSAGE
+        ),
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.UILayoutPositionRtcInfo", WebcastDataUiLayoutPositionRtcInfo
 )
 
 
@@ -26063,6 +28541,10 @@ class WebcastDataUser(betterproto2.Message):
 
     foreign_user: "int" = betterproto2.field(1047, betterproto2.TYPE_INT32)
 
+    bottom_entry: "WebcastDataUserBottomEntry | None" = betterproto2.field(
+        1048, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
     user_open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
 
     host_info: "WebcastDataOpenHostInfo | None" = betterproto2.field(
@@ -26236,6 +28718,26 @@ class WebcastDataUserBorder(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.User.Border", WebcastDataUserBorder
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataUserBottomEntry(betterproto2.Message):
+    status: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    icon: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    schema: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    mystery_man: "bool" = betterproto2.field(4, betterproto2.TYPE_BOOL)
+
+    grade_level: "int" = betterproto2.field(6, betterproto2.TYPE_UINT64)
+
+    hide_grade_level: "bool" = betterproto2.field(7, betterproto2.TYPE_BOOL)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.User.BottomEntry", WebcastDataUserBottomEntry
 )
 
 
@@ -26530,6 +29032,12 @@ class WebcastDataUserPayGrade(betterproto2.Message):
     )
 
     grade_describe_shining: "bool" = betterproto2.field(27, betterproto2.TYPE_BOOL)
+
+    in_rebirth: "bool" = betterproto2.field(28, betterproto2.TYPE_BOOL)
+
+    recent_consume_badge: "WebcastDataImage | None" = betterproto2.field(
+        29, betterproto2.TYPE_MESSAGE, optional=True
+    )
 
     grade_banner: "str" = betterproto2.field(1001, betterproto2.TYPE_STRING)
 
@@ -26952,6 +29460,18 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastDataUserWorldChatInfo(betterproto2.Message):
+    enable: "bool" = betterproto2.field(1, betterproto2.TYPE_BOOL)
+
+    input_tip_text: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.UserWorldChatInfo", WebcastDataUserWorldChatInfo
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastDataVerticalTypeInfo(betterproto2.Message):
     name: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
 
@@ -27056,6 +29576,28 @@ class WebcastDataVideoEqualRoomRtcInfo(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Data.VideoEqualRoomRtcInfo", WebcastDataVideoEqualRoomRtcInfo
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastDataVideoLinkmicDoNotDisturbContent(betterproto2.Message):
+    accept_invite: "bool" = betterproto2.field(1, betterproto2.TYPE_BOOL)
+
+    accept_mutual_follow_invite: "bool" = betterproto2.field(2, betterproto2.TYPE_BOOL)
+
+    accept_search_invite: "bool" = betterproto2.field(3, betterproto2.TYPE_BOOL)
+
+    not_accept_invite_in_this_live: "bool" = betterproto2.field(
+        4, betterproto2.TYPE_BOOL
+    )
+
+    blacklist_count_for_today: "int" = betterproto2.field(5, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Data.VideoLinkmicDoNotDisturbContent",
+    WebcastDataVideoLinkmicDoNotDisturbContent,
 )
 
 
@@ -27224,6 +29766,8 @@ class WebcastDataVrInfoVrSixdofTransferInfo(betterproto2.Message):
             betterproto2.TYPE_STRING, betterproto2.TYPE_INT64
         ),
     )
+
+    stream_layout_version: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
 
 
 default_message_pool.register_message(
@@ -27702,6 +30246,16 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastDataWindmillData(betterproto2.Message):
+    clue_live_life_product: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Data.WindmillData", WebcastDataWindmillData
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastDataWishContributor(betterproto2.Message):
     contributors: "list[WebcastDataWishContributorContributor]" = betterproto2.field(
         1, betterproto2.TYPE_MESSAGE, repeated=True
@@ -27902,6 +30456,20 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImActUserInfo(betterproto2.Message):
+    user_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    role_id: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+    extra: "str" = betterproto2.field(100, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.ActUserInfo", WebcastImActUserInfo
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImAddKtvDressContent(betterproto2.Message):
     add_dress_prompt: "WebcastDataAddDressPrompt | None" = betterproto2.field(
         1, betterproto2.TYPE_MESSAGE, optional=True
@@ -28072,6 +30640,66 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImAiWishBizInfo(betterproto2.Message):
+    keyword: "list[str]" = betterproto2.field(
+        1, betterproto2.TYPE_STRING, repeated=True
+    )
+
+    timeout_duration: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    wait_duraion: "int" = betterproto2.field(3, betterproto2.TYPE_INT32)
+
+    auto_stop: "bool" = betterproto2.field(4, betterproto2.TYPE_BOOL)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.AIWishBizInfo", WebcastImAiWishBizInfo
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImAiWishGiftInfo(betterproto2.Message):
+    status: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    error_type: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    avatar_urls: "list[WebcastDataImage]" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, repeated=True
+    )
+
+    unique_id: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    gift_type: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    asset_id: "int" = betterproto2.field(6, betterproto2.TYPE_INT32)
+
+    to_user_type: "int" = betterproto2.field(7, betterproto2.TYPE_INT32)
+
+    wish_text: "str" = betterproto2.field(8, betterproto2.TYPE_STRING)
+
+    multi_asset_id: "int" = betterproto2.field(9, betterproto2.TYPE_INT32)
+
+    biz_info: "str" = betterproto2.field(10, betterproto2.TYPE_STRING)
+
+    to_user: "WebcastDataUser | None" = betterproto2.field(
+        11, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    user: "WebcastDataUser | None" = betterproto2.field(
+        12, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    random_example: "list[str]" = betterproto2.field(
+        13, betterproto2.TYPE_STRING, repeated=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.AIWishGiftInfo", WebcastImAiWishGiftInfo
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImAllQuizInfo(betterproto2.Message):
     id: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
 
@@ -28194,6 +30822,40 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImAnchorInstantPlayChangeInfo(betterproto2.Message):
+    toggle_on_status: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    requirement_enum: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    micro_game_id: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.AnchorInstantPlayChangeInfo",
+    WebcastImAnchorInstantPlayChangeInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImAnchorInstantPlayChangeMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    anchor_instant_play_change: "WebcastImAnchorInstantPlayChangeInfo | None" = (
+        betterproto2.field(2, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.AnchorInstantPlayChangeMessage",
+    WebcastImAnchorInstantPlayChangeMessage,
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImAnchorLinkGameVoiceMessage(betterproto2.Message):
     common: "WebcastImCommon | None" = betterproto2.field(
         1, betterproto2.TYPE_MESSAGE, optional=True
@@ -28234,6 +30896,42 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImAnchorLinkmicBackstageInviteMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    to_user_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    to_room_id: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    match_type: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
+
+    invite_type: "int" = betterproto2.field(5, betterproto2.TYPE_INT32)
+
+    scene: "int" = betterproto2.field(6, betterproto2.TYPE_INT32)
+
+    biz_type: "int" = betterproto2.field(7, betterproto2.TYPE_INT32)
+
+    invite_source: "int" = betterproto2.field(8, betterproto2.TYPE_INT32)
+
+    invitee_followed_user_ids: "str" = betterproto2.field(9, betterproto2.TYPE_STRING)
+
+    to_open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
+
+    invitee_followed_user_open_ids: "str" = betterproto2.field(
+        5001, betterproto2.TYPE_STRING
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.AnchorLinkmicBackstageInviteMessage",
+    WebcastImAnchorLinkmicBackstageInviteMessage,
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImAnchorLinkmicBizMessage(betterproto2.Message):
     common: "WebcastImCommon | None" = betterproto2.field(
         1, betterproto2.TYPE_MESSAGE, optional=True
@@ -28254,6 +30952,32 @@ class WebcastImAnchorLinkmicBizMessage(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.AnchorLinkmicBizMessage", WebcastImAnchorLinkmicBizMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImAnchorLinkmicPreLoadMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    asset_ids: "list[str]" = betterproto2.field(
+        2, betterproto2.TYPE_STRING, repeated=True
+    )
+
+    loki_asset_ids: "list[str]" = betterproto2.field(
+        3, betterproto2.TYPE_STRING, repeated=True
+    )
+
+    pc_loki_asset_ids: "list[str]" = betterproto2.field(
+        4, betterproto2.TYPE_STRING, repeated=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.AnchorLinkmicPreLoadMessage",
+    WebcastImAnchorLinkmicPreLoadMessage,
 )
 
 
@@ -28508,6 +31232,14 @@ class WebcastImAssetMessage(betterproto2.Message):
     log_id: "str" = betterproto2.field(9, betterproto2.TYPE_STRING)
 
     play_priority: "int" = betterproto2.field(10, betterproto2.TYPE_INT32)
+
+    required_assets: "list[int]" = betterproto2.field(
+        11, betterproto2.TYPE_INT32, repeated=True
+    )
+
+    diy_item_info: "str" = betterproto2.field(12, betterproto2.TYPE_STRING)
+
+    scene: "str" = betterproto2.field(13, betterproto2.TYPE_STRING)
 
 
 default_message_pool.register_message(
@@ -28900,6 +31632,20 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImAudioShowMediaContent(betterproto2.Message):
+    linkmic_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    status: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    show_user_id: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.AudioShowMediaContent", WebcastImAudioShowMediaContent
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImAuthorizationNotifyMessage(betterproto2.Message):
     common: "WebcastImCommon | None" = betterproto2.field(
         1, betterproto2.TYPE_MESSAGE, optional=True
@@ -29106,6 +31852,22 @@ class WebcastImAvatarAudioToTextResponse(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.AvatarAudioToTextResponse", WebcastImAvatarAudioToTextResponse
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImAvatarCardDrawResultMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    payload: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.AvatarCardDrawResultMessage",
+    WebcastImAvatarCardDrawResultMessage,
 )
 
 
@@ -29334,6 +32096,54 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImAvatarMessageChat(betterproto2.Message):
+    text: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    extra: "dict[str, str]" = betterproto2.field(
+        2,
+        betterproto2.TYPE_MAP,
+        map_meta=betterproto2.map_meta(
+            betterproto2.TYPE_STRING, betterproto2.TYPE_STRING
+        ),
+    )
+
+    user: "WebcastDataUser | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    ref_msg: "WebcastImAvatarMessageChat | None" = betterproto2.field(
+        4, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    chat_type: "int" = betterproto2.field(5, betterproto2.TYPE_INT32)
+
+    msg_id: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.AvatarMessageChat", WebcastImAvatarMessageChat
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImAvatarMessageContent(betterproto2.Message):
+    msg_type: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    payload: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    msg_id: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    resp_for: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+    msg_idx: "int" = betterproto2.field(5, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.AvatarMessageContent", WebcastImAvatarMessageContent
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImAvatarPhone(betterproto2.Message):
     phone: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
 
@@ -29344,6 +32154,34 @@ class WebcastImAvatarPhone(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.AvatarPhone", WebcastImAvatarPhone
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImAvatarRoomChatMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    content: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.AvatarRoomChatMessage", WebcastImAvatarRoomChatMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImAvatarRoomCommandMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    content: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.AvatarRoomCommandMessage", WebcastImAvatarRoomCommandMessage
 )
 
 
@@ -29706,6 +32544,32 @@ default_message_pool.register_message(
     "douyin",
     "Webcast.Im.BattleAutoMatchMessage.RivalInfo",
     WebcastImBattleAutoMatchMessageRivalInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImBattleAutoStartFindPeopleMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    user_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    room_id: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    find_people_info: "WebcastDataFindPeopleInfo | None" = betterproto2.field(
+        4, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    impr_id: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    user_open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.BattleAutoStartFindPeopleMessage",
+    WebcastImBattleAutoStartFindPeopleMessage,
 )
 
 
@@ -30105,6 +32969,8 @@ class WebcastImBattleInviteMessage(betterproto2.Message):
 
     event_tracking_info: "str" = betterproto2.field(19, betterproto2.TYPE_STRING)
 
+    score_contest_id: "str" = betterproto2.field(20, betterproto2.TYPE_STRING)
+
     invite_open_uid: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
 
 
@@ -30389,6 +33255,10 @@ class WebcastImBattlePowerContainerContainerInfo(betterproto2.Message):
         4, betterproto2.TYPE_MESSAGE, optional=True
     )
 
+    bg_image: "WebcastDataImage | None" = betterproto2.field(
+        5, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
     client_point_info: "str" = betterproto2.field(10, betterproto2.TYPE_STRING)
 
 
@@ -30462,6 +33332,40 @@ default_message_pool.register_message(
     "douyin",
     "Webcast.Im.BattlePrecisionMatchMessage",
     WebcastImBattlePrecisionMatchMessage,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImBattleRankSeasonMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    rank_season_result: "WebcastImRankSeasonResult | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.BattleRankSeasonMessage", WebcastImBattleRankSeasonMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImBattleRankSeasonScoreUpdateMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    info: "WebcastDataRankSeasonScoreUpdateInfo | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.BattleRankSeasonScoreUpdateMessage",
+    WebcastImBattleRankSeasonScoreUpdateMessage,
 )
 
 
@@ -30668,6 +33572,52 @@ default_message_pool.register_message(
     "douyin",
     "Webcast.Im.BattleRewardMessage.PKReward",
     WebcastImBattleRewardMessagePkReward,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImBattleScoreContestRoundFinishMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    score_contest_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    round_id: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    channel_id: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    battle_id: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    title: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+    score_delta: "str" = betterproto2.field(7, betterproto2.TYPE_STRING)
+
+    ranklist_name: "str" = betterproto2.field(8, betterproto2.TYPE_STRING)
+
+    ranklist: "list[WebcastImBattleScoreContestRoundFinishMessageRank]" = (
+        betterproto2.field(9, betterproto2.TYPE_MESSAGE, repeated=True)
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.BattleScoreContestRoundFinishMessage",
+    WebcastImBattleScoreContestRoundFinishMessage,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImBattleScoreContestRoundFinishMessageRank(betterproto2.Message):
+    name: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    score: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.BattleScoreContestRoundFinishMessage.Rank",
+    WebcastImBattleScoreContestRoundFinishMessageRank,
 )
 
 
@@ -30914,6 +33864,44 @@ class WebcastImBattleStateSyncMessage(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.BattleStateSyncMessage", WebcastImBattleStateSyncMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImBattleStealDragonMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    steal_dragon_info: "WebcastDataStealDragonInfo | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.BattleStealDragonMessage", WebcastImBattleStealDragonMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImBattleSwitchSkinMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    battle_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    switch_type: "int" = betterproto2.field(3, betterproto2.TYPE_INT32)
+
+    skin_config: "WebcastDataBattleSkinConfig | None" = betterproto2.field(
+        4, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    duration_mill: "int" = betterproto2.field(7, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.BattleSwitchSkinMessage", WebcastImBattleSwitchSkinMessage
 )
 
 
@@ -31175,6 +34163,10 @@ class WebcastImBizContent(betterproto2.Message):
         5, betterproto2.TYPE_MESSAGE, optional=True
     )
 
+    time_stamp: "int" = betterproto2.field(6, betterproto2.TYPE_UINT64)
+
+    end_text: "str" = betterproto2.field(7, betterproto2.TYPE_STRING)
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.BizContent", WebcastImBizContent
@@ -31218,6 +34210,18 @@ class WebcastImBorderEffectMessage(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.BorderEffectMessage", WebcastImBorderEffectMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImBottomPinInfo(betterproto2.Message):
+    stay_duration: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    exit_strategy: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.BottomPinInfo", WebcastImBottomPinInfo
 )
 
 
@@ -31440,6 +34444,50 @@ class WebcastImCarnivalMessage(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.CarnivalMessage", WebcastImCarnivalMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImCarouselComponent(betterproto2.Message):
+    id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    room_type: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    size: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    text: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    bg_color: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    bg_img: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+    show_chance: "int" = betterproto2.field(7, betterproto2.TYPE_INT32)
+
+    open_schema: "str" = betterproto2.field(8, betterproto2.TYPE_STRING)
+
+    start_time: "str" = betterproto2.field(9, betterproto2.TYPE_STRING)
+
+    end_time: "str" = betterproto2.field(10, betterproto2.TYPE_STRING)
+
+    priority: "int" = betterproto2.field(11, betterproto2.TYPE_INT32)
+
+    version: "str" = betterproto2.field(12, betterproto2.TYPE_STRING)
+
+    extra_type: "str" = betterproto2.field(13, betterproto2.TYPE_STRING)
+
+    action: "str" = betterproto2.field(14, betterproto2.TYPE_STRING)
+
+    extra: "dict[str, str]" = betterproto2.field(
+        15,
+        betterproto2.TYPE_MAP,
+        map_meta=betterproto2.map_meta(
+            betterproto2.TYPE_STRING, betterproto2.TYPE_STRING
+        ),
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.CarouselComponent", WebcastImCarouselComponent
 )
 
 
@@ -32074,6 +35122,22 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImChorusAccompanimentInfoContent(betterproto2.Message):
+    chorus_id: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    chorus_accompaniment_info: "WebcastDataChorusAccompanimentInfo | None" = (
+        betterproto2.field(2, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.ChorusAccompanimentInfoContent",
+    WebcastImChorusAccompanimentInfoContent,
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImChorusCdnSingersOnlyContent(betterproto2.Message):
     cdn_singers: "list[WebcastImCdnSingerInfo]" = betterproto2.field(
         1, betterproto2.TYPE_MESSAGE, repeated=True
@@ -32084,6 +35148,28 @@ default_message_pool.register_message(
     "douyin",
     "Webcast.Im.ChorusCDNSingersOnlyContent",
     WebcastImChorusCdnSingersOnlyContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImChorusComponentSwitchContent(betterproto2.Message):
+    display_component: "bool" = betterproto2.field(1, betterproto2.TYPE_BOOL)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.ChorusComponentSwitchContent",
+    WebcastImChorusComponentSwitchContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImChorusConcertStartContent(betterproto2.Message):
+    display_component: "bool" = betterproto2.field(1, betterproto2.TYPE_BOOL)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.ChorusConcertStartContent", WebcastImChorusConcertStartContent
 )
 
 
@@ -32102,6 +35188,10 @@ class WebcastImChorusFollowCdnStartContent(betterproto2.Message):
     room_id: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
 
     task_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    cdn_info: "WebcastDataChorusCdnInfo | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
 
 
 default_message_pool.register_message(
@@ -32136,6 +35226,16 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImChorusInfoChangedContent(betterproto2.Message):
+    finish: "bool" = betterproto2.field(1, betterproto2.TYPE_BOOL)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.ChorusInfoChangedContent", WebcastImChorusInfoChangedContent
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImChorusInitContent(betterproto2.Message):
     chorus_id: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
 
@@ -32152,6 +35252,26 @@ class WebcastImChorusInitContent(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.ChorusInitContent", WebcastImChorusInitContent
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImChorusLeaderSettingContent(betterproto2.Message):
+    lead_chorus_switch: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    assign_user_ids: "list[int]" = betterproto2.field(
+        2, betterproto2.TYPE_UINT64, repeated=True
+    )
+
+    assign_open_user_ids: "list[str]" = betterproto2.field(
+        5000, betterproto2.TYPE_STRING, repeated=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.ChorusLeaderSettingContent",
+    WebcastImChorusLeaderSettingContent,
 )
 
 
@@ -32265,9 +35385,49 @@ class WebcastImChorusUserChangedContent(betterproto2.Message):
         6, betterproto2.TYPE_MESSAGE, optional=True
     )
 
+    chorus_midi_rank: "list[WebcastDataChorusMidiRank]" = betterproto2.field(
+        7, betterproto2.TYPE_MESSAGE, repeated=True
+    )
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.ChorusUserChangedContent", WebcastImChorusUserChangedContent
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImChorusVolumeChangedContent(betterproto2.Message):
+    accompaniment_volume: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    leader_volume: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+    singer_volume: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    accompaniment_mode: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
+
+    chorus_accompaniment_info: "WebcastDataChorusAccompanimentInfo | None" = (
+        betterproto2.field(5, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    chorus_leader_linkmic_ids: "list[str]" = betterproto2.field(
+        6, betterproto2.TYPE_STRING, repeated=True
+    )
+
+    anchor_linkmic_id: "str" = betterproto2.field(7, betterproto2.TYPE_STRING)
+
+    user_volumes: "dict[str, int]" = betterproto2.field(
+        8,
+        betterproto2.TYPE_MAP,
+        map_meta=betterproto2.map_meta(
+            betterproto2.TYPE_STRING, betterproto2.TYPE_INT64
+        ),
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.ChorusVolumeChangedContent",
+    WebcastImChorusVolumeChangedContent,
 )
 
 
@@ -32382,6 +35542,8 @@ class WebcastImCloudCollaborateMemberActionMessage(betterproto2.Message):
     )
 
     reject_reason: "str" = betterproto2.field(10, betterproto2.TYPE_STRING)
+
+    extra: "str" = betterproto2.field(11, betterproto2.TYPE_STRING)
 
 
 default_message_pool.register_message(
@@ -32534,6 +35696,46 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImCombinedMessageMeta(betterproto2.Message):
+    display_text: "WebcastDataText | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    max_rows: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.CombinedMessageMeta", WebcastImCombinedMessageMeta
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImCombinedTextMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    biz_scene: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    supplement_area_info: "WebcastImCombinedMessageMeta | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    core_area_info: "WebcastImCombinedMessageMeta | None" = betterproto2.field(
+        4, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    public_area_common: "WebcastImPublicAreaCommon | None" = betterproto2.field(
+        5, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.CombinedTextMessage", WebcastImCombinedTextMessage
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImComboTrayInfo(betterproto2.Message):
     combo_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
 
@@ -32585,6 +35787,12 @@ class WebcastImComment(betterproto2.Message):
         11, betterproto2.TYPE_MESSAGE, optional=True
     )
 
+    reply_user: "WebcastImCommentUser | None" = betterproto2.field(
+        12, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    child_comment_number: "int" = betterproto2.field(13, betterproto2.TYPE_INT32)
+
 
 default_message_pool.register_message("douyin", "Webcast.Im.Comment", WebcastImComment)
 
@@ -32616,6 +35824,8 @@ class WebcastImCommentUser(betterproto2.Message):
     authentication_info: "WebcastDataUserAuthenticationInfo | None" = (
         betterproto2.field(6, betterproto2.TYPE_MESSAGE, optional=True)
     )
+
+    tag_name: "str" = betterproto2.field(7, betterproto2.TYPE_STRING)
 
 
 default_message_pool.register_message(
@@ -32916,6 +36126,26 @@ class WebcastImCommonCardAreaMessage(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.CommonCardAreaMessage", WebcastImCommonCardAreaMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImCommonDotMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    panel_dots: "dict[str, WebcastImPanelDotInfo]" = betterproto2.field(
+        2,
+        betterproto2.TYPE_MAP,
+        map_meta=betterproto2.map_meta(
+            betterproto2.TYPE_STRING, betterproto2.TYPE_MESSAGE
+        ),
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.CommonDotMessage", WebcastImCommonDotMessage
 )
 
 
@@ -33628,6 +36858,42 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImCrossRoomInteractActingInfo(betterproto2.Message):
+    room_id: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    play_id: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+    status: "int" = betterproto2.field(3, betterproto2.TYPE_INT32)
+
+    theme_id: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+    bg_id: "int" = betterproto2.field(5, betterproto2.TYPE_UINT64)
+
+    bg_url: "WebcastDataImage | None" = betterproto2.field(
+        6, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    theme_role: "WebcastDataInteractActingThemeRole | None" = betterproto2.field(
+        7, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    show_role_nick_name: "bool" = betterproto2.field(8, betterproto2.TYPE_BOOL)
+
+    acting_user_infos: "list[WebcastImActUserInfo]" = betterproto2.field(
+        9, betterproto2.TYPE_MESSAGE, repeated=True
+    )
+
+    extra: "str" = betterproto2.field(100, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.CrossRoomInteractActingInfo",
+    WebcastImCrossRoomInteractActingInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImCrossRoomLinkCancelInviteContent(betterproto2.Message):
     canceller_room_id: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
 
@@ -33660,6 +36926,8 @@ class WebcastImCrossRoomLinkInviteContent(betterproto2.Message):
     introduction_content: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
 
     cross_room_kind: "int" = betterproto2.field(7, betterproto2.TYPE_INT32)
+
+    score_type: "int" = betterproto2.field(8, betterproto2.TYPE_INT32)
 
 
 default_message_pool.register_message(
@@ -33700,6 +36968,8 @@ class WebcastImCrossRoomLinkReplyContent(betterproto2.Message):
     cross_room_kind: "int" = betterproto2.field(12, betterproto2.TYPE_INT32)
 
     invitee_live_room_mode: "int" = betterproto2.field(13, betterproto2.TYPE_UINT64)
+
+    score_type: "int" = betterproto2.field(14, betterproto2.TYPE_INT32)
 
     invitee_open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
 
@@ -34519,6 +37789,8 @@ class WebcastImEntertainmentPaidData(betterproto2.Message):
 
     order_id: "str" = betterproto2.field(8, betterproto2.TYPE_STRING)
 
+    paid_extra_data: "str" = betterproto2.field(9, betterproto2.TYPE_STRING)
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.EntertainmentPaidData", WebcastImEntertainmentPaidData
@@ -34896,6 +38168,12 @@ class WebcastImFeaturedPublicScreenSettingMessage(betterproto2.Message):
     mode: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
 
     inner_tips: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    setting_source: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+    ai_container: "WebcastDataAiPublicScreenContainer | None" = betterproto2.field(
+        7, betterproto2.TYPE_MESSAGE, optional=True
+    )
 
 
 default_message_pool.register_message(
@@ -36220,6 +39498,42 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImGameRoomSuggestionFloatWindowMessage(betterproto2.Message):
+    id: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    title: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    text: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    create_time: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.GameRoomSuggestionFloatWindowMessage",
+    WebcastImGameRoomSuggestionFloatWindowMessage,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImGameRoomSuggestionMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    float_window: "WebcastImGameRoomSuggestionFloatWindowMessage | None" = (
+        betterproto2.field(2, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    type: "int" = betterproto2.field(3, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.GameRoomSuggestionMessage", WebcastImGameRoomSuggestionMessage
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImGameRuntimeMessage(betterproto2.Message):
     common: "WebcastImCommon | None" = betterproto2.field(
         1, betterproto2.TYPE_MESSAGE, optional=True
@@ -36592,6 +39906,72 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImGiftAgentGiftStruct(betterproto2.Message):
+    id: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    name: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    icon: "WebcastDataImage | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    diamond: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
+
+    type: "int" = betterproto2.field(5, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.GiftAgentGiftStruct", WebcastImGiftAgentGiftStruct
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImGiftAgentQueryMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    biz_type: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    value: "WebcastImGiftAgentQueryValue | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    query_id: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    extra: "dict[str, str]" = betterproto2.field(
+        5,
+        betterproto2.TYPE_MAP,
+        map_meta=betterproto2.map_meta(
+            betterproto2.TYPE_STRING, betterproto2.TYPE_STRING
+        ),
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.GiftAgentQueryMessage", WebcastImGiftAgentQueryMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImGiftAgentQueryValue(betterproto2.Message):
+    content: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    gifts: "list[WebcastImGiftAgentGiftStruct]" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, repeated=True
+    )
+
+    suggests: "list[str]" = betterproto2.field(
+        3, betterproto2.TYPE_STRING, repeated=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.GiftAgentQueryValue", WebcastImGiftAgentQueryValue
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImGiftCommentAuditContent(betterproto2.Message):
     change_type: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
 
@@ -36624,6 +40004,32 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImGiftCommentGuideTextAuditContent(betterproto2.Message):
+    change_type: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    guide_text: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.GiftCommentGuideTextAuditContent",
+    WebcastImGiftCommentGuideTextAuditContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImGiftCommentGuideTextShowContent(betterproto2.Message):
+    guide_text: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.GiftCommentGuideTextShowContent",
+    WebcastImGiftCommentGuideTextShowContent,
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImGiftCommentMessage(betterproto2.Message):
     common: "WebcastImCommon | None" = betterproto2.field(
         1, betterproto2.TYPE_MESSAGE, optional=True
@@ -36645,6 +40051,14 @@ class WebcastImGiftCommentMessage(betterproto2.Message):
 
     comment_list_content: "WebcastImGiftCommentCommentListContent | None" = (
         betterproto2.field(53, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    guide_text_show_content: "WebcastImGiftCommentGuideTextShowContent | None" = (
+        betterproto2.field(54, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    guide_text_audit_content: "WebcastImGiftCommentGuideTextAuditContent | None" = (
+        betterproto2.field(55, betterproto2.TYPE_MESSAGE, optional=True)
     )
 
 
@@ -36754,6 +40168,122 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImGiftEffectGameBattleBattleGate(betterproto2.Message):
+    guard: "WebcastImGiftEffectGameBattleGuard | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    current_hp: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    current_gem_stone: "int" = betterproto2.field(3, betterproto2.TYPE_INT32)
+
+    current_level: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
+
+    completeness: "int" = betterproto2.field(5, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.GiftEffectGameBattleBattleGate",
+    WebcastImGiftEffectGameBattleBattleGate,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImGiftEffectGameBattleBattleTreasure(betterproto2.Message):
+    current_hp: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    current_gem_stone: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    current_level: "int" = betterproto2.field(3, betterproto2.TYPE_INT32)
+
+    completeness: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.GiftEffectGameBattleBattleTreasure",
+    WebcastImGiftEffectGameBattleBattleTreasure,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImGiftEffectGameBattleDefense(betterproto2.Message):
+    action: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    title_image: "WebcastDataImage | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    battle_gates: "list[WebcastImGiftEffectGameBattleDefenseGate]" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, repeated=True
+    )
+
+    schema_url: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.GiftEffectGameBattleDefense",
+    WebcastImGiftEffectGameBattleDefense,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImGiftEffectGameBattleDefenseGate(betterproto2.Message):
+    image: "WebcastDataImage | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    total_score: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    add_score: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    guard: "WebcastImGiftEffectGameBattleGuard | None" = betterproto2.field(
+        4, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    index: "int" = betterproto2.field(5, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.GiftEffectGameBattleDefenseGate",
+    WebcastImGiftEffectGameBattleDefenseGate,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImGiftEffectGameBattleGuard(betterproto2.Message):
+    name: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    avatar: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.GiftEffectGameBattleGuard", WebcastImGiftEffectGameBattleGuard
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImGiftEffectGameBattleScore(betterproto2.Message):
+    index: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    gate: "WebcastImGiftEffectGameBattleBattleGate | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    treasure: "WebcastImGiftEffectGameBattleBattleTreasure | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.GiftEffectGameBattleScore", WebcastImGiftEffectGameBattleScore
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImGiftEffectGameGift(betterproto2.Message):
     from_user_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
 
@@ -36770,6 +40300,10 @@ class WebcastImGiftEffectGameGift(betterproto2.Message):
     total_diamond: "int" = betterproto2.field(7, betterproto2.TYPE_INT32)
 
     game_extra: "str" = betterproto2.field(8, betterproto2.TYPE_STRING)
+
+    icon: "WebcastDataImage | None" = betterproto2.field(
+        9, betterproto2.TYPE_MESSAGE, optional=True
+    )
 
     from_open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
 
@@ -36823,6 +40357,12 @@ class WebcastImGiftEffectGameMessage(betterproto2.Message):
         6, betterproto2.TYPE_MESSAGE, optional=True
     )
 
+    action: "int" = betterproto2.field(7, betterproto2.TYPE_INT32)
+
+    battle_defense: "WebcastImGiftEffectGameBattleDefense | None" = betterproto2.field(
+        8, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.GiftEffectGameMessage", WebcastImGiftEffectGameMessage
@@ -36845,6 +40385,10 @@ class WebcastImGiftEffectGameScore(betterproto2.Message):
         map_meta=betterproto2.map_meta(
             betterproto2.TYPE_INT32, betterproto2.TYPE_INT32
         ),
+    )
+
+    score_items: "list[WebcastImGiftEffectGameBattleScore]" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, repeated=True
     )
 
 
@@ -37023,6 +40567,8 @@ class WebcastImGiftMessage(betterproto2.Message):
 
     count: "int" = betterproto2.field(44, betterproto2.TYPE_UINT64)
 
+    video_linkmic_room_id: "str" = betterproto2.field(45, betterproto2.TYPE_STRING)
+
     to_openids: "list[str]" = betterproto2.field(
         5000, betterproto2.TYPE_STRING, repeated=True
     )
@@ -37117,9 +40663,173 @@ class WebcastImGiftPlayEventMessage(betterproto2.Message):
         3, betterproto2.TYPE_MESSAGE, repeated=True
     )
 
+    biz_data: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.GiftPlayEventMessage", WebcastImGiftPlayEventMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImGiftSingGuideTextContent(betterproto2.Message):
+    play_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    mode: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    collect_mode_content: "WebcastImGiftSingGuideTextContentCollectModeGuideTextContent | None" = betterproto2.field(
+        50, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    vote_mode_content: "WebcastImGiftSingGuideTextContentVoteModeGuideTextContent | None" = betterproto2.field(
+        51, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.GiftSingGuideTextContent", WebcastImGiftSingGuideTextContent
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImGiftSingGuideTextContentCollectModeGuideTextContent(
+    betterproto2.Message
+):
+    guide_text: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    guide_text_review_status: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.GiftSingGuideTextContent.CollectModeGuideTextContent",
+    WebcastImGiftSingGuideTextContentCollectModeGuideTextContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImGiftSingGuideTextContentVoteModeGuideTextContent(betterproto2.Message):
+    title: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    gift_text1: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    gift_text2: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    guide_text_review_status: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.GiftSingGuideTextContent.VoteModeGuideTextContent",
+    WebcastImGiftSingGuideTextContentVoteModeGuideTextContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImGiftSingMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    msg_type: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    meta_content: "WebcastImGiftSingMetaContent | None" = betterproto2.field(
+        50, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    guide_text_content: "WebcastImGiftSingGuideTextContent | None" = betterproto2.field(
+        51, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.GiftSingMessage", WebcastImGiftSingMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImGiftSingMetaContent(betterproto2.Message):
+    is_open: "bool" = betterproto2.field(1, betterproto2.TYPE_BOOL)
+
+    play_info: "WebcastImGiftSingMetaContentPlayInfo | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.GiftSingMetaContent", WebcastImGiftSingMetaContent
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImGiftSingMetaContentCollectModeContent(betterproto2.Message):
+    gift_info: "WebcastDataGiftSingGiftInfo | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    target_score: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+    current_score: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    current_score_str: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.GiftSingMetaContent.CollectModeContent",
+    WebcastImGiftSingMetaContentCollectModeContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImGiftSingMetaContentPlayInfo(betterproto2.Message):
+    play_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    mode: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    status: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    finish_time: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+    collect_mode_content: "WebcastImGiftSingMetaContentCollectModeContent | None" = (
+        betterproto2.field(50, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    vote_mode_content: "WebcastImGiftSingMetaContentVoteModeContent | None" = (
+        betterproto2.field(51, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.GiftSingMetaContent.PlayInfo",
+    WebcastImGiftSingMetaContentPlayInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImGiftSingMetaContentVoteModeContent(betterproto2.Message):
+    gift_info1: "WebcastDataGiftSingGiftInfo | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    current_score1: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+    current_score1_str: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    gift_info2: "WebcastDataGiftSingGiftInfo | None" = betterproto2.field(
+        4, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    current_score2: "int" = betterproto2.field(5, betterproto2.TYPE_UINT64)
+
+    current_score2_str: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.GiftSingMetaContent.VoteModeContent",
+    WebcastImGiftSingMetaContentVoteModeContent,
 )
 
 
@@ -37311,6 +41021,8 @@ class WebcastImGroupLiveContainerChangeMessage(betterproto2.Message):
         2, betterproto2.TYPE_MESSAGE, optional=True
     )
 
+    extra: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
 
 default_message_pool.register_message(
     "douyin",
@@ -37420,6 +41132,24 @@ default_message_pool.register_message(
     "douyin",
     "Webcast.Im.GroupLiveMemberChangeMessage",
     WebcastImGroupLiveMemberChangeMessage,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImGroupLiveRoomPkRankInviteChangeMessage(betterproto2.Message):
+    data: "list[WebcastDataRoomPkRankInviteChangeInfo]" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, repeated=True
+    )
+
+    common: "WebcastImCommon | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.GroupLiveRoomPKRankInviteChangeMessage",
+    WebcastImGroupLiveRoomPkRankInviteChangeMessage,
 )
 
 
@@ -37583,6 +41313,10 @@ class WebcastImGuestBattleScoreMessage(betterproto2.Message):
 
     crown_upgrade: "bool" = betterproto2.field(3, betterproto2.TYPE_BOOL)
 
+    fund_check_extra_info: "WebcastDataFundCheckExtraInfo | None" = betterproto2.field(
+        4, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.GuestBattleScoreMessage", WebcastImGuestBattleScoreMessage
@@ -37596,6 +41330,18 @@ class WebcastImGuestBattleUpdateContent(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.GuestBattleUpdateContent", WebcastImGuestBattleUpdateContent
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImGuestBattleV2Message(betterproto2.Message):
+    battle_info: "WebcastDataGuestBattleV2Info | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.GuestBattleV2Message", WebcastImGuestBattleV2Message
 )
 
 
@@ -37832,6 +41578,8 @@ class WebcastImHighlightDataAppointment(betterproto2.Message):
     date_text: "str" = betterproto2.field(11, betterproto2.TYPE_STRING)
 
     time_text: "str" = betterproto2.field(12, betterproto2.TYPE_STRING)
+
+    has_red_packet: "bool" = betterproto2.field(13, betterproto2.TYPE_BOOL)
 
 
 default_message_pool.register_message(
@@ -38084,6 +41832,24 @@ class WebcastImHighValueUserDataMessage(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.HighValueUserDataMessage", WebcastImHighValueUserDataMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImHomelandMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    type: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    effect_id: "int" = betterproto2.field(3, betterproto2.TYPE_INT32)
+
+    module: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.HomelandMessage", WebcastImHomelandMessage
 )
 
 
@@ -38640,6 +42406,46 @@ class WebcastImInstantCommandMessage(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.InstantCommandMessage", WebcastImInstantCommandMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImInteractActingMessage(betterproto2.Message):
+    play_id: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    status: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    theme_id: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    bg_id: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+    bg_url: "WebcastDataImage | None" = betterproto2.field(
+        5, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    theme_role: "WebcastDataInteractActingThemeRole | None" = betterproto2.field(
+        6, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    show_role_nick_name: "bool" = betterproto2.field(7, betterproto2.TYPE_BOOL)
+
+    acting_user_infos: "list[WebcastImActUserInfo]" = betterproto2.field(
+        8, betterproto2.TYPE_MESSAGE, repeated=True
+    )
+
+    gift_content: "WebcastDataInteractActingGiftContent | None" = betterproto2.field(
+        9, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    cross_room_info: "WebcastImCrossRoomInteractActingInfo | None" = betterproto2.field(
+        20, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    extra: "str" = betterproto2.field(100, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.InteractActingMessage", WebcastImInteractActingMessage
 )
 
 
@@ -39673,8 +43479,14 @@ class WebcastImKtvChorusActionMessage(betterproto2.Message):
 
     type: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
 
+    version: "int" = betterproto2.field(100, betterproto2.TYPE_UINT64)
+
     gift_sent_content: "WebcastImChorusGiftSentContent | None" = betterproto2.field(
         101, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    volume_changed_content: "WebcastImChorusVolumeChangedContent | None" = (
+        betterproto2.field(102, betterproto2.TYPE_MESSAGE, optional=True)
     )
 
     stage_update_content: "WebcastImChorusStageContent | None" = betterproto2.field(
@@ -39705,6 +43517,14 @@ class WebcastImKtvChorusActionMessage(betterproto2.Message):
         betterproto2.field(109, betterproto2.TYPE_MESSAGE, optional=True)
     )
 
+    chorus_concert_start_content: "WebcastImChorusConcertStartContent | None" = (
+        betterproto2.field(110, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    linkmic_chorus_user_list_changed_content: "WebcastImLinkmicChorusUserListChangedContent | None" = betterproto2.field(
+        111, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.KtvChorusActionMessage", WebcastImKtvChorusActionMessage
@@ -39733,6 +43553,22 @@ class WebcastImKtvChorusMessage(betterproto2.Message):
 
     chorus_cdn_singers_only_content: "WebcastImChorusCdnSingersOnlyContent | None" = (
         betterproto2.field(6, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    chorus_accompaniment_info_content: "WebcastImChorusAccompanimentInfoContent | None" = betterproto2.field(
+        7, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    chorus_leader_setting_content: "WebcastImChorusLeaderSettingContent | None" = (
+        betterproto2.field(8, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    chorus_component_switch_content: "WebcastImChorusComponentSwitchContent | None" = (
+        betterproto2.field(9, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    chorus_info_changed_content: "WebcastImChorusInfoChangedContent | None" = (
+        betterproto2.field(10, betterproto2.TYPE_MESSAGE, optional=True)
     )
 
     chorus_info: "WebcastDataRealTimeChorusInfo | None" = betterproto2.field(
@@ -40116,6 +43952,10 @@ class WebcastImKtvUserSingingHotMessage(betterproto2.Message):
     level2_threshold: "int" = betterproto2.field(7, betterproto2.TYPE_UINT64)
 
     level3_threshold: "int" = betterproto2.field(8, betterproto2.TYPE_UINT64)
+
+    str_song_id: "str" = betterproto2.field(9, betterproto2.TYPE_STRING)
+
+    str_user_id: "str" = betterproto2.field(10, betterproto2.TYPE_STRING)
 
     open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
 
@@ -40589,6 +44429,8 @@ class WebcastImLinkerChangeMultiPkTeamInfoContent(betterproto2.Message):
 
     toast: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
 
+    show_mode_tab: "bool" = betterproto2.field(3, betterproto2.TYPE_BOOL)
+
 
 default_message_pool.register_message(
     "douyin",
@@ -40721,6 +44563,12 @@ class WebcastImLinkerContributeMessage(betterproto2.Message):
 
     quick_interact: "WebcastDataLinkmicQuickInteract | None" = betterproto2.field(
         9, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    reset_version: "int" = betterproto2.field(10, betterproto2.TYPE_UINT64)
+
+    fund_check_extra_info: "WebcastDataFundCheckExtraInfo | None" = betterproto2.field(
+        11, betterproto2.TYPE_MESSAGE, optional=True
     )
 
 
@@ -41183,6 +45031,10 @@ class WebcastImLinkerInviteContent(betterproto2.Message):
 
     peer_desc: "str" = betterproto2.field(45, betterproto2.TYPE_STRING)
 
+    game_extra: "WebcastImLinkerInviteContentGameExtra | None" = betterproto2.field(
+        46, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
     biz_extra: "str" = betterproto2.field(200, betterproto2.TYPE_STRING)
 
     from_open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
@@ -41192,6 +45044,26 @@ class WebcastImLinkerInviteContent(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.LinkerInviteContent", WebcastImLinkerInviteContent
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkerInviteContentGameExtra(betterproto2.Message):
+    game_nick_name: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    is_enemy: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    game_avatar: "WebcastDataImage | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    match_source: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkerInviteContent.GameExtra",
+    WebcastImLinkerInviteContentGameExtra,
 )
 
 
@@ -41356,6 +45228,18 @@ default_message_pool.register_message(
     "douyin",
     "Webcast.Im.LinkerLinkedListChangeContent",
     WebcastImLinkerLinkedListChangeContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkerLiveCoreBizTagChangeContent(betterproto2.Message):
+    biz_tag: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkerLiveCoreBizTagChangeContent",
+    WebcastImLinkerLiveCoreBizTagChangeContent,
 )
 
 
@@ -42257,6 +46141,10 @@ class WebcastImLinkMessage(betterproto2.Message):
         71, betterproto2.TYPE_MESSAGE, optional=True
     )
 
+    linker_live_core_biz_tag_change_content: "WebcastImLinkerLiveCoreBizTagChangeContent | None" = betterproto2.field(
+        72, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
     sys_kick_out_content: "WebcastImLinkerSysKickOutContent | None" = (
         betterproto2.field(101, betterproto2.TYPE_MESSAGE, optional=True)
     )
@@ -42564,6 +46452,176 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImLinkmicAiGuestMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    ai_guest_mode_content: "WebcastImLinkmicAiGuestModeContent | None" = (
+        betterproto2.field(2, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    ai_guest_tool_content: "WebcastImLinkmicAiGuestToolModeContent | None" = (
+        betterproto2.field(3, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LinkmicAIGuestMessage", WebcastImLinkmicAiGuestMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicAiGuestModeContent(betterproto2.Message):
+    anchor_id_str: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    room_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    ai_guest_id: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    switch_mode: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
+
+    version: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    anchor_open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LinkmicAIGuestModeContent", WebcastImLinkmicAiGuestModeContent
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicAiGuestToolModeContent(betterproto2.Message):
+    anchor_id_str: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    room_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    ai_guest_id: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    tool_mode: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
+
+    version: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    anchor_open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicAIGuestToolModeContent",
+    WebcastImLinkmicAiGuestToolModeContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicAiRecommendMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    action: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    channel_id: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    recommend_id: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    ai_name: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    desc_text: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+    btn_text: "str" = betterproto2.field(7, betterproto2.TYPE_STRING)
+
+    show_duration_sec: "str" = betterproto2.field(8, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LinkmicAIRecommendMessage", WebcastImLinkmicAiRecommendMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicAiSilenceStatusMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    channel_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    ai_user_id: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    silence_status: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicAISilenceStatusMessage",
+    WebcastImLinkmicAiSilenceStatusMessage,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicAiUserJoinMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    channel_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    ai_user: "WebcastDataLinkmicAiUser | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    ai_user_type: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LinkmicAIUserJoinMessage", WebcastImLinkmicAiUserJoinMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicAiUserLeaveMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    channel_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    ai_user: "WebcastDataLinkmicAiUser | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    ai_user_type: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
+
+    toast: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    leave_reason: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LinkmicAIUserLeaveMessage", WebcastImLinkmicAiUserLeaveMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicAnchorSettingMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    settings: "list[WebcastDataLinkmicSetting]" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, repeated=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicAnchorSettingMessage",
+    WebcastImLinkmicAnchorSettingMessage,
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImLinkmicAnnounceMessage(betterproto2.Message):
     common: "WebcastImCommon | None" = betterproto2.field(
         1, betterproto2.TYPE_MESSAGE, optional=True
@@ -42680,6 +46738,52 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImLinkmicAudienceChangeRoomMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    message_type: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    enter_chat_room_content: "WebcastImLinkmicAudienceEnterChatRoomContent | None" = (
+        betterproto2.field(11, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    leave_chat_room_content: "WebcastImLinkmicAudienceLeaveChatRoomContent | None" = (
+        betterproto2.field(12, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicAudienceChangeRoomMessage",
+    WebcastImLinkmicAudienceChangeRoomMessage,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicAudienceEnterChatRoomContent(betterproto2.Message):
+    leave_room_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    enter_chat_room_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    random_duration: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    leave_room_web_rid: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    enter_chat_room_web_rid: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    live_guest_anchor_id: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicAudienceEnterChatRoomContent",
+    WebcastImLinkmicAudienceEnterChatRoomContent,
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImLinkMicAudienceKtvMessage(betterproto2.Message):
     common: "WebcastImCommon | None" = betterproto2.field(
         1, betterproto2.TYPE_MESSAGE, optional=True
@@ -42737,6 +46841,10 @@ class WebcastImLinkMicAudienceKtvMessageSongUniqueInfo(betterproto2.Message):
 
     k_song_uid: "int" = betterproto2.field(5, betterproto2.TYPE_UINT64)
 
+    song_id_str: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+    str_user_id: "str" = betterproto2.field(7, betterproto2.TYPE_STRING)
+
     open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
 
 
@@ -42744,6 +46852,26 @@ default_message_pool.register_message(
     "douyin",
     "Webcast.Im.LinkMicAudienceKtvMessage.SongUniqueInfo",
     WebcastImLinkMicAudienceKtvMessageSongUniqueInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicAudienceLeaveChatRoomContent(betterproto2.Message):
+    leave_chat_room_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    enter_room_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    random_duration: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    leave_chat_room_web_rid: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    enter_room_web_rid: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicAudienceLeaveChatRoomContent",
+    WebcastImLinkmicAudienceLeaveChatRoomContent,
 )
 
 
@@ -43374,6 +47502,40 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImLinkmicChorusUserListChangedContent(betterproto2.Message):
+    user_list: "list[WebcastImLinkmicChorusUserListChangedContentSimpleLinkmicChorusUser]" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, repeated=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicChorusUserListChangedContent",
+    WebcastImLinkmicChorusUserListChangedContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicChorusUserListChangedContentSimpleLinkmicChorusUser(
+    betterproto2.Message
+):
+    user_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    linkmic_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    chorus_user_type: "int" = betterproto2.field(3, betterproto2.TYPE_INT32)
+
+    open_user_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicChorusUserListChangedContent.SimpleLinkmicChorusUser",
+    WebcastImLinkmicChorusUserListChangedContentSimpleLinkmicChorusUser,
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImLinkmicEcologyMessage(betterproto2.Message):
     common: "WebcastImCommon | None" = betterproto2.field(
         1, betterproto2.TYPE_MESSAGE, optional=True
@@ -43401,9 +47563,37 @@ class WebcastImLinkmicEcologyMessage(betterproto2.Message):
         7, betterproto2.TYPE_MESSAGE, optional=True
     )
 
+    audio_show_media_content: "WebcastImAudioShowMediaContent | None" = (
+        betterproto2.field(8, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.LinkmicEcologyMessage", WebcastImLinkmicEcologyMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicEffectMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    action: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    asset_id: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    partner_asset_id: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    resource_id: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    duration: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+    platform: "int" = betterproto2.field(7, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LinkmicEffectMessage", WebcastImLinkmicEffectMessage
 )
 
 
@@ -43414,6 +47604,8 @@ class WebcastImLinkmicEnlargeGuestChangeUserContent(betterproto2.Message):
     info: "WebcastDataEnlargeGuestInfo | None" = betterproto2.field(
         2, betterproto2.TYPE_MESSAGE, optional=True
     )
+
+    tracking_data: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
 
     enlarged_openid: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
 
@@ -43461,6 +47653,8 @@ default_message_pool.register_message(
 class WebcastImLinkmicEnlargeGuestTurnOffContent(betterproto2.Message):
     source: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
 
+    tracking_data: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
 
 default_message_pool.register_message(
     "douyin",
@@ -43478,6 +47672,8 @@ class WebcastImLinkmicEnlargeGuestTurnOnContent(betterproto2.Message):
     info: "WebcastDataEnlargeGuestInfo | None" = betterproto2.field(
         3, betterproto2.TYPE_MESSAGE, optional=True
     )
+
+    tracking_data: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
 
     enlarged_openid: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
 
@@ -44040,6 +48236,632 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImLinkmicInstructionApplyRankChangeContent(betterproto2.Message):
+    room_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicInstructionApplyRankChangeContent",
+    WebcastImLinkmicInstructionApplyRankChangeContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicInstructionApplyStrongReminderContent(betterproto2.Message):
+    source: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    user: "WebcastDataUser | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicInstructionApplyStrongReminderContent",
+    WebcastImLinkmicInstructionApplyStrongReminderContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicInstructionAudienceLeaveChatRoomContent(betterproto2.Message):
+    leave_chat_room_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    enter_room_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    random_duration: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    leave_chat_room_web_rid: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    enter_room_web_rid: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicInstructionAudienceLeaveChatRoomContent",
+    WebcastImLinkmicInstructionAudienceLeaveChatRoomContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicInstructionChangeMediaInfoContent(betterproto2.Message):
+    linkmic_media_param: "WebcastDataLinkmicMediaParam | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicInstructionChangeMediaInfoContent",
+    WebcastImLinkmicInstructionChangeMediaInfoContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicInstructionConfirmUnSilenceContent(betterproto2.Message):
+    from_user_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    from_room_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    toast: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicInstructionConfirmUnSilenceContent",
+    WebcastImLinkmicInstructionConfirmUnSilenceContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicInstructionEnlargeGuestApplyContent(betterproto2.Message):
+    from_user_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    apply_prompts: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    ui_image: "WebcastDataImage | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    target_enlarge_guest_type: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicInstructionEnlargeGuestApplyContent",
+    WebcastImLinkmicInstructionEnlargeGuestApplyContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicInstructionEnlargeGuestInviteContent(betterproto2.Message):
+    from_user_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    to_user_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    invite_type: "int" = betterproto2.field(3, betterproto2.TYPE_INT32)
+
+    ui_image: "WebcastDataImage | None" = betterproto2.field(
+        4, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    target_enlarge_guest_type: "int" = betterproto2.field(5, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicInstructionEnlargeGuestInviteContent",
+    WebcastImLinkmicInstructionEnlargeGuestInviteContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicInstructionEnlargeGuestReplyContent(betterproto2.Message):
+    from_user_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    to_user_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    reply_type: "int" = betterproto2.field(3, betterproto2.TYPE_INT32)
+
+    reply_prompts: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicInstructionEnlargeGuestReplyContent",
+    WebcastImLinkmicInstructionEnlargeGuestReplyContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicInstructionEnterContent(betterproto2.Message):
+    user_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    live_guest_room_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicInstructionEnterContent",
+    WebcastImLinkmicInstructionEnterContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicInstructionFinishContent(betterproto2.Message):
+    ban_anchor_info: "WebcastDataBanUser | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    finish_reason: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicInstructionFinishContent",
+    WebcastImLinkmicInstructionFinishContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicInstructionInviteContent(betterproto2.Message):
+    from_user_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    anchor_linkmic_id_str: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    invitor_info: "WebcastImLinkmicInstructionInviteContentInvitorInfo | None" = (
+        betterproto2.field(3, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    linker_session_id: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    remote_linker_session_id: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    invite_subtitle: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+    invite_prompt: "str" = betterproto2.field(7, betterproto2.TYPE_STRING)
+
+    backup_anchor_linkmic_info: "WebcastDataAnchorLinkmicInfo | None" = (
+        betterproto2.field(8, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    action_source: "WebcastDataAudienceActionSource | None" = betterproto2.field(
+        9, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    guest_media_info: "WebcastDataLinkmicMediaInfo | None" = betterproto2.field(
+        10, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    from_room_id: "str" = betterproto2.field(11, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicInstructionInviteContent",
+    WebcastImLinkmicInstructionInviteContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicInstructionInviteContentInvitorInfo(betterproto2.Message):
+    invitor_nick_name: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    invitor_avatar: "WebcastDataImage | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    user_count_str: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    gender: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicInstructionInviteContent.InvitorInfo",
+    WebcastImLinkmicInstructionInviteContentInvitorInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicInstructionKickOutContent(betterproto2.Message):
+    from_user_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    kick_out_source: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    toast: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    reason_toast: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    sys_kick_out_source: "int" = betterproto2.field(5, betterproto2.TYPE_INT32)
+
+    kick_out_users: "list[WebcastImLinkmicInstructionKickOutContentKickOutUserInfo]" = (
+        betterproto2.field(6, betterproto2.TYPE_MESSAGE, repeated=True)
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicInstructionKickOutContent",
+    WebcastImLinkmicInstructionKickOutContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicInstructionKickOutContentKickOutUserInfo(betterproto2.Message):
+    to_user_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    to_user_linkmic_id_str: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicInstructionKickOutContent.KickOutUserInfo",
+    WebcastImLinkmicInstructionKickOutContentKickOutUserInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicInstructionLeaveContent(betterproto2.Message):
+    user_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    user: "WebcastDataUser | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    live_guest_room_id: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    leave_reason: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+    toast: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicInstructionLeaveContent",
+    WebcastImLinkmicInstructionLeaveContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicInstructionMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    message_type: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    turn_on_content: "WebcastImLinkmicInstructionTurnOnContent | None" = (
+        betterproto2.field(11, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    finish_content: "WebcastImLinkmicInstructionFinishContent | None" = (
+        betterproto2.field(12, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    invite_content: "WebcastImLinkmicInstructionInviteContent | None" = (
+        betterproto2.field(13, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    reply_content: "WebcastImLinkmicInstructionReplyContent | None" = (
+        betterproto2.field(14, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    permit_content: "WebcastImLinkmicInstructionPermitContent | None" = (
+        betterproto2.field(15, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    waiting_list_change_content: "WebcastImLinkmicInstructionWaitingListChangeContent | None" = betterproto2.field(
+        16, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    silence_content: "WebcastImLinkmicInstructionSilenceContent | None" = (
+        betterproto2.field(17, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    un_silence_content: "WebcastImLinkmicInstructionUnSilenceContent | None" = (
+        betterproto2.field(18, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    confirm_un_silence_content: "WebcastImLinkmicInstructionConfirmUnSilenceContent | None" = betterproto2.field(
+        19, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    enter_content: "WebcastImLinkmicInstructionEnterContent | None" = (
+        betterproto2.field(20, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    kick_out_content: "WebcastImLinkmicInstructionKickOutContent | None" = (
+        betterproto2.field(21, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    apply_rank_change_content: "WebcastImLinkmicInstructionApplyRankChangeContent | None" = betterproto2.field(
+        22, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    update_link_type_apply_content: "WebcastImLinkmicInstructionUpdateLinkTypeApplyContent | None" = betterproto2.field(
+        23, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    update_link_type_reply_content: "WebcastImLinkmicInstructionUpdateLinkTypeReplyContent | None" = betterproto2.field(
+        24, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    change_media_info_content: "WebcastImLinkmicInstructionChangeMediaInfoContent | None" = betterproto2.field(
+        25, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    rtc_action_content: "WebcastImLinkmicInstructionRtcActionContent | None" = (
+        betterproto2.field(26, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    enlarge_guest_apply_content: "WebcastImLinkmicInstructionEnlargeGuestApplyContent | None" = betterproto2.field(
+        27, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    enlarge_guest_reply_content: "WebcastImLinkmicInstructionEnlargeGuestReplyContent | None" = betterproto2.field(
+        28, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    enlarge_guest_invite_content: "WebcastImLinkmicInstructionEnlargeGuestInviteContent | None" = betterproto2.field(
+        29, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    apply_strong_reminder_content: "WebcastImLinkmicInstructionApplyStrongReminderContent | None" = betterproto2.field(
+        30, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    leave_content: "WebcastImLinkmicInstructionLeaveContent | None" = (
+        betterproto2.field(31, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    audience_leave_chatroom_content: "WebcastImLinkmicInstructionAudienceLeaveChatRoomContent | None" = betterproto2.field(
+        32, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LinkmicInstructionMessage", WebcastImLinkmicInstructionMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicInstructionPermitContent(betterproto2.Message):
+    scene: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    ui_layout: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    guest_media_info: "WebcastDataLinkmicMediaInfo | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    anchor_linkmic_id_str: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    access_key: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    rtc_app_id: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+    rtc_app_sign: "str" = betterproto2.field(7, betterproto2.TYPE_STRING)
+
+    link_type: "int" = betterproto2.field(8, betterproto2.TYPE_INT32)
+
+    linker_session_id: "str" = betterproto2.field(9, betterproto2.TYPE_STRING)
+
+    remote_linker_session_id: "str" = betterproto2.field(10, betterproto2.TYPE_STRING)
+
+    push_rtc_type: "int" = betterproto2.field(11, betterproto2.TYPE_INT32)
+
+    multi_channel_info: "WebcastDataMultiChannelInfo | None" = betterproto2.field(
+        12, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    action_source: "WebcastDataAudienceActionSource | None" = betterproto2.field(
+        13, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    backup_anchor_linkmic_info: "WebcastDataAnchorLinkmicInfo | None" = (
+        betterproto2.field(14, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    join_channel_data: "WebcastImLinkmicJoinChannelData | None" = betterproto2.field(
+        15, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    silence_status: "int" = betterproto2.field(16, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicInstructionPermitContent",
+    WebcastImLinkmicInstructionPermitContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicInstructionReplyContent(betterproto2.Message):
+    reply_type: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    reply_prompts: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicInstructionReplyContent",
+    WebcastImLinkmicInstructionReplyContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicInstructionRtcActionContent(betterproto2.Message):
+    type: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    join_rtc_content: "WebcastImLinkerRtcActionJoinRtcContent | None" = (
+        betterproto2.field(2, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicInstructionRTCActionContent",
+    WebcastImLinkmicInstructionRtcActionContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicInstructionSilenceContent(betterproto2.Message):
+    from_user_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    to_user_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    to_status: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicInstructionSilenceContent",
+    WebcastImLinkmicInstructionSilenceContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicInstructionTurnOnContent(betterproto2.Message):
+    scene: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    ui_layout: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    anchor_media_info: "WebcastDataLinkmicMediaInfo | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    backup_anchor_linkmic_info: "WebcastDataAnchorLinkmicInfo | None" = (
+        betterproto2.field(4, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    init_source: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicInstructionTurnOnContent",
+    WebcastImLinkmicInstructionTurnOnContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicInstructionUnSilenceContent(betterproto2.Message):
+    from_user_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    to_user_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    to_status: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicInstructionUnSilenceContent",
+    WebcastImLinkmicInstructionUnSilenceContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicInstructionUpdateLinkTypeApplyContent(betterproto2.Message):
+    from_user_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    to_user_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    link_type: "int" = betterproto2.field(3, betterproto2.TYPE_INT32)
+
+    source: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
+
+    toast: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicInstructionUpdateLinkTypeApplyContent",
+    WebcastImLinkmicInstructionUpdateLinkTypeApplyContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicInstructionUpdateLinkTypeReplyContent(betterproto2.Message):
+    from_user_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    to_user_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    reply_type: "int" = betterproto2.field(3, betterproto2.TYPE_INT32)
+
+    reply_prompts: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicInstructionUpdateLinkTypeReplyContent",
+    WebcastImLinkmicInstructionUpdateLinkTypeReplyContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicInstructionWaitingListChangeContent(betterproto2.Message):
+    pass
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicInstructionWaitingListChangeContent",
+    WebcastImLinkmicInstructionWaitingListChangeContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicJoinChannelData(betterproto2.Message):
+    prompt: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    delegate_setting: "WebcastImLinkmicJoinChannelDataDelegateSetting | None" = (
+        betterproto2.field(2, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    token: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    live_core_settings: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    apply_type: "int" = betterproto2.field(5, betterproto2.TYPE_INT32)
+
+    prompt_with_earphone: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+    link_game_info: "WebcastDataLinkGameInfo | None" = betterproto2.field(
+        7, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LinkmicJoinChannelData", WebcastImLinkmicJoinChannelData
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicJoinChannelDataDelegateSetting(betterproto2.Message):
+    show_panel: "bool" = betterproto2.field(1, betterproto2.TYPE_BOOL)
+
+    enable_delegate: "bool" = betterproto2.field(2, betterproto2.TYPE_BOOL)
+
+    tag_image_url: "WebcastDataImage | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    prompt: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    status: "int" = betterproto2.field(5, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicJoinChannelData.DelegateSetting",
+    WebcastImLinkmicJoinChannelDataDelegateSetting,
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImLinkMicKtvBeatRankMessage(betterproto2.Message):
     common: "WebcastImCommon | None" = betterproto2.field(
         1, betterproto2.TYPE_MESSAGE, optional=True
@@ -44383,6 +49205,16 @@ class WebcastImLinkMicMethod(betterproto2.Message):
         108, betterproto2.TYPE_MESSAGE, optional=True
     )
 
+    tracking_data: "str" = betterproto2.field(109, betterproto2.TYPE_STRING)
+
+    throne_fight_info: "WebcastDataBattleCloudCollaborateThroneFightInfo | None" = (
+        betterproto2.field(110, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    from_user_id_str: "str" = betterproto2.field(111, betterproto2.TYPE_STRING)
+
+    biz_tag: "str" = betterproto2.field(112, betterproto2.TYPE_STRING)
+
     open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
 
     invite_open_id: "str" = betterproto2.field(5001, betterproto2.TYPE_STRING)
@@ -44599,6 +49431,12 @@ class WebcastImLinkmicOrderSingCreateContent(betterproto2.Message):
 
     multi_avatar_mode: "bool" = betterproto2.field(10, betterproto2.TYPE_BOOL)
 
+    room_song_info: "WebcastDataRoomSongInfo | None" = betterproto2.field(
+        11, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    stage_effects: "int" = betterproto2.field(12, betterproto2.TYPE_INT32)
+
 
 default_message_pool.register_message(
     "douyin",
@@ -44719,6 +49557,10 @@ class WebcastImLinkmicOrderSingScoreContent(betterproto2.Message):
         1, betterproto2.TYPE_MESSAGE, optional=True
     )
 
+    fund_check_extra_info: "WebcastDataFundCheckExtraInfo | None" = betterproto2.field(
+        13, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
 
 default_message_pool.register_message(
     "douyin",
@@ -44761,6 +49603,22 @@ class WebcastImLinkmicPlaymodeMessage(betterproto2.Message):
 
     linkmic_chest_game_status_list: "list[WebcastImLinkmicChestGameStatus]" = (
         betterproto2.field(4, betterproto2.TYPE_MESSAGE, repeated=True)
+    )
+
+    interact_acting_message: "WebcastImInteractActingMessage | None" = (
+        betterproto2.field(5, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    specified_guests_pk_message: "WebcastImSpecifiedGuestsPkMessage | None" = (
+        betterproto2.field(6, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    mic_avatar_message: "WebcastImMicAvatarMessage | None" = betterproto2.field(
+        7, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    guest_battle_v2_message: "WebcastImGuestBattleV2Message | None" = (
+        betterproto2.field(8, betterproto2.TYPE_MESSAGE, optional=True)
     )
 
 
@@ -45235,6 +50093,10 @@ class WebcastImLinkmicProfitMessage(betterproto2.Message):
         43, betterproto2.TYPE_MESSAGE, optional=True
     )
 
+    room_battle_switch_content: "WebcastImLinkmicRoomBattleSwitchContent | None" = (
+        betterproto2.field(44, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.LinkmicProfitMessage", WebcastImLinkmicProfitMessage
@@ -45365,6 +50227,8 @@ class WebcastImLinkmicRoomBattleInviteContent(betterproto2.Message):
 
     introduction_content: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
 
+    score_type: "int" = betterproto2.field(7, betterproto2.TYPE_INT32)
+
 
 default_message_pool.register_message(
     "douyin",
@@ -45423,6 +50287,8 @@ class WebcastImLinkmicRoomBattleReplyContent(betterproto2.Message):
 
     reply_operate: "int" = betterproto2.field(8, betterproto2.TYPE_INT32)
 
+    score_type: "int" = betterproto2.field(9, betterproto2.TYPE_INT32)
+
     invitee_open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
 
     reply_open_id: "str" = betterproto2.field(5001, betterproto2.TYPE_STRING)
@@ -45432,6 +50298,46 @@ default_message_pool.register_message(
     "douyin",
     "Webcast.Im.LinkmicRoomBattleReplyContent",
     WebcastImLinkmicRoomBattleReplyContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicRoomBattleSwitchContent(betterproto2.Message):
+    start_type: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    invitee_room_id: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+    invite_room_id: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    from_score_type: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
+
+    to_score_type: "int" = betterproto2.field(5, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicRoomBattleSwitchContent",
+    WebcastImLinkmicRoomBattleSwitchContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicRoomSongMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    room_song_info: "WebcastDataRoomSongInfo | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    update_time: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    is_mv_playing: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LinkmicRoomSongMessage", WebcastImLinkmicRoomSongMessage
 )
 
 
@@ -45733,6 +50639,10 @@ class WebcastImLinkmicTeamfightScoreMessage(betterproto2.Message):
         3, betterproto2.TYPE_MESSAGE, optional=True
     )
 
+    fund_check_extra_info: "WebcastDataFundCheckExtraInfo | None" = betterproto2.field(
+        4, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
 
 default_message_pool.register_message(
     "douyin",
@@ -45994,6 +50904,404 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImLinkmicUiBadge(betterproto2.Message):
+    badges: "dict[str, WebcastImLinkmicUiBadgeBadge]" = betterproto2.field(
+        1,
+        betterproto2.TYPE_MAP,
+        map_meta=betterproto2.map_meta(
+            betterproto2.TYPE_STRING, betterproto2.TYPE_MESSAGE
+        ),
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LinkmicUIBadge", WebcastImLinkmicUiBadge
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicUiBadgeBadge(betterproto2.Message):
+    dynamic_effect_url: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    static_effect_url: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    show_fly_mic_effect: "bool" = betterproto2.field(3, betterproto2.TYPE_BOOL)
+
+    dress_id: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    beauty_effect_id: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LinkmicUIBadge.Badge", WebcastImLinkmicUiBadgeBadge
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicUiBasic(betterproto2.Message):
+    scene: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    play_modes: "list[int]" = betterproto2.field(
+        2, betterproto2.TYPE_INT32, repeated=True
+    )
+
+    ui_layout: "int" = betterproto2.field(3, betterproto2.TYPE_INT32)
+
+    ui_feature_list: "list[int]" = betterproto2.field(
+        4, betterproto2.TYPE_INT32, repeated=True
+    )
+
+    positions: "list[WebcastImLinkmicUiBasicLinkmicPosition]" = betterproto2.field(
+        5, betterproto2.TYPE_MESSAGE, repeated=True
+    )
+
+    owner_user_id: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+    function_type: "str" = betterproto2.field(7, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LinkmicUIBasic", WebcastImLinkmicUiBasic
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicUiBasicEmptyPosition(betterproto2.Message):
+    toast_for_linked_user: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    toast_for_unlinked_user: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    icon_url: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    icon_type: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicUIBasic.EmptyPosition",
+    WebcastImLinkmicUiBasicEmptyPosition,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicUiBasicLinkmicPosition(betterproto2.Message):
+    position: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    status: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    user: "WebcastImLinkmicUiBasicUser | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    empty_position: "WebcastImLinkmicUiBasicEmptyPosition | None" = betterproto2.field(
+        4, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    mic_tag: "WebcastImLinkmicUiBasicMicTag | None" = betterproto2.field(
+        5, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    is_enlarged_pos: "bool" = betterproto2.field(6, betterproto2.TYPE_BOOL)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicUIBasic.LinkmicPosition",
+    WebcastImLinkmicUiBasicLinkmicPosition,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicUiBasicMicTag(betterproto2.Message):
+    position_name_mic_tag: "WebcastImLinkmicUiBasicPositionNameMicTag | None" = (
+        betterproto2.field(1, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    normal_mic_tag: "WebcastImLinkmicUiBasicNormalMicTag | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LinkmicUIBasic.MicTag", WebcastImLinkmicUiBasicMicTag
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicUiBasicNormalMicTag(betterproto2.Message):
+    tag_name: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    text_color_value: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    bg_color_value: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    tag_type_id: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+    bg_color_img_url: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicUIBasic.NormalMicTag",
+    WebcastImLinkmicUiBasicNormalMicTag,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicUiBasicPositionNameMicTag(betterproto2.Message):
+    text: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    status: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicUIBasic.PositionNameMicTag",
+    WebcastImLinkmicUiBasicPositionNameMicTag,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicUiBasicUser(betterproto2.Message):
+    user_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    nickname: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    avatar_thumb_url: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    avatar_medium_url: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    silence_status: "int" = betterproto2.field(5, betterproto2.TYPE_INT32)
+
+    is_background: "bool" = betterproto2.field(6, betterproto2.TYPE_BOOL)
+
+    role_show_type: "int" = betterproto2.field(7, betterproto2.TYPE_INT32)
+
+    linkmic_id_str: "str" = betterproto2.field(8, betterproto2.TYPE_STRING)
+
+    link_type: "int" = betterproto2.field(9, betterproto2.TYPE_INT32)
+
+    role_type: "int" = betterproto2.field(10, betterproto2.TYPE_INT32)
+
+    linkmic_unique_id: "str" = betterproto2.field(11, betterproto2.TYPE_STRING)
+
+    linkmic_rank_id: "str" = betterproto2.field(12, betterproto2.TYPE_STRING)
+
+    is_mystery_man: "bool" = betterproto2.field(18, betterproto2.TYPE_BOOL)
+
+    is_anonymous: "bool" = betterproto2.field(19, betterproto2.TYPE_BOOL)
+
+    apply_type: "int" = betterproto2.field(20, betterproto2.TYPE_INT32)
+
+    guest_type: "int" = betterproto2.field(22, betterproto2.TYPE_INT32)
+
+    sec_uid: "str" = betterproto2.field(23, betterproto2.TYPE_STRING)
+
+    own_room_id: "str" = betterproto2.field(24, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LinkmicUIBasic.User", WebcastImLinkmicUiBasicUser
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicUibgImg(betterproto2.Message):
+    bg_data: "WebcastImLinkmicUibgImgBgData | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    review_pass: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+    show_text: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LinkmicUIBGImg", WebcastImLinkmicUibgImg
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicUibgImgBgData(betterproto2.Message):
+    bg_type: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    image_type: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    image_url: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LinkmicUIBGImg.BGData", WebcastImLinkmicUibgImgBgData
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicUiComponent(betterproto2.Message):
+    announcement: "WebcastDataAnnounceInfo | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    guest_battle_v2_pk_bar: "WebcastDataGuestBattleV2PkBar | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LinkmicUIComponent", WebcastImLinkmicUiComponent
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicUiCustomizedRandomEmoji(betterproto2.Message):
+    customized_random_emojis: "dict[str, WebcastDataLinkmicCustomizedRandomEmoji]" = (
+        betterproto2.field(
+            1,
+            betterproto2.TYPE_MAP,
+            map_meta=betterproto2.map_meta(
+                betterproto2.TYPE_STRING, betterproto2.TYPE_MESSAGE
+            ),
+        )
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicUICustomizedRandomEmoji",
+    WebcastImLinkmicUiCustomizedRandomEmoji,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicUiFanTicket(betterproto2.Message):
+    user_fan_tickets: "dict[str, WebcastImLinkmicUiFanTicketUserFanTicket]" = (
+        betterproto2.field(
+            1,
+            betterproto2.TYPE_MAP,
+            map_meta=betterproto2.map_meta(
+                betterproto2.TYPE_STRING, betterproto2.TYPE_MESSAGE
+            ),
+        )
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LinkmicUIFanTicket", WebcastImLinkmicUiFanTicket
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicUiFanTicketFanTicketData(betterproto2.Message):
+    fan_ticket: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    fan_ticket_fuzzy_str: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    fan_ticket_real_str: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    rank_contributor_ids: "list[str]" = betterproto2.field(
+        4, betterproto2.TYPE_STRING, repeated=True
+    )
+
+    icon_url: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    custom_background_url: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+    rank_index: "int" = betterproto2.field(7, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicUIFanTicket.FanTicketData",
+    WebcastImLinkmicUiFanTicketFanTicketData,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicUiFanTicketUserFanTicket(betterproto2.Message):
+    type: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    fan_ticket_data: "WebcastImLinkmicUiFanTicketFanTicketData | None" = (
+        betterproto2.field(2, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicUIFanTicket.UserFanTicket",
+    WebcastImLinkmicUiFanTicketUserFanTicket,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicUiMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    message_type: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    basic: "WebcastImLinkmicUiBasic | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    fan_ticket: "WebcastImLinkmicUiFanTicket | None" = betterproto2.field(
+        4, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    voice_wave: "WebcastImLinkmicUiVoiceWave | None" = betterproto2.field(
+        5, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    badge: "WebcastImLinkmicUiBadge | None" = betterproto2.field(
+        6, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    customized_random_emoji: "WebcastImLinkmicUiCustomizedRandomEmoji | None" = (
+        betterproto2.field(7, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    bg_img: "WebcastImLinkmicUibgImg | None" = betterproto2.field(
+        8, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    component: "WebcastImLinkmicUiComponent | None" = betterproto2.field(
+        9, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LinkmicUIMessage", WebcastImLinkmicUiMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicUiVoiceWave(betterproto2.Message):
+    voice_waves: "dict[str, WebcastImLinkmicUiVoiceWaveVoiceWave]" = betterproto2.field(
+        1,
+        betterproto2.TYPE_MAP,
+        map_meta=betterproto2.map_meta(
+            betterproto2.TYPE_STRING, betterproto2.TYPE_MESSAGE
+        ),
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LinkmicUIVoiceWave", WebcastImLinkmicUiVoiceWave
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLinkmicUiVoiceWaveVoiceWave(betterproto2.Message):
+    url: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LinkmicUIVoiceWave.VoiceWave",
+    WebcastImLinkmicUiVoiceWaveVoiceWave,
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImLinkmicWebAntiCheatContent(betterproto2.Message):
     auth_ticket: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
 
@@ -46174,6 +51482,22 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImLiveEcomRankListMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    ranklist: "WebcastImRankList | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LiveEcomRankListMessage", WebcastImLiveEcomRankListMessage
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImLiveMateDemoteMessage(betterproto2.Message):
     common: "WebcastImCommon | None" = betterproto2.field(
         1, betterproto2.TYPE_MESSAGE, optional=True
@@ -46224,6 +51548,110 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImLiveMsgCarouselComponentInfo(betterproto2.Message):
+    msg_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    components: "list[WebcastImCarouselComponent]" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, repeated=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LiveMsgCarouselComponentInfo",
+    WebcastImLiveMsgCarouselComponentInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLiveMsgGuideLike(betterproto2.Message):
+    msg_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LiveMsgGuideLike", WebcastImLiveMsgGuideLike
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLiveMsgLeaveRoom(betterproto2.Message):
+    reason: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LiveMsgLeaveRoom", WebcastImLiveMsgLeaveRoom
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLiveMsgOnlineUserStatus(betterproto2.Message):
+    cnt: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    cnt_str: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    display_cnt_str: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LiveMsgOnlineUserStatus", WebcastImLiveMsgOnlineUserStatus
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLiveMsgPromotionFlush(betterproto2.Message):
+    product_id: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LiveMsgPromotionFlush", WebcastImLiveMsgPromotionFlush
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLiveMsgRecallMessage(betterproto2.Message):
+    recall_msg_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    recall_msg_type: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    toast: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LiveMsgRecallMessage", WebcastImLiveMsgRecallMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLiveMsgStartPlayScheduleVideo(betterproto2.Message):
+    msg_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    activity_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    session_id: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LiveMsgStartPlayScheduleVideo",
+    WebcastImLiveMsgStartPlayScheduleVideo,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLiveMsgSugInfo(betterproto2.Message):
+    msg_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    multi_content_sugs: "list[WebcastImMultiContentSug]" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, repeated=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LiveMsgSugInfo", WebcastImLiveMsgSugInfo
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImLiveplaysHonorMessage(betterproto2.Message):
     common: "WebcastImCommon | None" = betterproto2.field(
         1, betterproto2.TYPE_MESSAGE, optional=True
@@ -46236,6 +51664,24 @@ class WebcastImLiveplaysHonorMessage(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.LiveplaysHonorMessage", WebcastImLiveplaysHonorMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLiveplaysRandomMagicGiftMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    random_magic_gift_info: "WebcastImRandomMagicGiftInfo | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.LiveplaysRandomMagicGiftMessage",
+    WebcastImLiveplaysRandomMagicGiftMessage,
 )
 
 
@@ -46382,6 +51828,8 @@ class WebcastImLiveplaysSdkGiftMessagePayload(betterproto2.Message):
     test: "bool" = betterproto2.field(9, betterproto2.TYPE_BOOL)
 
     audience_sec_open_id: "str" = betterproto2.field(10, betterproto2.TYPE_STRING)
+
+    sec_magic_gift_id: "str" = betterproto2.field(11, betterproto2.TYPE_STRING)
 
 
 default_message_pool.register_message(
@@ -46972,6 +52420,38 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImLowPcuGuideChatMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    low_pcu_guide_chat_info: "WebcastDataLowPcuGuideChatData | None" = (
+        betterproto2.field(2, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LowPcuGuideChatMessage", WebcastImLowPcuGuideChatMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImLowPcuGuideMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    low_pcu_guide_info: "WebcastDataLowPcuGuideData | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.LowPcuGuideMessage", WebcastImLowPcuGuideMessage
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImLuckyBoxEndMessage(betterproto2.Message):
     common: "WebcastImCommon | None" = betterproto2.field(
         1, betterproto2.TYPE_MESSAGE, optional=True
@@ -47074,6 +52554,8 @@ class WebcastImLuckyBoxMessage(betterproto2.Message):
     join_frozen_duration: "int" = betterproto2.field(30, betterproto2.TYPE_UINT64)
 
     biz_extra: "str" = betterproto2.field(31, betterproto2.TYPE_STRING)
+
+    is_mystery_man: "bool" = betterproto2.field(32, betterproto2.TYPE_BOOL)
 
 
 default_message_pool.register_message(
@@ -47867,6 +53349,8 @@ class WebcastImMemberMessage(betterproto2.Message):
 
     unset_admin_type: "int" = betterproto2.field(25, betterproto2.TYPE_INT32)
 
+    enter_redirect_from: "int" = betterproto2.field(26, betterproto2.TYPE_UINT64)
+
     user_open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
 
 
@@ -47955,6 +53439,10 @@ class WebcastImMemberMessageEffectConfig(betterproto2.Message):
         ),
     )
 
+    badge_list: "WebcastDataImage | None" = betterproto2.field(
+        25, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
 
 default_message_pool.register_message(
     "douyin",
@@ -48035,6 +53523,72 @@ class WebcastImMessage(betterproto2.Message):
 
 
 default_message_pool.register_message("douyin", "Webcast.Im.Message", WebcastImMessage)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImMicAvatarInfo(betterproto2.Message):
+    role_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    avatar_thumb: "WebcastDataImage | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.MicAvatarInfo", WebcastImMicAvatarInfo
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImMicAvatarMessage(betterproto2.Message):
+    play_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    theme_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    theme_name: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    avatar_info_map: "dict[str, WebcastImMicAvatarInfo]" = betterproto2.field(
+        4,
+        betterproto2.TYPE_MAP,
+        map_meta=betterproto2.map_meta(
+            betterproto2.TYPE_STRING, betterproto2.TYPE_MESSAGE
+        ),
+    )
+
+    cross_room_info: "dict[str, WebcastImMicAvatarRoomInfo]" = betterproto2.field(
+        20,
+        betterproto2.TYPE_MAP,
+        map_meta=betterproto2.map_meta(
+            betterproto2.TYPE_STRING, betterproto2.TYPE_MESSAGE
+        ),
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.MicAvatarMessage", WebcastImMicAvatarMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImMicAvatarRoomInfo(betterproto2.Message):
+    play_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    theme_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    theme_name: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    avatar_info_map: "dict[str, WebcastImMicAvatarInfo]" = betterproto2.field(
+        4,
+        betterproto2.TYPE_MAP,
+        map_meta=betterproto2.map_meta(
+            betterproto2.TYPE_STRING, betterproto2.TYPE_MESSAGE
+        ),
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.MicAvatarRoomInfo", WebcastImMicAvatarRoomInfo
+)
 
 
 @dataclass(eq=False, repr=False)
@@ -48252,6 +53806,24 @@ default_message_pool.register_message(
     "douyin",
     "Webcast.Im.MultiChorusWaitingListChangedContent",
     WebcastImMultiChorusWaitingListChangedContent,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImMultiContentSug(betterproto2.Message):
+    sug_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    content: "WebcastImSugContent | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    sug_func_type: "int" = betterproto2.field(3, betterproto2.TYPE_INT32)
+
+    sug_business_type: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.MultiContentSug", WebcastImMultiContentSug
 )
 
 
@@ -49164,6 +54736,24 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImOriginRoomInfo(betterproto2.Message):
+    room_id: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    enable_link: "bool" = betterproto2.field(2, betterproto2.TYPE_BOOL)
+
+    room_url: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    is_anchor: "bool" = betterproto2.field(4, betterproto2.TYPE_BOOL)
+
+    link_text: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.OriginRoomInfo", WebcastImOriginRoomInfo
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImPackageMeta(betterproto2.Message):
     total: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
 
@@ -49310,6 +54900,24 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImPanelDotInfo(betterproto2.Message):
+    show_path: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    item_dots: "dict[str, WebcastDataItemDotInfo]" = betterproto2.field(
+        2,
+        betterproto2.TYPE_MAP,
+        map_meta=betterproto2.map_meta(
+            betterproto2.TYPE_STRING, betterproto2.TYPE_MESSAGE
+        ),
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.PanelDotInfo", WebcastImPanelDotInfo
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImPausePlaySongContent(betterproto2.Message):
     song_id: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
 
@@ -49318,6 +54926,12 @@ class WebcastImPausePlaySongContent(betterproto2.Message):
     from_user_id: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
 
     singer_id: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+    str_song_id: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    str_from_user_id: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+    str_singer_id: "str" = betterproto2.field(7, betterproto2.TYPE_STRING)
 
     from_open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
 
@@ -49572,6 +55186,28 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImPicAuditResultMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    audit_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    uri: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    url: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    audit_status: "int" = betterproto2.field(5, betterproto2.TYPE_INT32)
+
+    toast: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.PicAuditResultMessage", WebcastImPicAuditResultMessage
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImPicoDisplayInfo(betterproto2.Message):
     combo_sum_count: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
 
@@ -49754,6 +55390,64 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImPkPlayAnchorMatchMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    msg_type: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    match_source: "int" = betterproto2.field(3, betterproto2.TYPE_INT32)
+
+    self_player_data: "WebcastImPkPlayAnchorMatchMessagePlayerData | None" = (
+        betterproto2.field(4, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    rival_player_data: "WebcastImPkPlayAnchorMatchMessagePlayerData | None" = (
+        betterproto2.field(5, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    game_id: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+    game_name: "str" = betterproto2.field(7, betterproto2.TYPE_STRING)
+
+    close_reason: "int" = betterproto2.field(8, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.PKPlayAnchorMatchMessage", WebcastImPkPlayAnchorMatchMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImPkPlayAnchorMatchMessagePlayerData(betterproto2.Message):
+    user_icon_url: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    user_nick_name: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    game_battle_id: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    camp: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    game_icon_url: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    game_nick_name: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+    anchor_id: "str" = betterproto2.field(7, betterproto2.TYPE_STRING)
+
+    room_id: "str" = betterproto2.field(8, betterproto2.TYPE_STRING)
+
+    anchor_open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.PKPlayAnchorMatchMessage.PlayerData",
+    WebcastImPkPlayAnchorMatchMessagePlayerData,
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImPkPlayAnchorPanelMessage(betterproto2.Message):
     common: "WebcastImCommon | None" = betterproto2.field(
         1, betterproto2.TYPE_MESSAGE, optional=True
@@ -49804,6 +55498,68 @@ class WebcastImPkPlayAnchorPanelMessage(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.PKPlayAnchorPanelMessage", WebcastImPkPlayAnchorPanelMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImPkPlayAnchorRandMatchMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    msg_type: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    game_id: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    game_name: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    toast: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    is_invitee: "bool" = betterproto2.field(6, betterproto2.TYPE_BOOL)
+
+    rival_anchor_id: "str" = betterproto2.field(7, betterproto2.TYPE_STRING)
+
+    rival_room_id: "str" = betterproto2.field(8, betterproto2.TYPE_STRING)
+
+    game_icon_url: "str" = betterproto2.field(9, betterproto2.TYPE_STRING)
+
+    room_user_count: "str" = betterproto2.field(10, betterproto2.TYPE_STRING)
+
+    match_duration: "str" = betterproto2.field(11, betterproto2.TYPE_STRING)
+
+    self_user: "WebcastImPkPlayAnchorRandMatchMessagePkPlayRandMatchUser | None" = (
+        betterproto2.field(12, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    rival_user: "WebcastImPkPlayAnchorRandMatchMessagePkPlayRandMatchUser | None" = (
+        betterproto2.field(13, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    rival_anchor_open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.PKPlayAnchorRandMatchMessage",
+    WebcastImPkPlayAnchorRandMatchMessage,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImPkPlayAnchorRandMatchMessagePkPlayRandMatchUser(betterproto2.Message):
+    icon_url: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    nick_name: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    acu: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    follower: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.PKPlayAnchorRandMatchMessage.PKPlayRandMatchUser",
+    WebcastImPkPlayAnchorRandMatchMessagePkPlayRandMatchUser,
 )
 
 
@@ -49958,6 +55714,32 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImPkPlayInfoMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    status: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    anchor_id: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    anchor_room_id: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    invitee_id: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    invitee_room_id: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+    anchor_open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
+
+    invitee_open_id: "str" = betterproto2.field(5001, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.PKPlayInfoMessage", WebcastImPkPlayInfoMessage
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImPkPlayPlayerData(betterproto2.Message):
     nick_name: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
 
@@ -49992,6 +55774,8 @@ class WebcastImPkPlayUpdateConfigMessage(betterproto2.Message):
     )
 
     update_msg: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    update_content: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
 
 
 default_message_pool.register_message(
@@ -50317,7 +56101,27 @@ class WebcastImPrecisionMatch(betterproto2.Message):
 
     activity_id: "str" = betterproto2.field(15, betterproto2.TYPE_STRING)
 
+    play_mode: "int" = betterproto2.field(16, betterproto2.TYPE_INT32)
+
+    default_respond_type: "int" = betterproto2.field(17, betterproto2.TYPE_UINT64)
+
+    toast_content: "str" = betterproto2.field(18, betterproto2.TYPE_STRING)
+
+    title: "str" = betterproto2.field(19, betterproto2.TYPE_STRING)
+
+    sub_title: "str" = betterproto2.field(20, betterproto2.TYPE_STRING)
+
+    cur_battle_rule: "str" = betterproto2.field(21, betterproto2.TYPE_STRING)
+
+    auto_accept_anchor_id_list: "list[str]" = betterproto2.field(
+        22, betterproto2.TYPE_STRING, repeated=True
+    )
+
     sponsor_open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
+
+    auto_accept_anchor_open_id_list: "list[str]" = betterproto2.field(
+        50001, betterproto2.TYPE_STRING, repeated=True
+    )
 
 
 default_message_pool.register_message(
@@ -51469,6 +57273,18 @@ class WebcastImPublicAreaCommon(betterproto2.Message):
         ),
     )
 
+    tail_interact_type: "int" = betterproto2.field(24, betterproto2.TYPE_INT32)
+
+    default_click_schema_url: "str" = betterproto2.field(25, betterproto2.TYPE_STRING)
+
+    bottom_pin_config: "WebcastImBottomPinInfo | None" = betterproto2.field(
+        26, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    forced_insert: "bool" = betterproto2.field(27, betterproto2.TYPE_BOOL)
+
+    with_user_feature_label: "bool" = betterproto2.field(28, betterproto2.TYPE_BOOL)
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.PublicAreaCommon", WebcastImPublicAreaCommon
@@ -51852,6 +57668,32 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImRandomMagicGiftInfo(betterproto2.Message):
+    random_gift_id: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
+
+    random_gift_name: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    random_gift_diamond: "int" = betterproto2.field(3, betterproto2.TYPE_UINT64)
+
+    random_gift_count: "int" = betterproto2.field(4, betterproto2.TYPE_UINT64)
+
+    random_gift_desc: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    random_time: "int" = betterproto2.field(6, betterproto2.TYPE_UINT64)
+
+    user_name: "str" = betterproto2.field(7, betterproto2.TYPE_STRING)
+
+    short_id: "str" = betterproto2.field(8, betterproto2.TYPE_STRING)
+
+    user_icon: "str" = betterproto2.field(9, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.RandomMagicGiftInfo", WebcastImRandomMagicGiftInfo
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImRankItem(betterproto2.Message):
     rank: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
 
@@ -51874,6 +57716,18 @@ class WebcastImRankItem(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.RankItem", WebcastImRankItem
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImRankList(betterproto2.Message):
+    data: "list[WebcastImRankListItem]" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, repeated=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.RankList", WebcastImRankList
 )
 
 
@@ -51944,6 +57798,168 @@ default_message_pool.register_message(
     "douyin",
     "Webcast.Im.RanklistHourEntranceMessage",
     WebcastImRanklistHourEntranceMessage,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImRankListItem(betterproto2.Message):
+    content: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    schema: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    entrance_extra: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.RankListItem", WebcastImRankListItem
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImRankSeasonResult(betterproto2.Message):
+    delta_score_info: "WebcastImRankSeasonResultDeltaScoreInfo | None" = (
+        betterproto2.field(1, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    rank_change_info: "WebcastImRankSeasonResultRankChangeInfo | None" = (
+        betterproto2.field(2, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    tips: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.RankSeasonResult", WebcastImRankSeasonResult
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImRankSeasonResultDeltaScoreDetail(betterproto2.Message):
+    item_name: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    delta_score: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.RankSeasonResult.DeltaScoreDetail",
+    WebcastImRankSeasonResultDeltaScoreDetail,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImRankSeasonResultDeltaScoreInfo(betterproto2.Message):
+    total_delta_score: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    delta_score_details: "list[WebcastImRankSeasonResultDeltaScoreDetail]" = (
+        betterproto2.field(2, betterproto2.TYPE_MESSAGE, repeated=True)
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.RankSeasonResult.DeltaScoreInfo",
+    WebcastImRankSeasonResultDeltaScoreInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImRankSeasonResultRankChangeImgInfo(betterproto2.Message):
+    fade_in_img: "WebcastDataImage | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    fade_out_img: "WebcastDataImage | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    down_img: "WebcastDataImage | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.RankSeasonResult.RankChangeImgInfo",
+    WebcastImRankSeasonResultRankChangeImgInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImRankSeasonResultRankChangeInfo(betterproto2.Message):
+    pre_rank_info: "WebcastImRankSeasonResultRankInfo | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    after_rank_info: "WebcastImRankSeasonResultRankInfo | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    trans_img: "WebcastDataImage | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    change_type: "int" = betterproto2.field(4, betterproto2.TYPE_INT32)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.RankSeasonResult.RankChangeInfo",
+    WebcastImRankSeasonResultRankChangeInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImRankSeasonResultRankInfo(betterproto2.Message):
+    rank_change_img_info: "WebcastImRankSeasonResultRankChangeImgInfo | None" = (
+        betterproto2.field(1, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    star_change_img_info: "WebcastImRankSeasonResultStarChangeImgInfo | None" = (
+        betterproto2.field(2, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    rank_detail: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    rank_badge: "WebcastDataImage | None" = betterproto2.field(
+        4, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    cur_rank_score: "int" = betterproto2.field(5, betterproto2.TYPE_UINT64)
+
+    cur_rank_max_score: "int" = betterproto2.field(6, betterproto2.TYPE_UINT64)
+
+    rank_level: "int" = betterproto2.field(7, betterproto2.TYPE_INT32)
+
+    cur_rank_score_str: "str" = betterproto2.field(8, betterproto2.TYPE_STRING)
+
+    cur_rank_max_score_str: "str" = betterproto2.field(9, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.RankSeasonResult.RankInfo", WebcastImRankSeasonResultRankInfo
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImRankSeasonResultStarChangeImgInfo(betterproto2.Message):
+    rank_fade_in_img: "WebcastDataImage | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    star_fade_in_img: "WebcastDataImage | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    rank_fade_out_img: "WebcastDataImage | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.RankSeasonResult.StarChangeImgInfo",
+    WebcastImRankSeasonResultStarChangeImgInfo,
 )
 
 
@@ -52380,6 +58396,38 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImResidentGuestAllowContent(betterproto2.Message):
+    allow: "bool" = betterproto2.field(1, betterproto2.TYPE_BOOL)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.ResidentGuestAllowContent", WebcastImResidentGuestAllowContent
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImResidentGuestMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    msg_type: "int" = betterproto2.field(2, betterproto2.TYPE_INT32)
+
+    guest_allow_content: "WebcastImResidentGuestAllowContent | None" = (
+        betterproto2.field(100, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    linkmic_room_allow_content: "WebcastImResidentGuestAllowContent | None" = (
+        betterproto2.field(101, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.ResidentGuestMessage", WebcastImResidentGuestMessage
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImResponse(betterproto2.Message):
     messages: "list[WebcastImMessage]" = betterproto2.field(
         1, betterproto2.TYPE_MESSAGE, repeated=True
@@ -52461,6 +58509,10 @@ class WebcastImRoomAnchorFansChannelMessage(betterproto2.Message):
         )
     )
 
+    fans_club_channel_list: "list[WebcastDataRoomChannelInfo]" = betterproto2.field(
+        5, betterproto2.TYPE_MESSAGE, repeated=True
+    )
+
 
 default_message_pool.register_message(
     "douyin",
@@ -52489,11 +58541,29 @@ class WebcastImRoomAnchorFansChannelSyncData(betterproto2.Message):
         )
     )
 
+    fans_club_channel_list: "list[WebcastDataRoomChannelInfo]" = betterproto2.field(
+        4, betterproto2.TYPE_MESSAGE, repeated=True
+    )
+
 
 default_message_pool.register_message(
     "douyin",
     "Webcast.Im.RoomAnchorFansChannelSyncData",
     WebcastImRoomAnchorFansChannelSyncData,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImRoomAnswerCommonMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    biz_data: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.RoomAnswerCommonMessage", WebcastImRoomAnswerCommonMessage
 )
 
 
@@ -52714,6 +58784,22 @@ class WebcastImRoomChannelChatMessage(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.RoomChannelChatMessage", WebcastImRoomChannelChatMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImRoomChannelCipherMessage(betterproto2.Message):
+    chat_message: "WebcastImRoomChannelChatMessage | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    common: "WebcastImCommon | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.RoomChannelCipherMessage", WebcastImRoomChannelCipherMessage
 )
 
 
@@ -53088,6 +59174,60 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImRoomDigitalHumanMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    info_list: "list[WebcastImRoomDigitalHumanMessageDigitalHumanUsageInfo]" = (
+        betterproto2.field(2, betterproto2.TYPE_MESSAGE, repeated=True)
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.RoomDigitalHumanMessage", WebcastImRoomDigitalHumanMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImRoomDigitalHumanMessageDigitalHumanUsageInfo(betterproto2.Message):
+    status: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    avatar_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    public_output_stream: "WebcastImRoomDigitalHumanMessageDigitalHumanUsageInfoRtcInfo | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    user_id: "str" = betterproto2.field(4, betterproto2.TYPE_STRING)
+
+    scene: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.RoomDigitalHumanMessage.DigitalHumanUsageInfo",
+    WebcastImRoomDigitalHumanMessageDigitalHumanUsageInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImRoomDigitalHumanMessageDigitalHumanUsageInfoRtcInfo(
+    betterproto2.Message
+):
+    channel_id: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    stream_id: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.RoomDigitalHumanMessage.DigitalHumanUsageInfo.RtcInfo",
+    WebcastImRoomDigitalHumanMessageDigitalHumanUsageInfoRtcInfo,
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImRoomGroupChannelNotifyMessage(betterproto2.Message):
     common: "WebcastImCommon | None" = betterproto2.field(
         1, betterproto2.TYPE_MESSAGE, optional=True
@@ -53100,6 +59240,28 @@ default_message_pool.register_message(
     "douyin",
     "Webcast.Im.RoomGroupChannelNotifyMessage",
     WebcastImRoomGroupChannelNotifyMessage,
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImRoomHighlightAreaContainerMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    highlight_area_container: "WebcastDataHighlightAreaContainer | None" = (
+        betterproto2.field(2, betterproto2.TYPE_MESSAGE, optional=True)
+    )
+
+    public_area_common: "WebcastImPublicAreaCommon | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.RoomHighlightAreaContainerMessage",
+    WebcastImRoomHighlightAreaContainerMessage,
 )
 
 
@@ -53437,6 +59599,10 @@ class WebcastImRoomMsgGiftExtra(betterproto2.Message):
 
     diamond_count: "int" = betterproto2.field(9, betterproto2.TYPE_UINT64)
 
+    to_user_id: "str" = betterproto2.field(10, betterproto2.TYPE_STRING)
+
+    to_open_id: "str" = betterproto2.field(5000, betterproto2.TYPE_STRING)
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.RoomMsgGiftExtra", WebcastImRoomMsgGiftExtra
@@ -53451,6 +59617,10 @@ class WebcastImRoomRankMessage(betterproto2.Message):
 
     ranks: "list[WebcastImRoomRankMessageRoomRank]" = betterproto2.field(
         2, betterproto2.TYPE_MESSAGE, repeated=True
+    )
+
+    audience_ranks: "WebcastDataRank | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
     )
 
 
@@ -53704,6 +59874,10 @@ class WebcastImRoomTopMessage(betterproto2.Message):
     second_title: "WebcastDataText | None" = betterproto2.field(
         7, betterproto2.TYPE_MESSAGE, optional=True
     )
+
+    priority: "int" = betterproto2.field(8, betterproto2.TYPE_UINT64)
+
+    jump_url: "str" = betterproto2.field(9, betterproto2.TYPE_STRING)
 
 
 default_message_pool.register_message(
@@ -54131,6 +60305,10 @@ class WebcastImSecretChatMessage(betterproto2.Message):
 
     public_area_common: "WebcastImPublicAreaCommon | None" = betterproto2.field(
         8, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    suffix_text: "WebcastDataText | None" = betterproto2.field(
+        9, betterproto2.TYPE_MESSAGE, optional=True
     )
 
 
@@ -54732,6 +60910,24 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImSpecifiedGuestsPkMessage(betterproto2.Message):
+    msg_type: "int" = betterproto2.field(1, betterproto2.TYPE_INT32)
+
+    info: "WebcastDataSpecifiedGuestsPkInfo | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    fund_check_extra_info: "WebcastDataFundCheckExtraInfo | None" = betterproto2.field(
+        3, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.SpecifiedGuestsPKMessage", WebcastImSpecifiedGuestsPkMessage
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImSportsQuiz(betterproto2.Message):
     quiz_id: "int" = betterproto2.field(1, betterproto2.TYPE_UINT64)
 
@@ -54950,6 +61146,30 @@ class WebcastImSuffixText(betterproto2.Message):
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.SuffixText", WebcastImSuffixText
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImSugContent(betterproto2.Message):
+    text: "str" = betterproto2.field(1, betterproto2.TYPE_STRING)
+
+    schema: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+    image_url: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    candidate_texts: "list[str]" = betterproto2.field(
+        4, betterproto2.TYPE_STRING, repeated=True
+    )
+
+    left_color: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    right_color: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+    border_color: "str" = betterproto2.field(7, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.SugContent", WebcastImSugContent
 )
 
 
@@ -55286,6 +61506,10 @@ class WebcastImTaskCenterEntranceExtendMsg(betterproto2.Message):
     )
 
     extra: "str" = betterproto2.field(5, betterproto2.TYPE_STRING)
+
+    piggy_bank: "WebcastDataPiggyBank | None" = betterproto2.field(
+        6, betterproto2.TYPE_MESSAGE, optional=True
+    )
 
 
 default_message_pool.register_message(
@@ -55999,9 +62223,29 @@ class WebcastImTopEffectMessage(betterproto2.Message):
         20, betterproto2.TYPE_MESSAGE, repeated=True
     )
 
+    extra: "WebcastImTopEffectMessageExtra | None" = betterproto2.field(
+        21, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
 
 default_message_pool.register_message(
     "douyin", "Webcast.Im.TopEffectMessage", WebcastImTopEffectMessage
+)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImTopEffectMessageExtra(betterproto2.Message):
+    params: "dict[str, str]" = betterproto2.field(
+        1,
+        betterproto2.TYPE_MAP,
+        map_meta=betterproto2.map_meta(
+            betterproto2.TYPE_STRING, betterproto2.TYPE_STRING
+        ),
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.TopEffectMessage.Extra", WebcastImTopEffectMessageExtra
 )
 
 
@@ -57205,6 +63449,8 @@ class WebcastImVrTransferMessage(betterproto2.Message):
         ),
     )
 
+    vr_transfer_type: "int" = betterproto2.field(5, betterproto2.TYPE_UINT64)
+
     common: "WebcastImCommon | None" = betterproto2.field(
         100, betterproto2.TYPE_MESSAGE, optional=True
     )
@@ -57440,6 +63686,24 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImWebcastAvatarRoomChatMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    content: "WebcastImAvatarMessageContent | None" = betterproto2.field(
+        2, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin",
+    "Webcast.Im.WebcastAvatarRoomChatMessage",
+    WebcastImWebcastAvatarRoomChatMessage,
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImWebcastBattleBonusMessage(betterproto2.Message):
     common: "WebcastImCommon | None" = betterproto2.field(
         1, betterproto2.TYPE_MESSAGE, optional=True
@@ -57642,6 +63906,20 @@ default_message_pool.register_message(
 
 
 @dataclass(eq=False, repr=False)
+class WebcastImWebcastUeControlMessage(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    payload: "str" = betterproto2.field(2, betterproto2.TYPE_STRING)
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.WebcastUEControlMessage", WebcastImWebcastUeControlMessage
+)
+
+
+@dataclass(eq=False, repr=False)
 class WebcastImWelfareProjectOperateMessage(betterproto2.Message):
     common: "WebcastImCommon | None" = betterproto2.field(
         1, betterproto2.TYPE_MESSAGE, optional=True
@@ -57747,6 +64025,42 @@ class WebcastImWord(betterproto2.Message):
 
 
 default_message_pool.register_message("douyin", "Webcast.Im.Word", WebcastImWord)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImWorldChatData(betterproto2.Message):
+    common: "WebcastImCommon | None" = betterproto2.field(
+        1, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    msg_id: "int" = betterproto2.field(2, betterproto2.TYPE_UINT64)
+
+    content: "str" = betterproto2.field(3, betterproto2.TYPE_STRING)
+
+    user: "WebcastDataUser | None" = betterproto2.field(
+        4, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    display_text: "WebcastDataText | None" = betterproto2.field(
+        5, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    msg_id_str: "str" = betterproto2.field(6, betterproto2.TYPE_STRING)
+
+    origin_room: "WebcastImOriginRoomInfo | None" = betterproto2.field(
+        7, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+    event_time: "int" = betterproto2.field(8, betterproto2.TYPE_UINT64)
+
+    public_area_common: "WebcastImPublicAreaCommon | None" = betterproto2.field(
+        9, betterproto2.TYPE_MESSAGE, optional=True
+    )
+
+
+default_message_pool.register_message(
+    "douyin", "Webcast.Im.WorldChatData", WebcastImWorldChatData
+)
 
 
 @dataclass(eq=False, repr=False)

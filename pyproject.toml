@@ -21,7 +21,9 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "betterproto2-compiler>=0.9.0",
     "flet-splash>=0.2.2",
+    "grpcio-tools>=1.78.0",
     "pyinstaller>=6.19.0",
 ]
 
