@@ -1,3 +1,4 @@
+import sys
 import flet as ft
 from flet import NavigationDrawer, Ref
 from .controls import ModernToast, MenuBar
@@ -84,10 +85,6 @@ async def main(page: ft.Page):
 
     event_bus.on("on_status_change", on_notify)
 
-    def handle_keyboard(e: ft.KeyboardEvent):
-        if e.key == "Escape":
-            return
-
     def handle_minimized_window(_: ft.Event[ft.IconButton]):
         """
         最小化
@@ -101,20 +98,31 @@ async def main(page: ft.Page):
         await message_handler.stop()
         await page.window.close()
 
-    async def handle_close_window(_: ft.Event[ft.IconButton]):
-        """
-        退出确认
-        """
+    def show_exit_confirm():
         page.show_dialog(
             ft.AlertDialog(
                 title=ft.Text("提示"),
                 content=ft.Text("是否退出？"),
                 actions=[
-                    ft.TextButton("取消", on_click=lambda ee: page.pop_dialog()),
+                    ft.TextButton("取消", on_click=lambda e: page.pop_dialog()),
                     ft.TextButton("退出", on_click=handle_exit),
                 ],
             )
         )
+
+    async def handle_close_window(_: ft.Event[ft.IconButton]):
+        """
+        退出确认
+        """
+        show_exit_confirm()
+
+    def handle_keyboard(e: ft.KeyboardEvent):
+        if e.key == "Escape":
+            return
+        if sys.platform == "darwin" and e.meta and e.key == "Q":
+            show_exit_confirm()
+        if sys.platform == "win32" and e.alt and e.key == "F4":
+            show_exit_confirm()
 
     async def handle_theme_switch():
         """
