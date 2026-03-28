@@ -209,7 +209,6 @@ class Bili:
             medal_level,
             medal_name,
             guard_level,
-            price,
             msg=song_name,
             msg_id=history.id,
             send_time=now,

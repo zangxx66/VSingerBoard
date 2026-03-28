@@ -128,9 +128,9 @@ class Douyin:
         danmu_info = DanmuInfo(
             uid,
             uname,
-            guard_level,
             medal_level,
             medal_name,
+            guard_level,
             msg_id=history.id,
             msg=song_name,
             send_time=now,
