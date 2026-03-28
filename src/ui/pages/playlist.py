@@ -6,7 +6,7 @@ import flet as ft
 from flet import Ref
 from src.utils import PlaylistItem, async_worker, logger
 from src.database import Db as db
-from ..controls import NProgress, ModernToast, Pagination
+from ..controls import NProgress, ModernToast, Pagination, DataTable
 
 
 def main(page: ft.Page):
@@ -15,7 +15,7 @@ def main(page: ft.Page):
     keyword_text = Ref[ft.TextField]()
     delete_all_btn = Ref[ft.Button]()
     pagination = Ref[Pagination]()
-    data_table: ftd.DataTable2 | None = None
+    data_table: DataTable | None = None
 
     total = 0
 
@@ -412,7 +412,7 @@ def main(page: ft.Page):
             )
         return data_rows
 
-    data_table = ftd.DataTable2(
+    data_table = DataTable(
         show_checkbox_column=True,
         heading_row_color=ft.Colors.SECONDARY_CONTAINER,
         bottom_margin=10,

@@ -1,8 +1,8 @@
 import flet as ft
-from flet import Ref
 import flet_datatable2 as ftd
+from flet import Ref
 from typing import Sequence
-from ..controls import NProgress
+from ..controls import NProgress, DataTable
 from src.utils import async_worker
 from src.database import Db as db
 
@@ -13,7 +13,7 @@ def main(page: ft.Page):
     query_type_text = Ref[ft.Dropdown]()
     source_text = Ref[ft.Dropdown]()
     days_text = Ref[ft.Dropdown]()
-    data_table: ftd.DataTable2 | None = None
+    data_table: DataTable | None = None
 
     async def handle_search_click(e: ft.Event[ft.Button]):
         """
@@ -52,12 +52,15 @@ def main(page: ft.Page):
 
     def handle_query_change(e: ft.Event[ft.Dropdown]):
         query_type_text.current.value = e.control.value
+        if len(data_table.rows) > 0:
+            data_table.rows.clear()
         if e.control.value == "最受欢迎的歌":
             data_table.columns[1].visible = False
             data_table.columns[2].visible = True
         else:
             data_table.columns[1].visible = True
             data_table.columns[2].visible = False
+        data_table.update()
 
     def handle_source_change(e: ft.Event[ft.Dropdown]):
         source_text.current.value = e.control.value
@@ -95,7 +98,6 @@ def main(page: ft.Page):
         for item in query_result:
             data_rows.append(
                 ftd.DataRow2(
-                    specific_row_height=50,
                     cells=[
                         ft.DataCell(content=ft.Text("哔哩哔哩" if item["source"] == "bilibili" else "抖音")),
                         ft.DataCell(content=ft.Text(item["uname"] if query_type_text.current.value == "点歌最多的人" else item["song_name"])),
@@ -106,7 +108,7 @@ def main(page: ft.Page):
             )
         return data_rows
 
-    data_table = ftd.DataTable2(
+    data_table = DataTable(
         heading_row_color=ft.Colors.SECONDARY_CONTAINER,
         bottom_margin=10,
         columns=generate_columns(),

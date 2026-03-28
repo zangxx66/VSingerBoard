@@ -51,7 +51,7 @@ async def main(page: ft.Page):
 
     # 抽屉导航，系统主题设置
     drawer: NavigationDrawer | None = None
-    global_config = await db.get_gloal_config()
+    global_config: globalfigItem | None = None
     theme_destination = Ref[ft.NavigationDrawerDestination]()
 
     # 事件分发器
@@ -59,16 +59,26 @@ async def main(page: ft.Page):
     message_handler = MessageManager(event_bus)
     page.data = {"message_handler": message_handler}
 
-    if global_config:
-        page.theme_mode = (
-            ft.ThemeMode.DARK if global_config.dark_mode else ft.ThemeMode.LIGHT
-        )
-    else:
-        global_config = globalfigItem()
-        global_config.id = 0
-        global_config.dark_mode = False
-        page.theme_mode = ft.ThemeMode.LIGHT
-    theme_icon = ft.Icons.DARK_MODE if global_config.dark_mode else ft.Icons.LIGHT_MODE
+    async def on_mount():
+        """
+        初始化主题
+        """
+        nonlocal global_config
+        global_config = await db.get_gloal_config()
+        if global_config:
+            page.theme_mode = (
+                ft.ThemeMode.DARK if global_config.dark_mode else ft.ThemeMode.LIGHT
+            )
+        else:
+            global_config = globalfigItem()
+            global_config.id = 0
+            global_config.dark_mode = False
+            page.theme_mode = ft.ThemeMode.LIGHT
+        theme_icon = ft.Icons.DARK_MODE if global_config.dark_mode else ft.Icons.LIGHT_MODE
+        theme_destination.current.label = "DARK" if global_config.dark_mode else "LIGHT"
+        theme_destination.current.icon = theme_icon
+        theme_destination.current.selected_icon = theme_icon
+        message_handler.start()
 
     def on_notify(msg: dict[str, bool]):
         """
@@ -119,7 +129,7 @@ async def main(page: ft.Page):
     def handle_keyboard(e: ft.KeyboardEvent):
         if e.key == "Escape":
             return
-        if sys.platform == "darwin" and e.meta and e.key == "Q":
+        if sys.platform == "darwin" and e.meta and e.key == "W":
             show_exit_confirm()
         if sys.platform == "win32" and e.alt and e.key == "F4":
             show_exit_confirm()
@@ -217,9 +227,9 @@ async def main(page: ft.Page):
                 selected_icon=ft.Icon(ft.Icons.INFO),
             ),
             ft.NavigationDrawerDestination(
-                label="DARK" if global_config.dark_mode else "LIGHT",
-                icon=theme_icon,
-                selected_icon=theme_icon,
+                label="DARK" if page.theme_mode == ft.ThemeMode.DARK else "LIGHT",
+                icon=ft.Icons.DARK_MODE if page.theme_mode == ft.ThemeMode.DARK else ft.Icons.LIGHT_MODE,
+                selected_icon=ft.Icons.DARK_MODE if page.theme_mode == ft.ThemeMode.DARK else ft.Icons.LIGHT_MODE,
                 ref=theme_destination,
             ),
         ],
@@ -284,6 +294,6 @@ async def main(page: ft.Page):
     page.on_view_pop = view_pop
     page.on_keyboard_event = handle_keyboard
 
-    message_handler.start()
+    page.run_task(on_mount)
 
     route_change(page.route)
