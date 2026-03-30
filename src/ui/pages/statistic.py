@@ -2,7 +2,7 @@ import flet as ft
 import flet_datatable2 as ftd
 from flet import Ref
 from typing import Sequence
-from ..controls import NProgress, DataTable
+from ..controls import NProgress
 from src.utils import async_worker
 from src.database import Db as db
 
@@ -13,7 +13,7 @@ def main(page: ft.Page):
     query_type_text = Ref[ft.Dropdown]()
     source_text = Ref[ft.Dropdown]()
     days_text = Ref[ft.Dropdown]()
-    data_table: DataTable | None = None
+    data_table: ftd.DataTable2 | None = None
 
     async def handle_search_click(e: ft.Event[ft.Button]):
         """
@@ -108,7 +108,7 @@ def main(page: ft.Page):
             )
         return data_rows
 
-    data_table = DataTable(
+    data_table = ftd.DataTable2(
         heading_row_color=ft.Colors.SECONDARY_CONTAINER,
         bottom_margin=10,
         columns=generate_columns(),

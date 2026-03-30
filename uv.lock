@@ -550,7 +550,7 @@ wheels = [
 
 [[package]]
 name = "flet"
-version = "0.83.0"
+version = "0.83.1"
 source = { registry = "https://pypi.tuna.tsinghua.edu.cn/simple" }
 dependencies = [
     { name = "httpx", marker = "platform_system != 'Pyodide'" },
@@ -558,9 +558,9 @@ dependencies = [
     { name = "oauthlib", marker = "platform_system != 'Pyodide'" },
     { name = "repath" },
 ]
-sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/27/94/d0015aa876d0b0573c7ce24f6f609a627ff05a5e34606f227c257eb82064/flet-0.83.0.tar.gz", hash = "sha256:2ac8ed79ffa4a970fbbd9a8324573248e427ce8932e0cca445a2c75392defeae", size = 473714, upload-time = "2026-03-26T19:07:26.806Z" }
+sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/11/d7/102d2a3fafafd37b6c6f7a28a0a71ee9209085734faa138ff36dc3806ff9/flet-0.83.1.tar.gz", hash = "sha256:75115db74674ace37abe6642f84f3cbb6d8c7ab77ccfe2a62547003bd3b27e14", size = 474044, upload-time = "2026-03-29T18:24:51.618Z" }
 wheels = [
-    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/1e/1b/09d0feb4c2178c8e9e5c64551f9af128ca6d43a5f91d19d345536a0fa48e/flet-0.83.0-py3-none-any.whl", hash = "sha256:2c9c6cd5e4c23256f93a843519efe6416a8d189573ef85e905db3ad5467f704b", size = 561276, upload-time = "2026-03-26T19:07:25.247Z" },
+    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/7d/20/ac67c2d17d1e23570178c663caac98db9a08b966981282258c4977ac0ef9/flet-0.83.1-py3-none-any.whl", hash = "sha256:fcea71fe39a025c54eb913fea1b09ff608702e8ab05d71fec37aff793d9b8439", size = 561413, upload-time = "2026-03-29T18:24:52.942Z" },
 ]
 
 [package.optional-dependencies]
@@ -572,7 +572,7 @@ all = [
 
 [[package]]
 name = "flet-cli"
-version = "0.83.0"
+version = "0.83.1"
 source = { registry = "https://pypi.tuna.tsinghua.edu.cn/simple" }
 dependencies = [
     { name = "binaryornot" },
@@ -583,33 +583,33 @@ dependencies = [
     { name = "qrcode" },
     { name = "watchdog" },
 ]
-sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/d9/9d/62f5e36d446b9ba91dc044a713cc903f70e4989fb387d5bd3f9c9eaafa01/flet_cli-0.83.0.tar.gz", hash = "sha256:3f959b079efed6783ca493e6b28b57e4b7cc25391e21301eab77249ed3e7f6eb", size = 56747, upload-time = "2026-03-26T19:07:29.817Z" }
+sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/dd/4e/a57577156861e6ea661f5b3974f87ed78e5006ea785233bcd79cde32b03d/flet_cli-0.83.1.tar.gz", hash = "sha256:64a819b48330e162ddd181300c938a5232af922f3fab34ce2e3ad82f7148489f", size = 56760, upload-time = "2026-03-29T18:24:55.517Z" }
 wheels = [
-    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/79/b8/8bd60933712490f57c1ae72160b6b4a8b5f8cc6b27846b1bf62bcaf5c1ba/flet_cli-0.83.0-py3-none-any.whl", hash = "sha256:dfe4f840ae3be4da0aca62e58a386e892be92bc35838c002f8f658d5d2a4bbbf", size = 70322, upload-time = "2026-03-26T19:07:28.639Z" },
+    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/8a/9c/c8b1f6d01533682e049185e837b2c072279ceb28072aca721f87c65b4c3e/flet_cli-0.83.1-py3-none-any.whl", hash = "sha256:f9e58145356f3017e82176390949695566b3cbc9cf61964e4dc6be864b3048e9", size = 70325, upload-time = "2026-03-29T18:24:54.658Z" },
 ]
 
 [[package]]
 name = "flet-datatable2"
-version = "0.83.0"
+version = "0.83.1"
 source = { registry = "https://pypi.tuna.tsinghua.edu.cn/simple" }
 dependencies = [
     { name = "flet" },
 ]
-sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/6b/18/5592c05d7715ace9f8f2cb6128ddda1a4677d835cf66330d7a6b789c45f0/flet_datatable2-0.83.0.tar.gz", hash = "sha256:7fc4b73fb61a7342273746efcf3e45c123f60323a0fd6cf8374ed70e692f7ee0", size = 15003, upload-time = "2026-03-26T19:07:55.177Z" }
+sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/05/ad/15ff1216ef7c10e9a401afc48faba6e3c4d996e90c3458620fd49546e751/flet_datatable2-0.83.1.tar.gz", hash = "sha256:0cda21efa8eeead8a87132174b9ab661b1fc0e5ef75afb462fe39d0d59849891", size = 15013, upload-time = "2026-03-29T18:25:20.435Z" }
 wheels = [
-    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/a3/24/434f90174d973e4d7cc921edb1145f99e7ea142a33f976c7e87bf487fc3f/flet_datatable2-0.83.0-py3-none-any.whl", hash = "sha256:85f9c35df11bd0041bb8d72ce1656ee91ec050a4491b4faede0a00d1002d1174", size = 17560, upload-time = "2026-03-26T19:07:54.084Z" },
+    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/f5/72/2a6a27c0b3a803a0b642b9f4206b04149e1f2d0f51270202799b2350b13b/flet_datatable2-0.83.1-py3-none-any.whl", hash = "sha256:d8d3b23f8c10c0e722939fae15bc87c76711899bcae30d21d2a8c85ea3574f6f", size = 17562, upload-time = "2026-03-29T18:25:21.131Z" },
 ]
 
 [[package]]
 name = "flet-desktop"
-version = "0.83.0"
+version = "0.83.1"
 source = { registry = "https://pypi.tuna.tsinghua.edu.cn/simple" }
 dependencies = [
     { name = "flet" },
 ]
-sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/d3/7c/9f604932d0b77861d59b0a0507beb1a184ddcf40261f162173216dea198d/flet_desktop-0.83.0.tar.gz", hash = "sha256:13479988252793ef0592daaea413b385e4e00a0a96b54710cf1a5f18ab565ed9", size = 6110, upload-time = "2026-03-26T19:07:32.152Z" }
+sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/39/66/ed5c51ff884a2edad198a5c48282d9e34c40884106b658002f6183e22522/flet_desktop-0.83.1.tar.gz", hash = "sha256:054b659bf08eb8e37bfb9e495ec3391f471cd21b0451f770027ca4bab4251755", size = 6115, upload-time = "2026-03-29T18:24:57.429Z" }
 wheels = [
-    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/1d/86/d80c529f5d8050fbdfaab72b3c5bb355aef87e94734f0587c993b12ff301/flet_desktop-0.83.0-py3-none-any.whl", hash = "sha256:fcae3a271cc62b6fd18d5db21c79114cb6c524cae0d1a71cabb8c4fedbb10a55", size = 6205, upload-time = "2026-03-26T19:07:31.113Z" },
+    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/4c/2c/9c86558c4763227e28ba22cc8f25cb6ddb73d476785d31a85871c070dd3f/flet_desktop-0.83.1-py3-none-any.whl", hash = "sha256:05a5a009d1ae7edef255dcf92861e0862e3ea4ebe74c670dfca719b35ee2be19", size = 6205, upload-time = "2026-03-29T18:24:58.291Z" },
 ]
 
 [[package]]
@@ -626,16 +626,16 @@ wheels = [
 
 [[package]]
 name = "flet-web"
-version = "0.83.0"
+version = "0.83.1"
 source = { registry = "https://pypi.tuna.tsinghua.edu.cn/simple" }
 dependencies = [
     { name = "fastapi" },
     { name = "flet" },
     { name = "uvicorn", extra = ["standard"] },
 ]
-sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/ae/2b/4599dff142844eebcbdc5fed7cce2beca0e45cff2018090b531fb8947aca/flet_web-0.83.0.tar.gz", hash = "sha256:565a424f55ed4bdbb7924e59dbcdb4dd2bf69cce75926b099e2d85687e7a931f", size = 18346, upload-time = "2026-03-26T19:07:36.131Z" }
+sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/61/70/9e56c61185b1b6f062f51617214951f465cac3a7c48187ae8c654cda5115/flet_web-0.83.1.tar.gz", hash = "sha256:16e15e4500546fbcfdb45f859b6ef7c373738670a1e6fc28f3754f36ab405f64", size = 18348, upload-time = "2026-03-29T18:25:03.049Z" }
 wheels = [
-    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/12/75/24b673ed83ede25cc684c33df0af65c9f2f2c9c17fe4f68b6032d4e3f431/flet_web-0.83.0-py3-none-any.whl", hash = "sha256:aea6d9d357057f4cdd24af2a7054eac40ca2cc153bd1b588a08656af3055fbb5", size = 23914398, upload-time = "2026-03-26T19:07:34.058Z" },
+    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/94/4d/8da022efef8e4d16ce7419010581a3ac1e19bdee42c1c5127387d04b483a/flet_web-0.83.1-py3-none-any.whl", hash = "sha256:ca76a0bfa07fae6fadfd6bd4a527ab8f721e32e581412f771ce7d440b344dcae", size = 23914412, upload-time = "2026-03-29T18:25:01.036Z" },
 ]
 
 [[package]]

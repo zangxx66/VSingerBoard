@@ -8,7 +8,7 @@ from bilibili_api.login_v2 import QrCodeLogin, QrCodeLoginChannel
 from src.utils import BiliCredentialItem, bconfigItem, async_worker
 from src.database import Db as db
 from src.live import bili_manager
-from ..controls import NProgress, ModernToast, DataTable
+from ..controls import NProgress, ModernToast
 
 
 def bilibili_container(page: ft.Page):
@@ -182,7 +182,7 @@ def bilibili_container(page: ft.Page):
             ),
         )
 
-    data_table: DataTable | None = None
+    data_table: ftd.DataTable2 | None = None
 
     def generate_columns():
         """
@@ -237,7 +237,7 @@ def bilibili_container(page: ft.Page):
             )
         return data_rows
 
-    data_table = DataTable(
+    data_table = ftd.DataTable2(
         heading_row_color=ft.Colors.SECONDARY_CONTAINER,
         bottom_margin=10,
         visible_vertical_scroll_bar=True,
