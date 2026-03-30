@@ -2,8 +2,7 @@ import flet as ft
 from flet import Ref
 from src.utils import globalfigItem, setup_autostart, async_worker
 from src.database import Db as db
-from ..controls.progress import NProgress
-from ..controls.toast import ModernToast
+from ..controls import NProgress, ModernToast
 
 
 def settings_container(page: ft.Page):

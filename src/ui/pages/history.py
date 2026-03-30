@@ -134,11 +134,15 @@ def main(page: ft.Page):
                 if end_date_picker.current.value
                 else None
             )
-            _, songs = await async_worker.run_db_operation(
+            nums, songs = await async_worker.run_db_operation(
                 db.get_song_history_page(
                     uname, song_name, source, start_time, end_time, 1, total
                 )
             )
+
+            if nums == 0:
+                ModernToast.info(page, "没有数据")
+                return
 
             df_dict = {
                 "日期": [timespan_to_localtime(item.create_time) for item in songs],

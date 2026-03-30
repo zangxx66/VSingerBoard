@@ -36,6 +36,7 @@ class Db:
             await cls.run_db_upgrade(cls)
             await Tortoise.init(config=TORTISE_ORM)
             await Tortoise.generate_schemas()
+            cls._conn = Tortoise.get_connection("default")
             cls._initialized = True
             logger.info("Database initialized successfully.")
         except Exception as e:
@@ -249,3 +250,42 @@ class Db:
             obj = Playlist(**item)
             objects.append(obj)
         await Playlist.bulk_create(objects, batch_size=500)
+
+    @classmethod
+    async def get_statisitic(cls, query_type: str, days: int, source: str | None):
+        # 根据 query_type 确定分组和目标字段
+        group_field = "uname" if query_type == "user" else "song_name"
+
+        source_filter = ""
+        params = [f"-{int(days)} days"]
+        if source and source.strip():
+            source_filter = " AND source = ?"
+            params.append(source)
+
+        query = f"""
+            WITH DailyCounts AS (
+                SELECT
+                    uname,
+                    song_name,
+                    source,
+                    COUNT(*) as count,
+                    strftime('%Y-%m-%d', create_time, 'unixepoch', 'localtime') as day
+                FROM songhistory
+                WHERE create_time > unixepoch('now', ?)
+                {source_filter}
+                GROUP BY day, {group_field}
+            )
+            SELECT uname, song_name, source, count, day
+            FROM (
+                SELECT *,
+                ROW_NUMBER() OVER (PARTITION BY day ORDER BY count DESC) as rn
+                FROM DailyCounts
+            )
+            WHERE rn = 1
+            ORDER BY day DESC
+            LIMIT ?;
+        """
+        params.append(days)
+
+        _, query_result = await cls._conn.execute_query(query, params)
+        return query_result

@@ -49,7 +49,8 @@ class Bili:
             self.live = live.LiveDanmaku(room_display_id=self.config.room_id, credential=credential, max_retry=99)
             self.live.on("DANMU_MSG")(self.on_msg)
             self.live.on("SUPER_CHAT_MESSAGE")(self.on_sc)
-            subscribe_manager.register("interval", minutes=30, id="refresh_credential", replace_existing=True)(self.refresh_credential)
+            if credential:
+                subscribe_manager.register("interval", minutes=30, id="refresh_credential", replace_existing=True)(self.refresh_credential)
 
             await self.live.connect()
             logger.info("Bilibili live client starting.")
@@ -71,8 +72,9 @@ class Bili:
             logger.info("Bilibili live client stopped.")
 
     async def stop(self):
-        from src.manager import cancel_subscribe
-        cancel_subscribe("refresh_credential")
+        if self.credential:
+            from src.manager import cancel_subscribe
+            cancel_subscribe("refresh_credential")
         if self._run_future and not self._run_future.done():
             logger.info("Stopping Bilibili main task.")
             self._stop_event.set()
@@ -131,7 +133,7 @@ class Bili:
             if history:
                 self.del_list(history.id)
             return
-        if not msg.startswith(self.config.sing_prefix):
+        if not msg.startswith(f"{self.config.sing_prefix} "):
             return
         if self.config.modal_level > 0 and medal_level < self.config.modal_level:
             return
@@ -207,7 +209,6 @@ class Bili:
             medal_level,
             medal_name,
             guard_level,
-            price,
             msg=song_name,
             msg_id=history.id,
             send_time=now,

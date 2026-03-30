@@ -111,7 +111,7 @@ class Douyin:
             if history:
                 self.del_list(history.id)
             return
-        if not content.startswith(self.sing_prefix):
+        if not content.startswith(f"{self.sing_prefix} "):
             return
         if self.fans_level > 0 and medal_level < self.fans_level:
             return
@@ -128,9 +128,9 @@ class Douyin:
         danmu_info = DanmuInfo(
             uid,
             uname,
-            guard_level,
             medal_level,
             medal_name,
+            guard_level,
             msg_id=history.id,
             msg=song_name,
             send_time=now,

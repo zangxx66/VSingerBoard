@@ -3,7 +3,7 @@ from flet import Ref
 from datetime import datetime as dt
 from datetime import UTC
 from src.utils import check_for_updates, async_worker
-from ..controls import NProgress
+from ..controls import NProgress, ModernToast
 
 
 def main(page: ft.Page):
@@ -16,6 +16,12 @@ def main(page: ft.Page):
     async def on_mount():
         NProgress.start(page)
         version_info = await async_worker.run_db_operation(check_for_updates())
+
+        if version_info["code"] == -1:
+            NProgress.stop(page)
+            ModernToast.warning(page, version_info["msg"])
+            page.update()
+            return
 
         if len(version_info["published_at"]) > 0:
             utc_str = version_info["published_at"]

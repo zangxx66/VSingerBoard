@@ -1,12 +1,14 @@
+import sys
 import flet as ft
 from flet import NavigationDrawer, Ref
-from .controls import ModernToast
+from .controls import ModernToast, MenuBar
 from .pages.about import main as AboutView
 from .pages.changelog import main as ChangelogView
 from .pages.history import main as HistoryView
 from .pages.home import main as HomeView
 from .pages.playlist import main as PlaylistView
 from .pages.settings import main as SettingsView
+from .pages.statistic import main as StatisticView
 from src.utils import resource_path, EventEmitter, globalfigItem
 from src.manager import MessageManager
 from src.database import Db as db
@@ -40,6 +42,11 @@ async def main(page: ft.Page):
         color_scheme_seed=ft.Colors.PINK,
         dialog_theme=ft.DialogTheme(shadow_color=ft.Colors.ON_SURFACE_VARIANT),
         font_family="AlibabaPuHuiTi",
+        page_transitions=ft.PageTransitionsTheme(
+            macos=ft.PageTransitionTheme.FADE_UPWARDS,
+            windows=ft.PageTransitionTheme.FADE_UPWARDS,
+            linux=ft.PageTransitionTheme.FADE_UPWARDS
+        )
     )
 
     # 抽屉导航，系统主题设置
@@ -51,7 +58,27 @@ async def main(page: ft.Page):
     event_bus = EventEmitter()
     message_handler = MessageManager(event_bus)
     page.data = {"message_handler": message_handler}
-    message_handler.start()
+
+    async def on_mount():
+        """
+        初始化主题
+        """
+        nonlocal global_config
+        global_config = await db.get_gloal_config()
+        if global_config:
+            page.theme_mode = (
+                ft.ThemeMode.DARK if global_config.dark_mode else ft.ThemeMode.LIGHT
+            )
+        else:
+            global_config = globalfigItem()
+            global_config.id = 0
+            global_config.dark_mode = False
+            page.theme_mode = ft.ThemeMode.LIGHT
+        theme_icon = ft.Icons.DARK_MODE if global_config.dark_mode else ft.Icons.LIGHT_MODE
+        theme_destination.current.label = "DARK" if global_config.dark_mode else "LIGHT"
+        theme_destination.current.icon = theme_icon
+        theme_destination.current.selected_icon = theme_icon
+        message_handler.start()
 
     def on_notify(msg: dict[str, bool]):
         """
@@ -68,37 +95,44 @@ async def main(page: ft.Page):
 
     event_bus.on("on_status_change", on_notify)
 
-    def handle_keyboard(e: ft.KeyboardEvent):
-        if e.key == "Escape":
-            return
-
-    def handle_minimized_window(e: ft.Event[ft.IconButton]):
+    def handle_minimized_window(_: ft.Event[ft.IconButton]):
         """
         最小化
         """
         page.window.minimized = True
 
-    async def handle_exit(e: ft.Event[ft.TextButton]):
+    async def handle_exit(_: ft.Event[ft.TextButton]):
         """
         退出应用
         """
         await message_handler.stop()
         await page.window.close()
 
-    async def handle_close_window(e: ft.Event[ft.IconButton]):
-        """
-        退出确认
-        """
+    def show_exit_confirm():
         page.show_dialog(
             ft.AlertDialog(
                 title=ft.Text("提示"),
                 content=ft.Text("是否退出？"),
                 actions=[
-                    ft.TextButton("取消", on_click=lambda ee: page.pop_dialog()),
+                    ft.TextButton("取消", on_click=lambda e: page.pop_dialog()),
                     ft.TextButton("退出", on_click=handle_exit),
                 ],
             )
         )
+
+    async def handle_close_window(_: ft.Event[ft.IconButton]):
+        """
+        退出确认
+        """
+        show_exit_confirm()
+
+    def handle_keyboard(e: ft.KeyboardEvent):
+        if e.key == "Escape":
+            return
+        if sys.platform == "darwin" and e.meta and e.key == "W":
+            show_exit_confirm()
+        if sys.platform == "win32" and e.alt and e.key == "F4":
+            show_exit_confirm()
 
     async def handle_theme_switch():
         """
@@ -122,27 +156,7 @@ async def main(page: ft.Page):
             theme_destination.current.selected_icon = theme_icon
             ModernToast.success(page, "切换成功")
 
-    async def on_mount():
-        """
-        初始化主题
-        """
-        nonlocal global_config
-        global_config = await db.get_gloal_config()
-        if global_config:
-            page.theme_mode = (
-                ft.ThemeMode.DARK if global_config.dark_mode else ft.ThemeMode.LIGHT
-            )
-        else:
-            global_config = globalfigItem()
-            global_config.id = 0
-            global_config.dark_mode = False
-            page.theme_mode = ft.ThemeMode.LIGHT
-        theme_icon = ft.Icons.DARK_MODE if global_config.dark_mode else ft.Icons.LIGHT_MODE
-        theme_destination.current.label = "DARK" if global_config.dark_mode else "LIGHT"
-        theme_destination.current.icon = theme_icon
-        theme_destination.current.selected_icon = theme_icon
-
-    async def handle_show_drawer():
+    async def handle_show_drawer(_: ft.Event[ft.IconButton]):
         """
         打开抽屉导航
         """
@@ -160,12 +174,14 @@ async def main(page: ft.Page):
             case 2:
                 await page.push_route("/playlist")
             case 3:
-                await page.push_route("/changelog")
+                await page.push_route("/statistic")
             case 4:
                 await page.push_route("/settings")
             case 5:
-                await page.push_route("/about")
+                await page.push_route("/changelog")
             case 6:
+                await page.push_route("/about")
+            case 7:
                 await handle_theme_switch()
             case _:
                 await page.push_route("/")
@@ -191,9 +207,9 @@ async def main(page: ft.Page):
                 selected_icon=ft.Icon(ft.Icons.COLLECTIONS),
             ),
             ft.NavigationDrawerDestination(
-                label="更新日志",
-                icon=ft.Icons.HISTORY,
-                selected_icon=ft.Icon(ft.Icons.HISTORY),
+                label="统计",
+                icon=ft.Icons.BAR_CHART,
+                selected_icon=ft.Icons.BAR_CHART
             ),
             ft.NavigationDrawerDestination(
                 label="设置",
@@ -201,14 +217,19 @@ async def main(page: ft.Page):
                 selected_icon=ft.Icon(ft.Icons.SETTINGS),
             ),
             ft.NavigationDrawerDestination(
+                label="更新日志",
+                icon=ft.Icons.HISTORY,
+                selected_icon=ft.Icon(ft.Icons.HISTORY),
+            ),
+            ft.NavigationDrawerDestination(
                 label="关于",
                 icon=ft.Icons.INFO,
                 selected_icon=ft.Icon(ft.Icons.INFO),
             ),
             ft.NavigationDrawerDestination(
-                label="LIGHT",
-                icon=ft.Icons.LIGHT_MODE,
-                selected_icon=ft.Icons.LIGHT_MODE,
+                label="DARK" if page.theme_mode == ft.ThemeMode.DARK else "LIGHT",
+                icon=ft.Icons.DARK_MODE if page.theme_mode == ft.ThemeMode.DARK else ft.Icons.LIGHT_MODE,
+                selected_icon=ft.Icons.DARK_MODE if page.theme_mode == ft.ThemeMode.DARK else ft.Icons.LIGHT_MODE,
                 ref=theme_destination,
             ),
         ],
@@ -230,69 +251,38 @@ async def main(page: ft.Page):
                 title.value = "歌单管理"
                 drawer.selected_index = 2
                 page.views.append(PlaylistView(page))
-            case "/changelog":
-                title.value = "更新日志"
+            case "/statistic":
+                title.value = "统计"
                 drawer.selected_index = 3
-                page.views.append(ChangelogView(page))
+                page.views.append(StatisticView(page))
             case "/settings":
                 title.value = "设置"
                 drawer.selected_index = 4
                 page.views.append(SettingsView(page))
+            case "/changelog":
+                title.value = "更新日志"
+                drawer.selected_index = 5
+                page.views.append(ChangelogView(page))
             case "/about":
                 title.value = "关于"
-                drawer.selected_index = 5
+                drawer.selected_index = 6
                 page.views.append(AboutView(page))
             case _:
                 pass
 
+        # 在顶部insert自定义appbar和drawer
         page.views[0].drawer = drawer
         page.views[0].padding = ft.Padding.all(0)
         page.views[0].controls.insert(
             0,
-            ft.Row(
-                height=50,
-                spacing=0,
-                controls=[
-                    ft.Container(
-                        height=50,
-                        padding=ft.Padding.only(left=10),
-                        bgcolor=ft.Colors.PINK_ACCENT_200,
-                        content=ft.IconButton(
-                            ft.Icons.MENU,
-                            on_click=handle_show_drawer,
-                        ),
-                    ),
-                    ft.WindowDragArea(
-                        expand=True,
-                        content=ft.Container(
-                            height=50,
-                            padding=ft.Padding.only(left=10),
-                            alignment=ft.Alignment.CENTER_LEFT,
-                            bgcolor=ft.Colors.PINK_ACCENT_200,
-                            content=title,
-                        ),
-                    ),
-                    ft.Container(
-                        height=50,
-                        padding=ft.Padding.only(right=10),
-                        bgcolor=ft.Colors.PINK_ACCENT_200,
-                        content=ft.Row(
-                            controls=[
-                                ft.IconButton(
-                                    ft.Icons.MINIMIZE,
-                                    tooltip="最小化",
-                                    on_click=handle_minimized_window,
-                                ),
-                                ft.IconButton(
-                                    ft.Icons.CLOSE,
-                                    tooltip="退出",
-                                    on_click=handle_close_window,
-                                ),
-                            ]
-                        ),
-                    ),
-                ],
-            ),
+            MenuBar(
+                bar_height=50,
+                bar_title=title,
+                bar_bgcolor=ft.Colors.PINK_ACCENT_200,
+                on_drawer_click=handle_show_drawer,
+                on_min_click=handle_minimized_window,
+                on_close_click=handle_close_window
+            )
         )
 
     async def view_pop(view):
