@@ -7,7 +7,7 @@
 
 # VSingerBoard - 您的专属虚拟主播点歌台
 
-![Flet](https://img.shields.io/badge/flet-0.82.0-blue.svg) ![Python Version](https://img.shields.io/badge/python-3.12-blue.svg) ![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)
+![Flet](https://img.shields.io/badge/flet-0.84.0-blue.svg) ![Python Version](https://img.shields.io/badge/python-3.12-blue.svg) ![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)
 
 </div>
 

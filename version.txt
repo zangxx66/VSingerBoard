@@ -29,12 +29,12 @@ StringFileInfo(
     u'040904B0',
     [StringStruct(u'CompanyName', u'想象力有限公司'), 
     StringStruct(u'FileDescription', u'多平台点歌姬'),
-    StringStruct(u'FileVersion', u'2.0.0'),
+    StringStruct(u'FileVersion', u'2.0.1'),
     StringStruct(u'InternalName', u'VSingerBoard'),
     StringStruct(u'LegalCopyright', u'Copyright (c) 2026 Ricardo All rights reserved.'),
     StringStruct(u'OriginalFilename', u'VSingerBoard.exe'),
     StringStruct(u'ProductName', u'点歌姬'),
-    StringStruct(u'ProductVersion', u'2.0.0'),
+    StringStruct(u'ProductVersion', u'2.0.1'),
     StringStruct(u'Build', u'1930')])
   ]),
 VarFileInfo([VarStruct(u'Translation', [2052, 1200])])

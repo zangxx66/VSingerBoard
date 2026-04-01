@@ -3,7 +3,7 @@ from PyInstaller.utils.hooks import collect_all
 
 datas = [('assets/douyinjs', 'assets/douyinjs'), ('assets/icons', 'assets/icons'), ('assets/images', 'assets/images'), ('assets/favicon.png', 'assets'), ('assets/fonts/AlibabaPuHuiTi-Medium.ttf', 'assets/fonts')]
 binaries = []
-hiddenimports = ['anyio', 'aiohttp', 'curl_cffi', 'pkg_resources']
+hiddenimports = ['anyio', 'aiohttp', 'curl_cffi']
 tmp_ret = collect_all('bilibili_api')
 datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
 tmp_ret = collect_all('tortoise')

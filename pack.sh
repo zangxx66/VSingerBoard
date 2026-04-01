@@ -86,7 +86,6 @@ BUILD_ARGS=(
     "--hidden-import" "anyio"
     "--hidden-import" "aiohttp"
     "--hidden-import" "curl_cffi"
-    "--hidden-import" "pkg_resources"
     # 使用 PyInstaller 原生参数完整收集复杂包 (对应原 .spec 中的 collect_all)
     "--pyinstaller-build-args=--collect-all=bilibili_api"
     "--pyinstaller-build-args=--collect-all=tortoise"

@@ -38,7 +38,7 @@ class MessageManager():
                     dy_msg = "抖音已连接" if dy_connect_status else "抖音未连接"
                     self.douyin_status = douyin_status
                     await self.events.emit("on_status_change", {"is_connect": dy_connect_status, "message": dy_msg})
-                
+
                 bilibili_status = bili_manager.get_status()
                 if self.bilibili_status != bilibili_status:
                     bili_connect_status = bilibili_status == 2
